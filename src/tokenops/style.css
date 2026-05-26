@@ -1004,3 +1004,97 @@ input, select {
   .comparator-header, .comparator-row { grid-template-columns: 1fr 1fr 1fr; font-size: 0.82rem; }
   .comparator-header span:nth-child(n+4), .comparator-row span:nth-child(n+4) { display: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   DARK + GOLD THEME OVERRIDE
+   Integrated for Kalilur Rahman design system
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --bg: #0b0b0d;
+  --surface: #15161a;
+  --ink: #f5f1e6;
+  --muted: #9aa0aa;
+  --line: #2a2c33;
+  --blue: #d4af37;
+  --green: #c9a227;
+  --amber: #e6c34a;
+  --red: #ef4444;
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.45);
+  --gold: #d4af37;
+  --gold-light: #f0d278;
+  --gold-dark: #a07a17;
+}
+body {
+  background: radial-gradient(ellipse at top, #1a1410 0%, #0b0b0d 60%) !important;
+  color: var(--ink) !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+h1, h2, h3, h4 { font-family: 'Playfair Display', 'Inter', serif !important; color: var(--ink); }
+.tokenops-root nav a { color: var(--muted); }
+.tokenops-root nav a:hover, .tokenops-root nav a.active {
+  background: rgba(212,175,55,0.1); color: var(--gold);
+}
+.tokenops-root .hero-band {
+  background: linear-gradient(135deg, #15110a 0%, #1b1610 60%, #2a1e0e 100%) !important;
+  border: 1px solid rgba(212,175,55,0.25) !important;
+  box-shadow: 0 0 60px rgba(212,175,55,0.08);
+}
+.tokenops-root .eyebrow { color: var(--gold) !important; }
+.tokenops-root .primary-action {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+  color: #0b0b0d !important; border: none !important; font-weight: 600;
+}
+.tokenops-root .secondary-action {
+  background: transparent !important; color: var(--gold) !important;
+  border: 1px solid rgba(212,175,55,0.4) !important;
+}
+.tokenops-root .tile, .tokenops-root .dash-card, .tokenops-root .dash-panel,
+.tokenops-root .control-surface, .tokenops-root .result-surface,
+.tokenops-root .toolkit-panel, .tokenops-root .resource-card,
+.tokenops-root .about-feature-card, .tokenops-root .command-panel,
+.tokenops-root .article-shell aside, .tokenops-root .anomaly-board,
+.tokenops-root .starter-kit-banner, .tokenops-root .about-hero, .tokenops-root .about-cta {
+  background: rgba(255,255,255,0.02) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink);
+}
+.tokenops-root .tile h3, .tokenops-root .dash-panel h3 { color: var(--gold-light); }
+.tokenops-root .filter-tab {
+  background: transparent; color: var(--muted); border: 1px solid var(--line);
+}
+.tokenops-root .filter-tab.active { background: var(--gold); color: #0b0b0d; border-color: var(--gold); }
+.tokenops-root .download-btn {
+  background: rgba(212,175,55,0.08); color: var(--gold);
+  border: 1px solid rgba(212,175,55,0.3);
+}
+.tokenops-root .download-btn:hover { background: var(--gold); color: #0b0b0d; }
+.tokenops-root .badge { background: rgba(212,175,55,0.1); color: var(--gold-light); border: 1px solid rgba(212,175,55,0.2); }
+.tokenops-root .category-tag { color: var(--muted); }
+.tokenops-root input, .tokenops-root select, .tokenops-root textarea {
+  background: rgba(0,0,0,0.3) !important; color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+.tokenops-root .metric-row { border-bottom: 1px solid var(--line); }
+.tokenops-root .metric-row.accent strong { color: var(--gold) !important; }
+.tokenops-root .executive-note {
+  background: rgba(212,175,55,0.05); border-left: 3px solid var(--gold); color: var(--ink);
+}
+.tokenops-root .guide { color: var(--ink); }
+.tokenops-root .guide h1, .tokenops-root .guide h2, .tokenops-root .guide h3 { color: var(--gold-light); }
+.tokenops-root .guide a { color: var(--gold); }
+.tokenops-root .guide code { background: rgba(212,175,55,0.08); color: var(--gold-light); padding: 1px 6px; border-radius: 4px; }
+.tokenops-root .guide pre { background: #08080a; border: 1px solid var(--line); }
+.tokenops-root .guide table { border-color: var(--line); }
+.tokenops-root .guide th { background: rgba(212,175,55,0.08); color: var(--gold-light); }
+.tokenops-root .guide td, .tokenops-root .guide th { border-color: var(--line); }
+.tokenops-root .source-list div { background: rgba(255,255,255,0.02); border: 1px solid var(--line); color: var(--ink); }
+.tokenops-root .compression-stat strong { color: var(--gold); }
+.tokenops-root .comparator-header, .tokenops-root .comparator-row { border-bottom: 1px solid var(--line); color: var(--ink); }
+.tokenops-root .comparator-row.cheapest { background: rgba(212,175,55,0.06); }
+.tokenops-root .comparator-bar { background: var(--gold); opacity: 0.4; }
+.tokenops-root .progress-track { background: rgba(255,255,255,0.05); }
+.tokenops-root .progress-track span { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); }
+.tokenops-root .timeline-item span {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #0b0b0d;
+}
+.tokenops-root .about-stat strong { color: var(--gold); }
