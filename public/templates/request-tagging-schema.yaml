@@ -1,0 +1,319 @@
+# ============================================================================
+# TokenOps — Request Tagging Schema
+# ============================================================================
+# LLM API Gateway configuration for request-level cost attribution.
+# Every outbound LLM call MUST carry the metadata defined below so that
+# token spend can be sliced by team, service, feature, model, and more.
+#
+# Usage:
+#   1. Drop this file into your gateway config directory.
+#   2. Map each service in your registry to a block under `services:`.
+#   3. The gateway injects the resolved tags into every LLM request header
+#      and logs them alongside the token-usage response.
+#
+# Last updated: 2026-05-25
+# ============================================================================
+
+schema_version: "1.2.0"
+
+# ---------------------------------------------------------------------------
+# Global metadata — required on every LLM request
+# ---------------------------------------------------------------------------
+metadata_fields:
+  - name: team
+    type: string
+    required: true
+    description: >
+      Owning team or squad (e.g., "platform-ai", "growth-eng").
+      Used as the primary dimension for cost roll-ups.
+
+  - name: service
+    type: string
+    required: true
+    description: >
+      Registered service name from the service catalog.
+      Must match a key under the `services` block below.
+
+  - name: feature
+    type: string
+    required: true
+    description: >
+      Sub-feature or capability within the service
+      (e.g., "subject_line", "draft_reply", "entity_extraction").
+
+  - name: environment
+    type: enum
+    values: [development, staging, production, sandbox]
+    required: true
+    description: >
+      Deployment environment. Non-production calls are excluded from
+      budget enforcement but still tracked for forecasting.
+
+  - name: model
+    type: string
+    required: true
+    description: >
+      Canonical model identifier as returned by the provider
+      (e.g., "gpt-4o", "claude-sonnet-4-20250514", "gemini-2.5-pro").
+
+  - name: use_case
+    type: enum
+    values:
+      - classification
+      - extraction
+      - summarization
+      - generation
+      - complex_reasoning
+      - code_generation
+      - embedding
+      - moderation
+      - other
+    required: true
+    description: >
+      Functional category of the request. Drives model-routing
+      recommendations and optimization prioritization.
+
+  - name: cost_center
+    type: string
+    required: true
+    description: >
+      Finance-approved cost center code (e.g., "CC-4410-AI").
+      Enables charge-back and show-back reporting.
+
+  - name: region
+    type: enum
+    values: [us-east, us-west, eu-west, eu-central, ap-southeast, ap-northeast]
+    required: true
+    description: >
+      Deployment region of the calling service. Used for
+      latency-aware routing and regional budget caps.
+
+  # -- Optional enrichment fields --
+  - name: priority
+    type: enum
+    values: [critical, high, medium, low, batch]
+    required: false
+    default: medium
+    description: >
+      Request priority. "batch" requests may be deferred to
+      off-peak windows for discount pricing.
+
+  - name: session_id
+    type: string
+    required: false
+    description: >
+      Correlation ID for multi-turn conversations. Enables
+      per-session cost tracking.
+
+  - name: user_tier
+    type: enum
+    values: [free, pro, enterprise, internal]
+    required: false
+    description: >
+      End-user subscription tier. Enables unit-economics
+      analysis per customer segment.
+
+# ---------------------------------------------------------------------------
+# Service configurations
+# ---------------------------------------------------------------------------
+services:
+
+  # -------------------------------------------------------------------------
+  # 1. Email Generator — Marketing & Sales Automation
+  # -------------------------------------------------------------------------
+  email_generator:
+    team: growth-eng
+    cost_center: "CC-4410-AI"
+    region: us-east
+    description: >
+      Generates personalized outbound emails including subject lines,
+      body copy, and follow-up sequences.
+
+    features:
+      - name: subject_line
+        use_case: generation
+        model: gpt-4o-mini
+        max_tokens_per_request: 60
+        description: "Short, high-impact subject lines."
+
+      - name: body_copy
+        use_case: generation
+        model: gpt-4o
+        max_tokens_per_request: 800
+        description: "Full email body with personalization tokens."
+
+      - name: follow_up_sequence
+        use_case: generation
+        model: gpt-4o-mini
+        max_tokens_per_request: 1200
+        description: "3-email drip sequence from a single brief."
+
+    models_allowed:
+      - gpt-4o
+      - gpt-4o-mini
+      - claude-sonnet-4-20250514
+
+    max_tokens_per_day: 5_000_000
+    timeout_seconds: 30
+    retry_policy:
+      max_retries: 2
+      backoff_base_ms: 500
+
+    tags:
+      department: marketing
+      product_line: outbound-automation
+      data_classification: pii-possible
+      compliance: gdpr-checked
+
+  # -------------------------------------------------------------------------
+  # 2. Support Chatbot — Customer Experience
+  # -------------------------------------------------------------------------
+  support_chatbot:
+    team: cx-platform
+    cost_center: "CC-5520-CX"
+    region: us-west
+    description: >
+      Real-time conversational agent for tier-1 customer support.
+      Handles FAQ, order status, returns, and escalation.
+
+    features:
+      - name: intent_classification
+        use_case: classification
+        model: gpt-4o-mini
+        max_tokens_per_request: 50
+        description: "Classify inbound message intent (15 categories)."
+
+      - name: answer_generation
+        use_case: generation
+        model: claude-sonnet-4-20250514
+        max_tokens_per_request: 600
+        description: "Generate grounded answers from knowledge base."
+
+      - name: sentiment_analysis
+        use_case: classification
+        model: gpt-4o-mini
+        max_tokens_per_request: 20
+        description: "Detect customer sentiment for escalation triggers."
+
+      - name: conversation_summary
+        use_case: summarization
+        model: gpt-4o-mini
+        max_tokens_per_request: 300
+        description: "End-of-session summary for agent hand-off."
+
+    models_allowed:
+      - gpt-4o-mini
+      - claude-sonnet-4-20250514
+      - gemini-2.5-flash
+
+    max_tokens_per_day: 25_000_000
+    timeout_seconds: 10
+    retry_policy:
+      max_retries: 3
+      backoff_base_ms: 200
+
+    tags:
+      department: customer-experience
+      product_line: support-automation
+      data_classification: pii-present
+      compliance: soc2-required
+      sla_tier: p1
+
+  # -------------------------------------------------------------------------
+  # 3. Data Pipeline — Analytics & Data Engineering
+  # -------------------------------------------------------------------------
+  data_pipeline:
+    team: data-eng
+    cost_center: "CC-3300-DATA"
+    region: eu-west
+    description: >
+      Batch and streaming pipelines that use LLMs for entity
+      extraction, document classification, and data enrichment.
+
+    features:
+      - name: entity_extraction
+        use_case: extraction
+        model: gpt-4o-mini
+        max_tokens_per_request: 400
+        description: "Extract structured entities (names, dates, amounts) from documents."
+
+      - name: document_classification
+        use_case: classification
+        model: gpt-4o-mini
+        max_tokens_per_request: 30
+        description: "Classify documents into 40+ taxonomy categories."
+
+      - name: text_summarization
+        use_case: summarization
+        model: claude-sonnet-4-20250514
+        max_tokens_per_request: 500
+        description: "Generate concise summaries for data catalog entries."
+
+      - name: pii_detection
+        use_case: extraction
+        model: gpt-4o-mini
+        max_tokens_per_request: 200
+        description: "Detect and tag PII fields before downstream storage."
+
+    models_allowed:
+      - gpt-4o-mini
+      - claude-sonnet-4-20250514
+      - gemini-2.5-flash
+
+    max_tokens_per_day: 50_000_000
+    timeout_seconds: 60
+    retry_policy:
+      max_retries: 5
+      backoff_base_ms: 1000
+
+    tags:
+      department: data-engineering
+      product_line: data-enrichment
+      data_classification: confidential
+      compliance: gdpr-required
+      processing_mode: batch
+      priority: low
+
+# ---------------------------------------------------------------------------
+# Validation rules — enforced by the gateway at request time
+# ---------------------------------------------------------------------------
+validation:
+  reject_untagged_requests: true
+  reject_unknown_services: true
+  reject_disallowed_models: true
+  log_level: info          # debug | info | warn | error
+  sampling_rate: 1.0       # 1.0 = log 100% of requests
+
+  # Fields that must be present even in development / sandbox
+  always_required:
+    - team
+    - service
+    - feature
+    - model
+
+  # Fields required only in production
+  production_required:
+    - cost_center
+    - use_case
+    - region
+
+# ---------------------------------------------------------------------------
+# Export & integration
+# ---------------------------------------------------------------------------
+export:
+  # Where enriched request logs are shipped for cost analysis
+  destinations:
+    - type: data_warehouse
+      target: "analytics.llm_request_log"
+      format: parquet
+      partition_by: [date, team, service]
+
+    - type: observability
+      target: "datadog"
+      metric_prefix: "tokenops.requests"
+      tags_from_metadata: [team, service, feature, model, environment]
+
+    - type: billing
+      target: "internal_chargeback_api"
+      frequency: daily
+      group_by: [cost_center, service]
