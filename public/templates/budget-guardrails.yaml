@@ -1,0 +1,341 @@
+# ============================================================================
+# TokenOps — Budget Guardrails Configuration
+# ============================================================================
+# Enforces token-spend limits at the service, team, and organizational level.
+# The LLM API gateway reads this file to:
+#   1. Track cumulative token usage per budget period.
+#   2. Fire soft alerts when spend approaches the limit.
+#   3. Enforce hard limits to prevent runaway costs.
+#   4. Route alerts and escalations to the right people.
+#
+# Deployment:
+#   • Place in your gateway's config directory (e.g., /etc/tokenops/budget-guardrails.yaml)
+#   • The gateway reloads on SIGHUP or on a configurable polling interval.
+#
+# Last updated: 2026-05-25
+# ============================================================================
+
+schema_version: "1.0.0"
+
+# ---------------------------------------------------------------------------
+# Global defaults — apply to every service unless overridden
+# ---------------------------------------------------------------------------
+global_defaults:
+  # Percentage of the monthly budget at which a soft alert fires
+  alert_threshold_pct: 80
+
+  # Percentage of the monthly budget at which requests are rejected (hard stop)
+  hard_limit_pct: 110
+
+  # Budget review cadence
+  review_cycle: monthly            # monthly | weekly | quarterly
+
+  # Grace period after hard limit before requests are actually blocked.
+  # Allows in-flight requests to complete gracefully.
+  grace_period_minutes: 5
+
+  # Default action when hard limit is hit
+  hard_limit_action: reject        # reject | throttle | log_only
+
+  # Rate-limit fallback (requests per minute) when throttle mode is active
+  throttle_rpm: 10
+
+  # Timezone for budget period boundaries
+  timezone: "UTC"
+
+  # Whether to count retried requests toward the budget
+  count_retries: true
+
+  # Whether to count requests in non-production environments
+  count_non_production: false
+
+# ---------------------------------------------------------------------------
+# Service-level budgets
+# ---------------------------------------------------------------------------
+service_budgets:
+
+  # -------------------------------------------------------------------------
+  # 1. Support Chatbot
+  # -------------------------------------------------------------------------
+  support_chatbot:
+    description: "Real-time customer support conversational agent"
+    team: cx-platform
+    cost_center: "CC-5520-CX"
+
+    monthly_token_budget: 30_000_000       # 30M tokens / month
+
+    soft_alert:
+      threshold_pct: 75                    # Override global (earlier warning)
+      message: >
+        ⚠️ Support chatbot has consumed 75% of its monthly token budget.
+        Current usage: {{ current_usage }} / {{ budget }} tokens.
+        Projected end-of-month: {{ projected_usage }} tokens.
+        Action: Review conversation lengths and cache hit rate.
+
+    hard_limit:
+      threshold_pct: 100                   # Strict — no overage allowed
+      action: throttle                     # Degrade gracefully, don't block
+      throttle_rpm: 20                     # Reduced rate during throttle
+      message: >
+        🛑 Support chatbot has hit its monthly token budget.
+        Throttling to {{ throttle_rpm }} RPM until budget resets.
+        Escalate to FinOps if business-critical traffic is impacted.
+
+    owners:
+      - name: "Alex Chen"
+        email: "alex.chen@company.com"
+        role: engineering_lead
+      - name: "Priya Sharma"
+        email: "priya.sharma@company.com"
+        role: product_owner
+
+    escalation:
+      - level: 1
+        trigger_pct: 75
+        notify: owners
+        channel: slack
+      - level: 2
+        trigger_pct: 90
+        notify: [owners, finops_team]
+        channel: [slack, email]
+      - level: 3
+        trigger_pct: 100
+        notify: [owners, finops_team, vp_engineering]
+        channel: [slack, email, pagerduty]
+
+    tags:
+      sla_tier: p1
+      data_classification: pii-present
+
+  # -------------------------------------------------------------------------
+  # 2. Email Generator
+  # -------------------------------------------------------------------------
+  email_generator:
+    description: "Generates personalized outbound marketing emails"
+    team: growth-eng
+    cost_center: "CC-4410-AI"
+
+    monthly_token_budget: 8_000_000        # 8M tokens / month
+
+    soft_alert:
+      threshold_pct: 80                    # Use global default
+      message: >
+        ⚠️ Email generator has consumed 80% of its monthly token budget.
+        Current usage: {{ current_usage }} / {{ budget }} tokens.
+        Consider pausing batch campaigns or compressing prompts.
+
+    hard_limit:
+      threshold_pct: 110                   # Allow 10% overage
+      action: reject
+      message: >
+        🛑 Email generator has exceeded 110% of its monthly budget.
+        All requests are being rejected until the budget resets or an
+        exception is approved. See exception_process below.
+
+    owners:
+      - name: "Jordan Lee"
+        email: "jordan.lee@company.com"
+        role: engineering_lead
+      - name: "Maria Garcia"
+        email: "maria.garcia@company.com"
+        role: marketing_lead
+
+    escalation:
+      - level: 1
+        trigger_pct: 80
+        notify: owners
+        channel: slack
+      - level: 2
+        trigger_pct: 100
+        notify: [owners, finops_team]
+        channel: [slack, email]
+      - level: 3
+        trigger_pct: 110
+        notify: [owners, finops_team, vp_engineering]
+        channel: [slack, email, pagerduty]
+
+    tags:
+      sla_tier: p2
+      data_classification: pii-possible
+
+  # -------------------------------------------------------------------------
+  # 3. Data Pipeline
+  # -------------------------------------------------------------------------
+  data_pipeline:
+    description: "Batch LLM processing for entity extraction and classification"
+    team: data-eng
+    cost_center: "CC-3300-DATA"
+
+    monthly_token_budget: 60_000_000       # 60M tokens / month
+
+    soft_alert:
+      threshold_pct: 80
+      message: >
+        ⚠️ Data pipeline has consumed 80% of its monthly token budget.
+        Current usage: {{ current_usage }} / {{ budget }} tokens.
+        Review batch job schedules and input document sizes.
+
+    hard_limit:
+      threshold_pct: 120                   # Generous overage for batch jobs
+      action: reject
+      message: >
+        🛑 Data pipeline has exceeded 120% of its monthly budget.
+        Batch jobs will be queued until budget resets or an exception
+        is approved. Contact FinOps for emergency allocation.
+
+    owners:
+      - name: "Sam Nakamura"
+        email: "sam.nakamura@company.com"
+        role: engineering_lead
+      - name: "Dana Okonkwo"
+        email: "dana.okonkwo@company.com"
+        role: data_lead
+
+    escalation:
+      - level: 1
+        trigger_pct: 80
+        notify: owners
+        channel: slack
+      - level: 2
+        trigger_pct: 100
+        notify: [owners, finops_team]
+        channel: [slack, email]
+      - level: 3
+        trigger_pct: 120
+        notify: [owners, finops_team, vp_engineering, cfo_office]
+        channel: [slack, email, pagerduty]
+
+    tags:
+      sla_tier: p3
+      data_classification: confidential
+      processing_mode: batch
+
+# ---------------------------------------------------------------------------
+# Team-level aggregate budgets (optional — for cross-service roll-up)
+# ---------------------------------------------------------------------------
+team_budgets:
+  cx-platform:
+    monthly_token_budget: 35_000_000
+    alert_threshold_pct: 80
+    hard_limit_pct: 110
+    services: [support_chatbot]
+
+  growth-eng:
+    monthly_token_budget: 10_000_000
+    alert_threshold_pct: 80
+    hard_limit_pct: 115
+    services: [email_generator]
+
+  data-eng:
+    monthly_token_budget: 65_000_000
+    alert_threshold_pct: 85
+    hard_limit_pct: 125
+    services: [data_pipeline]
+
+# ---------------------------------------------------------------------------
+# Organization-level budget (top-level guardrail)
+# ---------------------------------------------------------------------------
+org_budget:
+  monthly_token_budget: 150_000_000        # 150M tokens / month
+  alert_threshold_pct: 75
+  hard_limit_pct: 105
+  hard_limit_action: log_only              # Org-level: alert only, don't block
+  owners:
+    - name: "FinOps Team"
+      email: "finops@company.com"
+    - name: "VP Engineering"
+      email: "vp-eng@company.com"
+
+# ---------------------------------------------------------------------------
+# Alert channels configuration
+# ---------------------------------------------------------------------------
+alert_channels:
+  slack:
+    webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+    default_channel: "#tokenops-alerts"
+    channels_by_severity:
+      warning: "#tokenops-alerts"
+      critical: "#tokenops-critical"
+      emergency: "#incident-response"
+    mention_on_critical: ["@finops-oncall", "@platform-oncall"]
+
+  email:
+    smtp_host: "smtp.company.com"
+    smtp_port: 587
+    from_address: "tokenops-alerts@company.com"
+    # Recipients are resolved from the `owners` field of each service
+
+  pagerduty:
+    integration_key: "YOUR_PAGERDUTY_INTEGRATION_KEY"
+    severity_mapping:
+      level_1: info
+      level_2: warning
+      level_3: critical
+
+  webhook:
+    url: "https://api.company.com/tokenops/alerts"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ TOKENOPS_WEBHOOK_TOKEN }}"
+      Content-Type: "application/json"
+
+# ---------------------------------------------------------------------------
+# Exception process — for approved budget overrides
+# ---------------------------------------------------------------------------
+exception_process:
+  description: >
+    When a service needs to exceed its hard limit, the owning team must
+    request a temporary budget exception. This prevents surprise costs
+    while allowing legitimate business-critical overages.
+
+  steps:
+    - step: 1
+      action: "Service owner submits exception request"
+      details: >
+        File a ticket in the #tokenops-exceptions channel or via the
+        internal FinOps portal. Include: service name, reason for overage,
+        requested additional budget (tokens), duration, and business
+        justification.
+
+    - step: 2
+      action: "FinOps reviews within 4 hours (business hours)"
+      details: >
+        FinOps validates the request against the service's optimization
+        history and current spend trajectory. Requests with no prior
+        optimization effort may be sent back with recommendations.
+
+    - step: 3
+      action: "Approval or counter-proposal"
+      details: >
+        FinOps approves the exception (possibly at a reduced amount),
+        proposes a counter-offer, or rejects with an explanation.
+        Approved exceptions are recorded in the exception log.
+
+    - step: 4
+      action: "Gateway updated with temporary override"
+      details: >
+        The approved exception is applied as a time-bound override in
+        the gateway config. The override auto-expires at the specified
+        end date. No manual cleanup required.
+
+  approval_authority:
+    - amount_up_to: 10_000_000      # ≤10M tokens
+      approver: finops_lead
+    - amount_up_to: 50_000_000      # ≤50M tokens
+      approver: vp_engineering
+    - amount_above: 50_000_000      # >50M tokens
+      approver: cfo
+
+  sla:
+    response_time: "4 business hours"
+    emergency_response_time: "30 minutes (PagerDuty escalation)"
+
+  active_exceptions:
+    # Example — remove or replace with real exceptions
+    - service: data_pipeline
+      additional_tokens: 15_000_000
+      reason: "Q2 backfill of 50K historical documents"
+      approved_by: "finops_lead"
+      start_date: "2026-05-20"
+      end_date: "2026-06-03"
+      ticket: "FINOPS-1234"

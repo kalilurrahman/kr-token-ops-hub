@@ -1,0 +1,139 @@
+{
+  "nav": [
+    "Home",
+    "Guide",
+    "Patterns",
+    "Calculator",
+    "Dashboard",
+    "Toolkit",
+    "Resources",
+    "Templates",
+    "Sources",
+    "About"
+  ],
+  "patterns": [
+    {
+      "title": "Prompt compression",
+      "desc": "Remove redundancy and shorten system prompts."
+    },
+    {
+      "title": "Context trimming",
+      "desc": "Keep only relevant history and retrieved chunks."
+    },
+    {
+      "title": "Model routing",
+      "desc": "Use the cheapest model that meets quality thresholds."
+    },
+    {
+      "title": "Prompt caching",
+      "desc": "Reuse stable prefixes and repeated queries."
+    },
+    {
+      "title": "Output constraints",
+      "desc": "Force structured, shorter responses."
+    },
+    {
+      "title": "Retry reduction",
+      "desc": "Validate outputs and avoid repeated failed calls."
+    },
+    {
+      "title": "Batch processing",
+      "desc": "Move non-urgent jobs to batch workflows."
+    }
+  ],
+  "templates": [
+    {
+      "title": "Request Tagging Schema",
+      "desc": "Gateway configuration with team, service, feature, and model metadata for every LLM API call.",
+      "category": "Engineering",
+      "format": "YAML",
+      "file": "request-tagging-schema.yaml"
+    },
+    {
+      "title": "Monthly Cost Review Agenda",
+      "desc": "60-minute meeting template covering metrics review, optimization progress, budget forecast, and priorities.",
+      "category": "Governance",
+      "format": "Markdown",
+      "file": "monthly-cost-review.md"
+    },
+    {
+      "title": "Model Selection Matrix",
+      "desc": "Task-to-model mapping with quality thresholds, cheaper alternatives, and A/B testing steps.",
+      "category": "Engineering",
+      "format": "Markdown",
+      "file": "model-selection-matrix.md"
+    },
+    {
+      "title": "Architecture Decision Record",
+      "desc": "Cost analysis, unit economics, optimization roadmap, and risk assessment for new AI features.",
+      "category": "Engineering",
+      "format": "Markdown",
+      "file": "architecture-decision-record.md"
+    },
+    {
+      "title": "Prompt Optimization Checklist",
+      "desc": "12-item checklist for compression, format constraints, validation, and operations before deploying prompts.",
+      "category": "Engineering",
+      "format": "Markdown",
+      "file": "prompt-optimization-checklist.md"
+    },
+    {
+      "title": "Budget Guardrails Config",
+      "desc": "Soft alerts, hard limits, exception processes, and escalation paths for token budget enforcement.",
+      "category": "Finance",
+      "format": "YAML",
+      "file": "budget-guardrails.yaml"
+    },
+    {
+      "title": "Instrumentation Checklist",
+      "desc": "Pre-production checklist for tagging, cost tracking, governance, and operational readiness.",
+      "category": "Engineering",
+      "format": "Markdown",
+      "file": "instrumentation-checklist.md"
+    },
+    {
+      "title": "Database Schema (SQL)",
+      "desc": "PostgreSQL / Supabase migration for LLM usage logging with teams, usage logs, and budget tables.",
+      "category": "Engineering",
+      "format": "SQL",
+      "file": "supabase-schema.sql"
+    }
+  ],
+  "resources": [
+    {
+      "title": "Implementation Playbook",
+      "desc": "Step-by-step guide from baseline audit through instrumentation, allocation, optimization, and governance.",
+      "category": "Document",
+      "format": "Markdown",
+      "file": "implementation-playbook.md"
+    },
+    {
+      "title": "Unit Economics & Metrics Reference",
+      "desc": "Complete metrics framework for engineering, finance, and product teams managing LLM token costs.",
+      "category": "Document",
+      "format": "Markdown",
+      "file": "token-pricing-reference.md"
+    },
+    {
+      "title": "TokenOps Guide (PDF)",
+      "desc": "The complete 45,000-word TokenOps guide as a printable PDF document for offline reading.",
+      "category": "Document",
+      "format": "PDF",
+      "file": "TokenOps_Guide.pdf"
+    },
+    {
+      "title": "Case Studies & Scenarios",
+      "desc": "Real-world optimization scenarios with ROI calculations from SaaS chatbot to data enrichment pipelines.",
+      "category": "Document",
+      "format": "Guide",
+      "file": null
+    }
+  ],
+  "sources": [
+    "FinOps Foundation AI overview",
+    "FinOps GenAI token pricing guide",
+    "OpenAI pricing and prompt caching docs",
+    "Anthropic pricing and usage-cost docs",
+    "Finout TokenOps guide"
+  ]
+}
