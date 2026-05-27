@@ -14,6 +14,7 @@ import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as SourcesRouteImport } from './routes/sources'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PatternsRouteImport } from './routes/patterns'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CalculatorRouteImport } from './routes/calculator'
@@ -43,6 +44,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
 const PatternsRoute = PatternsRouteImport.update({
   id: '/patterns',
   path: '/patterns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuideRoute = GuideRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/calculator': typeof CalculatorRoute
   '/dashboard': typeof DashboardRoute
   '/guide': typeof GuideRoute
+  '/library': typeof LibraryRoute
   '/patterns': typeof PatternsRoute
   '/resources': typeof ResourcesRoute
   '/sources': typeof SourcesRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/calculator': typeof CalculatorRoute
   '/dashboard': typeof DashboardRoute
   '/guide': typeof GuideRoute
+  '/library': typeof LibraryRoute
   '/patterns': typeof PatternsRoute
   '/resources': typeof ResourcesRoute
   '/sources': typeof SourcesRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/calculator': typeof CalculatorRoute
   '/dashboard': typeof DashboardRoute
   '/guide': typeof GuideRoute
+  '/library': typeof LibraryRoute
   '/patterns': typeof PatternsRoute
   '/resources': typeof ResourcesRoute
   '/sources': typeof SourcesRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/calculator'
     | '/dashboard'
     | '/guide'
+    | '/library'
     | '/patterns'
     | '/resources'
     | '/sources'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/calculator'
     | '/dashboard'
     | '/guide'
+    | '/library'
     | '/patterns'
     | '/resources'
     | '/sources'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/calculator'
     | '/dashboard'
     | '/guide'
+    | '/library'
     | '/patterns'
     | '/resources'
     | '/sources'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   CalculatorRoute: typeof CalculatorRoute
   DashboardRoute: typeof DashboardRoute
   GuideRoute: typeof GuideRoute
+  LibraryRoute: typeof LibraryRoute
   PatternsRoute: typeof PatternsRoute
   ResourcesRoute: typeof ResourcesRoute
   SourcesRoute: typeof SourcesRoute
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/patterns'
       fullPath: '/patterns'
       preLoaderRoute: typeof PatternsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guide': {
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalculatorRoute: CalculatorRoute,
   DashboardRoute: DashboardRoute,
   GuideRoute: GuideRoute,
+  LibraryRoute: LibraryRoute,
   PatternsRoute: PatternsRoute,
   ResourcesRoute: ResourcesRoute,
   SourcesRoute: SourcesRoute,
