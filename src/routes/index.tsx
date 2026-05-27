@@ -1,7 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Library as LibraryIcon, BookOpen, ClipboardCheck, Map, BookMarked, Wrench } from "lucide-react";
 import { operatingPillars, playbook } from "@/tokenops/data";
+import content from "@/tokenops/content.json";
+import type { TokenOpsContent } from "@/tokenops/data";
+
+const data = content as TokenOpsContent;
+const libCount = data.library.length;
+const byCat = (c: string) => data.library.filter((i) => i.category === c).length;
+
+const LIB_HIGHLIGHTS = [
+  { icon: BookOpen,       label: "Guides",     count: byCat("Guide"),     desc: "Glossary, FAQ, RACI, maturity model, case studies." },
+  { icon: Map,            label: "Playbooks",  count: byCat("Playbook"),  desc: "Multi-week programs: migration, RAG, billing, exec briefing." },
+  { icon: ClipboardCheck, label: "Checklists", count: byCat("Checklist"), desc: "Audit, launch, model swap, vendor negotiation." },
+  { icon: BookMarked,     label: "References", count: byCat("Reference"), desc: "Metrics, KPIs, provider matrix, tool landscape." },
+  { icon: Wrench,         label: "Operating",  count: byCat("Operating"), desc: "Runbooks, QBR, ROI, SLA/SLO, vendor scorecard." },
+  { icon: LibraryIcon,    label: "Advanced",   count: byCat("Advanced"),  desc: "Gateways, routing, anomaly detection, prompt versioning." },
+];
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -72,6 +87,38 @@ function Index() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="starter-kit-banner">
+        <div>
+          <p className="eyebrow" style={{ marginBottom: 8 }}>Content library</p>
+          <h3 style={{ fontSize: "1.6rem", marginBottom: 10 }}>
+            <LibraryIcon size={22} style={{ verticalAlign: "middle", marginRight: 10 }} />
+            {libCount} long-form artifacts, ready to use
+          </h3>
+          <p>
+            Guides, playbooks, checklists, references, and operating templates covering everything from
+            anomaly detection and gateway architecture to QBRs, RACI matrices, and vendor scorecards.
+          </p>
+          <div className="starter-kit-items">
+            {LIB_HIGHLIGHTS.map(({ icon: Icon, label, count }) => (
+              <span key={label}><Icon size={12} /> {count} {label}</span>
+            ))}
+          </div>
+        </div>
+        <Link className="download-btn" to="/library" style={{ textDecoration: "none" }}>
+          Browse library <ArrowRight size={16} />
+        </Link>
+      </section>
+
+      <section className="section-grid three">
+        {LIB_HIGHLIGHTS.map(({ icon: Icon, label, count, desc }) => (
+          <article className="tile" key={label}>
+            <Icon size={22} />
+            <h3>{label} <span style={{ color: "var(--gold)", fontSize: "0.9rem" }}>· {count}</span></h3>
+            <p>{desc}</p>
+          </article>
+        ))}
       </section>
     </div>
   );
