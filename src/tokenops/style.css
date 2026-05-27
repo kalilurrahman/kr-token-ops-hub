@@ -1006,95 +1006,200 @@ input, select {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DARK + GOLD THEME OVERRIDE
-   Integrated for Kalilur Rahman design system
+   FINANCIAL PROMPT HUB — kr-gold THEME OVERRIDE
+   Dark navy + warm gold, Cormorant Garamond / DM Sans / JetBrains Mono
    ═══════════════════════════════════════════════════════════ */
 :root {
-  --bg: #0b0b0d;
-  --surface: #15161a;
-  --ink: #f5f1e6;
-  --muted: #9aa0aa;
-  --line: #2a2c33;
-  --blue: #d4af37;
-  --green: #c9a227;
-  --amber: #e6c34a;
+  --bg: #06090f;
+  --bg-1: #0a0f17;
+  --bg-2: #101725;
+  --bg-3: #1a2334;
+  --surface: #101725;
+  --ink: #f4f1ea;
+  --muted: #a89e88;
+  --muted-2: #857d6c;
+  --line: rgba(197,160,71,0.14);
+  --line-bright: rgba(197,160,71,0.40);
+  --blue: #c5a047;
+  --green: #34d399;
+  --amber: #c5a047;
   --red: #ef4444;
-  --shadow: 0 18px 55px rgba(0, 0, 0, 0.45);
-  --gold: #d4af37;
-  --gold-light: #f0d278;
-  --gold-dark: #a07a17;
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+  --gold: #c5a047;
+  --gold-light: #e6c879;
+  --gold-dark: #9d7f38;
+  --gold-glow: rgba(197,160,71,0.16);
 }
 body {
-  background: radial-gradient(ellipse at top, #1a1410 0%, #0b0b0d 60%) !important;
+  background:
+    radial-gradient(ellipse at top, rgba(197,160,71,0.10) 0%, transparent 55%),
+    linear-gradient(180deg, #0a0f17 0%, #06090f 100%) !important;
   color: var(--ink) !important;
-  font-family: 'Inter', system-ui, sans-serif !important;
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif !important;
+  min-height: 100vh;
 }
-h1, h2, h3, h4 { font-family: 'Playfair Display', 'Inter', serif !important; color: var(--ink); }
+h1, h2, h3, h4, .font-display {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', Menlo, monospace !important;
+}
 .tokenops-root nav a { color: var(--muted); }
 .tokenops-root nav a:hover, .tokenops-root nav a.active {
-  background: rgba(212,175,55,0.1); color: var(--gold);
+  background: var(--gold-glow); color: var(--gold);
 }
 .tokenops-root .hero-band {
-  background: linear-gradient(135deg, #15110a 0%, #1b1610 60%, #2a1e0e 100%) !important;
-  border: 1px solid rgba(212,175,55,0.25) !important;
-  box-shadow: 0 0 60px rgba(212,175,55,0.08);
+  background:
+    radial-gradient(circle at 80% 20%, rgba(197,160,71,0.14) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0f17 0%, #101725 60%, #1a2334 100%) !important;
+  border: 1px solid var(--line-bright) !important;
+  box-shadow: 0 0 80px rgba(197,160,71,0.08), 0 30px 80px rgba(0,0,0,0.4);
+  color: var(--ink) !important;
 }
+.tokenops-root .hero-copy { color: var(--muted) !important; }
 .tokenops-root .eyebrow { color: var(--gold) !important; }
 .tokenops-root .primary-action {
   background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
-  color: #0b0b0d !important; border: none !important; font-weight: 600;
+  color: #06090f !important; border: none !important; font-weight: 600;
+  box-shadow: 0 8px 24px rgba(197,160,71,0.25);
 }
 .tokenops-root .secondary-action {
   background: transparent !important; color: var(--gold) !important;
-  border: 1px solid rgba(212,175,55,0.4) !important;
+  border: 1px solid var(--line-bright) !important;
+}
+.tokenops-root .button-action {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+  color: #06090f !important; border: none !important;
 }
 .tokenops-root .tile, .tokenops-root .dash-card, .tokenops-root .dash-panel,
 .tokenops-root .control-surface, .tokenops-root .result-surface,
 .tokenops-root .toolkit-panel, .tokenops-root .resource-card,
 .tokenops-root .about-feature-card, .tokenops-root .command-panel,
 .tokenops-root .article-shell aside, .tokenops-root .anomaly-board,
-.tokenops-root .starter-kit-banner, .tokenops-root .about-hero, .tokenops-root .about-cta {
-  background: rgba(255,255,255,0.02) !important;
+.tokenops-root .about-hero, .tokenops-root .about-cta,
+.tokenops-root .source-list, .tokenops-root .guide, .tokenops-root .about-stat,
+.tokenops-root .loading-panel {
+  background: var(--surface) !important;
   border: 1px solid var(--line) !important;
-  color: var(--ink);
+  color: var(--ink) !important;
+  box-shadow: var(--shadow) !important;
+}
+.tokenops-root .starter-kit-banner {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(197,160,71,0.18) 0%, transparent 50%),
+    linear-gradient(135deg, #101725 0%, #1a2334 100%) !important;
+  border: 1px solid var(--line-bright) !important;
+  color: var(--ink) !important;
+}
+.tokenops-root .starter-kit-banner p { color: var(--muted) !important; }
+.tokenops-root .starter-kit-banner .download-btn {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+  color: #06090f !important; border: none !important;
+}
+.tokenops-root .starter-kit-items span {
+  background: rgba(197,160,71,0.10); color: var(--gold-light);
+  border: 1px solid var(--line);
 }
 .tokenops-root .tile h3, .tokenops-root .dash-panel h3 { color: var(--gold-light); }
+.tokenops-root .tile svg, .tokenops-root .toolkit-panel-header svg,
+.tokenops-root .about-feature-card svg, .tokenops-root .resource-card-icon { color: var(--gold) !important; }
+.tokenops-root .resource-card-icon { background: rgba(197,160,71,0.10) !important; }
+.tokenops-root .resource-card-header p, .tokenops-root .tile p,
+.tokenops-root .about-feature-card p, .tokenops-root .panel-row span,
+.tokenops-root .metric-row span, .tokenops-root .page-heading p,
+.tokenops-root .split-section p, .tokenops-root .dash-card span,
+.tokenops-root .about-hero-desc, .tokenops-root .about-stat span,
+.tokenops-root .toolkit-panel-header p, .tokenops-root label {
+  color: var(--muted) !important;
+}
 .tokenops-root .filter-tab {
   background: transparent; color: var(--muted); border: 1px solid var(--line);
 }
-.tokenops-root .filter-tab.active { background: var(--gold); color: #0b0b0d; border-color: var(--gold); }
+.tokenops-root .filter-tab:hover { color: var(--gold); border-color: var(--line-bright); }
+.tokenops-root .filter-tab.active { background: var(--gold); color: #06090f; border-color: var(--gold); }
 .tokenops-root .download-btn {
-  background: rgba(212,175,55,0.08); color: var(--gold);
-  border: 1px solid rgba(212,175,55,0.3);
+  background: rgba(197,160,71,0.08); color: var(--gold);
+  border: 1px solid var(--line-bright);
 }
-.tokenops-root .download-btn:hover { background: var(--gold); color: #0b0b0d; }
-.tokenops-root .badge { background: rgba(212,175,55,0.1); color: var(--gold-light); border: 1px solid rgba(212,175,55,0.2); }
-.tokenops-root .category-tag { color: var(--muted); }
+.tokenops-root .download-btn:hover {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+  color: #06090f !important; border-color: var(--gold) !important;
+  box-shadow: 0 6px 20px rgba(197,160,71,0.30);
+}
+.tokenops-root .badge,
+.tokenops-root .badge-yaml, .tokenops-root .badge-md,
+.tokenops-root .badge-guide, .tokenops-root .badge-csv {
+  background: rgba(197,160,71,0.10) !important; color: var(--gold-light) !important;
+  border: 1px solid var(--line) !important;
+}
+.tokenops-root .category-tag {
+  background: rgba(255,255,255,0.04) !important; color: var(--muted) !important;
+  border: 1px solid var(--line);
+}
 .tokenops-root input, .tokenops-root select, .tokenops-root textarea {
   background: rgba(0,0,0,0.3) !important; color: var(--ink) !important;
   border: 1px solid var(--line) !important;
 }
+.tokenops-root input:focus, .tokenops-root select:focus, .tokenops-root textarea:focus {
+  outline: none !important; border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px var(--gold-glow) !important;
+}
+.tokenops-root .toolkit-textarea.compressed {
+  background: rgba(52,211,153,0.06) !important; border-color: rgba(52,211,153,0.3) !important;
+}
+.tokenops-root .toolkit-placeholder { border-color: var(--line); color: var(--muted); }
 .tokenops-root .metric-row { border-bottom: 1px solid var(--line); }
 .tokenops-root .metric-row.accent strong { color: var(--gold) !important; }
 .tokenops-root .executive-note {
-  background: rgba(212,175,55,0.05); border-left: 3px solid var(--gold); color: var(--ink);
+  background: rgba(197,160,71,0.06); border-left: 3px solid var(--gold); color: var(--ink);
 }
 .tokenops-root .guide { color: var(--ink); }
 .tokenops-root .guide h1, .tokenops-root .guide h2, .tokenops-root .guide h3 { color: var(--gold-light); }
 .tokenops-root .guide a { color: var(--gold); }
-.tokenops-root .guide code { background: rgba(212,175,55,0.08); color: var(--gold-light); padding: 1px 6px; border-radius: 4px; }
-.tokenops-root .guide pre { background: #08080a; border: 1px solid var(--line); }
+.tokenops-root .guide code { background: rgba(197,160,71,0.10); color: var(--gold-light); padding: 1px 6px; border-radius: 4px; }
+.tokenops-root .guide pre { background: #06090f; border: 1px solid var(--line); color: var(--ink); }
+.tokenops-root .guide pre code { background: transparent; color: var(--ink); padding: 0; }
+.tokenops-root .guide blockquote {
+  border-left: 3px solid var(--gold); padding-left: 16px; color: var(--muted);
+  margin-left: 0; font-style: italic;
+}
 .tokenops-root .guide table { border-color: var(--line); }
-.tokenops-root .guide th { background: rgba(212,175,55,0.08); color: var(--gold-light); }
+.tokenops-root .guide th { background: rgba(197,160,71,0.10); color: var(--gold-light); }
 .tokenops-root .guide td, .tokenops-root .guide th { border-color: var(--line); }
-.tokenops-root .source-list div { background: rgba(255,255,255,0.02); border: 1px solid var(--line); color: var(--ink); }
+.tokenops-root .source-list div {
+  background: rgba(255,255,255,0.02); border: 1px solid var(--line); color: var(--ink);
+}
 .tokenops-root .compression-stat strong { color: var(--gold); }
+.tokenops-root .compression-stat { background: rgba(255,255,255,0.02); border-color: var(--line); }
+.tokenops-root .compression-changes { background: rgba(52,211,153,0.06); color: var(--green); }
 .tokenops-root .comparator-header, .tokenops-root .comparator-row { border-bottom: 1px solid var(--line); color: var(--ink); }
-.tokenops-root .comparator-row.cheapest { background: rgba(212,175,55,0.06); }
-.tokenops-root .comparator-bar { background: var(--gold); opacity: 0.4; }
+.tokenops-root .comparator-header { background: rgba(255,255,255,0.03); color: var(--muted); }
+.tokenops-root .comparator-row:hover { background: rgba(197,160,71,0.04); }
+.tokenops-root .comparator-row.cheapest { background: rgba(197,160,71,0.08); }
+.tokenops-root .comparator-bar { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); opacity: 0.7; }
+.tokenops-root .comparator-mult { color: var(--muted); }
+.tokenops-root .comparator-table { border-color: var(--line); }
 .tokenops-root .progress-track { background: rgba(255,255,255,0.05); }
 .tokenops-root .progress-track span { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); }
 .tokenops-root .timeline-item span {
-  background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #0b0b0d;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #06090f;
 }
+.tokenops-root .timeline-item { border-bottom: 1px solid var(--line); }
 .tokenops-root .about-stat strong { color: var(--gold); }
+.tokenops-root .about-feature-card { color: var(--ink) !important; text-decoration: none; }
+.tokenops-root .about-feature-card:hover { border-color: var(--gold) !important; }
+.tokenops-root .about-feature-card .card-arrow { color: var(--gold); }
+.tokenops-root .about-cta {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(197,160,71,0.10) 0%, transparent 60%),
+    var(--surface) !important;
+}
+.tokenops-root .resource-card::before {
+  background: linear-gradient(90deg, transparent, var(--gold), transparent) !important;
+}
+.tokenops-root .resource-card:hover { border-color: var(--gold) !important; }
+.tokenops-root .resource-card-footer { border-top: 1px solid var(--line); }
+.tokenops-root .panel-row, .tokenops-root .metric-row { border-bottom: 1px solid var(--line); }
+.tokenops-root .panel-row strong, .tokenops-root .metric-row strong { color: var(--ink); }
