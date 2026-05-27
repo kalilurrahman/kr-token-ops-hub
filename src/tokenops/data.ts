@@ -163,4 +163,32 @@ export interface TokenOpsContent {
   templates: ResourceItem[];
   resources: ResourceItem[];
   sources: string[];
+  library: LibraryItem[];
+}
+
+export interface LibraryItem {
+  title: string;
+  desc: string;
+  category: "Advanced" | "Checklist" | "Guide" | "Playbook" | "Reference" | "Operating" | string;
+  format: string;
+  /** Path relative to /library/ (e.g. "guides/tokenops-faq.md") */
+  file: string;
+}
+
+export const libraryCategoryMeta: Record<string, { label: string; tagline: string }> = {
+  Advanced:   { label: "Advanced",   tagline: "Deep technical guides for platform engineers." },
+  Checklist:  { label: "Checklists", tagline: "Pre-flight and audit checklists you can print and run." },
+  Guide:      { label: "Guides",     tagline: "Reference reading for understanding TokenOps end-to-end." },
+  Playbook:   { label: "Playbooks",  tagline: "Multi-week programs with phases, owners, and outcomes." },
+  Reference:  { label: "References", tagline: "Look-up material — metrics, vendors, tools, comparisons." },
+  Operating:  { label: "Operating",  tagline: "Day-to-day artifacts: runbooks, QBRs, scorecards, SLAs." },
+};
+
+export function downloadLibraryFile(file: string) {
+  const a = document.createElement("a");
+  a.href = `/library/${file}`;
+  a.download = file.split("/").pop() ?? file;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }

@@ -1,0 +1,747 @@
+# ============================================================================
+# TokenOps — Multi-Provider Model Routing Configuration
+# ============================================================================
+# Central routing configuration for distributing LLM requests across multiple
+# providers based on task type, complexity, user tier, cost targets, and
+# availability. The LLM gateway reads this file to:
+#
+#   1. Select the optimal model for each request based on routing rules.
+#   2. Enforce rate limits and circuit breakers per provider.
+#   3. Fail over to secondary providers when primaries are degraded.
+#   4. Track per-request cost attribution for FinOps reporting.
+#
+# Deployment:
+#   • Place in your gateway config directory (e.g., /etc/tokenops/routing.yaml)
+#   • The gateway reloads on SIGHUP or via a configurable polling interval.
+#   • Secrets (API keys) are resolved from environment variables at runtime.
+#
+# Last updated: 2026-05-27
+# ============================================================================
+
+schema_version: "1.0.0"
+
+# ---------------------------------------------------------------------------
+# 1. Provider Definitions
+# ---------------------------------------------------------------------------
+# Each provider block contains connection, authentication, rate-limit, and
+# health-check settings. The gateway maintains a connection pool per provider.
+# ---------------------------------------------------------------------------
+providers:
+
+  openai:
+    display_name: "OpenAI"
+    base_url: "https://api.openai.com/v1"
+    auth:
+      type: bearer_token
+      env_var: OPENAI_API_KEY                   # Resolved at runtime
+    rate_limits:
+      requests_per_minute: 5000
+      tokens_per_minute: 2_000_000
+      requests_per_day: 500_000
+    timeout:
+      connect_ms: 3000
+      read_ms: 120_000                          # 2 min for long completions
+      write_ms: 10_000
+    retry:
+      max_retries: 3
+      backoff_base_ms: 500
+      backoff_max_ms: 8000
+      retryable_status_codes: [429, 500, 502, 503]
+    health_check:
+      enabled: true
+      endpoint: "/models"
+      interval_seconds: 30
+      timeout_ms: 5000
+    connection_pool:
+      max_connections: 200
+      idle_timeout_seconds: 60
+    priority: 1                                 # Lower = higher priority
+    enabled: true
+
+  anthropic:
+    display_name: "Anthropic"
+    base_url: "https://api.anthropic.com/v1"
+    auth:
+      type: api_key_header
+      header_name: "x-api-key"
+      env_var: ANTHROPIC_API_KEY
+    rate_limits:
+      requests_per_minute: 4000
+      tokens_per_minute: 1_600_000
+      requests_per_day: 400_000
+    timeout:
+      connect_ms: 3000
+      read_ms: 120_000
+      write_ms: 10_000
+    retry:
+      max_retries: 3
+      backoff_base_ms: 500
+      backoff_max_ms: 8000
+      retryable_status_codes: [429, 500, 502, 503, 529]
+    health_check:
+      enabled: true
+      endpoint: "/messages"                     # HEAD request for liveness
+      method: HEAD
+      interval_seconds: 30
+      timeout_ms: 5000
+    connection_pool:
+      max_connections: 150
+      idle_timeout_seconds: 60
+    priority: 2
+    enabled: true
+
+  google:
+    display_name: "Google AI (Gemini)"
+    base_url: "https://generativelanguage.googleapis.com/v1beta"
+    auth:
+      type: bearer_token
+      env_var: GOOGLE_AI_API_KEY
+    rate_limits:
+      requests_per_minute: 3000
+      tokens_per_minute: 4_000_000              # Gemini has generous TPM
+      requests_per_day: 300_000
+    timeout:
+      connect_ms: 3000
+      read_ms: 180_000                          # 3 min for Gemini long-context
+      write_ms: 10_000
+    retry:
+      max_retries: 2
+      backoff_base_ms: 1000
+      backoff_max_ms: 10_000
+      retryable_status_codes: [429, 500, 503]
+    health_check:
+      enabled: true
+      endpoint: "/models"
+      interval_seconds: 45
+      timeout_ms: 5000
+    connection_pool:
+      max_connections: 100
+      idle_timeout_seconds: 90
+    priority: 3
+    enabled: true
+
+  meta_llama:
+    display_name: "Meta Llama (via Together AI)"
+    base_url: "https://api.together.xyz/v1"
+    auth:
+      type: bearer_token
+      env_var: TOGETHER_API_KEY
+    rate_limits:
+      requests_per_minute: 6000
+      tokens_per_minute: 3_000_000
+      requests_per_day: 600_000
+    timeout:
+      connect_ms: 3000
+      read_ms: 90_000
+      write_ms: 10_000
+    retry:
+      max_retries: 3
+      backoff_base_ms: 500
+      backoff_max_ms: 8000
+      retryable_status_codes: [429, 500, 502, 503]
+    health_check:
+      enabled: true
+      endpoint: "/models"
+      interval_seconds: 30
+      timeout_ms: 5000
+    connection_pool:
+      max_connections: 150
+      idle_timeout_seconds: 60
+    priority: 4
+    enabled: true
+
+# ---------------------------------------------------------------------------
+# 2. Model Registry
+# ---------------------------------------------------------------------------
+# Each model entry records its capabilities, pricing, context limits, and
+# quality ratings by task type. Quality ratings are 1-10 based on internal
+# evals (update quarterly). Pricing is per 1M tokens as of May 2026.
+# ---------------------------------------------------------------------------
+model_registry:
+
+  # --- OpenAI Models ---
+  gpt-4.1:
+    provider: openai
+    display_name: "GPT-4.1"
+    context_window: 1_048_576                   # 1M tokens
+    max_output_tokens: 32_768
+    pricing:
+      input_per_1m: 2.00
+      output_per_1m: 8.00
+      cached_input_per_1m: 0.50
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 9.2
+      code_generation: 9.5
+      summarization: 8.8
+      classification: 8.5
+      creative_writing: 9.0
+      extraction: 8.7
+    tier: frontier
+
+  gpt-4.1-mini:
+    provider: openai
+    display_name: "GPT-4.1 Mini"
+    context_window: 1_048_576
+    max_output_tokens: 16_384
+    pricing:
+      input_per_1m: 0.40
+      output_per_1m: 1.60
+      cached_input_per_1m: 0.10
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 7.5
+      code_generation: 8.0
+      summarization: 8.2
+      classification: 8.6
+      creative_writing: 7.0
+      extraction: 8.5
+    tier: balanced
+
+  gpt-4.1-nano:
+    provider: openai
+    display_name: "GPT-4.1 Nano"
+    context_window: 1_048_576
+    max_output_tokens: 16_384
+    pricing:
+      input_per_1m: 0.10
+      output_per_1m: 0.40
+      cached_input_per_1m: 0.025
+    supports_vision: false
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 5.5
+      code_generation: 6.0
+      summarization: 7.0
+      classification: 8.0
+      creative_writing: 5.5
+      extraction: 7.8
+    tier: economy
+
+  o4-mini:
+    provider: openai
+    display_name: "o4-mini (Reasoning)"
+    context_window: 200_000
+    max_output_tokens: 100_000
+    pricing:
+      input_per_1m: 1.10
+      output_per_1m: 4.40
+      cached_input_per_1m: 0.275
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 9.8
+      code_generation: 9.4
+      summarization: 7.5
+      classification: 7.0
+      creative_writing: 6.5
+      extraction: 7.5
+    tier: reasoning
+
+  # --- Anthropic Models ---
+  claude-sonnet-4:
+    provider: anthropic
+    display_name: "Claude Sonnet 4"
+    context_window: 200_000
+    max_output_tokens: 64_000
+    pricing:
+      input_per_1m: 3.00
+      output_per_1m: 15.00
+      cached_input_per_1m: 0.30
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: false                   # Use tool_use for structured output
+    quality_ratings:
+      reasoning: 9.4
+      code_generation: 9.6
+      summarization: 9.2
+      classification: 8.5
+      creative_writing: 9.3
+      extraction: 9.0
+    tier: frontier
+
+  claude-haiku-3.5:
+    provider: anthropic
+    display_name: "Claude 3.5 Haiku"
+    context_window: 200_000
+    max_output_tokens: 8_192
+    pricing:
+      input_per_1m: 0.80
+      output_per_1m: 4.00
+      cached_input_per_1m: 0.08
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: false
+    quality_ratings:
+      reasoning: 7.0
+      code_generation: 7.5
+      summarization: 7.8
+      classification: 8.2
+      creative_writing: 7.0
+      extraction: 8.0
+    tier: balanced
+
+  # --- Google Models ---
+  gemini-2.5-pro:
+    provider: google
+    display_name: "Gemini 2.5 Pro"
+    context_window: 1_048_576
+    max_output_tokens: 65_536
+    pricing:
+      input_per_1m: 1.25
+      output_per_1m: 10.00
+      cached_input_per_1m: 0.3125
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 9.5
+      code_generation: 9.3
+      summarization: 9.0
+      classification: 8.8
+      creative_writing: 8.5
+      extraction: 9.1
+    tier: frontier
+
+  gemini-2.5-flash:
+    provider: google
+    display_name: "Gemini 2.5 Flash"
+    context_window: 1_048_576
+    max_output_tokens: 65_536
+    pricing:
+      input_per_1m: 0.15
+      output_per_1m: 0.60
+      cached_input_per_1m: 0.0375
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 7.8
+      code_generation: 8.0
+      summarization: 8.0
+      classification: 8.5
+      creative_writing: 7.0
+      extraction: 8.3
+    tier: economy
+
+  # --- Meta / Llama Models (via Together AI) ---
+  llama-4-maverick:
+    provider: meta_llama
+    display_name: "Llama 4 Maverick"
+    context_window: 1_048_576
+    max_output_tokens: 32_768
+    pricing:
+      input_per_1m: 0.27
+      output_per_1m: 0.85
+      cached_input_per_1m: 0.07
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 8.2
+      code_generation: 8.5
+      summarization: 8.0
+      classification: 8.3
+      creative_writing: 7.5
+      extraction: 8.2
+    tier: balanced
+
+  llama-4-scout:
+    provider: meta_llama
+    display_name: "Llama 4 Scout"
+    context_window: 524_288
+    max_output_tokens: 16_384
+    pricing:
+      input_per_1m: 0.10
+      output_per_1m: 0.30
+      cached_input_per_1m: 0.025
+    supports_vision: true
+    supports_function_calling: true
+    supports_streaming: true
+    supports_json_mode: true
+    quality_ratings:
+      reasoning: 6.5
+      code_generation: 7.0
+      summarization: 7.2
+      classification: 7.8
+      creative_writing: 6.0
+      extraction: 7.5
+    tier: economy
+
+# ---------------------------------------------------------------------------
+# 3. Routing Rules
+# ---------------------------------------------------------------------------
+# Rules are evaluated top-to-bottom; the first matching rule wins. Each rule
+# specifies a condition and a list of candidate models (in priority order).
+# The router selects the first available candidate that passes circuit-breaker
+# and rate-limit checks.
+# ---------------------------------------------------------------------------
+routing_rules:
+
+  # ---- 3a. Task-Based Routing ----
+  # Route requests by their declared task type (set via x-tokenops-task header
+  # or the `task_type` field in the request metadata).
+
+  task_based:
+
+    - name: "Classification → Economy"
+      description: "Simple classification tasks use cheapest models"
+      condition:
+        task_type: classification
+      candidates:
+        - gpt-4.1-nano                          # $0.10 / 1M input
+        - gemini-2.5-flash                      # $0.15 / 1M input
+        - llama-4-scout                         # $0.10 / 1M input
+      max_cost_per_request: 0.001               # Hard ceiling: $0.001
+
+    - name: "Extraction → Balanced"
+      description: "Entity extraction needs decent accuracy at moderate cost"
+      condition:
+        task_type: extraction
+      candidates:
+        - gpt-4.1-mini
+        - llama-4-maverick
+        - gemini-2.5-flash
+      max_cost_per_request: 0.01
+
+    - name: "Summarization → Balanced"
+      description: "Summarization works well with mid-tier models"
+      condition:
+        task_type: summarization
+      candidates:
+        - gemini-2.5-flash
+        - gpt-4.1-mini
+        - claude-haiku-3.5
+      max_cost_per_request: 0.02
+
+    - name: "Reasoning → Frontier"
+      description: "Complex reasoning tasks need the best models"
+      condition:
+        task_type: reasoning
+      candidates:
+        - o4-mini
+        - gemini-2.5-pro
+        - claude-sonnet-4
+        - gpt-4.1
+      max_cost_per_request: 0.50
+
+    - name: "Code Generation → Frontier"
+      description: "Code gen routes to highest-rated code models"
+      condition:
+        task_type: code_generation
+      candidates:
+        - claude-sonnet-4                       # 9.6 code rating
+        - gpt-4.1                               # 9.5 code rating
+        - gemini-2.5-pro
+      max_cost_per_request: 0.30
+
+    - name: "Creative Writing → Frontier"
+      description: "Creative work benefits from top-tier models"
+      condition:
+        task_type: creative_writing
+      candidates:
+        - claude-sonnet-4
+        - gpt-4.1
+        - gemini-2.5-pro
+      max_cost_per_request: 0.20
+
+  # ---- 3b. Complexity-Based Routing ----
+  # The gateway estimates complexity from input token count + task type, or
+  # the caller sets `x-tokenops-complexity` explicitly.
+
+  complexity_based:
+
+    - name: "Simple requests"
+      description: "< 500 input tokens, straightforward tasks"
+      condition:
+        complexity: simple
+        max_input_tokens: 500
+      candidates:
+        - gpt-4.1-nano
+        - gemini-2.5-flash
+        - llama-4-scout
+      max_cost_per_request: 0.002
+
+    - name: "Medium requests"
+      description: "500-4000 input tokens, moderate context needed"
+      condition:
+        complexity: medium
+        max_input_tokens: 4000
+      candidates:
+        - gpt-4.1-mini
+        - gemini-2.5-flash
+        - llama-4-maverick
+        - claude-haiku-3.5
+      max_cost_per_request: 0.02
+
+    - name: "Complex requests"
+      description: "> 4000 input tokens, deep reasoning required"
+      condition:
+        complexity: complex
+        min_input_tokens: 4000
+      candidates:
+        - gemini-2.5-pro                        # Best for long-context
+        - gpt-4.1
+        - claude-sonnet-4
+        - o4-mini
+      max_cost_per_request: 1.00
+
+  # ---- 3c. User-Tier Routing ----
+  # Different user tiers get access to different model classes. Tier is
+  # resolved from the API key or JWT claims.
+
+  user_tier:
+
+    - name: "Free tier"
+      description: "Free users get economy models only"
+      condition:
+        user_tier: free
+      candidates:
+        - gpt-4.1-nano
+        - gemini-2.5-flash
+        - llama-4-scout
+      rate_limit_override:
+        requests_per_minute: 10
+        tokens_per_minute: 50_000
+      max_cost_per_request: 0.001
+
+    - name: "Pro tier"
+      description: "Pro users get balanced + economy models"
+      condition:
+        user_tier: pro
+      candidates:
+        - gpt-4.1-mini
+        - gemini-2.5-flash
+        - llama-4-maverick
+        - claude-haiku-3.5
+      rate_limit_override:
+        requests_per_minute: 60
+        tokens_per_minute: 500_000
+      max_cost_per_request: 0.05
+
+    - name: "Enterprise tier"
+      description: "Enterprise users can access all models including frontier"
+      condition:
+        user_tier: enterprise
+      candidates:
+        - gpt-4.1
+        - claude-sonnet-4
+        - gemini-2.5-pro
+        - o4-mini
+        - gpt-4.1-mini                          # Fallback to balanced
+      rate_limit_override:
+        requests_per_minute: 500
+        tokens_per_minute: 2_000_000
+      max_cost_per_request: 2.00
+
+  # ---- 3d. Fallback Chains ----
+  # If all candidates in the matched rule are unavailable (circuit open,
+  # rate-limited, or erroring), use these global fallback chains.
+
+  fallback_chains:
+    frontier:
+      description: "Fallback order for frontier-tier requests"
+      chain:
+        - gpt-4.1
+        - claude-sonnet-4
+        - gemini-2.5-pro
+        - gpt-4.1-mini                          # Last resort: downgrade tier
+      on_exhausted: reject_with_retry_after      # 503 + Retry-After header
+
+    balanced:
+      description: "Fallback order for balanced-tier requests"
+      chain:
+        - gpt-4.1-mini
+        - llama-4-maverick
+        - gemini-2.5-flash
+        - claude-haiku-3.5
+      on_exhausted: reject_with_retry_after
+
+    economy:
+      description: "Fallback order for economy-tier requests"
+      chain:
+        - gpt-4.1-nano
+        - gemini-2.5-flash
+        - llama-4-scout
+      on_exhausted: queue_for_retry              # Enqueue for delayed retry
+
+# ---------------------------------------------------------------------------
+# 4. Circuit Breaker Settings
+# ---------------------------------------------------------------------------
+# Per-provider circuit breaker to stop sending traffic to degraded providers.
+# Uses a sliding window to track error rates.
+# ---------------------------------------------------------------------------
+circuit_breaker:
+  defaults:
+    enabled: true
+    # Window over which error rate is calculated
+    window_size_seconds: 60
+    # Minimum requests in window before circuit can trip
+    min_requests_in_window: 20
+    # Error rate threshold to open the circuit (0.0 - 1.0)
+    error_rate_threshold: 0.50
+    # How long the circuit stays open before trying a probe request
+    open_duration_seconds: 30
+    # Number of consecutive successes in half-open state to close circuit
+    half_open_success_threshold: 3
+    # Which HTTP status codes count as errors
+    error_status_codes: [500, 502, 503, 429]
+    # Whether timeouts count as errors
+    count_timeouts_as_errors: true
+
+  # Per-provider overrides
+  overrides:
+    openai:
+      error_rate_threshold: 0.40                # Trip earlier for primary
+      open_duration_seconds: 20                 # Recover faster
+    anthropic:
+      error_rate_threshold: 0.50
+      open_duration_seconds: 30
+    google:
+      error_rate_threshold: 0.50
+      open_duration_seconds: 45                 # Slower recovery; observe
+    meta_llama:
+      error_rate_threshold: 0.60                # More tolerant for OSS
+      open_duration_seconds: 30
+
+# ---------------------------------------------------------------------------
+# 5. Load Balancing
+# ---------------------------------------------------------------------------
+# When multiple candidates in a rule are healthy, the load balancer selects
+# among them. Strategy applies within a single routing rule's candidate list.
+# ---------------------------------------------------------------------------
+load_balancing:
+  # Strategy: round_robin | weighted | least_latency | cost_optimized
+  strategy: cost_optimized
+
+  cost_optimized:
+    description: >
+      Selects the cheapest healthy model that meets the quality threshold
+      for the detected task type. Falls back to least-latency if costs are
+      equal.
+    # Minimum quality rating (1-10) a model must have for the detected
+    # task type to be eligible. Prevents routing reasoning tasks to nano.
+    min_quality_rating: 7.0
+    # When multiple models have identical cost, break ties by latency
+    tiebreaker: least_latency
+
+  weighted:
+    description: "Manual traffic split for A/B testing or gradual migration"
+    weights:
+      gpt-4.1-mini: 60
+      gemini-2.5-flash: 25
+      llama-4-maverick: 15
+
+  least_latency:
+    description: "Route to the provider with the lowest P50 latency"
+    # Latency is measured via a sliding window of recent requests
+    latency_window_seconds: 300
+    # Minimum sample size before latency data is trusted
+    min_samples: 50
+
+# ---------------------------------------------------------------------------
+# 6. Cost Tracking Hooks
+# ---------------------------------------------------------------------------
+# After every request, the gateway emits a cost event for downstream
+# analytics pipelines. These hooks define where and how cost data flows.
+# ---------------------------------------------------------------------------
+cost_tracking:
+  enabled: true
+
+  # Fields appended to every cost event (in addition to standard metadata
+  # like request_id, model, provider, input/output tokens, cost, latency)
+  enrichment_fields:
+    - source: request_header
+      header: "x-tokenops-service"
+      event_field: service
+    - source: request_header
+      header: "x-tokenops-feature"
+      event_field: feature
+    - source: request_header
+      header: "x-tokenops-environment"
+      event_field: environment
+    - source: request_header
+      header: "x-tokenops-cost-center"
+      event_field: cost_center
+    - source: request_header
+      header: "x-tokenops-user-tier"
+      event_field: user_tier
+    - source: routing_metadata
+      field: "routing_rule_name"
+      event_field: routing_rule
+    - source: routing_metadata
+      field: "fallback_used"
+      event_field: is_fallback
+
+  # Destinations for cost events
+  sinks:
+    - type: webhook
+      url: "https://analytics.company.com/tokenops/events"
+      method: POST
+      headers:
+        Authorization: "Bearer {{ TOKENOPS_ANALYTICS_TOKEN }}"
+        Content-Type: "application/json"
+      batch_size: 100                           # Buffer up to 100 events
+      flush_interval_seconds: 5                 # Flush at least every 5s
+      retry_on_failure: true
+
+    - type: kafka
+      bootstrap_servers: "kafka.company.com:9092"
+      topic: "tokenops.cost.events"
+      compression: gzip
+      acks: 1                                   # Leader ack only (fast)
+
+    - type: stdout
+      format: json                              # For local development
+      enabled_environments: [development, staging]
+
+  # Real-time cost aggregation (powers budget guardrails)
+  aggregation:
+    # In-memory sliding window for real-time budget checks
+    window_duration_minutes: 60
+    # How often aggregated totals are flushed to persistent storage
+    persist_interval_seconds: 30
+    # Storage backend for persistent aggregation
+    storage:
+      type: redis
+      url: "redis://redis.company.com:6379/2"
+      key_prefix: "tokenops:cost:"
+      ttl_hours: 2160                           # 90 days retention
+
+# ---------------------------------------------------------------------------
+# 7. Global Settings
+# ---------------------------------------------------------------------------
+global:
+  # Default model when no routing rule matches (should rarely happen)
+  default_model: gpt-4.1-mini
+
+  # Maximum request body size (prevents abuse)
+  max_request_body_bytes: 10_485_760            # 10 MB
+
+  # Request ID header name (for tracing)
+  request_id_header: "x-tokenops-request-id"
+
+  # If true, the router adds x-tokenops-routed-model and
+  # x-tokenops-routed-reason headers to the response
+  expose_routing_headers: true
+
+  # Logging level for the routing engine
+  log_level: info                               # debug | info | warn | error
+
+  # Environment label
+  environment: production
