@@ -31,9 +31,14 @@ export function ResourceCard({ item }: { item: ResourceItem }) {
           <span className="category-tag">{item.category}</span>
         </div>
         {item.file && !isPdf && (
-          <button className="download-btn" onClick={() => downloadTemplate(item.file!)}>
-            <Download size={15} /> Download
-          </button>
+          <div className="resource-card-actions">
+            <Link className="download-btn" to="/read/$" params={{ _splat: `template/${item.file}` }}>
+              <BookOpen size={15} /> Read
+            </Link>
+            <button className="download-btn" onClick={() => downloadTemplate(item.file!)}>
+              <Download size={15} /> Download
+            </button>
+          </div>
         )}
         {isPdf && (
           <a className="download-btn" href={`/templates/${item.file}`} download>
