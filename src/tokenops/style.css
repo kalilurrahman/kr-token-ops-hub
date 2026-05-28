@@ -100,6 +100,17 @@ button, input, select { font: inherit; }
   padding: 12px 0 2px;
 }
 .reader-bottom-nav > :last-child { justify-self: end; }
+.tokenops-root main.app-shell:has(.reader-shell) {
+  width: min(1680px, calc(100% - 24px));
+}
+.reader-shell .guide {
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+.reader-article table { table-layout: fixed; }
+.reader-article th,
+.reader-article td { overflow-wrap: anywhere; word-break: break-word; }
 
 .topbar {
   display: flex;
