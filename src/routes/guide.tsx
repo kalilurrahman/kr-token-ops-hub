@@ -16,12 +16,13 @@ export const Route = createFileRoute("/guide")({
 
 function GuidePage() {
   return (
-    <section className="article-shell">
-      <aside>
-        <h2>Guide</h2>
-        <p>The complete TokenOps operating manual from the source markdown.</p>
-      </aside>
-      <article className="guide" dangerouslySetInnerHTML={{ __html: html }} />
+    <section className="reader-shell">
+      <header className="reader-header">
+        <p className="eyebrow">Master guide</p>
+        <h1>TokenOps Operating Manual</h1>
+        <p>The complete operating manual from the source markdown.</p>
+      </header>
+      <article className="guide reader-article" dangerouslySetInnerHTML={{ __html: html }} />
     </section>
   );
 }
