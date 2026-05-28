@@ -29,10 +29,12 @@ button, input, select { font: inherit; }
 
 /* ─── Reader (single-column markdown viewer) ─── */
 .reader-shell {
-  display: block;
-  padding: 24px 0 48px;
-  max-width: 920px;
+  display: grid;
+  gap: 12px;
+  padding: 8px 0 28px;
+  max-width: none;
   margin: 0 auto;
+  width: 100%;
 }
 .reader-toolbar {
   display: flex;
@@ -40,9 +42,19 @@ button, input, select { font: inherit; }
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 18px;
 }
-.reader-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.reader-toolbar-title {
+  position: sticky;
+  top: 65px;
+  z-index: 20;
+  padding: 12px 0;
+  backdrop-filter: blur(18px);
+}
+.reader-title-block { min-width: 0; flex: 1 1 420px; }
+.reader-title-block h1 { margin: 2px 0 4px; font-size: clamp(1.7rem, 4vw, 3.2rem); line-height: 1; }
+.reader-title-block p { max-width: 860px; margin: 0; color: var(--muted); }
+.reader-kicker { display: flex; gap: 8px; flex-wrap: wrap; color: var(--gold, var(--amber)); font-size: 0.74rem; font-weight: 800; text-transform: uppercase; }
+.reader-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .reader-back {
   display: inline-flex;
   align-items: center;
@@ -55,13 +67,39 @@ button, input, select { font: inherit; }
 .reader-header { margin-bottom: 18px; }
 .reader-header h1 { margin: 6px 0 8px; line-height: 1.1; }
 .reader-article {
-  padding: clamp(20px, 4vw, 40px);
-  border-radius: 12px;
+  padding: clamp(18px, 3vw, 36px);
+  border-radius: 8px;
   max-width: 100%;
   overflow-wrap: anywhere;
 }
 .reader-article img { max-width: 100%; height: auto; }
-.reader-article pre { max-width: 100%; }
+.reader-article pre { max-width: 100%; white-space: pre-wrap; word-break: break-word; }
+.reader-meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.reader-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--blue);
+  text-decoration: none;
+  cursor: pointer;
+}
+.reader-icon-btn:hover { transform: translateY(-1px); }
+.reader-icon-btn-wide { min-width: 112px; }
+.reader-bottom-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0 2px;
+}
+.reader-bottom-nav > :last-child { justify-self: end; }
 
 .topbar {
   display: flex;
