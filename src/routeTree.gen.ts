@@ -20,6 +20,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReadSplatRouteImport } from './routes/read.$'
 
 const ToolkitRoute = ToolkitRouteImport.update({
   id: '/toolkit',
@@ -76,6 +77,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReadSplatRoute = ReadSplatRouteImport.update({
+  id: '/read/$',
+  path: '/read/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/sources': typeof SourcesRoute
   '/templates': typeof TemplatesRoute
   '/toolkit': typeof ToolkitRoute
+  '/read/$': typeof ReadSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/sources': typeof SourcesRoute
   '/templates': typeof TemplatesRoute
   '/toolkit': typeof ToolkitRoute
+  '/read/$': typeof ReadSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/sources': typeof SourcesRoute
   '/templates': typeof TemplatesRoute
   '/toolkit': typeof ToolkitRoute
+  '/read/$': typeof ReadSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/sources'
     | '/templates'
     | '/toolkit'
+    | '/read/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/sources'
     | '/templates'
     | '/toolkit'
+    | '/read/$'
   id:
     | '__root__'
     | '/'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/sources'
     | '/templates'
     | '/toolkit'
+    | '/read/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +183,7 @@ export interface RootRouteChildren {
   SourcesRoute: typeof SourcesRoute
   TemplatesRoute: typeof TemplatesRoute
   ToolkitRoute: typeof ToolkitRoute
+  ReadSplatRoute: typeof ReadSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/read/$': {
+      id: '/read/$'
+      path: '/read/$'
+      fullPath: '/read/$'
+      preLoaderRoute: typeof ReadSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -267,6 +287,7 @@ const rootRouteChildren: RootRouteChildren = {
   SourcesRoute: SourcesRoute,
   TemplatesRoute: TemplatesRoute,
   ToolkitRoute: ToolkitRoute,
+  ReadSplatRoute: ReadSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
