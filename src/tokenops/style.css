@@ -27,6 +27,42 @@ button, input, select { font: inherit; }
   margin: 0 auto;
 }
 
+/* ─── Reader (single-column markdown viewer) ─── */
+.reader-shell {
+  display: block;
+  padding: 24px 0 48px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.reader-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.reader-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.reader-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+}
+.reader-back:hover { color: var(--ink); }
+.reader-header { margin-bottom: 18px; }
+.reader-header h1 { margin: 6px 0 8px; line-height: 1.1; }
+.reader-article {
+  padding: clamp(20px, 4vw, 40px);
+  border-radius: 12px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.reader-article img { max-width: 100%; height: auto; }
+.reader-article pre { max-width: 100%; }
+
 .topbar {
   display: flex;
   align-items: center;

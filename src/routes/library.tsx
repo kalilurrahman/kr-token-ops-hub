@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Download, ExternalLink, Library as LibraryIcon } from "lucide-react";
+import { BookOpen, Download, Library as LibraryIcon } from "lucide-react";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
 import { downloadLibraryFile, libraryCategoryMeta } from "@/tokenops/data";
@@ -72,14 +72,13 @@ function LibraryPage() {
                 <span className="category-tag">{item.category}</span>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <a
+                <Link
                   className="download-btn"
-                  href={`/library/${item.file}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  to="/read/$"
+                  params={{ _splat: item.file }}
                 >
-                  <ExternalLink size={15} /> Read
-                </a>
+                  <BookOpen size={15} /> Read
+                </Link>
                 <button className="download-btn" onClick={() => downloadLibraryFile(item.file)}>
                   <Download size={15} /> Download
                 </button>
