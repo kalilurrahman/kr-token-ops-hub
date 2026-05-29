@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X, BookOpen, Gauge, Calculator, Zap, FolderDown, FileText, Layers, Info, Github, Library } from "lucide-react";
+import { Menu, X, BookOpen, Gauge, Calculator, Zap, FolderDown, FileText, Layers, Info, Github, Library, Sparkles } from "lucide-react";
 
 const NAV = [
   { to: "/", label: "Home", icon: Gauge },
+  { to: "/hub", label: "Hub", icon: Sparkles },
   { to: "/guide", label: "Guide", icon: BookOpen },
   { to: "/patterns", label: "Patterns", icon: Layers },
   { to: "/calculator", label: "Calculator", icon: Calculator },
