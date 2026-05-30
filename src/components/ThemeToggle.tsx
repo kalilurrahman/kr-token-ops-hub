@@ -24,7 +24,11 @@ export function ThemeToggle() {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    try { window.localStorage.setItem(KEY, next); } catch {}
+    try {
+      window.localStorage.setItem(KEY, next);
+    } catch {
+      return;
+    }
   };
 
   return (
