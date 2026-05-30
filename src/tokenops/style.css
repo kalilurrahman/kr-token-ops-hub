@@ -1505,6 +1505,49 @@ code, pre, .font-mono {
 .tokenops-root .panel-row, .tokenops-root .metric-row { border-bottom: 1px solid var(--line); }
 .tokenops-root .panel-row strong, .tokenops-root .metric-row strong { color: var(--ink); }
 
+[data-theme="light"] .tokenops-root .hero-band,
+[data-theme="light"] .tokenops-root .starter-kit-banner,
+[data-theme="light"] .tokenops-root .about-cta {
+  background:
+    radial-gradient(circle at 82% 16%, rgba(37, 99, 235, 0.10) 0%, transparent 48%),
+    linear-gradient(135deg, #ffffff 0%, #f2f7ff 58%, #e8f1ff 100%) !important;
+  border-color: var(--line) !important;
+  box-shadow: var(--shadow) !important;
+}
+[data-theme="light"] .tokenops-root .primary-action,
+[data-theme="light"] .tokenops-root .button-action,
+[data-theme="light"] .tokenops-root .starter-kit-banner .download-btn,
+[data-theme="light"] .tokenops-root .download-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.20) !important;
+}
+[data-theme="light"] .tokenops-root .secondary-action,
+[data-theme="light"] .tokenops-root .download-btn {
+  background: #ffffff !important;
+  color: var(--gold) !important;
+  border-color: var(--line-bright) !important;
+}
+[data-theme="light"] .tokenops-root input,
+[data-theme="light"] .tokenops-root select,
+[data-theme="light"] .tokenops-root textarea,
+[data-theme="light"] .tokenops-root .guide pre,
+[data-theme="light"] .tokenops-root .source-list div,
+[data-theme="light"] .tokenops-root .compression-stat,
+[data-theme="light"] .tokenops-root .comparator-header {
+  background: #f8fbff !important;
+  color: var(--ink) !important;
+}
+[data-theme="light"] .tokenops-root .badge,
+[data-theme="light"] .tokenops-root .badge-yaml,
+[data-theme="light"] .tokenops-root .badge-md,
+[data-theme="light"] .tokenops-root .badge-guide,
+[data-theme="light"] .tokenops-root .badge-csv,
+[data-theme="light"] .tokenops-root .starter-kit-items span {
+  background: #eef5ff !important;
+  color: var(--gold-dim) !important;
+}
+
 /* ──────────────── Professional Hub ──────────────── */
 .hub-page { padding: 24px 0 64px; }
 .hub-hero { margin-bottom: 28px; max-width: 920px; }
