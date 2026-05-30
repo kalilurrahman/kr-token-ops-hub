@@ -100,9 +100,9 @@ function RoadmapPage() {
           <p className="eyebrow">Implementation roadmap</p>
           <h1>TokenOps roadmap: discover, measure, govern, optimize, scale.</h1>
           <p className="hero-copy">
-            Build TokenOps in phases. Establish visibility first, then define allocation and governance,
-            then optimize usage, then operationalize continuous improvement. A FinOps-style operating
-            model — not a one-off reporting project.
+            Build TokenOps in phases. Establish visibility first, then define allocation and
+            governance, then optimize usage, then operationalize continuous improvement. A
+            FinOps-style operating model — not a one-off reporting project.
           </p>
           <div className="hero-actions">
             <Link className="primary-action" to="/calculator">
@@ -121,17 +121,24 @@ function RoadmapPage() {
           <h2 style={{ marginBottom: 6 }}>Six phases from charter to continuous improvement</h2>
           <p style={{ color: "var(--muted)", margin: 0 }}>
             Each phase has a clear goal and a concrete output. Run them in order — skipping ahead to
-            optimization without ownership and measurement is the most common reason TokenOps programs stall.
+            optimization without ownership and measurement is the most common reason TokenOps
+            programs stall.
           </p>
         </div>
         <table>
           <thead>
-            <tr><th>Phase</th><th>Goal</th><th>Typical outputs</th></tr>
+            <tr>
+              <th>Phase</th>
+              <th>Goal</th>
+              <th>Typical outputs</th>
+            </tr>
           </thead>
           <tbody>
             {PHASES.map((p) => (
               <tr key={p.phase}>
-                <td><strong>{p.phase}</strong></td>
+                <td>
+                  <strong>{p.phase}</strong>
+                </td>
                 <td>{p.goal}</td>
                 <td>{p.outputs}</td>
               </tr>
@@ -156,7 +163,8 @@ function RoadmapPage() {
           <h2>A 90-day first implementation.</h2>
           <p>
             This sequence matches the way FinOps practices mature: first visibility, then control,
-            then optimization. Use it as a default cadence, then tune to your organization's appetite.
+            then optimization. Use it as a default cadence, then tune to your organization's
+            appetite.
           </p>
         </div>
         <div className="timeline">
@@ -164,7 +172,9 @@ function RoadmapPage() {
             <div className="timeline-item" key={item.window}>
               <span>{index + 1}</span>
               <div>
-                <h3>{item.window} — {item.title}</h3>
+                <h3>
+                  {item.window} — {item.title}
+                </h3>
                 <p>{item.body}</p>
               </div>
             </div>

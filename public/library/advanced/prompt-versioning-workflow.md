@@ -8,13 +8,13 @@
 
 Prompts are the most volatile component in an LLM-powered system. A one-line change can:
 
-| Impact | Example | Without Versioning | With Versioning |
-|--------|---------|-------------------|-----------------|
-| **Cost** | Adding "think step by step" triples output tokens | Silent 3× cost increase | Caught in CI: token count delta alert |
-| **Quality** | Removing a constraint causes format regression | Discovered in production by users | Caught by test suite before merge |
-| **Compliance** | Changing a system prompt removes PII guardrails | Audit trail missing | Full change history with author + reviewer |
-| **Rollback** | New prompt causes hallucination spike | Manual "what was the old prompt?" scramble | One-click rollback to previous version |
-| **Attribution** | Which prompt version drove last month's costs? | Impossible to determine | Exact cost-per-version in analytics |
+| Impact          | Example                                           | Without Versioning                         | With Versioning                            |
+| --------------- | ------------------------------------------------- | ------------------------------------------ | ------------------------------------------ |
+| **Cost**        | Adding "think step by step" triples output tokens | Silent 3× cost increase                    | Caught in CI: token count delta alert      |
+| **Quality**     | Removing a constraint causes format regression    | Discovered in production by users          | Caught by test suite before merge          |
+| **Compliance**  | Changing a system prompt removes PII guardrails   | Audit trail missing                        | Full change history with author + reviewer |
+| **Rollback**    | New prompt causes hallucination spike             | Manual "what was the old prompt?" scramble | One-click rollback to previous version     |
+| **Attribution** | Which prompt version drove last month's costs?    | Impossible to determine                    | Exact cost-per-version in analytics        |
 
 **Rule of thumb:** If a prompt reaches production, it must be versioned.
 
@@ -24,22 +24,22 @@ Prompts are the most volatile component in an LLM-powered system. A one-line cha
 
 Every prompt version is tracked with the following metadata:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `prompt_id` | `VARCHAR(64)` | Stable identifier for the prompt (e.g., `ticket-classifier-v1`) |
-| `version` | `INTEGER` | Auto-incrementing version number |
-| `content_hash` | `CHAR(64)` | SHA-256 hash of the prompt content (detects silent changes) |
-| `content` | `TEXT` | Full prompt text |
-| `created_at` | `TIMESTAMPTZ` | When this version was created |
-| `author` | `VARCHAR(128)` | Who created this version (email or handle) |
-| `status` | `ENUM` | `draft` → `testing` → `canary` → `active` → `deprecated` → `rolled_back` |
-| `model` | `VARCHAR(64)` | Target model this prompt was designed for |
-| `token_count` | `INTEGER` | Number of tokens in the prompt (measured with the target model's tokenizer) |
-| `estimated_cost_per_call` | `NUMERIC(10,6)` | Estimated cost per invocation based on token count + model pricing |
-| `test_pass_rate` | `NUMERIC(5,2)` | Pass rate from automated test suite (%) |
-| `change_description` | `TEXT` | Human-readable description of what changed and why |
-| `parent_version` | `INTEGER` | Previous version this was derived from |
-| `tags` | `JSONB` | Arbitrary metadata (e.g., `{"experiment": "compression-test"}`) |
+| Field                     | Type            | Description                                                                 |
+| ------------------------- | --------------- | --------------------------------------------------------------------------- |
+| `prompt_id`               | `VARCHAR(64)`   | Stable identifier for the prompt (e.g., `ticket-classifier-v1`)             |
+| `version`                 | `INTEGER`       | Auto-incrementing version number                                            |
+| `content_hash`            | `CHAR(64)`      | SHA-256 hash of the prompt content (detects silent changes)                 |
+| `content`                 | `TEXT`          | Full prompt text                                                            |
+| `created_at`              | `TIMESTAMPTZ`   | When this version was created                                               |
+| `author`                  | `VARCHAR(128)`  | Who created this version (email or handle)                                  |
+| `status`                  | `ENUM`          | `draft` → `testing` → `canary` → `active` → `deprecated` → `rolled_back`    |
+| `model`                   | `VARCHAR(64)`   | Target model this prompt was designed for                                   |
+| `token_count`             | `INTEGER`       | Number of tokens in the prompt (measured with the target model's tokenizer) |
+| `estimated_cost_per_call` | `NUMERIC(10,6)` | Estimated cost per invocation based on token count + model pricing          |
+| `test_pass_rate`          | `NUMERIC(5,2)`  | Pass rate from automated test suite (%)                                     |
+| `change_description`      | `TEXT`          | Human-readable description of what changed and why                          |
+| `parent_version`          | `INTEGER`       | Previous version this was derived from                                      |
+| `tags`                    | `JSONB`         | Arbitrary metadata (e.g., `{"experiment": "compression-test"}`)             |
 
 ### Status Lifecycle
 
@@ -49,13 +49,13 @@ draft → testing → canary → active → deprecated
                   rolled_back ────────────┘
 ```
 
-| Status | Meaning |
-|--------|---------|
-| `draft` | Work in progress; not evaluated yet |
-| `testing` | Running through automated test suite |
-| `canary` | Serving a small percentage of live traffic |
-| `active` | Serving 100% of production traffic |
-| `deprecated` | Replaced by a newer version; kept for audit trail |
+| Status        | Meaning                                                               |
+| ------------- | --------------------------------------------------------------------- |
+| `draft`       | Work in progress; not evaluated yet                                   |
+| `testing`     | Running through automated test suite                                  |
+| `canary`      | Serving a small percentage of live traffic                            |
+| `active`      | Serving 100% of production traffic                                    |
+| `deprecated`  | Replaced by a newer version; kept for audit trail                     |
 | `rolled_back` | Reverted due to quality or cost issues; previous version re-activated |
 
 ---
@@ -114,9 +114,9 @@ owner: "@cx-platform-team"
 cost_center: "CC-5520-CX"
 
 quality_requirements:
-  min_test_pass_rate: 95.0      # Percent
+  min_test_pass_rate: 95.0 # Percent
   max_token_count_delta_pct: 20 # Max allowed increase from current active version
-  max_cost_delta_pct: 30        # Max allowed cost increase
+  max_cost_delta_pct: 30 # Max allowed cost increase
 
 tags:
   service: support_chatbot
@@ -178,12 +178,12 @@ Run the new prompt version against live traffic **without serving its results** 
 
 Serve the new version to a small percentage of live traffic and monitor for regressions.
 
-| Phase | Traffic % | Duration | Criteria to Advance |
-|-------|----------|----------|-------------------|
-| Canary Start | 5% | 2 hours | No errors, quality stable |
-| Canary Expand | 20% | 4 hours | Metrics within tolerance |
-| Canary Full | 50% | 8 hours | Statistical significance on quality metrics |
-| Full Rollout | 100% | — | All checks pass |
+| Phase         | Traffic % | Duration | Criteria to Advance                         |
+| ------------- | --------- | -------- | ------------------------------------------- |
+| Canary Start  | 5%        | 2 hours  | No errors, quality stable                   |
+| Canary Expand | 20%       | 4 hours  | Metrics within tolerance                    |
+| Canary Full   | 50%       | 8 hours  | Statistical significance on quality metrics |
+| Full Rollout  | 100%      | —        | All checks pass                             |
 
 **Rollback trigger:** Any of the following during canary:
 
@@ -228,16 +228,16 @@ Automated checks that run in CI before a prompt change can be merged or promoted
 
 ### 5.1 Gate Definitions
 
-| Gate | Check | Pass Criteria | Blocks |
-|------|-------|--------------|--------|
-| **Token Count** | Count tokens with target model's tokenizer | Delta ≤ `max_token_count_delta_pct` from active version | Merge |
-| **Cost Estimate** | Calculate estimated cost per call | Delta ≤ `max_cost_delta_pct` from active version | Merge |
-| **Format Validation** | Parse prompt for required sections (system, user, output format) | All required sections present | Merge |
-| **Test Case Pass Rate** | Run prompt against test cases with expected outputs | Pass rate ≥ `min_test_pass_rate` | Merge |
-| **Regression Test** | Compare quality on golden dataset vs. active version | No degradation >1% on any metric | Promotion |
-| **Safety Check** | Run prompt through content safety classifier | No unsafe outputs detected | Merge |
-| **PII Scan** | Scan prompt for hardcoded PII or secrets | Zero PII matches | Merge |
-| **Idempotency** | Run same input 5 times; check output consistency | Consistency rate ≥ 95% | Merge |
+| Gate                    | Check                                                            | Pass Criteria                                           | Blocks    |
+| ----------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- | --------- |
+| **Token Count**         | Count tokens with target model's tokenizer                       | Delta ≤ `max_token_count_delta_pct` from active version | Merge     |
+| **Cost Estimate**       | Calculate estimated cost per call                                | Delta ≤ `max_cost_delta_pct` from active version        | Merge     |
+| **Format Validation**   | Parse prompt for required sections (system, user, output format) | All required sections present                           | Merge     |
+| **Test Case Pass Rate** | Run prompt against test cases with expected outputs              | Pass rate ≥ `min_test_pass_rate`                        | Merge     |
+| **Regression Test**     | Compare quality on golden dataset vs. active version             | No degradation >1% on any metric                        | Promotion |
+| **Safety Check**        | Run prompt through content safety classifier                     | No unsafe outputs detected                              | Merge     |
+| **PII Scan**            | Scan prompt for hardcoded PII or secrets                         | Zero PII matches                                        | Merge     |
+| **Idempotency**         | Run same input 5 times; check output consistency                 | Consistency rate ≥ 95%                                  | Merge     |
 
 ### 5.2 CI Gate Script (Pseudocode)
 
@@ -350,12 +350,12 @@ The gateway automatically rolls back if (during canary or after promotion):
 
 ### 6.3 Rollback SLA
 
-| Severity | Detection → Rollback | Method |
-|----------|---------------------|--------|
-| Automated trigger | < 2 minutes | Automatic |
-| P0 (user-facing issue) | < 15 minutes | Manual + automated support |
-| P1 (quality degradation) | < 1 hour | Manual after investigation |
-| P2 (cost increase) | < 4 hours | Manual after cost analysis |
+| Severity                 | Detection → Rollback | Method                     |
+| ------------------------ | -------------------- | -------------------------- |
+| Automated trigger        | < 2 minutes          | Automatic                  |
+| P0 (user-facing issue)   | < 15 minutes         | Manual + automated support |
+| P1 (quality degradation) | < 1 hour             | Manual after investigation |
+| P2 (cost increase)       | < 4 hours            | Manual after cost analysis |
 
 ---
 
@@ -580,18 +580,17 @@ name: Prompt CI/CD
 on:
   pull_request:
     paths:
-      - 'prompts/**'
+      - "prompts/**"
   push:
     branches: [main]
     paths:
-      - 'prompts/**'
+      - "prompts/**"
 
 env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   PROMPT_REGISTRY_URL: ${{ secrets.PROMPT_REGISTRY_URL }}
 
 jobs:
-
   # --------------------------------------------------
   # Job 1: Static checks (runs on every PR)
   # --------------------------------------------------
@@ -612,7 +611,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: pip install tiktoken pyyaml
@@ -681,7 +680,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: pip install openai pyyaml
@@ -760,4 +759,4 @@ jobs:
 
 ---
 
-*Template version 1.0 — Maintained by the TokenOps team.*
+_Template version 1.0 — Maintained by the TokenOps team._

@@ -117,7 +117,6 @@ metadata_fields:
 # Service configurations
 # ---------------------------------------------------------------------------
 services:
-
   # -------------------------------------------------------------------------
   # 1. Email Generator — Marketing & Sales Automation
   # -------------------------------------------------------------------------
@@ -281,8 +280,8 @@ validation:
   reject_untagged_requests: true
   reject_unknown_services: true
   reject_disallowed_models: true
-  log_level: info          # debug | info | warn | error
-  sampling_rate: 1.0       # 1.0 = log 100% of requests
+  log_level: info # debug | info | warn | error
+  sampling_rate: 1.0 # 1.0 = log 100% of requests
 
   # Fields that must be present even in development / sandbox
   always_required:

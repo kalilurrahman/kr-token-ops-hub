@@ -137,37 +137,199 @@
     "Finout TokenOps guide"
   ],
   "library": [
-    { "title": "Cost Anomaly Detection", "desc": "Detect, investigate, and respond to unexpected token spend spikes before they break budgets.", "category": "Advanced", "format": "Markdown", "file": "advanced/cost-anomaly-detection.md" },
-    { "title": "LLM Gateway Architecture", "desc": "Design a centralized gateway for tagging, routing, rate limiting, caching, and cost tracking.", "category": "Advanced", "format": "Markdown", "file": "advanced/llm-gateway-architecture.md" },
-    { "title": "Multi-Provider Routing Config", "desc": "YAML reference for routing requests across OpenAI, Anthropic, Google, and open-source models.", "category": "Advanced", "format": "YAML", "file": "advanced/multi-provider-routing-config.yaml" },
-    { "title": "Optimization Patterns — Detailed", "desc": "Ten battle-tested patterns for reducing token cost without sacrificing quality.", "category": "Advanced", "format": "Markdown", "file": "advanced/optimization-patterns-detailed.md" },
-    { "title": "Prompt Versioning Workflow", "desc": "Treat prompts as production artifacts with version control, quality gates, and rollback.", "category": "Advanced", "format": "Markdown", "file": "advanced/prompt-versioning-workflow.md" },
+    {
+      "title": "Cost Anomaly Detection",
+      "desc": "Detect, investigate, and respond to unexpected token spend spikes before they break budgets.",
+      "category": "Advanced",
+      "format": "Markdown",
+      "file": "advanced/cost-anomaly-detection.md"
+    },
+    {
+      "title": "LLM Gateway Architecture",
+      "desc": "Design a centralized gateway for tagging, routing, rate limiting, caching, and cost tracking.",
+      "category": "Advanced",
+      "format": "Markdown",
+      "file": "advanced/llm-gateway-architecture.md"
+    },
+    {
+      "title": "Multi-Provider Routing Config",
+      "desc": "YAML reference for routing requests across OpenAI, Anthropic, Google, and open-source models.",
+      "category": "Advanced",
+      "format": "YAML",
+      "file": "advanced/multi-provider-routing-config.yaml"
+    },
+    {
+      "title": "Optimization Patterns — Detailed",
+      "desc": "Ten battle-tested patterns for reducing token cost without sacrificing quality.",
+      "category": "Advanced",
+      "format": "Markdown",
+      "file": "advanced/optimization-patterns-detailed.md"
+    },
+    {
+      "title": "Prompt Versioning Workflow",
+      "desc": "Treat prompts as production artifacts with version control, quality gates, and rollback.",
+      "category": "Advanced",
+      "format": "Markdown",
+      "file": "advanced/prompt-versioning-workflow.md"
+    },
 
-    { "title": "Quarterly Cost Optimization Audit", "desc": "Audit checklist covering tagging coverage, model mix, retry rates, caching, and waste reduction.", "category": "Checklist", "format": "Markdown", "file": "checklists/cost-optimization-audit-checklist.md" },
-    { "title": "Model Upgrade / Migration Checklist", "desc": "Validate quality, cost, latency, and rollback plan before swapping models in production.", "category": "Checklist", "format": "Markdown", "file": "checklists/model-upgrade-checklist.md" },
-    { "title": "Pre-Production Launch Checklist", "desc": "Tagging, budgets, alerts, fallbacks, and incident readiness before launching an LLM feature.", "category": "Checklist", "format": "Markdown", "file": "checklists/pre-production-launch-checklist.md" },
-    { "title": "Vendor Contract Negotiation", "desc": "Pricing tiers, rate limits, SLAs, data-use, and termination terms to negotiate with LLM vendors.", "category": "Checklist", "format": "Markdown", "file": "checklists/vendor-contract-negotiation-checklist.md" },
+    {
+      "title": "Quarterly Cost Optimization Audit",
+      "desc": "Audit checklist covering tagging coverage, model mix, retry rates, caching, and waste reduction.",
+      "category": "Checklist",
+      "format": "Markdown",
+      "file": "checklists/cost-optimization-audit-checklist.md"
+    },
+    {
+      "title": "Model Upgrade / Migration Checklist",
+      "desc": "Validate quality, cost, latency, and rollback plan before swapping models in production.",
+      "category": "Checklist",
+      "format": "Markdown",
+      "file": "checklists/model-upgrade-checklist.md"
+    },
+    {
+      "title": "Pre-Production Launch Checklist",
+      "desc": "Tagging, budgets, alerts, fallbacks, and incident readiness before launching an LLM feature.",
+      "category": "Checklist",
+      "format": "Markdown",
+      "file": "checklists/pre-production-launch-checklist.md"
+    },
+    {
+      "title": "Vendor Contract Negotiation",
+      "desc": "Pricing tiers, rate limits, SLAs, data-use, and termination terms to negotiate with LLM vendors.",
+      "category": "Checklist",
+      "format": "Markdown",
+      "file": "checklists/vendor-contract-negotiation-checklist.md"
+    },
 
-    { "title": "TokenOps Case Studies", "desc": "Real-world optimization stories with starting state, interventions, and measurable savings.", "category": "Guide", "format": "Markdown", "file": "guides/case-studies-detailed.md" },
-    { "title": "Team RACI Matrix", "desc": "Who is Responsible, Accountable, Consulted, and Informed for every TokenOps activity.", "category": "Guide", "format": "Markdown", "file": "guides/team-raci-matrix.md" },
-    { "title": "TokenOps FAQ", "desc": "Answers to the most common TokenOps questions — from \"what is it?\" to multi-tenant billing.", "category": "Guide", "format": "Markdown", "file": "guides/tokenops-faq.md" },
-    { "title": "TokenOps Glossary", "desc": "Reference for every term used across TokenOps practices, dashboards, and contracts.", "category": "Guide", "format": "Markdown", "file": "guides/tokenops-glossary.md" },
-    { "title": "TokenOps Maturity Model", "desc": "Score your organization across five maturity levels and plot a path to the next one.", "category": "Guide", "format": "Markdown", "file": "guides/tokenops-maturity-model.md" },
+    {
+      "title": "TokenOps Case Studies",
+      "desc": "Real-world optimization stories with starting state, interventions, and measurable savings.",
+      "category": "Guide",
+      "format": "Markdown",
+      "file": "guides/case-studies-detailed.md"
+    },
+    {
+      "title": "Team RACI Matrix",
+      "desc": "Who is Responsible, Accountable, Consulted, and Informed for every TokenOps activity.",
+      "category": "Guide",
+      "format": "Markdown",
+      "file": "guides/team-raci-matrix.md"
+    },
+    {
+      "title": "TokenOps FAQ",
+      "desc": "Answers to the most common TokenOps questions — from \"what is it?\" to multi-tenant billing.",
+      "category": "Guide",
+      "format": "Markdown",
+      "file": "guides/tokenops-faq.md"
+    },
+    {
+      "title": "TokenOps Glossary",
+      "desc": "Reference for every term used across TokenOps practices, dashboards, and contracts.",
+      "category": "Guide",
+      "format": "Markdown",
+      "file": "guides/tokenops-glossary.md"
+    },
+    {
+      "title": "TokenOps Maturity Model",
+      "desc": "Score your organization across five maturity levels and plot a path to the next one.",
+      "category": "Guide",
+      "format": "Markdown",
+      "file": "guides/tokenops-maturity-model.md"
+    },
 
-    { "title": "Executive Briefing Template", "desc": "C-suite-ready deck outline for presenting TokenOps results, asks, and roadmap.", "category": "Playbook", "format": "Markdown", "file": "playbooks/executive-briefing-template.md" },
-    { "title": "Single-Model → Multi-Model Migration", "desc": "8-week playbook to migrate from a single LLM to a routed multi-model architecture.", "category": "Playbook", "format": "Markdown", "file": "playbooks/migration-from-single-model.md" },
-    { "title": "Multi-Tenant Billing Guide", "desc": "Architecture and accounting patterns for charging tenants accurately for LLM usage.", "category": "Playbook", "format": "Markdown", "file": "playbooks/multi-tenant-billing-guide.md" },
-    { "title": "RAG Pipeline Cost Optimization", "desc": "6-week playbook to cut RAG token cost via chunking, reranking, caching, and retrieval tuning.", "category": "Playbook", "format": "Markdown", "file": "playbooks/rag-cost-optimization-playbook.md" },
+    {
+      "title": "Executive Briefing Template",
+      "desc": "C-suite-ready deck outline for presenting TokenOps results, asks, and roadmap.",
+      "category": "Playbook",
+      "format": "Markdown",
+      "file": "playbooks/executive-briefing-template.md"
+    },
+    {
+      "title": "Single-Model → Multi-Model Migration",
+      "desc": "8-week playbook to migrate from a single LLM to a routed multi-model architecture.",
+      "category": "Playbook",
+      "format": "Markdown",
+      "file": "playbooks/migration-from-single-model.md"
+    },
+    {
+      "title": "Multi-Tenant Billing Guide",
+      "desc": "Architecture and accounting patterns for charging tenants accurately for LLM usage.",
+      "category": "Playbook",
+      "format": "Markdown",
+      "file": "playbooks/multi-tenant-billing-guide.md"
+    },
+    {
+      "title": "RAG Pipeline Cost Optimization",
+      "desc": "6-week playbook to cut RAG token cost via chunking, reranking, caching, and retrieval tuning.",
+      "category": "Playbook",
+      "format": "Markdown",
+      "file": "playbooks/rag-cost-optimization-playbook.md"
+    },
 
-    { "title": "LLM Provider Comparison Matrix", "desc": "Side-by-side comparison of pricing, context windows, features, and SLAs across providers.", "category": "Reference", "format": "Markdown", "file": "references/provider-comparison-matrix.md" },
-    { "title": "TokenOps KPI Dashboard Spec", "desc": "Technical spec for a complete TokenOps monitoring dashboard — metrics, panels, alerts.", "category": "Reference", "format": "Markdown", "file": "references/tokenops-kpi-dashboard-spec.md" },
-    { "title": "TokenOps Metrics Reference", "desc": "Every metric used in TokenOps — definition, formula, owner, alert thresholds.", "category": "Reference", "format": "Markdown", "file": "references/tokenops-metrics-reference.md" },
-    { "title": "Tool Landscape Guide", "desc": "Curated guide to gateways, observability platforms, and FinOps tooling for LLMs.", "category": "Reference", "format": "Markdown", "file": "references/tool-landscape-guide.md" },
+    {
+      "title": "LLM Provider Comparison Matrix",
+      "desc": "Side-by-side comparison of pricing, context windows, features, and SLAs across providers.",
+      "category": "Reference",
+      "format": "Markdown",
+      "file": "references/provider-comparison-matrix.md"
+    },
+    {
+      "title": "TokenOps KPI Dashboard Spec",
+      "desc": "Technical spec for a complete TokenOps monitoring dashboard — metrics, panels, alerts.",
+      "category": "Reference",
+      "format": "Markdown",
+      "file": "references/tokenops-kpi-dashboard-spec.md"
+    },
+    {
+      "title": "TokenOps Metrics Reference",
+      "desc": "Every metric used in TokenOps — definition, formula, owner, alert thresholds.",
+      "category": "Reference",
+      "format": "Markdown",
+      "file": "references/tokenops-metrics-reference.md"
+    },
+    {
+      "title": "Tool Landscape Guide",
+      "desc": "Curated guide to gateways, observability platforms, and FinOps tooling for LLMs.",
+      "category": "Reference",
+      "format": "Markdown",
+      "file": "references/tool-landscape-guide.md"
+    },
 
-    { "title": "Incident Response Runbook", "desc": "Step-by-step runbook for triaging and resolving token-cost incidents at any severity.", "category": "Operating", "format": "Markdown", "file": "templates/incident-response-runbook.md" },
-    { "title": "Quarterly Business Review", "desc": "QBR template covering spend, savings, optimization backlog, and program asks.", "category": "Operating", "format": "Markdown", "file": "templates/quarterly-business-review.md" },
-    { "title": "ROI Justification Template", "desc": "Build a defensible ROI case for funding a TokenOps program — costs, savings, payback.", "category": "Operating", "format": "Markdown", "file": "templates/roi-justification-template.md" },
-    { "title": "SLA / SLO Definitions", "desc": "Define and measure latency, availability, and quality SLOs for LLM-powered features.", "category": "Operating", "format": "Markdown", "file": "templates/sla-slo-definitions.md" },
-    { "title": "Vendor Evaluation Scorecard", "desc": "Scorecard for evaluating LLM API vendors across price, quality, security, and ops.", "category": "Operating", "format": "Markdown", "file": "templates/vendor-evaluation-scorecard.md" }
+    {
+      "title": "Incident Response Runbook",
+      "desc": "Step-by-step runbook for triaging and resolving token-cost incidents at any severity.",
+      "category": "Operating",
+      "format": "Markdown",
+      "file": "templates/incident-response-runbook.md"
+    },
+    {
+      "title": "Quarterly Business Review",
+      "desc": "QBR template covering spend, savings, optimization backlog, and program asks.",
+      "category": "Operating",
+      "format": "Markdown",
+      "file": "templates/quarterly-business-review.md"
+    },
+    {
+      "title": "ROI Justification Template",
+      "desc": "Build a defensible ROI case for funding a TokenOps program — costs, savings, payback.",
+      "category": "Operating",
+      "format": "Markdown",
+      "file": "templates/roi-justification-template.md"
+    },
+    {
+      "title": "SLA / SLO Definitions",
+      "desc": "Define and measure latency, availability, and quality SLOs for LLM-powered features.",
+      "category": "Operating",
+      "format": "Markdown",
+      "file": "templates/sla-slo-definitions.md"
+    },
+    {
+      "title": "Vendor Evaluation Scorecard",
+      "desc": "Scorecard for evaluating LLM API vendors across price, quality, security, and ops.",
+      "category": "Operating",
+      "format": "Markdown",
+      "file": "templates/vendor-evaluation-scorecard.md"
+    }
   ]
 }

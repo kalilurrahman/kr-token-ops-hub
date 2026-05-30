@@ -77,12 +77,12 @@ Rules: JSON only. Best guess if unsure (confidence<0.5). No follow-up questions.
 
 ### Expected Savings
 
-| Scenario | Before | After | Savings |
-|----------|--------|-------|---------|
-| Input tokens per call | 487 | 142 | -71% |
-| Monthly calls | 180,000 | 180,000 | — |
-| Monthly input cost (GPT-4.1-mini @ $0.40/1M) | $35.06 | $10.22 | $24.84/mo |
-| Annual savings | — | — | **$298/year** |
+| Scenario                                     | Before  | After   | Savings       |
+| -------------------------------------------- | ------- | ------- | ------------- |
+| Input tokens per call                        | 487     | 142     | -71%          |
+| Monthly calls                                | 180,000 | 180,000 | —             |
+| Monthly input cost (GPT-4.1-mini @ $0.40/1M) | $35.06  | $10.22  | $24.84/mo     |
+| Annual savings                               | —       | —       | **$298/year** |
 
 ### Quality Risk
 
@@ -186,11 +186,11 @@ class ContextWindowManager:
 ### Expected Savings
 
 | Conversation Length | Without Management | With Management | Savings |
-|--------------------|-------------------|-----------------|---------|
-| 5 turns | 2,500 tokens | 2,500 tokens | 0% |
-| 10 turns | 5,000 tokens | 3,200 tokens | 36% |
-| 20 turns | 10,000 tokens | 3,800 tokens | 62% |
-| 50 turns | 25,000 tokens | 4,200 tokens | 83% |
+| ------------------- | ------------------ | --------------- | ------- |
+| 5 turns             | 2,500 tokens       | 2,500 tokens    | 0%      |
+| 10 turns            | 5,000 tokens       | 3,200 tokens    | 36%     |
+| 20 turns            | 10,000 tokens      | 3,800 tokens    | 62%     |
+| 50 turns            | 25,000 tokens      | 4,200 tokens    | 83%     |
 
 ### Quality Risk
 
@@ -266,12 +266,12 @@ def select_model(task_type: str, complexity: str) -> str:
 
 ### Expected Savings
 
-| Before (100% GPT-4.1) | After (tiered routing) | Savings |
-|------------------------|----------------------|---------|
-| Classification: 40% volume × $2.00/1M | 40% × $0.10/1M | -95% on this segment |
-| Extraction: 25% volume × $2.00/1M | 25% × $0.40/1M | -80% on this segment |
-| Reasoning: 15% volume × $2.00/1M | 15% × $2.00/1M | 0% (still frontier) |
-| **Blended rate** | **$2.00/1M** | **~$0.58/1M** | **-71% overall** |
+| Before (100% GPT-4.1)                 | After (tiered routing) | Savings              |
+| ------------------------------------- | ---------------------- | -------------------- | ---------------- |
+| Classification: 40% volume × $2.00/1M | 40% × $0.10/1M         | -95% on this segment |
+| Extraction: 25% volume × $2.00/1M     | 25% × $0.40/1M         | -80% on this segment |
+| Reasoning: 15% volume × $2.00/1M      | 15% × $2.00/1M         | 0% (still frontier)  |
+| **Blended rate**                      | **$2.00/1M**           | **~$0.58/1M**        | **-71% overall** |
 
 ### Quality Risk
 
@@ -365,13 +365,13 @@ class SemanticCache:
 
 ### Expected Savings
 
-| Workload Type | Cache Hit Rate | Cost Reduction |
-|--------------|---------------|----------------|
-| FAQ / Support chatbot | 30–50% | 30–50% |
-| Document classification | 20–40% | 20–40% |
-| Content moderation | 40–60% | 40–60% |
-| Code generation (unique) | 5–10% | 5–10% |
-| Creative writing | 2–5% | 2–5% |
+| Workload Type            | Cache Hit Rate | Cost Reduction |
+| ------------------------ | -------------- | -------------- |
+| FAQ / Support chatbot    | 30–50%         | 30–50%         |
+| Document classification  | 20–40%         | 20–40%         |
+| Content moderation       | 40–60%         | 40–60%         |
+| Code generation (unique) | 5–10%          | 5–10%          |
+| Creative writing         | 2–5%           | 2–5%           |
 
 ### Quality Risk
 
@@ -469,11 +469,11 @@ class BatchProcessor:
 
 ### Expected Savings
 
-| Approach | Pricing | Savings vs. Real-Time |
-|----------|---------|----------------------|
-| OpenAI Batch API (24h window) | 50% of standard rate | **50%** |
-| Self-managed batching (optimize RPM) | Standard rate | 0% direct (but reduces overhead) |
-| Off-peak scheduling + batch API | 50% + reduced rate limit contention | **50%+** |
+| Approach                             | Pricing                             | Savings vs. Real-Time            |
+| ------------------------------------ | ----------------------------------- | -------------------------------- |
+| OpenAI Batch API (24h window)        | 50% of standard rate                | **50%**                          |
+| Self-managed batching (optimize RPM) | Standard rate                       | 0% direct (but reduces overhead) |
+| Off-peak scheduling + batch API      | 50% + reduced rate limit contention | **50%+**                         |
 
 ### Quality Risk
 
@@ -542,11 +542,11 @@ response = client.chat.completions.create(
 
 ### Expected Savings
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Avg output tokens | 250 | 35 | -86% |
-| Output cost per request (GPT-4.1-mini) | $0.000400 | $0.000056 | -86% |
-| Monthly output cost (180K calls) | $72.00 | $10.08 | **-$61.92/mo** |
+| Metric                                 | Before    | After     | Change         |
+| -------------------------------------- | --------- | --------- | -------------- |
+| Avg output tokens                      | 250       | 35        | -86%           |
+| Output cost per request (GPT-4.1-mini) | $0.000400 | $0.000056 | -86%           |
+| Monthly output cost (180K calls)       | $72.00    | $10.08    | **-$61.92/mo** |
 
 ### Quality Risk
 
@@ -639,12 +639,12 @@ class SmartRetryHandler:
 
 ### Expected Savings
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Wasted cost on non-retryable errors | $45/mo | $0/mo | -100% |
-| Retries per 1000 requests | 80 | 25 | -69% |
-| Cost of retries | $120/mo | $37/mo | -69% |
-| P99 latency (retry-induced) | 12s | 4s | -67% |
+| Metric                              | Before  | After  | Change |
+| ----------------------------------- | ------- | ------ | ------ |
+| Wasted cost on non-retryable errors | $45/mo  | $0/mo  | -100%  |
+| Retries per 1000 requests           | 80      | 25     | -69%   |
+| Cost of retries                     | $120/mo | $37/mo | -69%   |
+| P99 latency (retry-induced)         | 12s     | 4s     | -67%   |
 
 ### Quality Risk
 
@@ -738,13 +738,13 @@ class EmbeddingOptimizer:
 
 ### Expected Savings
 
-| Optimization | Cost Reduction |
-|-------------|---------------|
-| Model downsizing (large → small) | 60–80% |
+| Optimization                     | Cost Reduction                           |
+| -------------------------------- | ---------------------------------------- |
+| Model downsizing (large → small) | 60–80%                                   |
 | Dimension reduction (1536 → 512) | 0% direct (saves storage, faster search) |
-| Embedding caching (70% hit rate) | 70% on repeated content |
-| Batch vs. single calls | 0% direct (but higher throughput) |
-| **Combined** | **75–90%** |
+| Embedding caching (70% hit rate) | 70% on repeated content                  |
+| Batch vs. single calls           | 0% direct (but higher throughput)        |
+| **Combined**                     | **75–90%**                               |
 
 ### Quality Risk
 
@@ -875,12 +875,12 @@ class DistillationPipeline:
 
 ### Expected Savings
 
-| Metric | Frontier Model | Fine-Tuned Mini | Change |
-|--------|---------------|-----------------|--------|
-| Input cost / 1M tokens | $2.00 | $0.40 | -80% |
-| Output cost / 1M tokens | $8.00 | $1.60 | -80% |
-| Quality (task-specific) | 97.2% | 96.5% | -0.7pp |
-| Monthly cost (180K calls) | $396 | $79 | **-$317/mo** |
+| Metric                    | Frontier Model | Fine-Tuned Mini | Change       |
+| ------------------------- | -------------- | --------------- | ------------ |
+| Input cost / 1M tokens    | $2.00          | $0.40           | -80%         |
+| Output cost / 1M tokens   | $8.00          | $1.60           | -80%         |
+| Quality (task-specific)   | 97.2%          | 96.5%           | -0.7pp       |
+| Monthly cost (180K calls) | $396           | $79             | **-$317/mo** |
 
 ### Quality Risk
 
@@ -1000,13 +1000,13 @@ class OptimizedAgent:
 
 ### Expected Savings
 
-| Metric | Unoptimized Agent | Optimized Agent | Change |
-|--------|------------------|-----------------|--------|
-| Avg LLM calls per request | 12 | 5 | -58% |
-| Avg tool calls per request | 8 | 4 | -50% |
-| Avg cost per request | $0.45 | $0.12 | -73% |
-| P95 cost per request | $2.10 | $0.35 | -83% |
-| Avg latency | 18s | 6s | -67% |
+| Metric                     | Unoptimized Agent | Optimized Agent | Change |
+| -------------------------- | ----------------- | --------------- | ------ |
+| Avg LLM calls per request  | 12                | 5               | -58%   |
+| Avg tool calls per request | 8                 | 4               | -50%   |
+| Avg cost per request       | $0.45             | $0.12           | -73%   |
+| P95 cost per request       | $2.10             | $0.35           | -83%   |
+| Avg latency                | 18s               | 6s              | -67%   |
 
 ### Quality Risk
 
@@ -1025,18 +1025,18 @@ class OptimizedAgent:
 
 ## Summary Matrix
 
-| # | Pattern | Effort | Expected Savings | Quality Risk | Best For |
-|---|---------|--------|-----------------|--------------|----------|
-| 1 | Prompt Compression | Low | 20–70% input cost | Low | All workloads |
-| 2 | Context Window Management | Medium | 30–80% per long conversation | Medium | Chatbots, multi-turn |
-| 3 | Model Tiering & Routing | Medium | 50–80% blended cost | Low–Medium | Mixed workloads |
-| 4 | Semantic Caching | Medium | 20–60% total cost | Low | Repetitive queries |
-| 5 | Batch Processing | Low | 50% API cost | None | Background processing |
-| 6 | Output Format Constraints | Low | 50–85% output cost | Low | Classification, extraction |
-| 7 | Retry Reduction | Low | 5–15% total cost | None | High-volume services |
-| 8 | Embedding Optimization | Medium | 75–90% embedding cost | Low | RAG, search |
-| 9 | Fine-Tuning (Distillation) | High | 60–90% inference cost | Medium | High-volume, stable tasks |
-| 10 | Agent/Chain Optimization | High | 50–80% per agent call | Medium | Agentic workflows |
+| #   | Pattern                    | Effort | Expected Savings             | Quality Risk | Best For                   |
+| --- | -------------------------- | ------ | ---------------------------- | ------------ | -------------------------- |
+| 1   | Prompt Compression         | Low    | 20–70% input cost            | Low          | All workloads              |
+| 2   | Context Window Management  | Medium | 30–80% per long conversation | Medium       | Chatbots, multi-turn       |
+| 3   | Model Tiering & Routing    | Medium | 50–80% blended cost          | Low–Medium   | Mixed workloads            |
+| 4   | Semantic Caching           | Medium | 20–60% total cost            | Low          | Repetitive queries         |
+| 5   | Batch Processing           | Low    | 50% API cost                 | None         | Background processing      |
+| 6   | Output Format Constraints  | Low    | 50–85% output cost           | Low          | Classification, extraction |
+| 7   | Retry Reduction            | Low    | 5–15% total cost             | None         | High-volume services       |
+| 8   | Embedding Optimization     | Medium | 75–90% embedding cost        | Low          | RAG, search                |
+| 9   | Fine-Tuning (Distillation) | High   | 60–90% inference cost        | Medium       | High-volume, stable tasks  |
+| 10  | Agent/Chain Optimization   | High   | 50–80% per agent call        | Medium       | Agentic workflows          |
 
 ### Recommended Implementation Order
 
@@ -1047,4 +1047,4 @@ class OptimizedAgent:
 
 ---
 
-*Template version 1.0 — Maintained by the TokenOps team.*
+_Template version 1.0 — Maintained by the TokenOps team._

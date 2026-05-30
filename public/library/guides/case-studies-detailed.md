@@ -19,6 +19,7 @@
 HelpFlow provides a customer support platform used by 400+ B2B clients. In 2025, they launched an AI-powered support chatbot that handles Tier 1 customer inquiries — answering FAQs, looking up order status, troubleshooting common issues, and escalating complex cases to human agents. The chatbot uses a RAG architecture: it retrieves relevant help articles from a knowledge base, includes them in the context, and generates conversational responses.
 
 **Architecture:**
+
 ```
 User Message → Embedding Model (query vectorization)
             → Vector DB (retrieve top-10 help articles)
@@ -27,6 +28,7 @@ User Message → Embedding Model (query vectorization)
 ```
 
 **Scale:**
+
 - 180,000 conversations/month across all tenants
 - Average 6 turns per conversation (1.08M LLM calls/month)
 - Available 24/7 across 12 time zones
@@ -43,16 +45,16 @@ After 6 months in production, LLM costs had grown to $85,000/month and were tren
 
 **Monthly Cost Breakdown (Before):**
 
-| Component | Volume | Avg Tokens/Request | Model | Monthly Cost |
-|-----------|--------|-------------------|-------|-------------|
-| FAQ responses | 378,000 calls | 4,200 in / 350 out | GPT-4o | $5,040 |
-| Order lookups | 270,000 calls | 3,800 in / 200 out | GPT-4o | $2,970 |
-| Troubleshooting | 216,000 calls | 5,100 in / 600 out | GPT-4o | $4,050 |
-| Complex escalation | 162,000 calls | 5,500 in / 800 out | GPT-4o | $3,375 |
-| Embedding (queries) | 1,080,000 calls | 50 tokens each | text-embedding-3-small | $1.08 |
-| **Total** | **1,080,000** | | | **~$85,000** |
+| Component           | Volume          | Avg Tokens/Request | Model                  | Monthly Cost |
+| ------------------- | --------------- | ------------------ | ---------------------- | ------------ |
+| FAQ responses       | 378,000 calls   | 4,200 in / 350 out | GPT-4o                 | $5,040       |
+| Order lookups       | 270,000 calls   | 3,800 in / 200 out | GPT-4o                 | $2,970       |
+| Troubleshooting     | 216,000 calls   | 5,100 in / 600 out | GPT-4o                 | $4,050       |
+| Complex escalation  | 162,000 calls   | 5,500 in / 800 out | GPT-4o                 | $3,375       |
+| Embedding (queries) | 1,080,000 calls | 50 tokens each     | text-embedding-3-small | $1.08        |
+| **Total**           | **1,080,000**   |                    |                        | **~$85,000** |
 
-> *Note: Costs include multi-turn conversation overhead. The numbers above represent blended averages across all turns per conversation.*
+> _Note: Costs include multi-turn conversation overhead. The numbers above represent blended averages across all turns per conversation._
 
 ### Solution
 
@@ -108,24 +110,24 @@ Evaluated GPT-4o-mini for FAQ and order lookup tasks:
 
 ### Results
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Monthly LLM cost | $85,000 | $28,000 | −67% (−$57,000) |
-| Cost per conversation | $0.47 | $0.16 | −66% |
-| Avg. input tokens/request | 4,650 | 2,100 | −55% |
-| FAQ cache hit rate | 0% | 42% | +42pp |
-| System prompt tokens | 1,800 | 680 | −62% |
-| Retrieved articles per query | 10 | 5 (avg 3.2 after filtering) | −68% |
-| Quality score (human eval) | 4.3/5.0 | 4.2/5.0 | −2.3% (within tolerance) |
-| P99 latency (TTFT) | 1.2s | 0.8s | −33% (faster due to fewer input tokens) |
-| Time to detect cost anomaly | ~3 days | < 15 minutes | −99% |
+| Metric                       | Before  | After                       | Change                                  |
+| ---------------------------- | ------- | --------------------------- | --------------------------------------- |
+| Monthly LLM cost             | $85,000 | $28,000                     | −67% (−$57,000)                         |
+| Cost per conversation        | $0.47   | $0.16                       | −66%                                    |
+| Avg. input tokens/request    | 4,650   | 2,100                       | −55%                                    |
+| FAQ cache hit rate           | 0%      | 42%                         | +42pp                                   |
+| System prompt tokens         | 1,800   | 680                         | −62%                                    |
+| Retrieved articles per query | 10      | 5 (avg 3.2 after filtering) | −68%                                    |
+| Quality score (human eval)   | 4.3/5.0 | 4.2/5.0                     | −2.3% (within tolerance)                |
+| P99 latency (TTFT)           | 1.2s    | 0.8s                        | −33% (faster due to fewer input tokens) |
+| Time to detect cost anomaly  | ~3 days | < 15 minutes                | −99%                                    |
 
 **Annualized savings: $684,000**
 
 ### Lessons Learned
 
 1. **Model tiering delivered the largest single saving** — Switching FAQ and order lookup to GPT-4o-mini saved $39K/month alone. Always check if simpler tasks are running on unnecessarily expensive models.
-2. **Context trimming was higher-impact than expected** — Reducing from 10 to 5 retrieved articles (with relevance filtering) actually *improved* response quality because it removed noisy, irrelevant context.
+2. **Context trimming was higher-impact than expected** — Reducing from 10 to 5 retrieved articles (with relevance filtering) actually _improved_ response quality because it removed noisy, irrelevant context.
 3. **Semantic caching requires careful threshold tuning** — Initial threshold of 0.90 caused 3% of responses to be semantically incorrect. Raising to 0.95 eliminated mismatches while still achieving a 42% hit rate.
 4. **System prompt bloat is invisible and expensive** — Nobody noticed the system prompt had grown to 1,800 tokens. At 1.08M requests/month, every unnecessary token in the system prompt costs $2.70/month.
 5. **Instrumentation must come first** — The dashboard built in Week 1 revealed that FAQ and order lookup were the obvious targets. Without use-case-level tagging, the team would have optimized blindly.
@@ -145,11 +147,13 @@ Evaluated GPT-4o-mini for FAQ and order lookup tasks:
 DataMesh operates a data enrichment platform that processes raw business records (company profiles, job listings, product catalogs) and enriches them with standardized fields: industry classification, technology stack detection, company size estimation, and entity extraction. The platform processes data for 50+ enterprise clients.
 
 **Architecture:**
+
 ```
 Raw Records (S3) → Queue (SQS) → Worker Fleet → LLM API → Enriched Records (S3/Warehouse)
 ```
 
 **Scale:**
+
 - 2,000,000 records/day across all clients
 - Each record requires 1 LLM call for enrichment
 - Pipeline runs 24/7 with batch processing windows
@@ -166,13 +170,13 @@ The enrichment pipeline was the company's largest cost center at $124,000/month 
 
 **Monthly Cost Breakdown (Before):**
 
-| Component | Daily Volume | Avg Tokens/Request | Model | Monthly Cost |
-|-----------|-------------|-------------------|-------|-------------|
-| Industry classification | 2M records | 3,200 in / 180 out | Claude Sonnet | $72,000 |
-| Entity extraction | 2M records | 3,400 in / 250 out | Claude Sonnet | $52,000 |
-| **Total** | **4M calls** | | | **$124,000** |
+| Component               | Daily Volume | Avg Tokens/Request | Model         | Monthly Cost |
+| ----------------------- | ------------ | ------------------ | ------------- | ------------ |
+| Industry classification | 2M records   | 3,200 in / 180 out | Claude Sonnet | $72,000      |
+| Entity extraction       | 2M records   | 3,400 in / 250 out | Claude Sonnet | $52,000      |
+| **Total**               | **4M calls** |                    |               | **$124,000** |
 
-> *Note: Some records require both classification and extraction; total calls exceed record count.*
+> _Note: Some records require both classification and extraction; total calls exceed record count._
 
 ### Solution
 
@@ -229,17 +233,17 @@ Evaluated GPT-4o-mini and Claude Haiku for the enrichment tasks:
 
 ### Results
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Monthly LLM cost | $124,000 | $43,400 | −65% (−$80,600) |
-| Cost per record | $0.0021 | $0.00072 | −66% |
-| Model | Claude Sonnet | GPT-4o-mini (Batch) | — |
-| Avg. input tokens/request | 3,300 | 1,100 | −67% |
-| Few-shot examples | 8 | 3 | −63% |
-| Retry rate | 4.0% | 0.3% | −92% |
-| Classification accuracy | 96.8% | 95.1% | −1.7pp (within tolerance) |
-| Extraction F1 | 94.2% | 93.8% | −0.4pp (within tolerance) |
-| Processing latency | Real-time (~2s) | Batch (~4 hours) | Increased (acceptable for ETL) |
+| Metric                    | Before          | After               | Change                         |
+| ------------------------- | --------------- | ------------------- | ------------------------------ |
+| Monthly LLM cost          | $124,000        | $43,400             | −65% (−$80,600)                |
+| Cost per record           | $0.0021         | $0.00072            | −66%                           |
+| Model                     | Claude Sonnet   | GPT-4o-mini (Batch) | —                              |
+| Avg. input tokens/request | 3,300           | 1,100               | −67%                           |
+| Few-shot examples         | 8               | 3                   | −63%                           |
+| Retry rate                | 4.0%            | 0.3%                | −92%                           |
+| Classification accuracy   | 96.8%           | 95.1%               | −1.7pp (within tolerance)      |
+| Extraction F1             | 94.2%           | 93.8%               | −0.4pp (within tolerance)      |
+| Processing latency        | Real-time (~2s) | Batch (~4 hours)    | Increased (acceptable for ETL) |
 
 **Annualized savings: $967,200**
 
@@ -266,6 +270,7 @@ Evaluated GPT-4o-mini and Claude Haiku for the enrichment tasks:
 ContentForge is an enterprise content management platform with AI capabilities across six product teams: Marketing (email campaigns, ad copy), Documentation (tech docs, knowledge base), Legal (contract analysis, compliance), Customer Success (onboarding guides, health reports), Analytics (report generation, data narratives), and Internal Tools (code review, Slack bots). Each team independently integrated LLM capabilities into their features over 18 months.
 
 **Scale:**
+
 - 6 product teams, each with their own LLM integrations
 - 14 distinct LLM-powered features across the organization
 - Combined monthly LLM spend: $210,000/month
@@ -283,15 +288,15 @@ LLM costs were the fastest-growing line item in ContentForge's infrastructure bu
 
 **Monthly Cost by Team (Before — estimated, since attribution didn't exist):**
 
-| Team | Features | Estimated Monthly Cost | Model(s) Used |
-|------|----------|----------------------|---------------|
-| Marketing | Email campaigns, ad copy, A/B variants | $52,000 | GPT-4o |
-| Documentation | Tech docs, KB articles, changelog | $38,000 | Claude Sonnet |
-| Legal | Contract analysis, compliance review | $41,000 | Claude Haiku / GPT-4o |
-| Customer Success | Onboarding guides, health reports | $28,000 | GPT-4o |
-| Analytics | Report narratives, data summaries | $34,000 | GPT-4o |
-| Internal Tools | Code review bot, Slack assistant | $17,000 | Claude Sonnet |
-| **Total** | **14 features** | **$210,000** | |
+| Team             | Features                               | Estimated Monthly Cost | Model(s) Used         |
+| ---------------- | -------------------------------------- | ---------------------- | --------------------- |
+| Marketing        | Email campaigns, ad copy, A/B variants | $52,000                | GPT-4o                |
+| Documentation    | Tech docs, KB articles, changelog      | $38,000                | Claude Sonnet         |
+| Legal            | Contract analysis, compliance review   | $41,000                | Claude Haiku / GPT-4o |
+| Customer Success | Onboarding guides, health reports      | $28,000                | GPT-4o                |
+| Analytics        | Report narratives, data summaries      | $34,000                | GPT-4o                |
+| Internal Tools   | Code review bot, Slack assistant       | $17,000                | Claude Sonnet         |
+| **Total**        | **14 features**                        | **$210,000**           |                       |
 
 ### Solution
 
@@ -314,7 +319,8 @@ The Platform Engineering team, with executive sponsorship from the VP Engineerin
 - Held a company-wide "LLM Cost Awareness" presentation: showed each team their costs for the first time
 
 **Key reactions from teams upon seeing their costs:**
-- Marketing: "We're spending $52K/month on *email subject lines*?!" (they didn't realize GPT-4o was overkill)
+
+- Marketing: "We're spending $52K/month on _email subject lines_?!" (they didn't realize GPT-4o was overkill)
 - Legal: "Why are we using Haiku for contract analysis? That's a high-stakes task." (they upgraded to Sonnet for quality)
 - Internal Tools: "Our Slack bot costs $17K/month for 200 users. That's $85/user/month." (they immediately started optimizing)
 
@@ -332,57 +338,63 @@ The Platform Engineering team, with executive sponsorship from the VP Engineerin
 With chargeback driving accountability, each team optimized their own features:
 
 **Marketing Team ($52K → $18K):**
+
 - Downgraded email subject line generation from GPT-4o to GPT-4o-mini (A/B test showed no click-rate difference)
 - Added semantic caching for ad copy templates (38% hit rate)
 - Compressed prompts by removing redundant brand guidelines from every request (moved to fine-tuning)
 
 **Documentation Team ($38K → $24K):**
+
 - Implemented incremental doc updates (only re-generate changed sections, not entire articles)
 - Moved changelog generation to batch API (overnight processing)
 - Reduced few-shot examples from 6 to 2
 
 **Legal Team ($41K → $32K):**
+
 - Upgraded contract analysis from Claude Haiku to Claude Sonnet (quality improvement justified the cost increase for this high-stakes task)
 - Downgraded compliance checklist generation from GPT-4o to GPT-4o-mini (simple extraction task)
 - Net: quality improved on the critical path while cost decreased on routine tasks
 
 **Customer Success Team ($28K → $19K):**
+
 - Implemented template caching for onboarding guides (70% of guides follow standard templates)
 - Added `max_tokens` limits to health report generation
 - Moved weekly batch reports to batch API
 
 **Analytics Team ($34K → $20K):**
+
 - Switched report narratives from GPT-4o to GPT-4o-mini (human reviewers couldn't distinguish the outputs)
 - Implemented exact-match caching for repeated dashboard queries
 - Reduced context window usage by summarizing input datasets before generation
 
 **Internal Tools Team ($17K → $12K):**
+
 - Implemented aggressive caching for Slack bot (many questions are repeated)
 - Set token limits on code review output (was generating 2,000+ token reviews for 10-line changes)
 - Added a "complexity router" — simple questions to GPT-4o-mini, complex to Claude Sonnet
 
 ### Results
 
-| Team | Before | After | Savings | % Reduction |
-|------|--------|-------|---------|-------------|
-| Marketing | $52,000 | $18,000 | $34,000 | 65% |
-| Documentation | $38,000 | $24,000 | $14,000 | 37% |
-| Legal | $41,000 | $32,000 | $9,000 | 22% |
-| Customer Success | $28,000 | $19,000 | $9,000 | 32% |
-| Analytics | $34,000 | $20,000 | $14,000 | 41% |
-| Internal Tools | $17,000 | $12,000 | $5,000 | 29% |
-| **Organization Total** | **$210,000** | **$125,000** | **$85,000** | **40%** |
+| Team                   | Before       | After        | Savings     | % Reduction |
+| ---------------------- | ------------ | ------------ | ----------- | ----------- |
+| Marketing              | $52,000      | $18,000      | $34,000     | 65%         |
+| Documentation          | $38,000      | $24,000      | $14,000     | 37%         |
+| Legal                  | $41,000      | $32,000      | $9,000      | 22%         |
+| Customer Success       | $28,000      | $19,000      | $9,000      | 32%         |
+| Analytics              | $34,000      | $20,000      | $14,000     | 41%         |
+| Internal Tools         | $17,000      | $12,000      | $5,000      | 29%         |
+| **Organization Total** | **$210,000** | **$125,000** | **$85,000** | **40%**     |
 
-| Org-Wide Metric | Before | After | Change |
-|-----------------|--------|-------|--------|
-| Monthly LLM cost | $210,000 | $125,000 | −40% |
-| Cost attribution coverage | 0% | 100% | +100pp |
-| Teams with cost dashboards | 0 | 6 | +6 |
-| Features with budget guardrails | 0 | 14 | +14 |
-| Avg. cost per request (org-wide) | $0.038 | $0.021 | −45% |
-| Shadow API keys | 2 | 0 | −100% |
-| Independent client wrappers | 4 | 0 (centralized) | Consolidated |
-| Time to detect cost anomaly | ~1 week | < 30 minutes | −99% |
+| Org-Wide Metric                  | Before   | After           | Change       |
+| -------------------------------- | -------- | --------------- | ------------ |
+| Monthly LLM cost                 | $210,000 | $125,000        | −40%         |
+| Cost attribution coverage        | 0%       | 100%            | +100pp       |
+| Teams with cost dashboards       | 0        | 6               | +6           |
+| Features with budget guardrails  | 0        | 14              | +14          |
+| Avg. cost per request (org-wide) | $0.038   | $0.021          | −45%         |
+| Shadow API keys                  | 2        | 0               | −100%        |
+| Independent client wrappers      | 4        | 0 (centralized) | Consolidated |
+| Time to detect cost anomaly      | ~1 week  | < 30 minutes    | −99%         |
 
 **Annualized savings: $1,020,000**
 
@@ -390,9 +402,9 @@ With chargeback driving accountability, each team optimized their own features:
 
 1. **Chargeback is the most powerful optimization lever** — When costs were centralized, no team had incentive to optimize. Within 4 weeks of chargeback, 5 of 6 teams independently started optimization projects. Financial accountability drives behavior far more effectively than mandates.
 2. **Start with showback before chargeback** — The 1-quarter showback period was critical: it let teams see their costs, validate data accuracy, and start forming optimization plans before the costs hit their budgets. Jumping straight to chargeback creates backlash.
-3. **Teams optimize differently (and that's okay)** — Marketing focused on model downgrading, Documentation focused on batching, Legal focused on quality improvement. Giving teams autonomy over *how* they optimize (within the governance framework) produces better results than top-down mandates.
+3. **Teams optimize differently (and that's okay)** — Marketing focused on model downgrading, Documentation focused on batching, Legal focused on quality improvement. Giving teams autonomy over _how_ they optimize (within the governance framework) produces better results than top-down mandates.
 4. **Centralizing the gateway consolidates hidden costs** — Retiring 4 independent client wrappers and discovering shadow API keys saved engineering time and eliminated $3,200/month in untracked costs.
-5. **Some cost increases are justified** — The Legal team's upgrade from Claude Haiku to Claude Sonnet *increased* their cost for contract analysis, but it was the right decision for a high-stakes use case. TokenOps is about optimizing value per dollar, not minimizing cost at all costs.
+5. **Some cost increases are justified** — The Legal team's upgrade from Claude Haiku to Claude Sonnet _increased_ their cost for contract analysis, but it was the right decision for a high-stakes use case. TokenOps is about optimizing value per dollar, not minimizing cost at all costs.
 6. **The "aha moment" matters** — When the Marketing team saw that they were spending $52K/month on email subject lines generated by GPT-4o, the optimization case made itself. Visibility creates urgency.
 
 ---
@@ -410,11 +422,13 @@ With chargeback driving accountability, each team optimized their own features:
 CodeLens builds an AI-powered code review tool that integrates with GitHub and GitLab. When a developer opens a pull request, CodeLens analyzes the diff, identifies potential bugs, security vulnerabilities, performance issues, and style violations, and posts review comments directly on the PR. The tool serves 15,000 developers across 800 organizations.
 
 **Architecture:**
+
 ```
 GitHub/GitLab Webhook → Queue → Code Analysis Service → LLM API → PR Comments
 ```
 
 **Scale:**
+
 - 45,000 pull requests/day across all tenants
 - Each PR generates 1–15 LLM calls depending on diff size and complexity
 - Average: 4.2 LLM calls per PR
@@ -432,15 +446,15 @@ CodeLens faced a unique cost management challenge: wildly unpredictable costs dr
 
 **Monthly Cost Characteristics (Before):**
 
-| Metric | Value |
-|--------|-------|
-| Total monthly LLM cost | $95,000 (±$25,000 variance) |
-| Average cost per PR | $0.50 |
-| Median cost per PR | $0.12 |
-| P99 cost per PR | $8.20 |
-| Cost of top 2% PRs | $33,250 (35% of total) |
-| Revenue per customer/month | $15–$200 (tiered) |
-| Margin-negative customers | 12% of customer base |
+| Metric                     | Value                       |
+| -------------------------- | --------------------------- |
+| Total monthly LLM cost     | $95,000 (±$25,000 variance) |
+| Average cost per PR        | $0.50                       |
+| Median cost per PR         | $0.12                       |
+| P99 cost per PR            | $8.20                       |
+| Cost of top 2% PRs         | $33,250 (35% of total)      |
+| Revenue per customer/month | $15–$200 (tiered)           |
+| Margin-negative customers  | 12% of customer base        |
 
 ### Solution
 
@@ -452,24 +466,24 @@ CodeLens faced a unique cost management challenge: wildly unpredictable costs dr
 
 **PR Cost Distribution:**
 
-| PR Size | % of PRs | Avg Cost/PR | % of Total Cost |
-|---------|----------|-------------|-----------------|
-| Small (1–50 lines) | 45% | $0.06 | 8% |
-| Medium (51–300 lines) | 35% | $0.28 | 28% |
-| Large (301–1000 lines) | 15% | $1.20 | 29% |
-| X-Large (1000+ lines) | 5% | $4.80 | 35% |
+| PR Size                | % of PRs | Avg Cost/PR | % of Total Cost |
+| ---------------------- | -------- | ----------- | --------------- |
+| Small (1–50 lines)     | 45%      | $0.06       | 8%              |
+| Medium (51–300 lines)  | 35%      | $0.28       | 28%             |
+| Large (301–1000 lines) | 15%      | $1.20       | 29%             |
+| X-Large (1000+ lines)  | 5%       | $4.80       | 35%             |
 
 #### Step 2: Model Routing by Review Type (Weeks 2–4)
 
 Implemented a review-type classifier that routes each analysis to the appropriate model:
 
-| Review Type | Model (Before) | Model (After) | Quality Impact | Cost Impact |
-|-------------|---------------|---------------|----------------|-------------|
-| **Style checks** (formatting, naming, conventions) | Claude Sonnet | GPT-4o-mini | No measurable difference | −92% |
-| **Logic review** (bugs, edge cases, error handling) | Claude Sonnet | GPT-4o-mini | −1.2% detection rate (acceptable) | −92% |
-| **Security analysis** (vulnerabilities, injection, auth) | Claude Sonnet | Claude Sonnet | No change (kept premium model) | 0% |
-| **Performance review** (complexity, memory, efficiency) | Claude Sonnet | GPT-4o | −0.5% detection rate (acceptable) | −17% |
-| **Architecture review** (design patterns, abstractions) | Claude Sonnet | Claude Sonnet | No change (kept premium model) | 0% |
+| Review Type                                              | Model (Before) | Model (After) | Quality Impact                    | Cost Impact |
+| -------------------------------------------------------- | -------------- | ------------- | --------------------------------- | ----------- |
+| **Style checks** (formatting, naming, conventions)       | Claude Sonnet  | GPT-4o-mini   | No measurable difference          | −92%        |
+| **Logic review** (bugs, edge cases, error handling)      | Claude Sonnet  | GPT-4o-mini   | −1.2% detection rate (acceptable) | −92%        |
+| **Security analysis** (vulnerabilities, injection, auth) | Claude Sonnet  | Claude Sonnet | No change (kept premium model)    | 0%          |
+| **Performance review** (complexity, memory, efficiency)  | Claude Sonnet  | GPT-4o        | −0.5% detection rate (acceptable) | −17%        |
+| **Architecture review** (design patterns, abstractions)  | Claude Sonnet  | Claude Sonnet | No change (kept premium model)    | 0%          |
 
 **Implementation:** Added a lightweight classifier (rule-based, not LLM) that categorizes each analysis chunk by type based on the code patterns present, then routes to the appropriate model.
 
@@ -482,8 +496,8 @@ Implemented per-PR cost limits to cap the extreme tail:
 ```yaml
 budget_guardrails:
   per_pr:
-    soft_limit: $2.00    # Alert to the customer
-    hard_limit: $5.00    # Stop analysis, summarize what's done so far
+    soft_limit: $2.00 # Alert to the customer
+    hard_limit: $5.00 # Stop analysis, summarize what's done so far
     strategy: "progressive_degradation"
     # When approaching limit:
     # 1. Switch remaining files to cheapest model
@@ -503,7 +517,7 @@ budget_guardrails:
 Redesigned how large diffs are processed:
 
 - **Before:** Each changed file was sent as a separate LLM call with the full file context
-- **After:** 
+- **After:**
   - Group related file changes (same module/package) into a single LLM call
   - For large files: only send the changed hunks ± 20 lines of context (not the entire file)
   - For auto-generated files (detected by path patterns and heuristics): skip LLM analysis entirely, post a standard "auto-generated, skipped" comment
@@ -525,18 +539,18 @@ Implemented customer-level cost management:
 
 ### Results
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Monthly LLM cost | $95,000 (±$25K) | $38,000 (±$5K) | −60%, 80% less variance |
-| Average cost per PR | $0.50 | $0.20 | −60% |
-| Median cost per PR | $0.12 | $0.05 | −58% |
-| P99 cost per PR | $8.20 | $4.50 | −45% |
-| P99.9 cost per PR | $15.00+ | $5.00 (hard cap) | −67% |
-| Cost of top 2% PRs | 35% of total | 18% of total | −49% |
-| Margin-negative customers | 12% | 2% | −83% |
-| Monthly cost variance | ±26% | ±13% | 50% more predictable |
-| Security analysis quality | Baseline | No change | 0% (premium model retained) |
-| Overall detection rate | Baseline | −1.8% | Acceptable trade-off |
+| Metric                    | Before          | After            | Change                      |
+| ------------------------- | --------------- | ---------------- | --------------------------- |
+| Monthly LLM cost          | $95,000 (±$25K) | $38,000 (±$5K)   | −60%, 80% less variance     |
+| Average cost per PR       | $0.50           | $0.20            | −60%                        |
+| Median cost per PR        | $0.12           | $0.05            | −58%                        |
+| P99 cost per PR           | $8.20           | $4.50            | −45%                        |
+| P99.9 cost per PR         | $15.00+         | $5.00 (hard cap) | −67%                        |
+| Cost of top 2% PRs        | 35% of total    | 18% of total     | −49%                        |
+| Margin-negative customers | 12%             | 2%               | −83%                        |
+| Monthly cost variance     | ±26%            | ±13%             | 50% more predictable        |
+| Security analysis quality | Baseline        | No change        | 0% (premium model retained) |
+| Overall detection rate    | Baseline        | −1.8%            | Acceptable trade-off        |
 
 **Annualized savings: $684,000**
 
@@ -553,13 +567,13 @@ Implemented customer-level cost management:
 
 ## Cross-Case-Study Themes
 
-| Theme | CS 1: HelpFlow | CS 2: DataMesh | CS 3: ContentForge | CS 4: CodeLens |
-|-------|----------------|----------------|---------------------|----------------|
-| **Largest single optimization lever** | Model tiering (46% of savings) | Model downgrade (53% of savings) | Chargeback (cultural driver) | Model routing (37% of savings) |
-| **Time to first savings** | Week 2 | Week 2 | Week 5 (after showback) | Week 3 |
-| **Quality impact** | −2.3% (within tolerance) | −1.7pp accuracy | Varies by team | −1.8% detection rate |
-| **Implementation effort** | 6 weeks, 2 engineers | 5 weeks, 1.5 engineers | 12 weeks, 1 platform engineer + 6 team leads | 6 weeks, 2 engineers |
-| **Annualized savings** | $684K | $967K | $1,020K | $684K |
+| Theme                                 | CS 1: HelpFlow                 | CS 2: DataMesh                   | CS 3: ContentForge                           | CS 4: CodeLens                 |
+| ------------------------------------- | ------------------------------ | -------------------------------- | -------------------------------------------- | ------------------------------ |
+| **Largest single optimization lever** | Model tiering (46% of savings) | Model downgrade (53% of savings) | Chargeback (cultural driver)                 | Model routing (37% of savings) |
+| **Time to first savings**             | Week 2                         | Week 2                           | Week 5 (after showback)                      | Week 3                         |
+| **Quality impact**                    | −2.3% (within tolerance)       | −1.7pp accuracy                  | Varies by team                               | −1.8% detection rate           |
+| **Implementation effort**             | 6 weeks, 2 engineers           | 5 weeks, 1.5 engineers           | 12 weeks, 1 platform engineer + 6 team leads | 6 weeks, 2 engineers           |
+| **Annualized savings**                | $684K                          | $967K                            | $1,020K                                      | $684K                          |
 
 ### Universal Takeaways
 
@@ -568,7 +582,7 @@ Implemented customer-level cost management:
 3. **Quality gates are non-negotiable** — Every optimization was validated with measurable quality metrics before deployment. Optimizing without quality gates leads to user-facing regressions and eroded trust.
 4. **Organizational incentives matter as much as technical solutions** — ContentForge's 40% savings came primarily from chargeback (accountability), not technical optimization. The best tools are useless if teams have no incentive to use them.
 5. **Batch everything you can** — DataMesh's 50% savings from batch API migration required zero quality trade-off. If a workload doesn't need real-time response, batch it.
-6. **Cost variance is underappreciated** — CodeLens showed that cost *predictability* is as important as cost *reduction*. Budget guardrails and progressive degradation make costs plannable.
+6. **Cost variance is underappreciated** — CodeLens showed that cost _predictability_ is as important as cost _reduction_. Budget guardrails and progressive degradation make costs plannable.
 
 ---
 
@@ -582,4 +596,4 @@ Implemented customer-level cost management:
 
 ---
 
-*Case studies version 1.0 — Maintained by the TokenOps team.*
+_Case studies version 1.0 — Maintained by the TokenOps team._

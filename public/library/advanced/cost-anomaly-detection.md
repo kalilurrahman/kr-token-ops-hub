@@ -8,13 +8,13 @@
 
 An **anomaly** is any data point that falls outside the expected range of normal behavior. In the context of LLM token spend, we define anomalies statistically:
 
-| Type | Definition | Example |
-|------|-----------|---------|
-| **Spike** | Spend exceeds the rolling average by more than **2 standard deviations (σ)** | Daily cost jumps from $120 ± $15 to $280 |
-| **Sustained drift** | 5+ consecutive data points above **1.5σ** from the rolling average | Gradual creep from $120 → $160 over a week |
-| **Drop** | Spend falls below the rolling average by more than **2σ** | Costs drop to $30 — may indicate a broken pipeline |
-| **Pattern break** | Deviation from expected periodic patterns (e.g., weekday vs. weekend) | Saturday cost equals Tuesday cost (suggests runaway batch) |
-| **Rate anomaly** | Cost-per-request changes suddenly even if volume is stable | $/req jumps from $0.003 to $0.012 — model misconfiguration? |
+| Type                | Definition                                                                   | Example                                                     |
+| ------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **Spike**           | Spend exceeds the rolling average by more than **2 standard deviations (σ)** | Daily cost jumps from $120 ± $15 to $280                    |
+| **Sustained drift** | 5+ consecutive data points above **1.5σ** from the rolling average           | Gradual creep from $120 → $160 over a week                  |
+| **Drop**            | Spend falls below the rolling average by more than **2σ**                    | Costs drop to $30 — may indicate a broken pipeline          |
+| **Pattern break**   | Deviation from expected periodic patterns (e.g., weekday vs. weekend)        | Saturday cost equals Tuesday cost (suggests runaway batch)  |
+| **Rate anomaly**    | Cost-per-request changes suddenly even if volume is stable                   | $/req jumps from $0.003 to $0.012 — model misconfiguration? |
 
 > **Why 2σ?** For normally distributed data, ~95.4% of values fall within ±2σ. A data point beyond 2σ has a <5% chance of being normal variation, making it a strong signal without excessive false positives.
 
@@ -35,12 +35,12 @@ if |z_score| > 3.0 → CRITICAL
 
 **Parameters:**
 
-| Parameter | Recommended | Notes |
-|-----------|------------|-------|
-| Rolling window | 14 days | Long enough to smooth weekly cycles |
-| Min data points | 7 | Don't alert until sufficient baseline exists |
-| Threshold (warning) | 2.0σ | Catches ~5% false positive rate |
-| Threshold (critical) | 3.0σ | Catches ~0.3% false positive rate |
+| Parameter            | Recommended | Notes                                        |
+| -------------------- | ----------- | -------------------------------------------- |
+| Rolling window       | 14 days     | Long enough to smooth weekly cycles          |
+| Min data points      | 7           | Don't alert until sufficient baseline exists |
+| Threshold (warning)  | 2.0σ        | Catches ~5% false positive rate              |
+| Threshold (critical) | 3.0σ        | Catches ~0.3% false positive rate            |
 
 **Pseudocode:**
 
@@ -80,11 +80,11 @@ Simple and intuitive. Compare today's cost to yesterday's or the same day last w
 ```yaml
 # Alert rules
 day_over_day:
-  warning_threshold_pct: 40     # Today > yesterday by 40%
-  critical_threshold_pct: 80    # Today > yesterday by 80%
+  warning_threshold_pct: 40 # Today > yesterday by 40%
+  critical_threshold_pct: 80 # Today > yesterday by 80%
 
 week_over_week:
-  warning_threshold_pct: 30     # Today > same-day-last-week by 30%
+  warning_threshold_pct: 30 # Today > same-day-last-week by 30%
   critical_threshold_pct: 60
 ```
 
@@ -95,8 +95,8 @@ A hard ceiling that should never be crossed. Derived from budget guardrails.
 ```yaml
 absolute_thresholds:
   daily_cost:
-    warning: 500.00             # $500/day
-    critical: 1000.00           # $1,000/day — something is very wrong
+    warning: 500.00 # $500/day
+    critical: 1000.00 # $1,000/day — something is very wrong
   hourly_cost:
     warning: 60.00
     critical: 120.00
@@ -141,18 +141,18 @@ def composite_anomaly_score(
 
 When an anomaly fires, these are the most frequent causes. Use this table to guide your initial investigation:
 
-| # | Root Cause | Symptoms | Typical Cost Impact | Detection Signal | MTTR |
-|---|-----------|----------|-------------------|-----------------|------|
-| 1 | **Prompt regression** | Token count per request increases; output quality may not change | +20–200% per request | Cost-per-request spike with stable volume | 1–4 hours |
-| 2 | **Upstream volume spike** | Request volume jumps; cost per request is stable | +50–500% total cost | Volume anomaly, not rate anomaly | 2–8 hours |
-| 3 | **Retry storm** | High error rate + high retry count; same request repeated | +100–1000% total cost | Error rate spike + volume spike | 30 min–2 hours |
-| 4 | **Model migration error** | Requests routed to wrong (more expensive) model | +200–2000% per request | Model distribution shift | 15 min–1 hour |
-| 5 | **Cache invalidation** | Cache hit rate drops suddenly; same queries re-executed | +30–80% total cost | Cache hit rate drop + volume stable | 1–2 hours |
-| 6 | **New feature launch** | New service or endpoint starts sending requests | +20–100% total cost | New `service` or `feature` tag appears | 2–4 hours |
-| 7 | **Context window stuffing** | Input tokens per request balloons (e.g., full conversation history) | +50–300% per request | Input token count anomaly | 2–8 hours |
-| 8 | **Batch job misconfiguration** | Off-hours cost spike; single service dominates | +100–500% during batch window | Time-of-day anomaly + service concentration | 1–2 hours |
-| 9 | **Provider pricing change** | Cost-per-token increases with identical usage pattern | +10–100% total cost | Cost-per-token anomaly, stable volume/tokens | N/A (external) |
-| 10 | **Runaway agent loop** | Agent calls itself or tools repeatedly without termination | +500–5000% total cost | Extreme volume spike from single session | 15 min–1 hour |
+| #   | Root Cause                     | Symptoms                                                            | Typical Cost Impact           | Detection Signal                             | MTTR           |
+| --- | ------------------------------ | ------------------------------------------------------------------- | ----------------------------- | -------------------------------------------- | -------------- |
+| 1   | **Prompt regression**          | Token count per request increases; output quality may not change    | +20–200% per request          | Cost-per-request spike with stable volume    | 1–4 hours      |
+| 2   | **Upstream volume spike**      | Request volume jumps; cost per request is stable                    | +50–500% total cost           | Volume anomaly, not rate anomaly             | 2–8 hours      |
+| 3   | **Retry storm**                | High error rate + high retry count; same request repeated           | +100–1000% total cost         | Error rate spike + volume spike              | 30 min–2 hours |
+| 4   | **Model migration error**      | Requests routed to wrong (more expensive) model                     | +200–2000% per request        | Model distribution shift                     | 15 min–1 hour  |
+| 5   | **Cache invalidation**         | Cache hit rate drops suddenly; same queries re-executed             | +30–80% total cost            | Cache hit rate drop + volume stable          | 1–2 hours      |
+| 6   | **New feature launch**         | New service or endpoint starts sending requests                     | +20–100% total cost           | New `service` or `feature` tag appears       | 2–4 hours      |
+| 7   | **Context window stuffing**    | Input tokens per request balloons (e.g., full conversation history) | +50–300% per request          | Input token count anomaly                    | 2–8 hours      |
+| 8   | **Batch job misconfiguration** | Off-hours cost spike; single service dominates                      | +100–500% during batch window | Time-of-day anomaly + service concentration  | 1–2 hours      |
+| 9   | **Provider pricing change**    | Cost-per-token increases with identical usage pattern               | +10–100% total cost           | Cost-per-token anomaly, stable volume/tokens | N/A (external) |
+| 10  | **Runaway agent loop**         | Agent calls itself or tools repeatedly without termination          | +500–5000% total cost         | Extreme volume spike from single session     | 15 min–1 hour  |
 
 ---
 
@@ -167,7 +167,6 @@ When an anomaly fires, these are the most frequent causes. Use this table to gui
 schema_version: "1.0.0"
 
 alert_rules:
-
   # --- Hourly Cost Spike ---
   - name: hourly_cost_spike
     description: "Hourly cost exceeds 2σ from 14-day rolling average"
@@ -243,8 +242,8 @@ alert_rules:
     metric: error_rate
     detection:
       method: absolute_threshold
-      warning_threshold: 0.10    # 10% error rate
-      critical_threshold: 0.25   # 25% error rate
+      warning_threshold: 0.10 # 10% error rate
+      critical_threshold: 0.25 # 25% error rate
     secondary_metric: retry_count_per_hour
     secondary_detection:
       method: z_score
@@ -266,7 +265,7 @@ alert_rules:
     detection:
       method: percentage_change
       comparison: rolling_average_7d
-      warning_threshold_pct: -30   # 30% drop from baseline
+      warning_threshold_pct: -30 # 30% drop from baseline
       critical_threshold_pct: -50
     evaluation_interval: 15m
     notification:
@@ -313,11 +312,11 @@ alert_rules:
 
 ### 4.2 Alert Severity Matrix
 
-| Anomaly Score | Severity | Response Time | Channels | Escalation |
-|--------------|----------|---------------|----------|------------|
-| 30–60 | **Warning** | Within 4 hours | Slack | Service owner |
-| 60–80 | **High** | Within 1 hour | Slack + Email | Service owner + FinOps |
-| 80–100 | **Critical** | Within 15 min | Slack + PagerDuty | FinOps + Engineering Lead + VP |
+| Anomaly Score | Severity     | Response Time  | Channels          | Escalation                     |
+| ------------- | ------------ | -------------- | ----------------- | ------------------------------ |
+| 30–60         | **Warning**  | Within 4 hours | Slack             | Service owner                  |
+| 60–80         | **High**     | Within 1 hour  | Slack + Email     | Service owner + FinOps         |
+| 80–100        | **Critical** | Within 15 min  | Slack + PagerDuty | FinOps + Engineering Lead + VP |
 
 ---
 
@@ -420,15 +419,15 @@ ORDER BY (c.req_count * c.avg_cost) DESC;
 
 ### Step 5: Remediate (variable)
 
-| Root Cause | Immediate Action | Long-term Fix |
-|-----------|-----------------|---------------|
-| Prompt regression | Rollback to previous prompt version | Add token-count CI gate |
-| Volume spike | Apply rate limiting or throttle upstream | Capacity planning review |
-| Retry storm | Enable circuit breaker; fix root error | Improve error handling |
-| Model misconfiguration | Fix routing rule; redeploy | Add routing integration tests |
-| Cache invalidation | Warm cache; fix invalidation bug | Cache health monitoring |
-| Runaway agent | Kill the session; add loop limits | Max-iteration guardrails |
-| New feature launch | Apply budget guardrails to new service | Require cost ADR before launch |
+| Root Cause             | Immediate Action                         | Long-term Fix                  |
+| ---------------------- | ---------------------------------------- | ------------------------------ |
+| Prompt regression      | Rollback to previous prompt version      | Add token-count CI gate        |
+| Volume spike           | Apply rate limiting or throttle upstream | Capacity planning review       |
+| Retry storm            | Enable circuit breaker; fix root error   | Improve error handling         |
+| Model misconfiguration | Fix routing rule; redeploy               | Add routing integration tests  |
+| Cache invalidation     | Warm cache; fix invalidation bug         | Cache health monitoring        |
+| Runaway agent          | Kill the session; add loop limits        | Max-iteration guardrails       |
+| New feature launch     | Apply budget guardrails to new service   | Require cost ADR before launch |
 
 ### Step 6: Document & Close (5 min)
 
@@ -445,43 +444,43 @@ Build a dedicated **Cost Anomaly Monitoring** dashboard with these panels:
 
 ### Row 1: High-Level Indicators
 
-| Panel | Type | Description |
-|-------|------|-------------|
-| **Current Anomaly Score** | Single stat (gauge) | Composite anomaly score (0–100), color-coded: green/yellow/red |
-| **Daily Cost vs. Forecast** | Time series + band | Actual daily cost with ±2σ confidence band shaded |
-| **Active Alerts** | Alert list | Currently firing anomaly alerts with severity and age |
+| Panel                       | Type                | Description                                                    |
+| --------------------------- | ------------------- | -------------------------------------------------------------- |
+| **Current Anomaly Score**   | Single stat (gauge) | Composite anomaly score (0–100), color-coded: green/yellow/red |
+| **Daily Cost vs. Forecast** | Time series + band  | Actual daily cost with ±2σ confidence band shaded              |
+| **Active Alerts**           | Alert list          | Currently firing anomaly alerts with severity and age          |
 
 ### Row 2: Cost Decomposition
 
-| Panel | Type | Description |
-|-------|------|-------------|
-| **Cost by Service** | Stacked bar (hourly) | Hourly cost broken down by service; highlights which service drives anomalies |
-| **Cost by Model** | Stacked bar (hourly) | Same, broken down by model; reveals model-routing shifts |
-| **Cost per Request** | Time series (per service) | Avg $/request per service; detects rate anomalies independent of volume |
+| Panel                | Type                      | Description                                                                   |
+| -------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| **Cost by Service**  | Stacked bar (hourly)      | Hourly cost broken down by service; highlights which service drives anomalies |
+| **Cost by Model**    | Stacked bar (hourly)      | Same, broken down by model; reveals model-routing shifts                      |
+| **Cost per Request** | Time series (per service) | Avg $/request per service; detects rate anomalies independent of volume       |
 
 ### Row 3: Volume & Error Metrics
 
-| Panel | Type | Description |
-|-------|------|-------------|
-| **Request Volume** | Time series (per service) | Hourly request count; overlayed with baseline |
-| **Error Rate** | Time series (per provider) | Error % per provider; spikes indicate retry storms |
-| **Cache Hit Rate** | Time series | Semantic cache hit rate; drops correlate with cost increases |
+| Panel              | Type                       | Description                                                  |
+| ------------------ | -------------------------- | ------------------------------------------------------------ |
+| **Request Volume** | Time series (per service)  | Hourly request count; overlayed with baseline                |
+| **Error Rate**     | Time series (per provider) | Error % per provider; spikes indicate retry storms           |
+| **Cache Hit Rate** | Time series                | Semantic cache hit rate; drops correlate with cost increases |
 
 ### Row 4: Deep-Dive Panels
 
-| Panel | Type | Description |
-|-------|------|-------------|
-| **Token Distribution** | Box plot / histogram | Distribution of input + output tokens per request; detects context bloat |
-| **Model Traffic Share** | Pie chart (rolling 1h) | Current model distribution vs. baseline; reveals routing shifts |
-| **Top 10 Expensive Requests** | Table | Specific request IDs, cost, tokens, and service for the costliest calls |
+| Panel                         | Type                   | Description                                                              |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------------------ |
+| **Token Distribution**        | Box plot / histogram   | Distribution of input + output tokens per request; detects context bloat |
+| **Model Traffic Share**       | Pie chart (rolling 1h) | Current model distribution vs. baseline; reveals routing shifts          |
+| **Top 10 Expensive Requests** | Table                  | Specific request IDs, cost, tokens, and service for the costliest calls  |
 
 ### Row 5: Trend Analysis
 
-| Panel | Type | Description |
-|-------|------|-------------|
-| **7-Day Cost Trend** | Sparkline per service | Compact trend view across services |
-| **Month-to-Date vs. Budget** | Progress bar | MTD spend as % of monthly budget per service |
-| **Cost Forecast (30-day)** | Time series + projection | Linear projection of current trend to end of month |
+| Panel                        | Type                     | Description                                        |
+| ---------------------------- | ------------------------ | -------------------------------------------------- |
+| **7-Day Cost Trend**         | Sparkline per service    | Compact trend view across services                 |
+| **Month-to-Date vs. Budget** | Progress bar             | MTD spend as % of monthly budget per service       |
+| **Cost Forecast (30-day)**   | Time series + projection | Linear projection of current trend to end of month |
 
 ---
 
@@ -493,19 +492,18 @@ For high-confidence anomalies (composite score ≥ 80), the gateway can take aut
 
 ```yaml
 automated_responses:
-
   # Automatically downgrade to cheaper model during cost spikes
   - name: auto_model_downgrade
     trigger:
       anomaly_score: ">= 80"
       anomaly_type: cost_spike
-      duration_minutes: 15         # Must persist for 15 min
+      duration_minutes: 15 # Must persist for 15 min
     action:
       type: model_downgrade
       from_tier: frontier
       to_tier: balanced
       affected_services: all
-      exclude_services: [critical_safety_review]  # Never downgrade these
+      exclude_services: [critical_safety_review] # Never downgrade these
     notification:
       channels: [slack, email]
       message: >
@@ -520,11 +518,11 @@ automated_responses:
     trigger:
       anomaly_score: ">= 70"
       anomaly_type: volume_spike
-      service: "*"                 # Any service
+      service: "*" # Any service
     action:
       type: rate_limit
-      reduce_rpm_by_pct: 50       # Cut RPM in half
-      min_rpm: 5                   # Never go below 5 RPM
+      reduce_rpm_by_pct: 50 # Cut RPM in half
+      min_rpm: 5 # Never go below 5 RPM
     notification:
       channels: [slack]
       message: >
@@ -767,4 +765,4 @@ ORDER BY total_cost DESC;
 
 ---
 
-*Template version 1.0 — Maintained by the TokenOps team.*
+_Template version 1.0 — Maintained by the TokenOps team._

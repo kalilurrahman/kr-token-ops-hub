@@ -11,7 +11,10 @@ export const Route = createFileRoute("/templates")({
   head: () => ({
     meta: [
       { title: "Templates — TokenOps Atlas" },
-      { name: "description", content: "Starter operating artifacts for making TokenOps repeatable." },
+      {
+        name: "description",
+        content: "Starter operating artifacts for making TokenOps repeatable.",
+      },
     ],
   }),
 });
@@ -19,13 +22,17 @@ export const Route = createFileRoute("/templates")({
 function TemplatesPage() {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Engineering", "Finance", "Governance"];
-  const filtered = filter === "All" ? data.templates : data.templates.filter((t) => t.category === filter);
+  const filtered =
+    filter === "All" ? data.templates : data.templates.filter((t) => t.category === filter);
 
   return (
     <section className="stack">
       <div className="page-heading">
         <h1>Templates</h1>
-        <p>Starter operating artifacts for making TokenOps repeatable. Each template is ready to download and customize.</p>
+        <p>
+          Starter operating artifacts for making TokenOps repeatable. Each template is ready to
+          download and customize.
+        </p>
       </div>
 
       <div className="filter-tabs">

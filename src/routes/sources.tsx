@@ -9,7 +9,10 @@ export const Route = createFileRoute("/sources")({
   head: () => ({
     meta: [
       { title: "Sources — TokenOps Atlas" },
-      { name: "description", content: "Reference material used by the TokenOps guide and implementation spec." },
+      {
+        name: "description",
+        content: "Reference material used by the TokenOps guide and implementation spec.",
+      },
     ],
   }),
 });

@@ -17,12 +17,12 @@ This runbook provides a structured response procedure for incidents where LLM to
 
 ### Severity Levels
 
-| Severity | Trigger Condition | Example | Response Time | Escalation |
-|----------|-------------------|---------|---------------|------------|
-| **P1 — Critical** | > 200% of daily budget **OR** projected monthly overage > $50K | Runaway loop consuming $10K/hr; compromised API key | **15 min** | VP Eng + Finance immediately |
-| **P2 — Major** | 150–200% of daily budget **OR** projected monthly overage $10K–$50K | Prompt regression doubling token usage; model misconfiguration after deploy | **30 min** | Eng Manager + FinOps within 1 hr |
-| **P3 — Moderate** | 120–150% of daily budget **OR** single service spike > 200% of its baseline | Upstream traffic surge; cache miss rate spike; new feature launch without cost review | **2 hr** | Team lead within 4 hr |
-| **P4 — Low** | 100–120% of daily budget **OR** gradual upward trend over 5+ days | Slow prompt drift; seasonal traffic increase; context window creep | **Next business day** | Review in weekly TokenOps standup |
+| Severity          | Trigger Condition                                                           | Example                                                                               | Response Time         | Escalation                        |
+| ----------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------- | --------------------------------- |
+| **P1 — Critical** | > 200% of daily budget **OR** projected monthly overage > $50K              | Runaway loop consuming $10K/hr; compromised API key                                   | **15 min**            | VP Eng + Finance immediately      |
+| **P2 — Major**    | 150–200% of daily budget **OR** projected monthly overage $10K–$50K         | Prompt regression doubling token usage; model misconfiguration after deploy           | **30 min**            | Eng Manager + FinOps within 1 hr  |
+| **P3 — Moderate** | 120–150% of daily budget **OR** single service spike > 200% of its baseline | Upstream traffic surge; cache miss rate spike; new feature launch without cost review | **2 hr**              | Team lead within 4 hr             |
+| **P4 — Low**      | 100–120% of daily budget **OR** gradual upward trend over 5+ days           | Slow prompt drift; seasonal traffic increase; context window creep                    | **Next business day** | Review in weekly TokenOps standup |
 
 ### Auto-Classification Rules
 
@@ -56,22 +56,22 @@ rules:
 
 ### 2.1 Detection Sources
 
-| Source | What It Detects | Latency | Tool Example |
-|--------|-----------------|---------|--------------|
-| LLM Gateway metrics | Per-request cost, token volume anomalies | Real-time | LiteLLM, custom proxy |
-| Cost monitoring platform | Budget threshold breaches | 1–5 min | Datadog, Grafana, New Relic |
-| Provider billing API | Invoice-level spend anomalies | 15–60 min | OpenAI Usage API, Anthropic Console |
-| Automated anomaly detection | Statistical outliers in spend patterns | 5–15 min | Custom ML model, CloudWatch Anomaly |
-| Manual observation | Dashboard review, invoice review | Hours–days | Weekly cost review meeting |
+| Source                      | What It Detects                          | Latency    | Tool Example                        |
+| --------------------------- | ---------------------------------------- | ---------- | ----------------------------------- |
+| LLM Gateway metrics         | Per-request cost, token volume anomalies | Real-time  | LiteLLM, custom proxy               |
+| Cost monitoring platform    | Budget threshold breaches                | 1–5 min    | Datadog, Grafana, New Relic         |
+| Provider billing API        | Invoice-level spend anomalies            | 15–60 min  | OpenAI Usage API, Anthropic Console |
+| Automated anomaly detection | Statistical outliers in spend patterns   | 5–15 min   | Custom ML model, CloudWatch Anomaly |
+| Manual observation          | Dashboard review, invoice review         | Hours–days | Weekly cost review meeting          |
 
 ### 2.2 Alert Routing
 
-| Severity | Primary Channel | Secondary Channel | Acknowledge SLA |
-|----------|----------------|-------------------|-----------------|
-| P1 | PagerDuty (on-call rotation) | Slack #tokenops-critical + SMS | 5 min |
-| P2 | Slack #tokenops-alerts | Email to eng-manager | 15 min |
-| P3 | Slack #tokenops-alerts | Jira ticket auto-created | 1 hr |
-| P4 | Slack #tokenops-digest (daily) | Weekly review agenda | Next standup |
+| Severity | Primary Channel                | Secondary Channel              | Acknowledge SLA |
+| -------- | ------------------------------ | ------------------------------ | --------------- |
+| P1       | PagerDuty (on-call rotation)   | Slack #tokenops-critical + SMS | 5 min           |
+| P2       | Slack #tokenops-alerts         | Email to eng-manager           | 15 min          |
+| P3       | Slack #tokenops-alerts         | Jira ticket auto-created       | 1 hr            |
+| P4       | Slack #tokenops-digest (daily) | Weekly review agenda           | Next standup    |
 
 ### 2.3 Alert Content Template
 
@@ -126,15 +126,15 @@ The on-call engineer or FinOps analyst who acknowledges the alert should complet
 
 Based on triage findings, proceed to the appropriate investigation path:
 
-| Finding | Go To |
-|---------|-------|
-| Runaway loop / infinite recursion | §4.1 |
-| Prompt regression / context bloat | §4.2 |
-| Model misconfiguration | §4.3 |
-| Upstream volume spike | §4.4 |
-| Cache failure | §4.5 |
-| Compromised credentials | §4.6 |
-| Unknown / unclear | §4.7 |
+| Finding                           | Go To |
+| --------------------------------- | ----- |
+| Runaway loop / infinite recursion | §4.1  |
+| Prompt regression / context bloat | §4.2  |
+| Model misconfiguration            | §4.3  |
+| Upstream volume spike             | §4.4  |
+| Cache failure                     | §4.5  |
+| Compromised credentials           | §4.6  |
+| Unknown / unclear                 | §4.7  |
 
 ---
 
@@ -287,7 +287,7 @@ git checkout <commit-hash> -- prompts/<service>/system_prompt.txt
 # Emergency gateway override
 overrides:
   - service: <service_name>
-    force_model: "gpt-4o-mini"    # Override to cheaper model
+    force_model: "gpt-4o-mini" # Override to cheaper model
     reason: "Cost incident INC-2026-0527"
     expires: "2026-05-28T00:00:00Z"
 ```
@@ -298,8 +298,8 @@ overrides:
 # Emergency rate limit
 rate_limits:
   - service: <service_name>
-    requests_per_minute: 100       # Reduced from normal 1000
-    tokens_per_minute: 500000      # Hard cap
+    requests_per_minute: 100 # Reduced from normal 1000
+    tokens_per_minute: 500000 # Hard cap
     reason: "Cost incident INC-2026-0527"
 ```
 
@@ -418,30 +418,30 @@ Complete within **3 business days** of incident resolution (P1/P2) or **1 week**
 
 ### Incident Metadata
 
-| Field | Value |
-|-------|-------|
-| Incident ID | INC-YYYY-MMDD-### |
-| Severity | P__ |
-| Duration | |
-| Detection method | |
-| Time to detect | |
-| Time to contain | |
-| Time to resolve | |
-| Incident Commander | |
-| Total excess cost | $ |
+| Field              | Value             |
+| ------------------ | ----------------- |
+| Incident ID        | INC-YYYY-MMDD-### |
+| Severity           | P\_\_             |
+| Duration           |                   |
+| Detection method   |                   |
+| Time to detect     |                   |
+| Time to contain    |                   |
+| Time to resolve    |                   |
+| Incident Commander |                   |
+| Total excess cost  | $                 |
 
 ### Timeline
 
-| Time (UTC) | Event |
-|------------|-------|
-| HH:MM | [Triggering event — e.g., deploy, config change, traffic spike] |
-| HH:MM | Alert fired |
-| HH:MM | Alert acknowledged by [name] |
-| HH:MM | Incident classified as P__ |
-| HH:MM | Root cause identified |
-| HH:MM | Containment action taken |
-| HH:MM | Permanent fix deployed |
-| HH:MM | Incident resolved |
+| Time (UTC) | Event                                                           |
+| ---------- | --------------------------------------------------------------- |
+| HH:MM      | [Triggering event — e.g., deploy, config change, traffic spike] |
+| HH:MM      | Alert fired                                                     |
+| HH:MM      | Alert acknowledged by [name]                                    |
+| HH:MM      | Incident classified as P\_\_                                    |
+| HH:MM      | Root cause identified                                           |
+| HH:MM      | Containment action taken                                        |
+| HH:MM      | Permanent fix deployed                                          |
+| HH:MM      | Incident resolved                                               |
 
 ### Root Cause Analysis
 
@@ -468,11 +468,11 @@ Complete within **3 business days** of incident resolution (P1/P2) or **1 week**
 
 ### Action Items
 
-| # | Action | Owner | Priority | Due Date | Status |
-|---|--------|-------|----------|----------|--------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
+| #   | Action | Owner | Priority | Due Date | Status |
+| --- | ------ | ----- | -------- | -------- | ------ |
+| 1   |        |       |          |          |        |
+| 2   |        |       |          |          |        |
+| 3   |        |       |          |          |        |
 
 ---
 
@@ -513,12 +513,13 @@ After each incident, evaluate whether these monitoring capabilities need to be a
 
 ## Appendix A: On-Call Rotation
 
-| Week | Primary On-Call | Secondary On-Call | Escalation Manager |
-|------|----------------|-------------------|---------------------|
-| Current | | | |
-| Next | | | |
+| Week    | Primary On-Call | Secondary On-Call | Escalation Manager |
+| ------- | --------------- | ----------------- | ------------------ |
+| Current |                 |                   |                    |
+| Next    |                 |                   |                    |
 
 **On-call responsibilities:**
+
 - Monitor #tokenops-alerts Slack channel
 - Respond to PagerDuty alerts within SLA
 - Execute this runbook for any triggered incident
@@ -527,27 +528,27 @@ After each incident, evaluate whether these monitoring capabilities need to be a
 
 ## Appendix B: Key Contacts
 
-| Role | Name | Slack | Phone |
-|------|------|-------|-------|
-| TokenOps Lead | | | |
-| Platform Eng Manager | | | |
-| FinOps Lead | | | |
-| VP Engineering | | | |
-| Finance Director | | | |
-| Provider Account Manager | | | |
+| Role                     | Name | Slack | Phone |
+| ------------------------ | ---- | ----- | ----- |
+| TokenOps Lead            |      |       |       |
+| Platform Eng Manager     |      |       |       |
+| FinOps Lead              |      |       |       |
+| VP Engineering           |      |       |       |
+| Finance Director         |      |       |       |
+| Provider Account Manager |      |       |       |
 
 ## Appendix C: Quick Reference Links
 
-| Resource | URL |
-|----------|-----|
-| Cost Dashboard | |
-| LLM Gateway Admin | |
-| Provider Usage Dashboard | |
-| Alert Configuration | |
-| Prompt Repository | |
-| Budget Guardrails Config | |
-| Incident Tracker | |
+| Resource                 | URL |
+| ------------------------ | --- |
+| Cost Dashboard           |     |
+| LLM Gateway Admin        |     |
+| Provider Usage Dashboard |     |
+| Alert Configuration      |     |
+| Prompt Repository        |     |
+| Budget Guardrails Config |     |
+| Incident Tracker         |     |
 
 ---
 
-*Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)*
+_Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)_

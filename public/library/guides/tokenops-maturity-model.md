@@ -31,24 +31,24 @@ The organization uses LLMs in production but has no systematic visibility into t
 
 ### Key Capabilities
 
-| Capability | Status |
-|------------|--------|
-| Cost visibility | ❌ None — only raw provider invoices |
-| Request tagging | ❌ No metadata on API calls |
-| Cost attribution | ❌ Cannot attribute costs to teams, features, or services |
-| Budgets | ❌ No token budgets defined |
-| Optimization | ❌ No deliberate optimization; model choice is "whatever works" |
-| Governance | ❌ No policies, no review cadence |
+| Capability       | Status                                                          |
+| ---------------- | --------------------------------------------------------------- |
+| Cost visibility  | ❌ None — only raw provider invoices                            |
+| Request tagging  | ❌ No metadata on API calls                                     |
+| Cost attribution | ❌ Cannot attribute costs to teams, features, or services       |
+| Budgets          | ❌ No token budgets defined                                     |
+| Optimization     | ❌ No deliberate optimization; model choice is "whatever works" |
+| Governance       | ❌ No policies, no review cadence                               |
 
 ### Typical Metrics
 
-| Metric | Typical Value |
-|--------|---------------|
-| % of LLM calls tagged | 0% |
-| Cost attribution coverage | 0% |
-| Time to detect cost anomaly | Days to weeks (invoice surprise) |
-| Optimization savings realized | $0 |
-| Teams with cost dashboards | 0 |
+| Metric                        | Typical Value                    |
+| ----------------------------- | -------------------------------- |
+| % of LLM calls tagged         | 0%                               |
+| Cost attribution coverage     | 0%                               |
+| Time to detect cost anomaly   | Days to weeks (invoice surprise) |
+| Optimization savings realized | $0                               |
+| Teams with cost dashboards    | 0                                |
 
 ### Signs You're Here
 
@@ -82,24 +82,24 @@ The organization has basic visibility into LLM spending through provider dashboa
 
 ### Key Capabilities
 
-| Capability | Status |
-|------------|--------|
-| Cost visibility | 🟡 Basic — provider dashboards and exported invoices |
-| Request tagging | 🟡 Partial — some teams tag, most don't |
-| Cost attribution | 🟡 Rough estimates — based on API key or account mapping |
-| Budgets | 🟡 Informal — "try to keep it under $X" but not enforced |
-| Optimization | 🟡 Opportunistic — individual developers make ad hoc improvements |
-| Governance | 🟡 Minimal — occasional cost review, no formal cadence |
+| Capability       | Status                                                            |
+| ---------------- | ----------------------------------------------------------------- |
+| Cost visibility  | 🟡 Basic — provider dashboards and exported invoices              |
+| Request tagging  | 🟡 Partial — some teams tag, most don't                           |
+| Cost attribution | 🟡 Rough estimates — based on API key or account mapping          |
+| Budgets          | 🟡 Informal — "try to keep it under $X" but not enforced          |
+| Optimization     | 🟡 Opportunistic — individual developers make ad hoc improvements |
+| Governance       | 🟡 Minimal — occasional cost review, no formal cadence            |
 
 ### Typical Metrics
 
-| Metric | Typical Value |
-|--------|---------------|
-| % of LLM calls tagged | 10–30% |
-| Cost attribution coverage | 30–50% (rough, account-level) |
-| Time to detect cost anomaly | 1–3 days |
-| Optimization savings realized | 5–15% (ad hoc wins) |
-| Teams with cost dashboards | 0–1 |
+| Metric                        | Typical Value                 |
+| ----------------------------- | ----------------------------- |
+| % of LLM calls tagged         | 10–30%                        |
+| Cost attribution coverage     | 30–50% (rough, account-level) |
+| Time to detect cost anomaly   | 1–3 days                      |
+| Optimization savings realized | 5–15% (ad hoc wins)           |
+| Teams with cost dashboards    | 0–1                           |
 
 ### Signs You're Here
 
@@ -134,24 +134,24 @@ The organization has achieved comprehensive observability over LLM token consump
 
 ### Key Capabilities
 
-| Capability | Status |
-|------------|--------|
-| Cost visibility | ✅ Full — real-time dashboards with drill-down by team, service, feature, model |
-| Request tagging | ✅ 100% — standardized schema enforced by gateway |
-| Cost attribution | ✅ Accurate — per-request cost computed and attributed to cost centers |
-| Budgets | ✅ Defined — monthly token budgets set per service/team with soft/hard limits |
-| Optimization | 🟡 Emerging — optimization backlog exists but execution is inconsistent |
-| Governance | 🟡 Structured — monthly review cadence, but policies are not yet codified |
+| Capability       | Status                                                                          |
+| ---------------- | ------------------------------------------------------------------------------- |
+| Cost visibility  | ✅ Full — real-time dashboards with drill-down by team, service, feature, model |
+| Request tagging  | ✅ 100% — standardized schema enforced by gateway                               |
+| Cost attribution | ✅ Accurate — per-request cost computed and attributed to cost centers          |
+| Budgets          | ✅ Defined — monthly token budgets set per service/team with soft/hard limits   |
+| Optimization     | 🟡 Emerging — optimization backlog exists but execution is inconsistent         |
+| Governance       | 🟡 Structured — monthly review cadence, but policies are not yet codified       |
 
 ### Typical Metrics
 
-| Metric | Typical Value |
-|--------|---------------|
-| % of LLM calls tagged | 95–100% |
-| Cost attribution coverage | 95–100% |
-| Time to detect cost anomaly | < 1 hour (automated alerts) |
+| Metric                        | Typical Value                             |
+| ----------------------------- | ----------------------------------------- |
+| % of LLM calls tagged         | 95–100%                                   |
+| Cost attribution coverage     | 95–100%                                   |
+| Time to detect cost anomaly   | < 1 hour (automated alerts)               |
 | Optimization savings realized | 15–30% (from visibility-driven decisions) |
-| Teams with cost dashboards | All teams |
+| Teams with cost dashboards    | All teams                                 |
 
 ### Signs You're Here
 
@@ -187,27 +187,27 @@ The organization has moved beyond visibility into active, systematic optimizatio
 
 ### Key Capabilities
 
-| Capability | Status |
-|------------|--------|
-| Cost visibility | ✅ Full — with unit economics (cost per conversation, cost per document, etc.) |
-| Request tagging | ✅ 100% — schema enforced; untagged requests rejected |
-| Cost attribution | ✅ Full chargeback or showback operational |
-| Budgets | ✅ Enforced — hard limits prevent budget overruns; exception process defined |
-| Optimization | ✅ Systematic — model routing, caching, prompt compression, batching all active |
-| Governance | 🟡 Emerging — optimization targets set, but policy enforcement is manual |
+| Capability       | Status                                                                          |
+| ---------------- | ------------------------------------------------------------------------------- |
+| Cost visibility  | ✅ Full — with unit economics (cost per conversation, cost per document, etc.)  |
+| Request tagging  | ✅ 100% — schema enforced; untagged requests rejected                           |
+| Cost attribution | ✅ Full chargeback or showback operational                                      |
+| Budgets          | ✅ Enforced — hard limits prevent budget overruns; exception process defined    |
+| Optimization     | ✅ Systematic — model routing, caching, prompt compression, batching all active |
+| Governance       | 🟡 Emerging — optimization targets set, but policy enforcement is manual        |
 
 ### Typical Metrics
 
-| Metric | Typical Value |
-|--------|---------------|
-| % of LLM calls tagged | 100% |
-| Cost attribution coverage | 100% |
-| Time to detect cost anomaly | < 15 minutes |
+| Metric                        | Typical Value                     |
+| ----------------------------- | --------------------------------- |
+| % of LLM calls tagged         | 100%                              |
+| Cost attribution coverage     | 100%                              |
+| Time to detect cost anomaly   | < 15 minutes                      |
 | Optimization savings realized | 40–65% (cumulative from baseline) |
-| Cache hit rate | 25–40% |
-| Model routing coverage | 80–100% of workloads |
-| Prompt token reduction | 20–40% from original prompts |
-| Batch API adoption | 100% of eligible workloads |
+| Cache hit rate                | 25–40%                            |
+| Model routing coverage        | 80–100% of workloads              |
+| Prompt token reduction        | 20–40% from original prompts      |
+| Batch API adoption            | 100% of eligible workloads        |
 
 ### Signs You're Here
 
@@ -243,27 +243,27 @@ TokenOps is fully integrated into the organization's engineering and financial p
 
 ### Key Capabilities
 
-| Capability | Status |
-|------------|--------|
-| Cost visibility | ✅ Full — real-time, self-serve, with forecasting and anomaly detection |
-| Request tagging | ✅ 100% — enforced; schema versioned and governed |
-| Cost attribution | ✅ Full chargeback — costs flow to team/product P&Ls |
-| Budgets | ✅ Enforced with automated guardrails and codified exception process |
-| Optimization | ✅ Continuous — optimization is a sustained practice, not a project |
-| Governance | ✅ Full — policies codified, automated, audited; cost is part of architecture reviews |
+| Capability       | Status                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| Cost visibility  | ✅ Full — real-time, self-serve, with forecasting and anomaly detection               |
+| Request tagging  | ✅ 100% — enforced; schema versioned and governed                                     |
+| Cost attribution | ✅ Full chargeback — costs flow to team/product P&Ls                                  |
+| Budgets          | ✅ Enforced with automated guardrails and codified exception process                  |
+| Optimization     | ✅ Continuous — optimization is a sustained practice, not a project                   |
+| Governance       | ✅ Full — policies codified, automated, audited; cost is part of architecture reviews |
 
 ### Typical Metrics
 
-| Metric | Typical Value |
-|--------|---------------|
-| % of LLM calls tagged | 100% |
-| Cost attribution coverage | 100% (chargeback) |
-| Time to detect cost anomaly | < 5 minutes (automated detection + alerting) |
-| Optimization savings realized | 50–75% (cumulative from baseline) |
-| Cache hit rate | 30–50% |
-| New features with cost review | 100% |
-| Policy compliance rate | ≥ 98% |
-| Vendor contract savings | 10–25% off list price |
+| Metric                        | Typical Value                                |
+| ----------------------------- | -------------------------------------------- |
+| % of LLM calls tagged         | 100%                                         |
+| Cost attribution coverage     | 100% (chargeback)                            |
+| Time to detect cost anomaly   | < 5 minutes (automated detection + alerting) |
+| Optimization savings realized | 50–75% (cumulative from baseline)            |
+| Cache hit rate                | 30–50%                                       |
+| New features with cost review | 100%                                         |
+| Policy compliance rate        | ≥ 98%                                        |
+| Vendor contract savings       | 10–25% off list price                        |
 
 ### Signs You're Here
 
@@ -282,32 +282,32 @@ TokenOps is fully integrated into the organization's engineering and financial p
 
 At Level 5, the focus shifts from building capabilities to sustaining and evolving them:
 
-| Activity | Cadence | Purpose |
-|----------|---------|---------|
-| Re-evaluate model selection | Quarterly | New models and price drops are frequent |
-| Re-run prompt optimization audits | Quarterly | Prompts accumulate cruft; new techniques emerge |
-| Refresh pricing reference tables | Monthly | Provider pricing changes without notice |
-| Review vendor contracts | Annually | Negotiate based on updated consumption data |
-| Benchmark against industry peers | Semi-annually | Ensure competitiveness |
-| Update governance policies | Semi-annually | Adapt to new models, use cases, and organizational changes |
-| Train new engineers on TokenOps practices | Onboarding | Sustain the culture as the team grows |
-| Run cost war games / chaos exercises | Semi-annually | Test guardrails and incident response under stress |
+| Activity                                  | Cadence       | Purpose                                                    |
+| ----------------------------------------- | ------------- | ---------------------------------------------------------- |
+| Re-evaluate model selection               | Quarterly     | New models and price drops are frequent                    |
+| Re-run prompt optimization audits         | Quarterly     | Prompts accumulate cruft; new techniques emerge            |
+| Refresh pricing reference tables          | Monthly       | Provider pricing changes without notice                    |
+| Review vendor contracts                   | Annually      | Negotiate based on updated consumption data                |
+| Benchmark against industry peers          | Semi-annually | Ensure competitiveness                                     |
+| Update governance policies                | Semi-annually | Adapt to new models, use cases, and organizational changes |
+| Train new engineers on TokenOps practices | Onboarding    | Sustain the culture as the team grows                      |
+| Run cost war games / chaos exercises      | Semi-annually | Test guardrails and incident response under stress         |
 
 ---
 
 ## Maturity Progression Summary
 
-| Dimension | Level 1: Ad Hoc | Level 2: Aware | Level 3: Instrumented | Level 4: Optimized | Level 5: Governed |
-|-----------|----------------|---------------|----------------------|-------------------|------------------|
-| **Visibility** | None | Provider dashboards | Full real-time dashboards | Unit economics | Forecasting + anomaly detection |
-| **Tagging** | None | Partial, inconsistent | 100%, standardized | 100%, enforced | 100%, versioned, governed |
-| **Attribution** | None | Account-level estimates | Per-request, per-team | Full showback/chargeback | Full chargeback to P&L |
-| **Budgets** | None | Informal | Defined with alerts | Enforced with limits | Automated guardrails + exception process |
-| **Optimization** | None | Ad hoc individual wins | Emerging backlog | Systematic (routing, caching, compression) | Continuous improvement culture |
-| **Governance** | None | Occasional reviews | Monthly review cadence | Policies defined | Policies automated + audited |
-| **Culture** | Unaware | Curious | Informed | Proactive | Embedded |
-| **Typical Savings** | 0% | 5–15% | 15–30% | 40–65% | 50–75% |
-| **Time Investment** | — | 2–4 weeks | 4–6 weeks | 6–10 weeks | 8–12 weeks |
+| Dimension           | Level 1: Ad Hoc | Level 2: Aware          | Level 3: Instrumented     | Level 4: Optimized                         | Level 5: Governed                        |
+| ------------------- | --------------- | ----------------------- | ------------------------- | ------------------------------------------ | ---------------------------------------- |
+| **Visibility**      | None            | Provider dashboards     | Full real-time dashboards | Unit economics                             | Forecasting + anomaly detection          |
+| **Tagging**         | None            | Partial, inconsistent   | 100%, standardized        | 100%, enforced                             | 100%, versioned, governed                |
+| **Attribution**     | None            | Account-level estimates | Per-request, per-team     | Full showback/chargeback                   | Full chargeback to P&L                   |
+| **Budgets**         | None            | Informal                | Defined with alerts       | Enforced with limits                       | Automated guardrails + exception process |
+| **Optimization**    | None            | Ad hoc individual wins  | Emerging backlog          | Systematic (routing, caching, compression) | Continuous improvement culture           |
+| **Governance**      | None            | Occasional reviews      | Monthly review cadence    | Policies defined                           | Policies automated + audited             |
+| **Culture**         | Unaware         | Curious                 | Informed                  | Proactive                                  | Embedded                                 |
+| **Typical Savings** | 0%              | 5–15%                   | 15–30%                    | 40–65%                                     | 50–75%                                   |
+| **Time Investment** | —               | 2–4 weeks               | 4–6 weeks                 | 6–10 weeks                                 | 8–12 weeks                               |
 
 ---
 
@@ -367,13 +367,13 @@ Use this checklist to determine your current maturity level. Check every stateme
 
 ### Scoring Guide
 
-| Items Checked (per level) | Assessment |
-|--------------------------|------------|
-| All items in Level 2 | ✅ You are at Level 2 |
-| All items in Level 2 + Level 3 | ✅ You are at Level 3 |
-| All items in Level 2 + Level 3 + Level 4 | ✅ You are at Level 4 |
-| All items in Level 2 + Level 3 + Level 4 + Level 5 | ✅ You are at Level 5 |
-| Some items checked at next level | 🟡 You are transitioning — focus on completing the remaining items |
+| Items Checked (per level)                          | Assessment                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------------ |
+| All items in Level 2                               | ✅ You are at Level 2                                              |
+| All items in Level 2 + Level 3                     | ✅ You are at Level 3                                              |
+| All items in Level 2 + Level 3 + Level 4           | ✅ You are at Level 4                                              |
+| All items in Level 2 + Level 3 + Level 4 + Level 5 | ✅ You are at Level 5                                              |
+| Some items checked at next level                   | 🟡 You are transitioning — focus on completing the remaining items |
 
 > **Tip:** It's normal to have some capabilities from higher levels while not fully completing a lower level. Focus on completing the current level before advancing — each level builds the foundation for the next.
 
@@ -381,15 +381,15 @@ Use this checklist to determine your current maturity level. Check every stateme
 
 ## Common Pitfalls by Level
 
-| Pitfall | Level | What Goes Wrong | How to Avoid |
-|---------|-------|----------------|-------------|
-| Jumping to optimization without instrumentation | 1 → 4 | You optimize blindly; can't measure impact; wins are unsustainable | Complete Level 3 first — you need data to optimize effectively |
-| Over-engineering the gateway | 2 → 3 | Months spent building a perfect gateway while costs spiral | Start with a simple client wrapper; iterate based on actual needs |
-| Dashboard fatigue | 3 | Beautiful dashboards that nobody looks at | Tie dashboards to monthly reviews with action items; send weekly digests |
-| Optimization without quality gates | 3 → 4 | Aggressive model downgrades degrade user experience | Always A/B test; define measurable quality thresholds before switching |
-| Governance theater | 4 → 5 | Policies exist on paper but are not enforced | Automate enforcement in the gateway; manual policies will be ignored |
-| Chargeback without buy-in | 4 → 5 | Teams resist chargeback; it becomes adversarial | Start with showback; get teams used to seeing costs before impacting budgets |
-| Declaring victory | 5 | Governance set up but not maintained; maturity regresses | Assign an owner; establish continuous improvement cadence; audit quarterly |
+| Pitfall                                         | Level | What Goes Wrong                                                    | How to Avoid                                                                 |
+| ----------------------------------------------- | ----- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| Jumping to optimization without instrumentation | 1 → 4 | You optimize blindly; can't measure impact; wins are unsustainable | Complete Level 3 first — you need data to optimize effectively               |
+| Over-engineering the gateway                    | 2 → 3 | Months spent building a perfect gateway while costs spiral         | Start with a simple client wrapper; iterate based on actual needs            |
+| Dashboard fatigue                               | 3     | Beautiful dashboards that nobody looks at                          | Tie dashboards to monthly reviews with action items; send weekly digests     |
+| Optimization without quality gates              | 3 → 4 | Aggressive model downgrades degrade user experience                | Always A/B test; define measurable quality thresholds before switching       |
+| Governance theater                              | 4 → 5 | Policies exist on paper but are not enforced                       | Automate enforcement in the gateway; manual policies will be ignored         |
+| Chargeback without buy-in                       | 4 → 5 | Teams resist chargeback; it becomes adversarial                    | Start with showback; get teams used to seeing costs before impacting budgets |
+| Declaring victory                               | 5     | Governance set up but not maintained; maturity regresses           | Assign an owner; establish continuous improvement cadence; audit quarterly   |
 
 ---
 
@@ -404,4 +404,4 @@ Use this checklist to determine your current maturity level. Check every stateme
 
 ---
 
-*Template version 1.0 — Maintained by the TokenOps team.*
+_Template version 1.0 — Maintained by the TokenOps team._

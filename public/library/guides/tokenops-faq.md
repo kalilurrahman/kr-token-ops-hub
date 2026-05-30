@@ -128,7 +128,7 @@ The most effective structure is a **hub-and-spoke model**: a small central Token
 
 ### Q25: How do I handle resistance from teams who feel TokenOps adds overhead?
 
-Acknowledge the concern — it's valid. Then demonstrate that TokenOps, done right, *reduces* overhead rather than adding it. Automated tagging (via the gateway) means no extra work per request. Self-serve dashboards mean no more ad-hoc cost queries. Budget guardrails mean no more surprise invoices. Model routing means no more manual model selection debates. Frame the initial setup effort as a one-time investment: "We spend 4 weeks building the infrastructure so that you never have to think about token costs manually again." Show concrete examples where lack of TokenOps created real overhead: bill surprises, emergency cost-cutting scrambles, production incidents from uncontrolled costs.
+Acknowledge the concern — it's valid. Then demonstrate that TokenOps, done right, _reduces_ overhead rather than adding it. Automated tagging (via the gateway) means no extra work per request. Self-serve dashboards mean no more ad-hoc cost queries. Budget guardrails mean no more surprise invoices. Model routing means no more manual model selection debates. Frame the initial setup effort as a one-time investment: "We spend 4 weeks building the infrastructure so that you never have to think about token costs manually again." Show concrete examples where lack of TokenOps created real overhead: bill surprises, emergency cost-cutting scrambles, production incidents from uncontrolled costs.
 
 ---
 
@@ -183,4 +183,4 @@ If your question isn't covered here:
 
 ---
 
-*FAQ version 1.0 — 34 questions. Maintained by the TokenOps team.*
+_FAQ version 1.0 — 34 questions. Maintained by the TokenOps team._

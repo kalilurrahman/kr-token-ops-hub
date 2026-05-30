@@ -38,12 +38,14 @@
 ```
 
 ### Data Sources
+
 1. **Gateway logs:** Real-time request/response data (tokens, cost, latency, model, tags)
 2. **Provider billing APIs:** Monthly invoices, usage reports, rate changes
 3. **Product analytics:** User activity, feature usage, business outcomes
 4. **Finance data:** Budgets, cost centers, chargeback allocations
 
 ### Data Pipeline
+
 - **Real-time path:** Gateway → Prometheus (metrics) → Grafana (dashboards)
 - **Analytical path:** Gateway → Message queue → ETL → Data warehouse → BI tool
 - **Refresh intervals:** Real-time metrics every 15s, cost aggregates every 5 min, billing data daily
@@ -57,12 +59,12 @@ _Refresh: Daily_
 
 ### Panel 1.1: Key Metrics Cards (top row)
 
-| Card | Metric | SQL |
-|------|--------|-----|
-| **Total Spend** | Month-to-date AI spend | `SELECT SUM(cost_usd) FROM usage WHERE created_at >= DATE_TRUNC('month', NOW())` |
-| **Budget Status** | % of monthly budget used | `SELECT SUM(cost_usd) / budget * 100 FROM usage CROSS JOIN budgets WHERE ...` |
-| **Savings Rate** | Cumulative savings vs. unoptimized baseline | `SELECT (baseline_cost - actual_cost) / baseline_cost * 100` |
-| **Cost/User** | AI cost per active user | `SELECT SUM(cost_usd) / COUNT(DISTINCT user_id) FROM usage WHERE ...` |
+| Card              | Metric                                      | SQL                                                                              |
+| ----------------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
+| **Total Spend**   | Month-to-date AI spend                      | `SELECT SUM(cost_usd) FROM usage WHERE created_at >= DATE_TRUNC('month', NOW())` |
+| **Budget Status** | % of monthly budget used                    | `SELECT SUM(cost_usd) / budget * 100 FROM usage CROSS JOIN budgets WHERE ...`    |
+| **Savings Rate**  | Cumulative savings vs. unoptimized baseline | `SELECT (baseline_cost - actual_cost) / baseline_cost * 100`                     |
+| **Cost/User**     | AI cost per active user                     | `SELECT SUM(cost_usd) / COUNT(DISTINCT user_id) FROM usage WHERE ...`            |
 
 ### Panel 1.2: Monthly Cost Trend (line chart)
 
@@ -348,21 +350,21 @@ ORDER BY 1;
 
 ### Critical Alerts (page on-call)
 
-| Alert | Condition | Severity |
-|-------|-----------|----------|
-| Budget exceeded | `month_to_date_spend > monthly_budget` | P1 |
-| Cost anomaly | `hourly_cost z-score > 3` | P1 |
-| Provider outage | `error_rate > 10% for 5 min` | P1 |
+| Alert           | Condition                              | Severity |
+| --------------- | -------------------------------------- | -------- |
+| Budget exceeded | `month_to_date_spend > monthly_budget` | P1       |
+| Cost anomaly    | `hourly_cost z-score > 3`              | P1       |
+| Provider outage | `error_rate > 10% for 5 min`           | P1       |
 
 ### Warning Alerts (Slack notification)
 
-| Alert | Condition | Severity |
-|-------|-----------|----------|
-| Budget approaching | `utilization > 80% with > 7 days remaining` | P2 |
-| Cache degradation | `cache_hit_rate < 50% of baseline` | P2 |
-| Latency spike | `p95_latency > 2× target for 15 min` | P2 |
-| Cost per request increase | `avg_cost_per_request > 150% of 7-day avg` | P3 |
-| Retry rate elevated | `retry_rate > 5% for 30 min` | P3 |
+| Alert                     | Condition                                   | Severity |
+| ------------------------- | ------------------------------------------- | -------- |
+| Budget approaching        | `utilization > 80% with > 7 days remaining` | P2       |
+| Cache degradation         | `cache_hit_rate < 50% of baseline`          | P2       |
+| Latency spike             | `p95_latency > 2× target for 15 min`        | P2       |
+| Cost per request increase | `avg_cost_per_request > 150% of 7-day avg`  | P3       |
+| Retry rate elevated       | `retry_rate > 5% for 30 min`                | P3       |
 
 ---
 
@@ -370,23 +372,23 @@ ORDER BY 1;
 
 ### Recommended Stack
 
-| Component | Recommended Tool | Alternative |
-|-----------|-----------------|-------------|
-| Time-series metrics | Prometheus | Datadog, CloudWatch |
-| Dashboards | Grafana | Tableau, Metabase |
-| Data warehouse | PostgreSQL/BigQuery | Snowflake, Redshift |
-| Alerting | Grafana Alerts + PagerDuty | Opsgenie, Slack |
+| Component           | Recommended Tool           | Alternative         |
+| ------------------- | -------------------------- | ------------------- |
+| Time-series metrics | Prometheus                 | Datadog, CloudWatch |
+| Dashboards          | Grafana                    | Tableau, Metabase   |
+| Data warehouse      | PostgreSQL/BigQuery        | Snowflake, Redshift |
+| Alerting            | Grafana Alerts + PagerDuty | Opsgenie, Slack     |
 
 ### Refresh Intervals
 
-| Dashboard | Refresh |
-|-----------|---------|
-| Engineering (real-time) | 15 seconds |
-| Executive | Daily (9 AM) |
-| Finance | Daily (end of day) |
-| Product | Daily |
-| Alerts | Continuous (15s evaluation) |
+| Dashboard               | Refresh                     |
+| ----------------------- | --------------------------- |
+| Engineering (real-time) | 15 seconds                  |
+| Executive               | Daily (9 AM)                |
+| Finance                 | Daily (end of day)          |
+| Product                 | Daily                       |
+| Alerts                  | Continuous (15s evaluation) |
 
 ---
 
-*Reference from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)*
+_Reference from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)_
