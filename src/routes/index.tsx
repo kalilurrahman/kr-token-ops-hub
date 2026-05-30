@@ -4,6 +4,7 @@ import { ArrowRight, Library as LibraryIcon, BookOpen, ClipboardCheck, Map, Book
 import { operatingPillars, playbook } from "@/tokenops/data";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
+import heroIllustration from "@/assets/hero-tokenops.png";
 
 const data = content as TokenOpsContent;
 const libCount = data.library.length;
@@ -48,11 +49,49 @@ function Index() {
             </Link>
           </div>
         </div>
-        <div className="command-panel">
-          <div className="panel-row"><span>Monthly AI spend</span><strong>$126,000</strong></div>
-          <div className="panel-row"><span>Optimized run-rate</span><strong>$71,000</strong></div>
-          <div className="panel-row"><span>Token yield target</span><strong>80%+</strong></div>
-          <div className="progress-track"><span style={{ width: "84%" }} /></div>
+        <div className="hero-illustration">
+          <img
+            src={heroIllustration}
+            alt="TokenOps illustration: glowing gold token coin with a rising cost chart"
+            width={1024}
+            height={1024}
+          />
+        </div>
+      </section>
+
+      <section className="exec-summary">
+        <div>
+          <p className="eyebrow">Executive summary</p>
+          <h2 style={{ marginBottom: 6 }}>TokenOps: operational intelligence for LLM token spend</h2>
+          <p style={{ color: "var(--muted)", margin: 0 }}>
+            Every LLM API call has a measurable cost. TokenOps makes that cost visible, predictable, and optimisable — applying FinOps-style discipline to four domains: visibility, allocation, optimisation, and governance.
+          </p>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Pillar</th><th>What it means</th><th>Key metric</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Visibility</strong></td><td>Tag every API call; join with billing</td><td>Tagging coverage %</td></tr>
+            <tr><td><strong>Optimisation</strong></td><td>Compress prompts, route to cheap models, cache prefixes</td><td>Cost per 1K calls</td></tr>
+            <tr><td><strong>Governance</strong></td><td>Budget guardrails, team chargebacks, monthly reviews</td><td>Budget utilisation %</td></tr>
+          </tbody>
+        </table>
+        <div>
+          <h3 style={{ marginBottom: 8 }}>Typical savings profile</h3>
+          <table>
+            <thead>
+              <tr><th>Technique</th><th>Typical saving</th><th>Effort</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Model routing (premium → nano for simple tasks)</td><td>40–80%</td><td>Medium</td></tr>
+              <tr><td>Prompt caching (stable system prompts)</td><td>50–90% on cached tokens</td><td>Low</td></tr>
+              <tr><td>Prompt compression (remove fluff &amp; redundancy)</td><td>15–30%</td><td>Low</td></tr>
+              <tr><td>RAG chunk reduction (reranking, fewer docs)</td><td>20–50%</td><td>Medium</td></tr>
+              <tr><td>Batch API for async workloads</td><td>~50%</td><td>Low</td></tr>
+              <tr><td>Output constraints (structured JSON vs prose)</td><td>10–40%</td><td>Low</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
