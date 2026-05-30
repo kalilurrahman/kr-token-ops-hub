@@ -16,14 +16,14 @@ User Query ──► [1. Embedding] ──► [2. Retrieval] ──► [3. Conte
 
 ### Cost Breakdown (Typical Unoptimized RAG)
 
-| Layer | Component | Monthly Volume | Unit Cost | Monthly Cost | % of Total |
-|-------|-----------|---------------|-----------|-------------|------------|
-| Embedding | Query embedding | 500K queries | $0.02/1M tokens | $50 | 1% |
-| Embedding | Document embedding (one-time amortized) | 10M chunks | $0.02/1M tokens | $100/mo | 2% |
-| Retrieval | Vector DB queries | 500K queries | $0.0001/query | $50 | 1% |
-| Generation | Input tokens (system + context + query) | 500K × 4,200 avg | $5/1M tokens | $10,500 | 72% |
-| Generation | Output tokens | 500K × 500 avg | $15/1M tokens | $3,750 | 26% |
-| **Total** | | | | **$14,450** | **100%** |
+| Layer      | Component                               | Monthly Volume   | Unit Cost       | Monthly Cost | % of Total |
+| ---------- | --------------------------------------- | ---------------- | --------------- | ------------ | ---------- |
+| Embedding  | Query embedding                         | 500K queries     | $0.02/1M tokens | $50          | 1%         |
+| Embedding  | Document embedding (one-time amortized) | 10M chunks       | $0.02/1M tokens | $100/mo      | 2%         |
+| Retrieval  | Vector DB queries                       | 500K queries     | $0.0001/query   | $50          | 1%         |
+| Generation | Input tokens (system + context + query) | 500K × 4,200 avg | $5/1M tokens    | $10,500      | 72%        |
+| Generation | Output tokens                           | 500K × 500 avg   | $15/1M tokens   | $3,750       | 26%        |
+| **Total**  |                                         |                  |                 | **$14,450**  | **100%**   |
 
 **Key insight:** Generation input tokens (context) drive 72% of total cost. Optimizing retrieval quality (fewer, better chunks) has the highest cost impact.
 
@@ -34,13 +34,14 @@ User Query ──► [1. Embedding] ──► [2. Retrieval] ──► [3. Conte
 ### Step 1: Instrument the RAG Pipeline
 
 Tag every query with:
+
 ```yaml
 metadata:
   service: rag-pipeline
   query_id: uuid
   retrieval_top_k: 10
   chunks_retrieved: 10
-  chunks_used_by_model: 3  # estimate via attribution
+  chunks_used_by_model: 3 # estimate via attribution
   total_input_tokens: 4200
   context_tokens: 3200
   query_tokens: 200
@@ -78,11 +79,11 @@ WHERE date >= CURRENT_DATE - 30;
 Most RAG pipelines default to `top_k=10`. Testing shows diminishing returns beyond 3–5 chunks.
 
 | top_k | Avg Context Tokens | Answer Quality (F1) | Monthly Context Cost |
-|-------|--------------------|--------------------|--------------------|
-| 10 | 3,200 | 0.89 | $10,500 |
-| 7 | 2,240 | 0.88 | $7,350 |
-| 5 | 1,600 | 0.87 | $5,250 |
-| 3 | 960 | 0.85 | $3,150 |
+| ----- | ------------------ | ------------------- | -------------------- |
+| 10    | 3,200              | 0.89                | $10,500              |
+| 7     | 2,240              | 0.88                | $7,350               |
+| 5     | 1,600              | 0.87                | $5,250               |
+| 3     | 960                | 0.85                | $3,150               |
 
 **Recommendation:** Start with `top_k=5` and validate quality. Drop to 3 if quality holds.
 
@@ -103,12 +104,12 @@ def filter_by_relevance(chunks, threshold=0.78):
 
 ### Strategy 3: Chunk Size Optimization
 
-| Chunk Size | Pros | Cons | Best For |
-|------------|------|------|----------|
-| 128 tokens | Precise retrieval | May split context | FAQ, definitions |
-| 256 tokens | Good balance | Standard choice | General knowledge |
-| 512 tokens | Rich context | May include noise | Technical docs |
-| 1024 tokens | Full paragraphs | Expensive, noisy | Legal, academic |
+| Chunk Size  | Pros              | Cons              | Best For          |
+| ----------- | ----------------- | ----------------- | ----------------- |
+| 128 tokens  | Precise retrieval | May split context | FAQ, definitions  |
+| 256 tokens  | Good balance      | Standard choice   | General knowledge |
+| 512 tokens  | Rich context      | May include noise | Technical docs    |
+| 1024 tokens | Full paragraphs   | Expensive, noisy  | Legal, academic   |
 
 **Test different sizes** on your specific corpus. Smaller chunks = more precise retrieval but may need more chunks to cover context.
 
@@ -119,7 +120,7 @@ def hybrid_search(query, alpha=0.7):
     """Combine dense (semantic) + sparse (keyword) search."""
     dense_results = vector_db.search(embed(query), top_k=10)
     sparse_results = bm25_index.search(query, top_k=10)
-    
+
     # Reciprocal rank fusion
     combined = reciprocal_rank_fusion(
         dense_results, sparse_results, alpha=alpha
@@ -180,7 +181,7 @@ Rate each chunk's relevance (1-5):
 {format_chunks(chunks)}
 
 Return JSON: [{{"chunk_id": 0, "relevance": 5}}, ...]"""
-    
+
     ratings = await call_model(pruning_model, prompt)
     return [c for c, r in zip(chunks, ratings) if r["relevance"] >= 3]
 ```
@@ -195,11 +196,11 @@ Return JSON: [{{"chunk_id": 0, "relevance": 5}}, ...]"""
 
 ### Strategy 1: Model Tiering for RAG
 
-| Query Complexity | Detection Signal | Model | Cost/Query |
-|-----------------|-----------------|-------|-----------|
-| Simple lookup | Short query, high-confidence top chunk (>0.92) | GPT-4.1-nano | $0.001 |
-| Standard Q&A | Medium query, good retrieval (>0.82) | GPT-4.1-mini | $0.008 |
-| Complex reasoning | Long query, low retrieval confidence (<0.82) | GPT-4.1 | $0.050 |
+| Query Complexity  | Detection Signal                               | Model        | Cost/Query |
+| ----------------- | ---------------------------------------------- | ------------ | ---------- |
+| Simple lookup     | Short query, high-confidence top chunk (>0.92) | GPT-4.1-nano | $0.001     |
+| Standard Q&A      | Medium query, good retrieval (>0.82)           | GPT-4.1-mini | $0.008     |
+| Complex reasoning | Long query, low retrieval confidence (<0.82)   | GPT-4.1      | $0.050     |
 
 ### Strategy 2: Output Constraints
 
@@ -209,10 +210,10 @@ messages = [{"role": "user", "content": f"Answer: {query}\nContext: {context}"}]
 
 # After: Constrained output
 messages = [{
-    "role": "system", 
+    "role": "system",
     "content": "Answer in 2-3 sentences. Cite source. JSON: {answer, source, confidence}"
 }, {
-    "role": "user", 
+    "role": "user",
     "content": f"Context: {context}\nQuestion: {query}"
 }]
 response = client.chat.completions.create(
@@ -230,13 +231,13 @@ class RAGCache:
         cached = redis.get(f"rag:{hash(key)}")
         if cached:
             return cached
-        
+
         # Semantic match
         embedding = embed(query)
         match = vector_cache.search(embedding, threshold=0.95)
         if match:
             return match.response
-        
+
         return None  # Cache miss
 ```
 
@@ -246,13 +247,13 @@ class RAGCache:
 
 ### Cost Reduction Strategies
 
-| Strategy | Savings | Implementation |
-|----------|---------|---------------|
-| Use smaller embedding model (large → small) | 60–80% | Change model parameter |
-| Cache query embeddings | 30–50% | Redis with hash key |
-| Batch document embeddings | 0% direct, faster | Process in batches of 100+ |
-| Reduce dimensions (1536 → 512) | 0% direct, lower storage | Use Matryoshka embeddings |
-| Deduplicate before embedding | 10–30% | Hash-based dedup |
+| Strategy                                    | Savings                  | Implementation             |
+| ------------------------------------------- | ------------------------ | -------------------------- |
+| Use smaller embedding model (large → small) | 60–80%                   | Change model parameter     |
+| Cache query embeddings                      | 30–50%                   | Redis with hash key        |
+| Batch document embeddings                   | 0% direct, faster        | Process in batches of 100+ |
+| Reduce dimensions (1536 → 512)              | 0% direct, lower storage | Use Matryoshka embeddings  |
+| Deduplicate before embedding                | 10–30%                   | Hash-based dedup           |
 
 ---
 
@@ -260,15 +261,15 @@ class RAGCache:
 
 ### Before vs. After Comparison
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Monthly RAG cost | $14,450 | $_____ | −__% |
-| Avg input tokens/query | 4,200 | _____ | −__% |
-| Chunks retrieved (top_k) | 10 | _____ | −__% |
-| Context utilization ratio | 25% | _____ | +__pp |
-| Cache hit rate | 0% | _____ | +__% |
-| Answer quality (F1) | 0.89 | _____ | ±__% |
-| P95 latency | 3.2s | _____ | ±__% |
+| Metric                    | Before  | After   | Change  |
+| ------------------------- | ------- | ------- | ------- |
+| Monthly RAG cost          | $14,450 | $**\_** | −\_\_%  |
+| Avg input tokens/query    | 4,200   | **\_**  | −\_\_%  |
+| Chunks retrieved (top_k)  | 10      | **\_**  | −\_\_%  |
+| Context utilization ratio | 25%     | **\_**  | +\_\_pp |
+| Cache hit rate            | 0%      | **\_**  | +\_\_%  |
+| Answer quality (F1)       | 0.89    | **\_**  | ±\_\_%  |
+| P95 latency               | 3.2s    | **\_**  | ±\_\_%  |
 
 ---
 
@@ -284,4 +285,4 @@ class RAGCache:
 
 ---
 
-*Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)*
+_Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)_

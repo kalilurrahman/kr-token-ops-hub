@@ -8,16 +8,16 @@
 
 Without a gateway, every service calls LLM providers directly. This leads to:
 
-| Problem | Without Gateway | With Gateway |
-|---------|----------------|-------------|
-| **Cost visibility** | Each team tracks costs differently (or not at all) | Every request tagged with service, feature, cost center; unified cost stream |
-| **Rate limiting** | Each service manages its own provider quotas | Centralized rate limiter prevents any single service from exhausting org limits |
-| **Cost tracking** | Requires manual aggregation across services | Real-time cost calculation and budget enforcement per request |
-| **Routing** | Hardcoded model choices in application code | Dynamic routing by task type, complexity, cost target, and provider health |
-| **Caching** | No shared cache; duplicate requests re-processed | Semantic cache shared across services; 20–40% cost reduction |
-| **Resilience** | Service-level retries cause retry storms | Centralized circuit breakers and intelligent failover |
-| **Security** | API keys scattered across services | Single point for key management, PII filtering, and audit logging |
-| **Observability** | Fragmented metrics; no unified view | Consistent metrics, traces, and logs across all LLM traffic |
+| Problem             | Without Gateway                                    | With Gateway                                                                    |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **Cost visibility** | Each team tracks costs differently (or not at all) | Every request tagged with service, feature, cost center; unified cost stream    |
+| **Rate limiting**   | Each service manages its own provider quotas       | Centralized rate limiter prevents any single service from exhausting org limits |
+| **Cost tracking**   | Requires manual aggregation across services        | Real-time cost calculation and budget enforcement per request                   |
+| **Routing**         | Hardcoded model choices in application code        | Dynamic routing by task type, complexity, cost target, and provider health      |
+| **Caching**         | No shared cache; duplicate requests re-processed   | Semantic cache shared across services; 20–40% cost reduction                    |
+| **Resilience**      | Service-level retries cause retry storms           | Centralized circuit breakers and intelligent failover                           |
+| **Security**        | API keys scattered across services                 | Single point for key management, PII filtering, and audit logging               |
+| **Observability**   | Fragmented metrics; no unified view                | Consistent metrics, traces, and logs across all LLM traffic                     |
 
 ---
 
@@ -346,7 +346,7 @@ Stops sending traffic to a degraded provider and routes to healthy alternatives.
 - Periodically send probe requests in half-open state
 - Close the circuit after consecutive probe successes
 
-*(Configuration details in `multi-provider-routing-config.yaml`, Section 4)*
+_(Configuration details in `multi-provider-routing-config.yaml`, Section 4)_
 
 ### 3.7 Cost Logger
 
@@ -408,26 +408,26 @@ class CostLogger:
 
 ## 4 · Technology Options
 
-| Approach | Description | Pros | Cons | Best For |
-|----------|-----------|------|------|----------|
-| **LiteLLM** | Open-source LLM proxy with 100+ provider support | Fast to deploy, active community, built-in routing | Limited customization, dependency risk | Startups, small teams, rapid prototyping |
-| **Custom middleware** | Purpose-built gateway (Python/Go/Rust) | Full control, tailored to your needs | Significant engineering investment | Enterprise, high-scale, unique requirements |
-| **Kong + plugins** | API gateway with custom LLM plugins | Mature platform, plugin ecosystem | Complexity, requires Kong expertise | Teams already using Kong |
-| **Envoy + WASM** | High-performance proxy with custom filters | Extreme performance, L7 flexibility | Steep learning curve, WASM limitations | High-throughput, low-latency requirements |
-| **SDK wrapper** | Client-side library that wraps provider SDKs | No infrastructure, easy adoption | No centralized control, harder to enforce | Small teams, early-stage |
-| **Cloud-managed** | AWS Bedrock, Azure AI Gateway, GCP Vertex | Managed, integrated with cloud ecosystem | Vendor lock-in, less customization | Cloud-native organizations |
+| Approach              | Description                                      | Pros                                               | Cons                                      | Best For                                    |
+| --------------------- | ------------------------------------------------ | -------------------------------------------------- | ----------------------------------------- | ------------------------------------------- |
+| **LiteLLM**           | Open-source LLM proxy with 100+ provider support | Fast to deploy, active community, built-in routing | Limited customization, dependency risk    | Startups, small teams, rapid prototyping    |
+| **Custom middleware** | Purpose-built gateway (Python/Go/Rust)           | Full control, tailored to your needs               | Significant engineering investment        | Enterprise, high-scale, unique requirements |
+| **Kong + plugins**    | API gateway with custom LLM plugins              | Mature platform, plugin ecosystem                  | Complexity, requires Kong expertise       | Teams already using Kong                    |
+| **Envoy + WASM**      | High-performance proxy with custom filters       | Extreme performance, L7 flexibility                | Steep learning curve, WASM limitations    | High-throughput, low-latency requirements   |
+| **SDK wrapper**       | Client-side library that wraps provider SDKs     | No infrastructure, easy adoption                   | No centralized control, harder to enforce | Small teams, early-stage                    |
+| **Cloud-managed**     | AWS Bedrock, Azure AI Gateway, GCP Vertex        | Managed, integrated with cloud ecosystem           | Vendor lock-in, less customization        | Cloud-native organizations                  |
 
 ### Recommended Stack
 
-| Component | Technology | Rationale |
-|-----------|-----------|-----------|
-| Gateway core | **Python (FastAPI)** or **Go** | FastAPI for rapid development; Go for high throughput |
-| Rate limiting | **Redis** (token bucket) | Fast, distributed, battle-tested |
-| Semantic cache | **Redis + pgvector** | Redis for exact match, pgvector for semantic similarity |
-| Circuit breaker | **In-process** (sliding window) | No external dependency; millisecond decisions |
-| Cost logging | **Kafka** → data warehouse | Decoupled, high throughput, replayable |
-| Configuration | **YAML file** + hot reload | Simple, version-controlled, auditable |
-| Observability | **Prometheus + Grafana** | Industry standard, rich ecosystem |
+| Component       | Technology                      | Rationale                                               |
+| --------------- | ------------------------------- | ------------------------------------------------------- |
+| Gateway core    | **Python (FastAPI)** or **Go**  | FastAPI for rapid development; Go for high throughput   |
+| Rate limiting   | **Redis** (token bucket)        | Fast, distributed, battle-tested                        |
+| Semantic cache  | **Redis + pgvector**            | Redis for exact match, pgvector for semantic similarity |
+| Circuit breaker | **In-process** (sliding window) | No external dependency; millisecond decisions           |
+| Cost logging    | **Kafka** → data warehouse      | Decoupled, high throughput, replayable                  |
+| Configuration   | **YAML file** + hot reload      | Simple, version-controlled, auditable                   |
+| Observability   | **Prometheus + Grafana**        | Industry standard, rich ecosystem                       |
 
 ---
 
@@ -585,15 +585,15 @@ response = client.complete(
 
 ### Deployment Comparison
 
-| Factor | Centralized Proxy | Sidecar | SDK Wrapper |
-|--------|------------------|---------|-------------|
-| **Shared cache** | ✅ Yes | ❌ No | ❌ No |
-| **Centralized rate limiting** | ✅ Yes | ⚠️ Partial | ❌ No |
-| **Enforcement** | ✅ Strong | ✅ Strong | ⚠️ Weak |
-| **Additional latency** | ~5–20ms | ~1–5ms | ~0ms |
-| **Infrastructure cost** | Medium | High (N×) | None |
-| **Adoption effort** | Medium | High | Low |
-| **Recommended for** | Most teams | High-isolation needs | Early-stage teams |
+| Factor                        | Centralized Proxy | Sidecar              | SDK Wrapper       |
+| ----------------------------- | ----------------- | -------------------- | ----------------- |
+| **Shared cache**              | ✅ Yes            | ❌ No                | ❌ No             |
+| **Centralized rate limiting** | ✅ Yes            | ⚠️ Partial           | ❌ No             |
+| **Enforcement**               | ✅ Strong         | ✅ Strong            | ⚠️ Weak           |
+| **Additional latency**        | ~5–20ms           | ~1–5ms               | ~0ms              |
+| **Infrastructure cost**       | Medium            | High (N×)            | None              |
+| **Adoption effort**           | Medium            | High                 | Low               |
+| **Recommended for**           | Most teams        | High-isolation needs | Early-stage teams |
 
 ---
 
@@ -603,23 +603,23 @@ response = client.complete(
 
 Export these metrics to Prometheus (or your metrics backend):
 
-| Metric Name | Type | Labels | Description |
-|-------------|------|--------|-------------|
-| `tokenops_request_total` | Counter | service, model, provider, status, cache_hit | Total request count |
-| `tokenops_request_duration_seconds` | Histogram | service, model, provider | End-to-end latency (gateway perspective) |
-| `tokenops_provider_duration_seconds` | Histogram | model, provider | Provider-only latency (network + inference) |
-| `tokenops_input_tokens_total` | Counter | service, model | Total input tokens processed |
-| `tokenops_output_tokens_total` | Counter | service, model | Total output tokens generated |
-| `tokenops_cost_usd_total` | Counter | service, model, cost_center | Cumulative cost in USD |
-| `tokenops_cost_per_request_usd` | Histogram | service, model | Per-request cost distribution |
-| `tokenops_cache_hits_total` | Counter | service, cache_type | Cache hits (exact, semantic) |
-| `tokenops_cache_misses_total` | Counter | service | Cache misses |
-| `tokenops_cache_hit_rate` | Gauge | service | Rolling cache hit rate |
-| `tokenops_rate_limit_rejections_total` | Counter | service, limit_type | Rate limit rejections |
-| `tokenops_circuit_breaker_state` | Gauge | provider | 0=closed, 1=half-open, 2=open |
-| `tokenops_circuit_breaker_trips_total` | Counter | provider | Circuit breaker trip count |
-| `tokenops_errors_total` | Counter | service, provider, error_type | Error count by type |
-| `tokenops_fallback_total` | Counter | service, from_model, to_model | Fallback invocations |
+| Metric Name                            | Type      | Labels                                      | Description                                 |
+| -------------------------------------- | --------- | ------------------------------------------- | ------------------------------------------- |
+| `tokenops_request_total`               | Counter   | service, model, provider, status, cache_hit | Total request count                         |
+| `tokenops_request_duration_seconds`    | Histogram | service, model, provider                    | End-to-end latency (gateway perspective)    |
+| `tokenops_provider_duration_seconds`   | Histogram | model, provider                             | Provider-only latency (network + inference) |
+| `tokenops_input_tokens_total`          | Counter   | service, model                              | Total input tokens processed                |
+| `tokenops_output_tokens_total`         | Counter   | service, model                              | Total output tokens generated               |
+| `tokenops_cost_usd_total`              | Counter   | service, model, cost_center                 | Cumulative cost in USD                      |
+| `tokenops_cost_per_request_usd`        | Histogram | service, model                              | Per-request cost distribution               |
+| `tokenops_cache_hits_total`            | Counter   | service, cache_type                         | Cache hits (exact, semantic)                |
+| `tokenops_cache_misses_total`          | Counter   | service                                     | Cache misses                                |
+| `tokenops_cache_hit_rate`              | Gauge     | service                                     | Rolling cache hit rate                      |
+| `tokenops_rate_limit_rejections_total` | Counter   | service, limit_type                         | Rate limit rejections                       |
+| `tokenops_circuit_breaker_state`       | Gauge     | provider                                    | 0=closed, 1=half-open, 2=open               |
+| `tokenops_circuit_breaker_trips_total` | Counter   | provider                                    | Circuit breaker trip count                  |
+| `tokenops_errors_total`                | Counter   | service, provider, error_type               | Error count by type                         |
+| `tokenops_fallback_total`              | Counter   | service, from_model, to_model               | Fallback invocations                        |
 
 ### 7.2 Key Dashboard Panels
 
@@ -697,13 +697,13 @@ async def handle_request(request):
 
 ### 8.1 API Key Management
 
-| Practice | Implementation |
-|----------|---------------|
+| Practice                              | Implementation                                                              |
+| ------------------------------------- | --------------------------------------------------------------------------- |
 | **Never store provider keys in code** | Use environment variables or a secrets manager (Vault, AWS Secrets Manager) |
-| **Rotate keys quarterly** | Automate rotation; the gateway resolves keys at runtime |
-| **Per-tenant gateway keys** | Each service gets its own gateway API key; map to tenant config |
-| **Key scoping** | Gateway keys can restrict access to specific models or tiers |
-| **Audit key usage** | Log which key was used for each request (not the key itself) |
+| **Rotate keys quarterly**             | Automate rotation; the gateway resolves keys at runtime                     |
+| **Per-tenant gateway keys**           | Each service gets its own gateway API key; map to tenant config             |
+| **Key scoping**                       | Gateway keys can restrict access to specific models or tiers                |
+| **Audit key usage**                   | Log which key was used for each request (not the key itself)                |
 
 ### 8.2 Tenant Isolation
 
@@ -792,12 +792,12 @@ class PIIFilter:
 
 **Scaling guidelines:**
 
-| Load Level | Gateway Pods | Redis | Notes |
-|-----------|-------------|-------|-------|
-| < 100 RPM | 2 (HA) | 1 node | Minimum viable deployment |
-| 100–1,000 RPM | 3–5 | 3-node cluster | Standard production |
-| 1,000–10,000 RPM | 5–15 | 6-node cluster | Consider read replicas |
-| > 10,000 RPM | 15+ | Redis Cluster | Shard by tenant or service |
+| Load Level       | Gateway Pods | Redis          | Notes                      |
+| ---------------- | ------------ | -------------- | -------------------------- |
+| < 100 RPM        | 2 (HA)       | 1 node         | Minimum viable deployment  |
+| 100–1,000 RPM    | 3–5          | 3-node cluster | Standard production        |
+| 1,000–10,000 RPM | 5–15         | 6-node cluster | Consider read replicas     |
+| > 10,000 RPM     | 15+          | Redis Cluster  | Shard by tenant or service |
 
 ### 9.2 Connection Pooling
 
@@ -825,15 +825,15 @@ class ProviderConnectionPool:
 
 ### 9.3 Performance Optimization
 
-| Optimization | Impact | Implementation |
-|-------------|--------|----------------|
-| **Async I/O** | High | Use asyncio / goroutines for all provider calls |
-| **Connection pooling** | High | Persistent HTTP/2 connections to providers |
-| **Cache-first routing** | High | Check cache before routing decisions |
-| **Async cost logging** | Medium | Fire-and-forget cost events; don't block response |
+| Optimization                | Impact | Implementation                                                  |
+| --------------------------- | ------ | --------------------------------------------------------------- |
+| **Async I/O**               | High   | Use asyncio / goroutines for all provider calls                 |
+| **Connection pooling**      | High   | Persistent HTTP/2 connections to providers                      |
+| **Cache-first routing**     | High   | Check cache before routing decisions                            |
+| **Async cost logging**      | Medium | Fire-and-forget cost events; don't block response               |
 | **Token counting shortcut** | Medium | Use fast approximation (chars/4) for routing; exact for billing |
-| **Request batching** | Medium | Batch cost events before flushing to Kafka |
-| **Zero-copy streaming** | Medium | Stream provider responses directly to client |
+| **Request batching**        | Medium | Batch cost events before flushing to Kafka                      |
+| **Zero-copy streaming**     | Medium | Stream provider responses directly to client                    |
 
 ---
 
@@ -1021,4 +1021,4 @@ volumes:
 
 ---
 
-*Template version 1.0 — Maintained by the TokenOps team.*
+_Template version 1.0 — Maintained by the TokenOps team._

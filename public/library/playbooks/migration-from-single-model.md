@@ -18,20 +18,21 @@ Using a single frontier model for all LLM tasks is the most common — and most 
 
 Create a spreadsheet of every LLM API call site:
 
-| # | Service | Feature | Task Type | Complexity | Monthly Volume | Current Model | Monthly Cost |
-|---|---------|---------|-----------|------------|---------------|---------------|-------------|
-| 1 | Support Bot | FAQ Response | Classification + Generation | Simple | 380,000 | GPT-4o | $18,500 |
-| 2 | Support Bot | Escalation Analysis | Complex Reasoning | Complex | 45,000 | GPT-4o | $8,200 |
-| 3 | Email Gen | Subject Lines | Generation | Simple | 200,000 | GPT-4o | $6,400 |
-| 4 | Data Pipeline | Entity Extraction | Extraction | Medium | 1,200,000 | GPT-4o | $42,000 |
-| 5 | Code Review | Security Analysis | Complex Reasoning | Complex | 60,000 | GPT-4o | $12,800 |
-| 6 | Reports | Summarization | Summarization | Medium | 90,000 | GPT-4o | $7,300 |
+| #   | Service       | Feature             | Task Type                   | Complexity | Monthly Volume | Current Model | Monthly Cost |
+| --- | ------------- | ------------------- | --------------------------- | ---------- | -------------- | ------------- | ------------ |
+| 1   | Support Bot   | FAQ Response        | Classification + Generation | Simple     | 380,000        | GPT-4o        | $18,500      |
+| 2   | Support Bot   | Escalation Analysis | Complex Reasoning           | Complex    | 45,000         | GPT-4o        | $8,200       |
+| 3   | Email Gen     | Subject Lines       | Generation                  | Simple     | 200,000        | GPT-4o        | $6,400       |
+| 4   | Data Pipeline | Entity Extraction   | Extraction                  | Medium     | 1,200,000      | GPT-4o        | $42,000      |
+| 5   | Code Review   | Security Analysis   | Complex Reasoning           | Complex    | 60,000         | GPT-4o        | $12,800      |
+| 6   | Reports       | Summarization       | Summarization               | Medium     | 90,000         | GPT-4o        | $7,300       |
 
 ### Step 2: Score Each Use Case
 
 For each use case, assign scores:
 
 **Complexity Score (1–5):**
+
 - 1 = Binary classification, simple extraction
 - 2 = Multi-class classification, template generation
 - 3 = Summarization, structured extraction
@@ -39,6 +40,7 @@ For each use case, assign scores:
 - 5 = Complex analysis, nuanced judgment
 
 **Quality Sensitivity (1–5):**
+
 - 1 = Internal tool, low stakes
 - 2 = Customer-facing, tolerant of minor errors
 - 3 = Customer-facing, moderate accuracy needed
@@ -80,15 +82,16 @@ ELSE:
 
 For each migration target, create a benchmark test set:
 
-| Task Type | Minimum Test Set Size | What to Include |
-|-----------|----------------------|-----------------|
-| Classification | 500 samples | All classes represented, edge cases, ambiguous samples |
-| Extraction | 300 samples | Various document types, missing fields, malformed inputs |
-| Summarization | 100 samples | Short and long inputs, different domains |
-| Generation | 100 samples | Various tones, lengths, formats |
-| Reasoning | 200 samples | Easy + hard problems, multi-step chains |
+| Task Type      | Minimum Test Set Size | What to Include                                          |
+| -------------- | --------------------- | -------------------------------------------------------- |
+| Classification | 500 samples           | All classes represented, edge cases, ambiguous samples   |
+| Extraction     | 300 samples           | Various document types, missing fields, malformed inputs |
+| Summarization  | 100 samples           | Short and long inputs, different domains                 |
+| Generation     | 100 samples           | Various tones, lengths, formats                          |
+| Reasoning      | 200 samples           | Easy + hard problems, multi-step chains                  |
 
 **Test set requirements:**
+
 - [ ] Ground-truth labels from human annotators or validated production outputs
 - [ ] Include edge cases (10–15% of set)
 - [ ] Include adversarial examples (5% of set)
@@ -101,32 +104,32 @@ Run each test set against 3–5 candidate models:
 
 **Candidate Models (as of May 2026):**
 
-| Tier | Models | Approximate Cost |
-|------|--------|-----------------|
-| Economy | GPT-4.1-nano, Gemini 2.5 Flash, Llama 4 Scout | $0.05–0.30/1M tokens |
-| Balanced | GPT-4.1-mini, Claude Haiku 3.5, Llama 4 Maverick | $0.15–4.00/1M tokens |
-| Frontier | GPT-4.1, Claude Sonnet 4, Gemini 2.5 Pro | $1.25–15.00/1M tokens |
+| Tier     | Models                                           | Approximate Cost      |
+| -------- | ------------------------------------------------ | --------------------- |
+| Economy  | GPT-4.1-nano, Gemini 2.5 Flash, Llama 4 Scout    | $0.05–0.30/1M tokens  |
+| Balanced | GPT-4.1-mini, Claude Haiku 3.5, Llama 4 Maverick | $0.15–4.00/1M tokens  |
+| Frontier | GPT-4.1, Claude Sonnet 4, Gemini 2.5 Pro         | $1.25–15.00/1M tokens |
 
 ### Step 3: Record Results
 
-| Use Case | Model | Accuracy/Quality | Latency (p95) | Cost/Request | Quality vs. Baseline | Cost Savings |
-|----------|-------|-----------------|---------------|-------------|---------------------|-------------|
-| FAQ Response | GPT-4o (baseline) | 97.2% | 1.8s | $0.048 | — | — |
-| FAQ Response | GPT-4.1-mini | 96.1% | 0.9s | $0.003 | −1.1% | 94% |
-| FAQ Response | Gemini 2.5 Flash | 95.4% | 0.6s | $0.001 | −1.8% | 98% |
-| FAQ Response | Llama 4 Maverick | 95.8% | 1.1s | $0.004 | −1.4% | 92% |
+| Use Case     | Model             | Accuracy/Quality | Latency (p95) | Cost/Request | Quality vs. Baseline | Cost Savings |
+| ------------ | ----------------- | ---------------- | ------------- | ------------ | -------------------- | ------------ |
+| FAQ Response | GPT-4o (baseline) | 97.2%            | 1.8s          | $0.048       | —                    | —            |
+| FAQ Response | GPT-4.1-mini      | 96.1%            | 0.9s          | $0.003       | −1.1%                | 94%          |
+| FAQ Response | Gemini 2.5 Flash  | 95.4%            | 0.6s          | $0.001       | −1.8%                | 98%          |
+| FAQ Response | Llama 4 Maverick  | 95.8%            | 1.1s          | $0.004       | −1.4%                | 92%          |
 
 ### Step 4: Set Quality Thresholds
 
 Define minimum acceptable quality for each use case:
 
-| Use Case | Metric | Threshold | Rationale |
-|----------|--------|-----------|-----------|
-| FAQ Response | Accuracy | ≥ 94% | Customer-facing but low stakes |
-| Entity Extraction | Field-level F1 | ≥ 93% | Data quality impacts downstream |
-| Summarization | Human eval ≥ | 4.0/5.0 | Must be coherent and complete |
-| Subject Lines | A/B CTR delta | < 3% regression | Revenue impact |
-| Security Analysis | Detection rate | ≥ 98% | Safety-critical |
+| Use Case          | Metric         | Threshold       | Rationale                       |
+| ----------------- | -------------- | --------------- | ------------------------------- |
+| FAQ Response      | Accuracy       | ≥ 94%           | Customer-facing but low stakes  |
+| Entity Extraction | Field-level F1 | ≥ 93%           | Data quality impacts downstream |
+| Summarization     | Human eval ≥   | 4.0/5.0         | Must be coherent and complete   |
+| Subject Lines     | A/B CTR delta  | < 3% regression | Revenue impact                  |
+| Security Analysis | Detection rate | ≥ 98%           | Safety-critical                 |
 
 ---
 
@@ -182,12 +185,12 @@ routing:
         task_type: [reasoning, analysis]
         complexity: [medium, complex]
       route_to: frontier
-      fallback: null  # No downgrade for complex reasoning
+      fallback: null # No downgrade for complex reasoning
 
     - match:
         quality_sensitivity: [4, 5]
       route_to: frontier
-      fallback: null  # Never downgrade safety-critical tasks
+      fallback: null # Never downgrade safety-critical tasks
 
   default: balanced
 ```
@@ -216,10 +219,10 @@ async def route_request(request, tier):
 
 ```yaml
 circuit_breaker:
-  failure_threshold: 5         # failures before opening circuit
+  failure_threshold: 5 # failures before opening circuit
   recovery_timeout_seconds: 30 # time before attempting recovery
-  half_open_requests: 3        # test requests during recovery
-  window_seconds: 60           # sliding window for failure counting
+  half_open_requests: 3 # test requests during recovery
+  window_seconds: 60 # sliding window for failure counting
 ```
 
 ---
@@ -249,6 +252,7 @@ ORDER BY use_case, model;
 ```
 
 **Quality Gate: Proceed if**
+
 - [ ] Quality delta ≤ 2% vs. baseline on all metrics
 - [ ] No new failure modes discovered
 - [ ] Latency within SLO bounds
@@ -259,6 +263,7 @@ ORDER BY use_case, model;
 - Monitor quality, latency, cost, and user feedback
 
 **Rollback Triggers (automatic):**
+
 - Quality score drops > 3% below baseline for 15 minutes
 - Error rate exceeds 2× baseline
 - P95 latency exceeds SLO for 10 minutes
@@ -306,14 +311,14 @@ ORDER BY pct_new_model DESC;
 
 ## Risk Register
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|-----------|
-| Quality regression on edge cases | Medium | High | Include edge cases in test set; monitor quality per-segment |
-| Provider outage during migration | Low | High | Fallback chains; multi-provider routing |
-| Prompt incompatibility with new model | Medium | Medium | Test all prompts during shadow phase; adjust formatting |
-| Rate limit differences between models | Medium | Low | Check rate limits before migration; configure gateway |
-| Team resistance to model changes | Low | Medium | Show quality benchmarks; involve team leads in evaluation |
-| Cost increase due to higher retry rate on new model | Low | Medium | Monitor retry rate; set cost ceiling per request |
+| Risk                                                | Likelihood | Impact | Mitigation                                                  |
+| --------------------------------------------------- | ---------- | ------ | ----------------------------------------------------------- |
+| Quality regression on edge cases                    | Medium     | High   | Include edge cases in test set; monitor quality per-segment |
+| Provider outage during migration                    | Low        | High   | Fallback chains; multi-provider routing                     |
+| Prompt incompatibility with new model               | Medium     | Medium | Test all prompts during shadow phase; adjust formatting     |
+| Rate limit differences between models               | Medium     | Low    | Check rate limits before migration; configure gateway       |
+| Team resistance to model changes                    | Low        | Medium | Show quality benchmarks; involve team leads in evaluation   |
+| Cost increase due to higher retry rate on new model | Low        | Medium | Monitor retry rate; set cost ceiling per request            |
 
 ---
 
@@ -326,8 +331,8 @@ Subject: TokenOps Migration: Moving to Multi-Model Architecture
 
 Team,
 
-We're beginning an 8-week migration from [Current Model] to a multi-model 
-routing architecture. This will reduce our blended token cost by an estimated 
+We're beginning an 8-week migration from [Current Model] to a multi-model
+routing architecture. This will reduce our blended token cost by an estimated
 30-60% while maintaining quality standards.
 
 Timeline:
@@ -382,4 +387,4 @@ Risks / Blockers:
 
 ---
 
-*Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)*
+_Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)_

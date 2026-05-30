@@ -13,24 +13,72 @@ import {
 
 export const providerPresets: Record<
   string,
-  { premiumInput: number; premiumOutput: number; cheapInput: number; cheapOutput: number; label: string }
+  {
+    premiumInput: number;
+    premiumOutput: number;
+    cheapInput: number;
+    cheapOutput: number;
+    label: string;
+  }
 > = {
-  openai: { premiumInput: 5, premiumOutput: 15, cheapInput: 0.15, cheapOutput: 0.6, label: "OpenAI mix" },
-  anthropic: { premiumInput: 3, premiumOutput: 15, cheapInput: 0.8, cheapOutput: 4, label: "Anthropic mix" },
-  google: { premiumInput: 1.25, premiumOutput: 10, cheapInput: 0.075, cheapOutput: 0.3, label: "Google mix" },
+  openai: {
+    premiumInput: 5,
+    premiumOutput: 15,
+    cheapInput: 0.15,
+    cheapOutput: 0.6,
+    label: "OpenAI mix",
+  },
+  anthropic: {
+    premiumInput: 3,
+    premiumOutput: 15,
+    cheapInput: 0.8,
+    cheapOutput: 4,
+    label: "Anthropic mix",
+  },
+  google: {
+    premiumInput: 1.25,
+    premiumOutput: 10,
+    cheapInput: 0.075,
+    cheapOutput: 0.3,
+    label: "Google mix",
+  },
 };
 
 export const operatingPillars: { icon: LucideIcon; title: string; body: string }[] = [
-  { icon: Gauge, title: "Visibility", body: "Know which services, features, teams, and use cases consume tokens and at what cost." },
-  { icon: Target, title: "Optimization", body: "Reduce waste through prompt engineering, model tiering, caching, and context management." },
-  { icon: ShieldCheck, title: "Governance", body: "Embed token economics into budgets, alerts, reviews, and architecture decisions." },
+  {
+    icon: Gauge,
+    title: "Visibility",
+    body: "Know which services, features, teams, and use cases consume tokens and at what cost.",
+  },
+  {
+    icon: Target,
+    title: "Optimization",
+    body: "Reduce waste through prompt engineering, model tiering, caching, and context management.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Governance",
+    body: "Embed token economics into budgets, alerts, reviews, and architecture decisions.",
+  },
 ];
 
 export const playbook = [
-  { title: "Instrument every call", body: "Tag requests by team, service, feature, environment, model, and outcome." },
-  { title: "Allocate spend", body: "Join usage metadata with billing data so token costs become accountable." },
-  { title: "Improve token yield", body: "Target 80%+ useful output by reducing retries, irrelevant context, and discarded generations." },
-  { title: "Operate continuously", body: "Review budgets, anomalies, model choices, and optimization backlog every month." },
+  {
+    title: "Instrument every call",
+    body: "Tag requests by team, service, feature, environment, model, and outcome.",
+  },
+  {
+    title: "Allocate spend",
+    body: "Join usage metadata with billing data so token costs become accountable.",
+  },
+  {
+    title: "Improve token yield",
+    body: "Target 80%+ useful output by reducing retries, irrelevant context, and discarded generations.",
+  },
+  {
+    title: "Operate continuously",
+    body: "Review budgets, anomalies, model choices, and optimization backlog every month.",
+  },
 ];
 
 export const modelPricingData: Record<string, { input: number; output: number }> = {
@@ -109,7 +157,8 @@ export function compressPrompt(text: string): CompressionResult {
   const originalLength = current.length;
 
   const step1 = current.replace(/\s+/g, " ").trim();
-  if (step1.length < current.length) changes.push(`Collapsed whitespace: -${current.length - step1.length} chars`);
+  if (step1.length < current.length)
+    changes.push(`Collapsed whitespace: -${current.length - step1.length} chars`);
   current = step1;
 
   const fluffPatterns = [
@@ -119,7 +168,8 @@ export function compressPrompt(text: string): CompressionResult {
   ];
   for (const pattern of fluffPatterns) current = current.replace(pattern, "");
   const step2 = current.replace(/\s+/g, " ").trim();
-  if (step2.length < step1.length) changes.push(`Removed fluff words: -${step1.length - step2.length} chars`);
+  if (step2.length < step1.length)
+    changes.push(`Removed fluff words: -${step1.length - step2.length} chars`);
   current = step2;
 
   current = current
@@ -127,7 +177,8 @@ export function compressPrompt(text: string): CompressionResult {
     .replace(/\bin order to\b/gi, "to")
     .replace(/\bit is (important|critical|necessary) that\b/gi, "must");
   const step3 = current.replace(/\s+/g, " ").trim();
-  if (step3.length < step2.length) changes.push(`Optimized phrasing: -${step2.length - step3.length} chars`);
+  if (step3.length < step2.length)
+    changes.push(`Optimized phrasing: -${step2.length - step3.length} chars`);
   current = step3;
 
   return {
@@ -140,7 +191,9 @@ export function compressPrompt(text: string): CompressionResult {
 }
 
 export function exportScenarioCSV(rows: (string | number)[][], filename = "tokenops-scenario.csv") {
-  const blob = new Blob([rows.map((row) => row.join(",")).join("\n")], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([rows.map((row) => row.join(",")).join("\n")], {
+    type: "text/csv;charset=utf-8;",
+  });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -176,12 +229,24 @@ export interface LibraryItem {
 }
 
 export const libraryCategoryMeta: Record<string, { label: string; tagline: string }> = {
-  Advanced:   { label: "Advanced",   tagline: "Deep technical guides for platform engineers." },
-  Checklist:  { label: "Checklists", tagline: "Pre-flight and audit checklists you can print and run." },
-  Guide:      { label: "Guides",     tagline: "Reference reading for understanding TokenOps end-to-end." },
-  Playbook:   { label: "Playbooks",  tagline: "Multi-week programs with phases, owners, and outcomes." },
-  Reference:  { label: "References", tagline: "Look-up material — metrics, vendors, tools, comparisons." },
-  Operating:  { label: "Operating",  tagline: "Day-to-day artifacts: runbooks, QBRs, scorecards, SLAs." },
+  Advanced: { label: "Advanced", tagline: "Deep technical guides for platform engineers." },
+  Checklist: {
+    label: "Checklists",
+    tagline: "Pre-flight and audit checklists you can print and run.",
+  },
+  Guide: { label: "Guides", tagline: "Reference reading for understanding TokenOps end-to-end." },
+  Playbook: {
+    label: "Playbooks",
+    tagline: "Multi-week programs with phases, owners, and outcomes.",
+  },
+  Reference: {
+    label: "References",
+    tagline: "Look-up material — metrics, vendors, tools, comparisons.",
+  },
+  Operating: {
+    label: "Operating",
+    tagline: "Day-to-day artifacts: runbooks, QBRs, scorecards, SLAs.",
+  },
 };
 
 export function downloadLibraryFile(file: string) {
@@ -196,15 +261,24 @@ export function downloadLibraryFile(file: string) {
 /* ─── Intelligent calculator engines (RAG, Routing, Budget, Caching ROI, TCO) ─── */
 
 export interface RAGCostInput {
-  docsPerQuery: number; avgChunkTokens: number; queriesPerDay: number;
-  systemPromptTokens: number; avgOutputTokens: number;
-  modelInputPrice: number; modelOutputPrice: number;
-  cacheHitRate: number; cachePriceDiscount: number;
+  docsPerQuery: number;
+  avgChunkTokens: number;
+  queriesPerDay: number;
+  systemPromptTokens: number;
+  avgOutputTokens: number;
+  modelInputPrice: number;
+  modelOutputPrice: number;
+  cacheHitRate: number;
+  cachePriceDiscount: number;
 }
 export interface RAGCostResult {
-  inputTokensPerQuery: number; dailyInputTokens: number;
-  dailyCost: number; monthlyCost: number;
-  monthlyCostWithCache: number; cacheSavings: number; costPerQuery: number;
+  inputTokensPerQuery: number;
+  dailyInputTokens: number;
+  dailyCost: number;
+  monthlyCost: number;
+  monthlyCostWithCache: number;
+  cacheSavings: number;
+  costPerQuery: number;
 }
 export function calcRAGCost(i: RAGCostInput): RAGCostResult {
   const contextTokens = i.docsPerQuery * i.avgChunkTokens;
@@ -218,22 +292,35 @@ export function calcRAGCost(i: RAGCostInput): RAGCostResult {
   const cachedFraction = i.cacheHitRate * (1 - i.cachePriceDiscount);
   const monthlyCostWithCache = monthlyCost * (1 - i.cacheHitRate + cachedFraction);
   return {
-    inputTokensPerQuery, dailyInputTokens, dailyCost, monthlyCost,
-    monthlyCostWithCache, cacheSavings: monthlyCost - monthlyCostWithCache,
+    inputTokensPerQuery,
+    dailyInputTokens,
+    dailyCost,
+    monthlyCost,
+    monthlyCostWithCache,
+    cacheSavings: monthlyCost - monthlyCostWithCache,
     costPerQuery: i.queriesPerDay ? dailyCost / i.queriesPerDay : 0,
   };
 }
 
 export interface RoutingInput {
-  totalCallsPerMonth: number; premiumFraction: number; cheapFraction: number;
-  avgInputTokens: number; avgOutputTokens: number;
-  premiumInputPrice: number; premiumOutputPrice: number;
-  cheapInputPrice: number; cheapOutputPrice: number;
+  totalCallsPerMonth: number;
+  premiumFraction: number;
+  cheapFraction: number;
+  avgInputTokens: number;
+  avgOutputTokens: number;
+  premiumInputPrice: number;
+  premiumOutputPrice: number;
+  cheapInputPrice: number;
+  cheapOutputPrice: number;
 }
 export interface RoutingResult {
-  baselineMonthlyCost: number; optimisedMonthlyCost: number;
-  monthlySavings: number; annualSavings: number; savingsPercent: number;
-  premiumCallCost: number; cheapCallCost: number;
+  baselineMonthlyCost: number;
+  optimisedMonthlyCost: number;
+  monthlySavings: number;
+  annualSavings: number;
+  savingsPercent: number;
+  premiumCallCost: number;
+  cheapCallCost: number;
 }
 export function calcRoutingSavings(r: RoutingInput): RoutingResult {
   const per = (i: number, o: number) =>
@@ -246,20 +333,27 @@ export function calcRoutingSavings(r: RoutingInput): RoutingResult {
     r.totalCallsPerMonth * r.cheapFraction * cheapCallCost;
   const monthlySavings = baseline - optimised;
   return {
-    baselineMonthlyCost: baseline, optimisedMonthlyCost: optimised,
-    monthlySavings, annualSavings: monthlySavings * 12,
+    baselineMonthlyCost: baseline,
+    optimisedMonthlyCost: optimised,
+    monthlySavings,
+    annualSavings: monthlySavings * 12,
     savingsPercent: baseline ? (monthlySavings / baseline) * 100 : 0,
-    premiumCallCost, cheapCallCost,
+    premiumCallCost,
+    cheapCallCost,
   };
 }
 
 export interface BudgetInput {
-  monthlyBudgetUSD: number; currentDayOfMonth: number;
-  spendToDate: number; projectedGrowthRate: number;
+  monthlyBudgetUSD: number;
+  currentDayOfMonth: number;
+  spendToDate: number;
+  projectedGrowthRate: number;
 }
 export interface BudgetResult {
-  dailyBurnRate: number; projectedMonthEnd: number;
-  budgetUtilization: number; daysUntilBudgetHit: number | null;
+  dailyBurnRate: number;
+  projectedMonthEnd: number;
+  budgetUtilization: number;
+  daysUntilBudgetHit: number | null;
   status: "on-track" | "warning" | "over-budget";
   recommendedDailyBudget: number;
 }
@@ -269,24 +363,34 @@ export function calcBudgetBurnRate(b: BudgetInput): BudgetResult {
   const projectedMonthEnd = b.spendToDate + dailyBurnRate * daysLeft;
   const budgetUtilization = b.monthlyBudgetUSD ? (projectedMonthEnd / b.monthlyBudgetUSD) * 100 : 0;
   const remaining = b.monthlyBudgetUSD - b.spendToDate;
-  const daysUntilBudgetHit = dailyBurnRate > 0 && remaining > 0
-    ? Math.floor(remaining / dailyBurnRate) : null;
-  const status = budgetUtilization > 100 ? "over-budget" : budgetUtilization > 80 ? "warning" : "on-track";
+  const daysUntilBudgetHit =
+    dailyBurnRate > 0 && remaining > 0 ? Math.floor(remaining / dailyBurnRate) : null;
+  const status =
+    budgetUtilization > 100 ? "over-budget" : budgetUtilization > 80 ? "warning" : "on-track";
   return {
-    dailyBurnRate, projectedMonthEnd, budgetUtilization,
-    daysUntilBudgetHit, status,
+    dailyBurnRate,
+    projectedMonthEnd,
+    budgetUtilization,
+    daysUntilBudgetHit,
+    status,
     recommendedDailyBudget: b.monthlyBudgetUSD / 30,
   };
 }
 
 export interface CachingROIInput {
-  systemPromptTokens: number; callsPerDay: number;
-  modelInputPrice: number; cacheWritePrice: number;
-  cacheReadPrice: number; cacheHitRate: number;
+  systemPromptTokens: number;
+  callsPerDay: number;
+  modelInputPrice: number;
+  cacheWritePrice: number;
+  cacheReadPrice: number;
+  cacheHitRate: number;
 }
 export interface CachingROIResult {
-  baselineDailyCost: number; cachedDailyCost: number;
-  dailySavings: number; monthlySavings: number; breakEvenCalls: number;
+  baselineDailyCost: number;
+  cachedDailyCost: number;
+  dailySavings: number;
+  monthlySavings: number;
+  breakEvenCalls: number;
 }
 export function calcCachingROI(c: CachingROIInput): CachingROIResult {
   const basePerCall = (c.systemPromptTokens / 1_000_000) * c.modelInputPrice;
@@ -296,33 +400,51 @@ export function calcCachingROI(c: CachingROIInput): CachingROIResult {
   const baselineDailyCost = basePerCall * c.callsPerDay;
   const cachedDailyCost = cachedPerCall * c.callsPerDay;
   const dailySavings = baselineDailyCost - cachedDailyCost;
-  const breakEvenCalls = writePerCall > basePerCall
-    ? Infinity
-    : Math.ceil(writePerCall / Math.max(0.0000001, basePerCall - readPerCall));
-  return { baselineDailyCost, cachedDailyCost, dailySavings, monthlySavings: dailySavings * 30, breakEvenCalls };
+  const breakEvenCalls =
+    writePerCall > basePerCall
+      ? Infinity
+      : Math.ceil(writePerCall / Math.max(0.0000001, basePerCall - readPerCall));
+  return {
+    baselineDailyCost,
+    cachedDailyCost,
+    dailySavings,
+    monthlySavings: dailySavings * 30,
+    breakEvenCalls,
+  };
 }
 
 export interface TCOInput {
-  monthlyTokenCostUSD: number; monthlyInfraUSD: number;
-  monthlyEngineeringHours: number; engineerHourlyRate: number;
-  monthlyOperationsHours: number; opsHourlyRate: number;
-  monthlyRevenueLift: number; monthlyChurnReduction: number;
+  monthlyTokenCostUSD: number;
+  monthlyInfraUSD: number;
+  monthlyEngineeringHours: number;
+  engineerHourlyRate: number;
+  monthlyOperationsHours: number;
+  opsHourlyRate: number;
+  monthlyRevenueLift: number;
+  monthlyChurnReduction: number;
 }
 export interface TCOResult {
-  totalMonthlyCost: number; totalMonthlyBenefit: number;
-  netMonthlyCashflow: number; roi: number;
-  tokenCostFraction: number; paybackMonths: number | null;
+  totalMonthlyCost: number;
+  totalMonthlyBenefit: number;
+  netMonthlyCashflow: number;
+  roi: number;
+  tokenCostFraction: number;
+  paybackMonths: number | null;
 }
 export function calcTCO(t: TCOInput): TCOResult {
   const totalMonthlyCost =
-    t.monthlyTokenCostUSD + t.monthlyInfraUSD +
+    t.monthlyTokenCostUSD +
+    t.monthlyInfraUSD +
     t.monthlyEngineeringHours * t.engineerHourlyRate +
     t.monthlyOperationsHours * t.opsHourlyRate;
   const totalMonthlyBenefit = t.monthlyRevenueLift + t.monthlyChurnReduction;
   const netMonthlyCashflow = totalMonthlyBenefit - totalMonthlyCost;
   const roi = totalMonthlyCost ? (netMonthlyCashflow / totalMonthlyCost) * 100 : 0;
   return {
-    totalMonthlyCost, totalMonthlyBenefit, netMonthlyCashflow, roi,
+    totalMonthlyCost,
+    totalMonthlyBenefit,
+    netMonthlyCashflow,
+    roi,
     tokenCostFraction: totalMonthlyCost ? (t.monthlyTokenCostUSD / totalMonthlyCost) * 100 : 0,
     paybackMonths: netMonthlyCashflow > 0 ? Math.ceil(totalMonthlyCost / netMonthlyCashflow) : null,
   };

@@ -46,8 +46,10 @@ const readerEntries: ReaderEntry[] = [
 ];
 
 function resolveReaderPath(path: string) {
-  if (path.startsWith("template/")) return { source: "template" as const, key: path.slice("template/".length) };
-  if (path.startsWith("library/")) return { source: "library" as const, key: path.slice("library/".length) };
+  if (path.startsWith("template/"))
+    return { source: "template" as const, key: path.slice("template/".length) };
+  if (path.startsWith("library/"))
+    return { source: "library" as const, key: path.slice("library/".length) };
   return { source: "library" as const, key: path };
 }
 
@@ -61,7 +63,10 @@ export const Route = createFileRoute("/read/$")({
     return {
       meta: [
         { title },
-        { name: "description", content: item?.desc ?? "Read TokenOps reference material in your browser." },
+        {
+          name: "description",
+          content: item?.desc ?? "Read TokenOps reference material in your browser.",
+        },
       ],
     };
   },
@@ -73,15 +78,21 @@ function ReaderPage() {
   if (!path) throw notFound();
 
   const resolved = resolveReaderPath(path);
-  const raw = resolved.source === "template"
-    ? documentStore.templates[resolved.key]
-    : documentStore.library[resolved.key];
+  const raw =
+    resolved.source === "template"
+      ? documentStore.templates[resolved.key]
+      : documentStore.library[resolved.key];
   if (!raw) throw notFound();
 
   const item = readerEntries.find((i) => i.source === resolved.source && i.key === resolved.key);
-  const currentIndex = readerEntries.findIndex((i) => i.source === resolved.source && i.key === resolved.key);
+  const currentIndex = readerEntries.findIndex(
+    (i) => i.source === resolved.source && i.key === resolved.key,
+  );
   const previous = currentIndex > 0 ? readerEntries[currentIndex - 1] : null;
-  const next = currentIndex >= 0 && currentIndex < readerEntries.length - 1 ? readerEntries[currentIndex + 1] : null;
+  const next =
+    currentIndex >= 0 && currentIndex < readerEntries.length - 1
+      ? readerEntries[currentIndex + 1]
+      : null;
 
   const isMarkdown = resolved.key.toLowerCase().endsWith(".md");
   const html = isMarkdown ? (marked.parse(raw) as string) : null;
@@ -103,28 +114,60 @@ function ReaderPage() {
         </div>
         <div className="reader-actions" aria-label="Reader controls">
           {resolved.source === "template" ? (
-            <Link to="/resources" className="reader-icon-btn" title="Back to resources" aria-label="Back to resources">
+            <Link
+              to="/resources"
+              className="reader-icon-btn"
+              title="Back to resources"
+              aria-label="Back to resources"
+            >
               <ArrowLeft size={18} />
             </Link>
           ) : (
-            <Link to="/library" className="reader-icon-btn" title="Back to library" aria-label="Back to library">
+            <Link
+              to="/library"
+              className="reader-icon-btn"
+              title="Back to library"
+              aria-label="Back to library"
+            >
               <ArrowLeft size={18} />
             </Link>
           )}
           {previous && (
-            <Link to="/read/$" params={{ _splat: previous.readPath }} className="reader-icon-btn" title="Previous document" aria-label="Previous document">
+            <Link
+              to="/read/$"
+              params={{ _splat: previous.readPath }}
+              className="reader-icon-btn"
+              title="Previous document"
+              aria-label="Previous document"
+            >
               <ChevronLeft size={18} />
             </Link>
           )}
           {next && (
-            <Link to="/read/$" params={{ _splat: next.readPath }} className="reader-icon-btn" title="Next document" aria-label="Next document">
+            <Link
+              to="/read/$"
+              params={{ _splat: next.readPath }}
+              className="reader-icon-btn"
+              title="Next document"
+              aria-label="Next document"
+            >
               <ChevronRight size={18} />
             </Link>
           )}
-          <a className="reader-icon-btn" href="#reader-bottom" title="Jump to bottom" aria-label="Jump to bottom">
+          <a
+            className="reader-icon-btn"
+            href="#reader-bottom"
+            title="Jump to bottom"
+            aria-label="Jump to bottom"
+          >
             <ArrowDown size={18} />
           </a>
-          <button className="reader-icon-btn" onClick={handleDownload} title="Download source" aria-label="Download source">
+          <button
+            className="reader-icon-btn"
+            onClick={handleDownload}
+            title="Download source"
+            aria-label="Download source"
+          >
             <Download size={18} />
           </button>
         </div>
@@ -137,9 +180,7 @@ function ReaderPage() {
             <span className="category-tag">{item.category}</span>
           </div>
         )}
-        {isMarkdown && html && (
-          <div dangerouslySetInnerHTML={{ __html: html }} />
-        )}
+        {isMarkdown && html && <div dangerouslySetInnerHTML={{ __html: html }} />}
         {!isMarkdown && (
           <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{raw}</pre>
         )}
@@ -147,18 +188,35 @@ function ReaderPage() {
 
       <nav className="reader-bottom-nav" id="reader-bottom" aria-label="Document navigation">
         {previous ? (
-          <Link to="/read/$" params={{ _splat: previous.readPath }} className="reader-icon-btn reader-icon-btn-wide">
+          <Link
+            to="/read/$"
+            params={{ _splat: previous.readPath }}
+            className="reader-icon-btn reader-icon-btn-wide"
+          >
             <ChevronLeft size={18} /> Previous
           </Link>
-        ) : <span />}
-        <a className="reader-icon-btn" href="#reader-top" title="Jump to top" aria-label="Jump to top">
+        ) : (
+          <span />
+        )}
+        <a
+          className="reader-icon-btn"
+          href="#reader-top"
+          title="Jump to top"
+          aria-label="Jump to top"
+        >
           <ArrowUp size={18} />
         </a>
         {next ? (
-          <Link to="/read/$" params={{ _splat: next.readPath }} className="reader-icon-btn reader-icon-btn-wide">
+          <Link
+            to="/read/$"
+            params={{ _splat: next.readPath }}
+            className="reader-icon-btn reader-icon-btn-wide"
+          >
             Next <ChevronRight size={18} />
           </Link>
-        ) : <span />}
+        ) : (
+          <span />
+        )}
       </nav>
     </section>
   );

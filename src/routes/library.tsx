@@ -12,14 +12,30 @@ export const Route = createFileRoute("/library")({
   head: () => ({
     meta: [
       { title: "Library — TokenOps Atlas" },
-      { name: "description", content: "29 guides, playbooks, checklists, references, and operating templates for running TokenOps in production." },
+      {
+        name: "description",
+        content:
+          "29 guides, playbooks, checklists, references, and operating templates for running TokenOps in production.",
+      },
       { property: "og:title", content: "TokenOps Library" },
-      { property: "og:description", content: "Guides, playbooks, checklists, references, and operating templates for running TokenOps." },
+      {
+        property: "og:description",
+        content:
+          "Guides, playbooks, checklists, references, and operating templates for running TokenOps.",
+      },
     ],
   }),
 });
 
-const CATEGORIES = ["All", "Advanced", "Checklist", "Guide", "Playbook", "Reference", "Operating"] as const;
+const CATEGORIES = [
+  "All",
+  "Advanced",
+  "Checklist",
+  "Guide",
+  "Playbook",
+  "Reference",
+  "Operating",
+] as const;
 
 function LibraryPage() {
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("All");
@@ -31,8 +47,9 @@ function LibraryPage() {
         <p className="eyebrow">Content library</p>
         <h1>The full TokenOps reference library</h1>
         <p>
-          {data.library.length} long-form artifacts — every guide, playbook, checklist, reference, and operating template
-          from the TokenOps content pack. Read in the browser or download the source markdown.
+          {data.library.length} long-form artifacts — every guide, playbook, checklist, reference,
+          and operating template from the TokenOps content pack. Read in the browser or download the
+          source markdown.
         </p>
       </div>
 
@@ -43,7 +60,7 @@ function LibraryPage() {
             className={`filter-tab ${filter === cat ? "active" : ""}`}
             onClick={() => setFilter(cat)}
           >
-            {cat === "All" ? "All" : libraryCategoryMeta[cat]?.label ?? cat}
+            {cat === "All" ? "All" : (libraryCategoryMeta[cat]?.label ?? cat)}
           </button>
         ))}
       </div>
@@ -72,11 +89,7 @@ function LibraryPage() {
                 <span className="category-tag">{item.category}</span>
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <Link
-                  className="download-btn"
-                  to="/read/$"
-                  params={{ _splat: item.file }}
-                >
+                <Link className="download-btn" to="/read/$" params={{ _splat: item.file }}>
                   <BookOpen size={15} /> Read
                 </Link>
                 <button className="download-btn" onClick={() => downloadLibraryFile(item.file)}>

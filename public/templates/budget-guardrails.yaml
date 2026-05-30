@@ -28,14 +28,14 @@ global_defaults:
   hard_limit_pct: 110
 
   # Budget review cadence
-  review_cycle: monthly            # monthly | weekly | quarterly
+  review_cycle: monthly # monthly | weekly | quarterly
 
   # Grace period after hard limit before requests are actually blocked.
   # Allows in-flight requests to complete gracefully.
   grace_period_minutes: 5
 
   # Default action when hard limit is hit
-  hard_limit_action: reject        # reject | throttle | log_only
+  hard_limit_action: reject # reject | throttle | log_only
 
   # Rate-limit fallback (requests per minute) when throttle mode is active
   throttle_rpm: 10
@@ -53,7 +53,6 @@ global_defaults:
 # Service-level budgets
 # ---------------------------------------------------------------------------
 service_budgets:
-
   # -------------------------------------------------------------------------
   # 1. Support Chatbot
   # -------------------------------------------------------------------------
@@ -62,10 +61,10 @@ service_budgets:
     team: cx-platform
     cost_center: "CC-5520-CX"
 
-    monthly_token_budget: 30_000_000       # 30M tokens / month
+    monthly_token_budget: 30_000_000 # 30M tokens / month
 
     soft_alert:
-      threshold_pct: 75                    # Override global (earlier warning)
+      threshold_pct: 75 # Override global (earlier warning)
       message: >
         ⚠️ Support chatbot has consumed 75% of its monthly token budget.
         Current usage: {{ current_usage }} / {{ budget }} tokens.
@@ -73,9 +72,9 @@ service_budgets:
         Action: Review conversation lengths and cache hit rate.
 
     hard_limit:
-      threshold_pct: 100                   # Strict — no overage allowed
-      action: throttle                     # Degrade gracefully, don't block
-      throttle_rpm: 20                     # Reduced rate during throttle
+      threshold_pct: 100 # Strict — no overage allowed
+      action: throttle # Degrade gracefully, don't block
+      throttle_rpm: 20 # Reduced rate during throttle
       message: >
         🛑 Support chatbot has hit its monthly token budget.
         Throttling to {{ throttle_rpm }} RPM until budget resets.
@@ -115,17 +114,17 @@ service_budgets:
     team: growth-eng
     cost_center: "CC-4410-AI"
 
-    monthly_token_budget: 8_000_000        # 8M tokens / month
+    monthly_token_budget: 8_000_000 # 8M tokens / month
 
     soft_alert:
-      threshold_pct: 80                    # Use global default
+      threshold_pct: 80 # Use global default
       message: >
         ⚠️ Email generator has consumed 80% of its monthly token budget.
         Current usage: {{ current_usage }} / {{ budget }} tokens.
         Consider pausing batch campaigns or compressing prompts.
 
     hard_limit:
-      threshold_pct: 110                   # Allow 10% overage
+      threshold_pct: 110 # Allow 10% overage
       action: reject
       message: >
         🛑 Email generator has exceeded 110% of its monthly budget.
@@ -166,7 +165,7 @@ service_budgets:
     team: data-eng
     cost_center: "CC-3300-DATA"
 
-    monthly_token_budget: 60_000_000       # 60M tokens / month
+    monthly_token_budget: 60_000_000 # 60M tokens / month
 
     soft_alert:
       threshold_pct: 80
@@ -176,7 +175,7 @@ service_budgets:
         Review batch job schedules and input document sizes.
 
     hard_limit:
-      threshold_pct: 120                   # Generous overage for batch jobs
+      threshold_pct: 120 # Generous overage for batch jobs
       action: reject
       message: >
         🛑 Data pipeline has exceeded 120% of its monthly budget.
@@ -236,10 +235,10 @@ team_budgets:
 # Organization-level budget (top-level guardrail)
 # ---------------------------------------------------------------------------
 org_budget:
-  monthly_token_budget: 150_000_000        # 150M tokens / month
+  monthly_token_budget: 150_000_000 # 150M tokens / month
   alert_threshold_pct: 75
   hard_limit_pct: 105
-  hard_limit_action: log_only              # Org-level: alert only, don't block
+  hard_limit_action: log_only # Org-level: alert only, don't block
   owners:
     - name: "FinOps Team"
       email: "finops@company.com"
@@ -319,11 +318,11 @@ exception_process:
         end date. No manual cleanup required.
 
   approval_authority:
-    - amount_up_to: 10_000_000      # ≤10M tokens
+    - amount_up_to: 10_000_000 # ≤10M tokens
       approver: finops_lead
-    - amount_up_to: 50_000_000      # ≤50M tokens
+    - amount_up_to: 50_000_000 # ≤50M tokens
       approver: vp_engineering
-    - amount_above: 50_000_000      # >50M tokens
+    - amount_above: 50_000_000 # >50M tokens
       approver: cfo
 
   sla:

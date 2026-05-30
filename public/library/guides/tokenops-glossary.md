@@ -276,35 +276,35 @@ A specialized database optimized for storing, indexing, and querying high-dimens
 
 ## Appendix: Acronyms Quick Reference
 
-| Acronym | Full Term |
-|---------|-----------|
-| ADR | Architecture Decision Record |
-| BPE | Byte-Pair Encoding |
-| CTO | Chief Technology Officer |
-| ETL | Extract, Transform, Load |
-| FAQ | Frequently Asked Questions |
-| FP&A | Financial Planning & Analysis |
-| KPI | Key Performance Indicator |
-| LLM | Large Language Model |
-| LoRA | Low-Rank Adaptation |
-| MTD | Month-to-Date |
-| MoM | Month-over-Month |
-| OKR | Objectives and Key Results |
-| P&L | Profit and Loss |
-| PII | Personally Identifiable Information |
-| QBR | Quarterly Business Review |
-| RACI | Responsible, Accountable, Consulted, Informed |
-| RAG | Retrieval-Augmented Generation |
-| RPD | Requests per Day |
-| RPM | Requests per Minute |
-| RPS | Requests per Second |
-| SLA | Service Level Agreement |
-| SLO | Service Level Objective |
-| SRE | Site Reliability Engineering |
-| TTFT | Time to First Token |
-| TPS | Tokens per Second |
-| TPM | Tokens per Minute |
+| Acronym | Full Term                                     |
+| ------- | --------------------------------------------- |
+| ADR     | Architecture Decision Record                  |
+| BPE     | Byte-Pair Encoding                            |
+| CTO     | Chief Technology Officer                      |
+| ETL     | Extract, Transform, Load                      |
+| FAQ     | Frequently Asked Questions                    |
+| FP&A    | Financial Planning & Analysis                 |
+| KPI     | Key Performance Indicator                     |
+| LLM     | Large Language Model                          |
+| LoRA    | Low-Rank Adaptation                           |
+| MTD     | Month-to-Date                                 |
+| MoM     | Month-over-Month                              |
+| OKR     | Objectives and Key Results                    |
+| P&L     | Profit and Loss                               |
+| PII     | Personally Identifiable Information           |
+| QBR     | Quarterly Business Review                     |
+| RACI    | Responsible, Accountable, Consulted, Informed |
+| RAG     | Retrieval-Augmented Generation                |
+| RPD     | Requests per Day                              |
+| RPM     | Requests per Minute                           |
+| RPS     | Requests per Second                           |
+| SLA     | Service Level Agreement                       |
+| SLO     | Service Level Objective                       |
+| SRE     | Site Reliability Engineering                  |
+| TTFT    | Time to First Token                           |
+| TPS     | Tokens per Second                             |
+| TPM     | Tokens per Minute                             |
 
 ---
 
-*Glossary version 1.0 — 60+ terms. Maintained by the TokenOps team.*
+_Glossary version 1.0 — 60+ terms. Maintained by the TokenOps team._

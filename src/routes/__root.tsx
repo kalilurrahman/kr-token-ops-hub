@@ -76,17 +76,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "TokenOps Atlas — FinOps for LLM Tokens" },
-      { name: "description", content: "The open reference for visibility, allocation, optimization, and governance of LLM token spend." },
+      {
+        name: "description",
+        content:
+          "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
+      },
       { name: "author", content: "Kalilur Rahman" },
       { property: "og:title", content: "TokenOps Atlas — FinOps for LLM Tokens" },
-      { property: "og:description", content: "The open reference for visibility, allocation, optimization, and governance of LLM token spend." },
+      {
+        property: "og:description",
+        content:
+          "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "TokenOps Atlas — FinOps for LLM Tokens" },
-      { name: "twitter:description", content: "The open reference for visibility, allocation, optimization, and governance of LLM token spend." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/919eee64-8e68-44cf-9bde-4c175cbbb284" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/919eee64-8e68-44cf-9bde-4c175cbbb284" },
+      {
+        name: "twitter:description",
+        content:
+          "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/919eee64-8e68-44cf-9bde-4c175cbbb284",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/919eee64-8e68-44cf-9bde-4c175cbbb284",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

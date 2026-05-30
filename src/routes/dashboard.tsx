@@ -51,7 +51,11 @@ export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Operational Dashboard — TokenOps Atlas" },
-      { name: "description", content: "Visibility, allocation, optimization progress, and anomalies for LLM token spend." },
+      {
+        name: "description",
+        content:
+          "Visibility, allocation, optimization progress, and anomalies for LLM token spend.",
+      },
     ],
   }),
 });
@@ -62,12 +66,19 @@ function DashboardPage() {
     return [
       { label: "Current monthly spend", value: `$${latest.baseline.toLocaleString()}` },
       { label: "Optimized run-rate", value: `$${latest.optimized.toLocaleString()}` },
-      { label: "Monthly savings", value: `$${(latest.baseline - latest.optimized).toLocaleString()}` },
+      {
+        label: "Monthly savings",
+        value: `$${(latest.baseline - latest.optimized).toLocaleString()}`,
+      },
       { label: "Token yield rate", value: `${latest.yieldRate}%` },
     ];
   }, []);
 
-  const tooltipStyle = { background: "#15161a", border: "1px solid #2a2c33", color: "#f5f1e6" } as const;
+  const tooltipStyle = {
+    background: "#15161a",
+    border: "1px solid #2a2c33",
+    color: "#f5f1e6",
+  } as const;
 
   return (
     <section className="dashboard stack">
@@ -97,9 +108,30 @@ function DashboardPage() {
                 <YAxis yAxisId="yield" orientation="right" domain={[50, 100]} stroke="#9aa0aa" />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend />
-                <Area yAxisId="cost" type="monotone" dataKey="baseline" name="Baseline spend" stroke="#a07a17" fill="rgba(212,175,55,0.15)" />
-                <Area yAxisId="cost" type="monotone" dataKey="optimized" name="Optimized spend" stroke="#d4af37" fill="rgba(240,210,120,0.18)" />
-                <Line yAxisId="yield" type="monotone" dataKey="yieldRate" name="Yield rate" stroke="#f0d278" strokeWidth={3} />
+                <Area
+                  yAxisId="cost"
+                  type="monotone"
+                  dataKey="baseline"
+                  name="Baseline spend"
+                  stroke="#a07a17"
+                  fill="rgba(212,175,55,0.15)"
+                />
+                <Area
+                  yAxisId="cost"
+                  type="monotone"
+                  dataKey="optimized"
+                  name="Optimized spend"
+                  stroke="#d4af37"
+                  fill="rgba(240,210,120,0.18)"
+                />
+                <Line
+                  yAxisId="yield"
+                  type="monotone"
+                  dataKey="yieldRate"
+                  name="Yield rate"
+                  stroke="#f0d278"
+                  strokeWidth={3}
+                />
               </ComposedChart>
             </ResponsiveContainer>
           </div>

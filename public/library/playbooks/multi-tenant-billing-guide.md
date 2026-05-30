@@ -8,6 +8,7 @@
 ## Why Per-Tenant Billing Matters
 
 In a multi-tenant SaaS platform, LLM costs are shared infrastructure. Without per-tenant tracking:
+
 - **Margin erosion:** Heavy users subsidized by light users
 - **No accountability:** No team or customer owns their consumption
 - **Abuse exposure:** No mechanism to limit excessive usage
@@ -31,13 +32,13 @@ Tenant Request ──► API Gateway ──► Tenant Tagger ──► LLM Route
 
 ```yaml
 tenant_metadata:
-  tenant_id: "tenant_abc123"          # Required
-  plan_tier: "enterprise"             # free | team | enterprise
-  feature: "chatbot"                  # Which AI feature
-  model: "gpt-4.1-mini"              # Model used
-  input_tokens: 1200                  # Logged after call
-  output_tokens: 350                  # Logged after call
-  cost_usd: 0.00072                  # Calculated
+  tenant_id: "tenant_abc123" # Required
+  plan_tier: "enterprise" # free | team | enterprise
+  feature: "chatbot" # Which AI feature
+  model: "gpt-4.1-mini" # Model used
+  input_tokens: 1200 # Logged after call
+  output_tokens: 350 # Logged after call
+  cost_usd: 0.00072 # Calculated
   timestamp: "2026-05-27T12:00:00Z"
 ```
 
@@ -58,12 +59,12 @@ Customer Price = Monthly Cost × Markup
 
 ### Model 2: Tiered Plans with Included Tokens
 
-| Plan | Monthly Price | Included Tokens | Overage Rate |
-|------|-------------|----------------|-------------|
-| Free | $0 | 100K tokens | Blocked at limit |
-| Starter | $29 | 2M tokens | $0.008/1K tokens |
-| Pro | $99 | 10M tokens | $0.006/1K tokens |
-| Enterprise | Custom | Custom | Custom |
+| Plan       | Monthly Price | Included Tokens | Overage Rate     |
+| ---------- | ------------- | --------------- | ---------------- |
+| Free       | $0            | 100K tokens     | Blocked at limit |
+| Starter    | $29           | 2M tokens       | $0.008/1K tokens |
+| Pro        | $99           | 10M tokens      | $0.006/1K tokens |
+| Enterprise | Custom        | Custom          | Custom           |
 
 **Pros:** Predictable for customers, simple pricing  
 **Cons:** Must estimate usage tiers carefully
@@ -87,7 +88,7 @@ plan:
   included_requests: 1000
   max_requests: 5000
   overage_per_request: $0.05
-  hard_cap: true  # Stop service at max
+  hard_cap: true # Stop service at max
 ```
 
 ---
@@ -152,29 +153,29 @@ CREATE INDEX idx_monthly_tenant ON tenant_monthly_usage (tenant_id, billing_mont
 ```python
 class TenantUsageTracker:
     """Middleware that wraps LLM calls to track per-tenant usage."""
-    
+
     def __init__(self, db, llm_client, pricing):
         self.db = db
         self.client = llm_client
         self.pricing = pricing  # model → {input_rate, output_rate}
-    
+
     async def call(self, tenant_id, feature, model, messages, **kwargs):
         # 1. Check budget before calling
         remaining = await self.get_remaining_budget(tenant_id)
         estimated_cost = self.estimate_cost(messages, model)
-        
+
         if estimated_cost > remaining:
             tenant = await self.db.get_tenant(tenant_id)
             if not tenant.overage_allowed:
                 raise BudgetExceededError(tenant_id, remaining)
-        
+
         # 2. Make LLM call
         start = time.monotonic()
         response = await self.client.chat.completions.create(
             model=model, messages=messages, **kwargs
         )
         latency_ms = int((time.monotonic() - start) * 1000)
-        
+
         # 3. Calculate actual cost
         usage = response.usage
         rates = self.pricing[model]
@@ -182,7 +183,7 @@ class TenantUsageTracker:
             usage.prompt_tokens * rates["input"] / 1_000_000
             + usage.completion_tokens * rates["output"] / 1_000_000
         )
-        
+
         # 4. Log usage
         await self.db.insert_usage_log(
             tenant_id=tenant_id,
@@ -194,12 +195,12 @@ class TenantUsageTracker:
             latency_ms=latency_ms,
             cached=getattr(response, 'cached', False)
         )
-        
+
         # 5. Update monthly summary (async)
         await self.update_monthly_summary(tenant_id, usage, cost)
-        
+
         return response
-    
+
     async def get_remaining_budget(self, tenant_id):
         """Get remaining token budget for current billing month."""
         tenant = await self.db.get_tenant(tenant_id)
@@ -257,6 +258,7 @@ ORDER BY margin ASC;
 ```
 
 **Actions for margin-negative tenants:**
+
 1. Upgrade their plan tier (if usage warrants it)
 2. Apply rate limiting to reduce their consumption
 3. Optimize their specific usage patterns (model tiering, caching)
@@ -277,7 +279,7 @@ rate_limits:
     requests_per_minute: 60
     tokens_per_day: 500_000
     monthly_budget_usd: 50
-    hard_cap: false  # Allow overage
+    hard_cap: false # Allow overage
   pro:
     requests_per_minute: 300
     tokens_per_day: 5_000_000
@@ -295,12 +297,14 @@ rate_limits:
 ## Dashboard Panels
 
 ### Per-Tenant Usage View
+
 - **Top 10 tenants by cost** (bar chart)
 - **Tenant cost distribution** (histogram)
 - **Margin-negative tenants** (alert list)
 - **Usage trend per tenant** (sparklines)
 
 ### Billing Summary
+
 - **Revenue vs. cost by plan tier** (stacked bar)
 - **Average margin by tier** (metric cards)
 - **Overage revenue** (line chart)
@@ -308,4 +312,4 @@ rate_limits:
 
 ---
 
-*Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)*
+_Template from the TokenOps Atlas — [tokenops-atlas](https://github.com/kalilurrahman/tokenops-atlas)_

@@ -10,7 +10,10 @@ export const Route = createFileRoute("/patterns")({
   head: () => ({
     meta: [
       { title: "Optimization Patterns — TokenOps Atlas" },
-      { name: "description", content: "Reusable recipes for reducing LLM token waste without degrading outcomes." },
+      {
+        name: "description",
+        content: "Reusable recipes for reducing LLM token waste without degrading outcomes.",
+      },
     ],
   }),
 });

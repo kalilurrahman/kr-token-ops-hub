@@ -27,20 +27,19 @@ schema_version: "1.0.0"
 # health-check settings. The gateway maintains a connection pool per provider.
 # ---------------------------------------------------------------------------
 providers:
-
   openai:
     display_name: "OpenAI"
     base_url: "https://api.openai.com/v1"
     auth:
       type: bearer_token
-      env_var: OPENAI_API_KEY                   # Resolved at runtime
+      env_var: OPENAI_API_KEY # Resolved at runtime
     rate_limits:
       requests_per_minute: 5000
       tokens_per_minute: 2_000_000
       requests_per_day: 500_000
     timeout:
       connect_ms: 3000
-      read_ms: 120_000                          # 2 min for long completions
+      read_ms: 120_000 # 2 min for long completions
       write_ms: 10_000
     retry:
       max_retries: 3
@@ -55,7 +54,7 @@ providers:
     connection_pool:
       max_connections: 200
       idle_timeout_seconds: 60
-    priority: 1                                 # Lower = higher priority
+    priority: 1 # Lower = higher priority
     enabled: true
 
   anthropic:
@@ -80,7 +79,7 @@ providers:
       retryable_status_codes: [429, 500, 502, 503, 529]
     health_check:
       enabled: true
-      endpoint: "/messages"                     # HEAD request for liveness
+      endpoint: "/messages" # HEAD request for liveness
       method: HEAD
       interval_seconds: 30
       timeout_ms: 5000
@@ -98,11 +97,11 @@ providers:
       env_var: GOOGLE_AI_API_KEY
     rate_limits:
       requests_per_minute: 3000
-      tokens_per_minute: 4_000_000              # Gemini has generous TPM
+      tokens_per_minute: 4_000_000 # Gemini has generous TPM
       requests_per_day: 300_000
     timeout:
       connect_ms: 3000
-      read_ms: 180_000                          # 3 min for Gemini long-context
+      read_ms: 180_000 # 3 min for Gemini long-context
       write_ms: 10_000
     retry:
       max_retries: 2
@@ -158,12 +157,11 @@ providers:
 # evals (update quarterly). Pricing is per 1M tokens as of May 2026.
 # ---------------------------------------------------------------------------
 model_registry:
-
   # --- OpenAI Models ---
   gpt-4.1:
     provider: openai
     display_name: "GPT-4.1"
-    context_window: 1_048_576                   # 1M tokens
+    context_window: 1_048_576 # 1M tokens
     max_output_tokens: 32_768
     pricing:
       input_per_1m: 2.00
@@ -261,7 +259,7 @@ model_registry:
     supports_vision: true
     supports_function_calling: true
     supports_streaming: true
-    supports_json_mode: false                   # Use tool_use for structured output
+    supports_json_mode: false # Use tool_use for structured output
     quality_ratings:
       reasoning: 9.4
       code_generation: 9.6
@@ -392,22 +390,20 @@ model_registry:
 # and rate-limit checks.
 # ---------------------------------------------------------------------------
 routing_rules:
-
   # ---- 3a. Task-Based Routing ----
   # Route requests by their declared task type (set via x-tokenops-task header
   # or the `task_type` field in the request metadata).
 
   task_based:
-
     - name: "Classification → Economy"
       description: "Simple classification tasks use cheapest models"
       condition:
         task_type: classification
       candidates:
-        - gpt-4.1-nano                          # $0.10 / 1M input
-        - gemini-2.5-flash                      # $0.15 / 1M input
-        - llama-4-scout                         # $0.10 / 1M input
-      max_cost_per_request: 0.001               # Hard ceiling: $0.001
+        - gpt-4.1-nano # $0.10 / 1M input
+        - gemini-2.5-flash # $0.15 / 1M input
+        - llama-4-scout # $0.10 / 1M input
+      max_cost_per_request: 0.001 # Hard ceiling: $0.001
 
     - name: "Extraction → Balanced"
       description: "Entity extraction needs decent accuracy at moderate cost"
@@ -445,8 +441,8 @@ routing_rules:
       condition:
         task_type: code_generation
       candidates:
-        - claude-sonnet-4                       # 9.6 code rating
-        - gpt-4.1                               # 9.5 code rating
+        - claude-sonnet-4 # 9.6 code rating
+        - gpt-4.1 # 9.5 code rating
         - gemini-2.5-pro
       max_cost_per_request: 0.30
 
@@ -465,7 +461,6 @@ routing_rules:
   # the caller sets `x-tokenops-complexity` explicitly.
 
   complexity_based:
-
     - name: "Simple requests"
       description: "< 500 input tokens, straightforward tasks"
       condition:
@@ -495,7 +490,7 @@ routing_rules:
         complexity: complex
         min_input_tokens: 4000
       candidates:
-        - gemini-2.5-pro                        # Best for long-context
+        - gemini-2.5-pro # Best for long-context
         - gpt-4.1
         - claude-sonnet-4
         - o4-mini
@@ -506,7 +501,6 @@ routing_rules:
   # resolved from the API key or JWT claims.
 
   user_tier:
-
     - name: "Free tier"
       description: "Free users get economy models only"
       condition:
@@ -543,7 +537,7 @@ routing_rules:
         - claude-sonnet-4
         - gemini-2.5-pro
         - o4-mini
-        - gpt-4.1-mini                          # Fallback to balanced
+        - gpt-4.1-mini # Fallback to balanced
       rate_limit_override:
         requests_per_minute: 500
         tokens_per_minute: 2_000_000
@@ -560,8 +554,8 @@ routing_rules:
         - gpt-4.1
         - claude-sonnet-4
         - gemini-2.5-pro
-        - gpt-4.1-mini                          # Last resort: downgrade tier
-      on_exhausted: reject_with_retry_after      # 503 + Retry-After header
+        - gpt-4.1-mini # Last resort: downgrade tier
+      on_exhausted: reject_with_retry_after # 503 + Retry-After header
 
     balanced:
       description: "Fallback order for balanced-tier requests"
@@ -578,7 +572,7 @@ routing_rules:
         - gpt-4.1-nano
         - gemini-2.5-flash
         - llama-4-scout
-      on_exhausted: queue_for_retry              # Enqueue for delayed retry
+      on_exhausted: queue_for_retry # Enqueue for delayed retry
 
 # ---------------------------------------------------------------------------
 # 4. Circuit Breaker Settings
@@ -607,16 +601,16 @@ circuit_breaker:
   # Per-provider overrides
   overrides:
     openai:
-      error_rate_threshold: 0.40                # Trip earlier for primary
-      open_duration_seconds: 20                 # Recover faster
+      error_rate_threshold: 0.40 # Trip earlier for primary
+      open_duration_seconds: 20 # Recover faster
     anthropic:
       error_rate_threshold: 0.50
       open_duration_seconds: 30
     google:
       error_rate_threshold: 0.50
-      open_duration_seconds: 45                 # Slower recovery; observe
+      open_duration_seconds: 45 # Slower recovery; observe
     meta_llama:
-      error_rate_threshold: 0.60                # More tolerant for OSS
+      error_rate_threshold: 0.60 # More tolerant for OSS
       open_duration_seconds: 30
 
 # ---------------------------------------------------------------------------
@@ -696,18 +690,18 @@ cost_tracking:
       headers:
         Authorization: "Bearer {{ TOKENOPS_ANALYTICS_TOKEN }}"
         Content-Type: "application/json"
-      batch_size: 100                           # Buffer up to 100 events
-      flush_interval_seconds: 5                 # Flush at least every 5s
+      batch_size: 100 # Buffer up to 100 events
+      flush_interval_seconds: 5 # Flush at least every 5s
       retry_on_failure: true
 
     - type: kafka
       bootstrap_servers: "kafka.company.com:9092"
       topic: "tokenops.cost.events"
       compression: gzip
-      acks: 1                                   # Leader ack only (fast)
+      acks: 1 # Leader ack only (fast)
 
     - type: stdout
-      format: json                              # For local development
+      format: json # For local development
       enabled_environments: [development, staging]
 
   # Real-time cost aggregation (powers budget guardrails)
@@ -721,7 +715,7 @@ cost_tracking:
       type: redis
       url: "redis://redis.company.com:6379/2"
       key_prefix: "tokenops:cost:"
-      ttl_hours: 2160                           # 90 days retention
+      ttl_hours: 2160 # 90 days retention
 
 # ---------------------------------------------------------------------------
 # 7. Global Settings
@@ -731,7 +725,7 @@ global:
   default_model: gpt-4.1-mini
 
   # Maximum request body size (prevents abuse)
-  max_request_body_bytes: 10_485_760            # 10 MB
+  max_request_body_bytes: 10_485_760 # 10 MB
 
   # Request ID header name (for tracing)
   request_id_header: "x-tokenops-request-id"
@@ -741,7 +735,7 @@ global:
   expose_routing_headers: true
 
   # Logging level for the routing engine
-  log_level: info                               # debug | info | warn | error
+  log_level: info # debug | info | warn | error
 
   # Environment label
   environment: production

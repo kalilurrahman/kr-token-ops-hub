@@ -1,4 +1,5 @@
 # The Comprehensive Guide to Token Economics & TokenOps
+
 ## Optimizing LLM Token Consumption Across Your Organization
 
 **Version 1.0** | Last Updated: May 2026
@@ -62,21 +63,23 @@ This guide serves dual audiences:
 An LLM processes input as **tokens**—discrete units of text. A token is roughly 4 characters of English text, though the exact mapping varies by model and tokenizer.
 
 **Example tokenization:**
+
 ```
 "What is the capital of France?"
 ↓
-[4, 5, 16, 5, 1, 1289, 4, 4843, 8] 
+[4, 5, 16, 5, 1, 1289, 4, 4843, 8]
 (9 tokens)
 ```
 
 Every LLM API call involves two token types:
 
-| Token Type | Definition | Billing |
-|---|---|---|
-| **Input Tokens** | All text sent to the model: system instructions, context, prompt, history | Charged at base rate |
-| **Output Tokens** | The model's generated response | Charged at higher rate (typically 2-10x input rate) |
+| Token Type        | Definition                                                                | Billing                                             |
+| ----------------- | ------------------------------------------------------------------------- | --------------------------------------------------- |
+| **Input Tokens**  | All text sent to the model: system instructions, context, prompt, history | Charged at base rate                                |
+| **Output Tokens** | The model's generated response                                            | Charged at higher rate (typically 2-10x input rate) |
 
 **Input tokens include:**
+
 - System prompt (e.g., "You are an expert analyst...")
 - Retrieved context (RAG documents, knowledge base extracts)
 - Conversation history (all prior turns)
@@ -84,6 +87,7 @@ Every LLM API call involves two token types:
 - Instructions for output format
 
 **Output tokens include:**
+
 - The entire model response (regardless of relevance)
 - Tool calls or function invocations
 - Reasoning chains (if reasoning tokens are enabled)
@@ -94,12 +98,12 @@ Token pricing varies significantly by model, provider, and volume tier.
 
 **Provider Comparison (as of May 2026):**
 
-| Provider | Model | Input Rate | Output Rate | Output Premium |
-|---|---|---|---|---|
-| OpenAI | GPT-4o | $5/1M | $15/1M | 3x |
-| Anthropic | Claude 3.5 Sonnet | $3/1M | $15/1M | 5x |
-| Google | Gemini 2.0 Flash | $0.075/1M | $0.30/1M | 4x |
-| Meta | Llama 3.1 (via third-party) | $0.40/1M | $0.60/1M | 1.5x |
+| Provider  | Model                       | Input Rate | Output Rate | Output Premium |
+| --------- | --------------------------- | ---------- | ----------- | -------------- |
+| OpenAI    | GPT-4o                      | $5/1M      | $15/1M      | 3x             |
+| Anthropic | Claude 3.5 Sonnet           | $3/1M      | $15/1M      | 5x             |
+| Google    | Gemini 2.0 Flash            | $0.075/1M  | $0.30/1M    | 4x             |
+| Meta      | Llama 3.1 (via third-party) | $0.40/1M   | $0.60/1M    | 1.5x           |
 
 **Volume tiers** offer 20-50% discounts at enterprise scale. Batch processing APIs cost 50% less than real-time pricing by design, as they queue requests for processing during off-peak hours.
 
@@ -108,16 +112,19 @@ Token pricing varies significantly by model, provider, and volume tier.
 Token costs compound invisibly. Consider this scenario:
 
 **Day 1 (Pilot): Single Feature, One Team**
+
 - Daily calls: 10,000
 - Avg tokens/call: 2,000 input + 500 output
 - Daily cost: 10,000 × (2,000 × $0.003 + 500 × $0.015) = **$135/day = ~$4,000/month**
 
 **Month 6 (Production): Multiple Features, Multiple Teams**
+
 - Daily calls across all features: 500,000
 - Avg tokens/call: 2,000 input + 500 output
 - Daily cost: 500,000 × (2,000 × $0.003 + 500 × $0.015) = **$6,750/day = ~$200,000/month**
 
 **No single decision triggered this 50x increase.** It accumulated across:
+
 - 5 new features launched (each consuming tokens)
 - 3 teams using internal AI tools
 - 2 automated pipelines (data enrichment, quality scoring)
@@ -136,6 +143,7 @@ Token Yield Rate = (Valuable Output Tokens) / (Total Consumed Tokens) × 100%
 Valuable tokens are those that contribute to a decision, action, or outcome that the user or downstream system acts upon.
 
 Low-yield token consumption includes:
+
 - **Retried calls** due to API errors or timeouts
 - **Discarded outputs** that don't meet quality thresholds
 - **Irrelevant context** retrieved but not used in reasoning
@@ -158,13 +166,13 @@ FinOps brought financial accountability to cloud computing by establishing three
 
 TokenOps mirrors this framework exactly, one layer up the stack:
 
-| FinOps (Cloud) | TokenOps (LLM) | Mechanism |
-|---|---|---|
-| Tag all resources | Tag all API calls | Metadata: team, service, feature, environment |
-| Build cost allocation reports | Build token allocation reports | Join metadata with billing data |
-| Compare cost per unit of value | Compare cost per request/outcome | Unit economics: $/request, $/user, $/outcome |
-| Set budgets and alerts | Set token budgets and alerts | Enforce guardrails at the API gateway |
-| Architecture reviews | Model selection reviews | Cost vs. quality tradeoff validation |
+| FinOps (Cloud)                 | TokenOps (LLM)                   | Mechanism                                     |
+| ------------------------------ | -------------------------------- | --------------------------------------------- |
+| Tag all resources              | Tag all API calls                | Metadata: team, service, feature, environment |
+| Build cost allocation reports  | Build token allocation reports   | Join metadata with billing data               |
+| Compare cost per unit of value | Compare cost per request/outcome | Unit economics: $/request, $/user, $/outcome  |
+| Set budgets and alerts         | Set token budgets and alerts     | Enforce guardrails at the API gateway         |
+| Architecture reviews           | Model selection reviews          | Cost vs. quality tradeoff validation          |
 
 ### 2.2 The Five Layers of Token Spend
 
@@ -175,10 +183,11 @@ Token spend in production systems has five distinct layers, each with its own co
 The system prompt is the foundational instruction that controls model behavior. It is included in **every single API call** to that endpoint.
 
 **Example system prompt (1,200 tokens):**
+
 ```
-You are an expert financial analyst specialized in SEC filings 
-and corporate earnings reports. Your role is to extract key 
-metrics, identify trends, and provide actionable insights for 
+You are an expert financial analyst specialized in SEC filings
+and corporate earnings reports. Your role is to extract key
+metrics, identify trends, and provide actionable insights for
 investment decisions.
 
 Follow these rules:
@@ -192,18 +201,21 @@ Follow these rules:
 ```
 
 **The cost multiplier:**
+
 - Endpoint receives: 100,000 daily calls
 - System prompt: 1,200 tokens per call
 - Daily system prompt tokens: 100,000 × 1,200 = **120 million tokens/day**
 - Monthly cost: 120M × 30 × $0.003 = **$10,800/month** (before a single user query)
 
 **Optimization lever: Prompt compression**
+
 - Remove redundant instructions
 - Replace verbose examples with concise rules
 - Use templating (fill values at call time, not in prompt)
 - Typical compression: 20-50% reduction without quality loss
 
 **Compressed example:**
+
 ```
 You are a financial analyst. Extract metrics from SEC filings.
 Rules: cite specific numbers | flag anomalies | JSON: {findings, risks, opportunities}
@@ -217,12 +229,14 @@ Achieves 75% reduction while maintaining quality.
 Context is the retrieved or accumulated information passed to the model for reasoning. This is usually the **highest-leverage optimization layer**.
 
 **Context sources:**
+
 - **RAG retrieval**: Document chunks retrieved by vector search
 - **Agent memory**: Tool results, reasoning traces, prior actions
 - **Conversation history**: All prior turns in a multi-turn dialog
 - **Knowledge base**: Structured metadata about entities
 
 **The problem:**
+
 - RAG retrieves top-10 document chunks but the model only needs 2-3
 - Conversation history grows with every turn; after 20 turns, earlier context becomes noise
 - Agent reasoning chains accumulate tool calls that don't inform the final decision
@@ -230,15 +244,17 @@ Context is the retrieved or accumulated information passed to the model for reas
 **Example: Customer support chatbot**
 
 Turn 1:
+
 ```
 User: "Why was I charged twice?"
-System includes: Full customer history (50 transactions), billing terms (5 pages), 
+System includes: Full customer history (50 transactions), billing terms (5 pages),
 ticket history (30 prior tickets), knowledge base (1,000 articles)
 Relevant: Last 2 transactions, relevant billing rule (1 article)
 Waste: 95% of context
 ```
 
 Turn 2:
+
 ```
 User: "I need to update my payment method"
 System includes: Entire prior turn + full chat history
@@ -247,6 +263,7 @@ Waste: 80% of accumulated context
 ```
 
 **Optimization lever: Context trimming & summarization**
+
 - Retrieve only top-3 most relevant chunks (not top-10)
 - Summarize conversation history after 5 turns: "User inquired about double charge on 2024-05-15. Issue identified as billing cycle overlap."
 - Filter knowledge base by relevance threshold (only include chunks >85% similar to query)
@@ -260,12 +277,12 @@ Model cost per token varies by 10-50x depending on the model's sophistication.
 
 **Model comparison (simplified):**
 
-| Model | Input Cost | Output Cost | Best For | Relative Cost |
-|---|---|---|---|---|
-| Llama 3.1 70B | $0.40/1M | $0.60/1M | Simple classification, extraction | 1x |
-| GPT-4o Mini | $0.15/1M | $0.60/1M | General tasks, slight upgrade | 2x |
-| Claude 3.5 Sonnet | $3/1M | $15/1M | Complex reasoning, nuance | 15x |
-| GPT-4 Turbo | $10/1M | $30/1M | Frontier performance | 50x |
+| Model             | Input Cost | Output Cost | Best For                          | Relative Cost |
+| ----------------- | ---------- | ----------- | --------------------------------- | ------------- |
+| Llama 3.1 70B     | $0.40/1M   | $0.60/1M    | Simple classification, extraction | 1x            |
+| GPT-4o Mini       | $0.15/1M   | $0.60/1M    | General tasks, slight upgrade     | 2x            |
+| Claude 3.5 Sonnet | $3/1M      | $15/1M      | Complex reasoning, nuance         | 15x           |
+| GPT-4 Turbo       | $10/1M     | $30/1M      | Frontier performance              | 50x           |
 
 **The mistake: Using frontier models for all tasks**
 
@@ -274,12 +291,14 @@ A common pattern: teams deploy a single frontier model (e.g., GPT-4) for all use
 **The opportunity: Model tiering**
 
 Evaluate each use case:
+
 - **Classification** ("Is this customer positive/negative/neutral?"): 98%+ accuracy at Llama-level
 - **Extraction** ("Pull the dollar amounts from this contract"): 99%+ accuracy at Llama-level
 - **Summarization** ("Summarize earnings report"): 95%+ accuracy at mid-tier
 - **Complex reasoning** ("Analyze investment opportunity"): Requires frontier model for nuance
 
 **Routing logic:**
+
 ```
 Input: task + quality requirements
 If task == "classification" → use Llama (cheapest)
@@ -295,11 +314,13 @@ Else if task == "complex reasoning" → use frontier model
 Output tokens are priced higher than input tokens on most pricing schedules. Output length variance is high without constraints.
 
 **Examples of uncontrolled output:**
+
 - User asks: "Summarize this 50-page report"
 - Model generates: 3,000 tokens (to be thorough)
 - Cost: 3,000 × $0.015 = $0.045 per request
 
 **With output constraints:**
+
 - Request: "Summarize in 5 bullet points"
 - Model generates: 300 tokens (structured format)
 - Cost: 300 × $0.015 = $0.0045 per request
@@ -323,6 +344,7 @@ Or: "True/False with one-sentence explanation"
 Retried calls, fallback prompts, and error correction loops consume tokens without producing usable results.
 
 **Sources of retry overhead:**
+
 - API timeouts (retry with same prompt)
 - Malformed output (retry with stricter format instruction)
 - Hallucinations (retry with additional constraints)
@@ -330,6 +352,7 @@ Retried calls, fallback prompts, and error correction loops consume tokens witho
 - Rate limit hits (queue and retry)
 
 **Example:**
+
 - Original request: 1,000 input tokens → 500 output tokens
 - Output doesn't parse as JSON (retry #1): 1,000 input + 500 output
 - Output missing required field (retry #2): 1,000 input + 500 output
@@ -348,13 +371,13 @@ Retried calls, fallback prompts, and error correction loops consume tokens witho
 
 ### 2.3 Summary: Token Spend Layers
 
-| Layer | % of Spend | Primary Lever | Potential Savings |
-|---|---|---|---|
-| System Prompt Overhead | 10-30% | Prompt compression | 20-50% |
-| Context & Memory | 20-50% | Context trimming | 30-60% |
-| Model Selection | Varies | Model tiering | 30-60% |
-| Output Length | 15-35% | Format constraints | 20-40% |
-| Retry & Error | 5-20% | Error handling | 10-20% |
+| Layer                  | % of Spend | Primary Lever      | Potential Savings |
+| ---------------------- | ---------- | ------------------ | ----------------- |
+| System Prompt Overhead | 10-30%     | Prompt compression | 20-50%            |
+| Context & Memory       | 20-50%     | Context trimming   | 30-60%            |
+| Model Selection        | Varies     | Model tiering      | 30-60%            |
+| Output Length          | 15-35%     | Format constraints | 20-40%            |
+| Retry & Error          | 5-20%      | Error handling     | 10-20%            |
 
 ---
 
@@ -367,12 +390,14 @@ Before optimizing, you must measure.
 **Step 1: Inventory all LLM API calls**
 
 Identify every service and pipeline calling an LLM API:
+
 - Web application features (chatbots, generators, analyzers)
 - Backend services (data enrichment, quality scoring, recommendations)
 - Automated pipelines (batch processing, scheduled jobs)
 - Internal tools (data analysis, report generation)
 
 **Output:** Spreadsheet with:
+
 - Service/feature name
 - API endpoint
 - Model(s) in use
@@ -383,17 +408,20 @@ Identify every service and pipeline calling an LLM API:
 **Step 2: Calculate current baseline costs**
 
 Pull data from your LLM provider's API logs or billing dashboard:
+
 - Total tokens consumed (input + output)
 - Total cost
 - Average tokens per call
 - Output token ratio (output ÷ total)
 
 **Formula:**
+
 ```
 Blended Cost Per Token = Total Cost / Total Tokens
 ```
 
 Example:
+
 ```
 Total monthly tokens: 10 billion
 Total monthly cost: $15,000
@@ -403,16 +431,19 @@ Blended cost: $15,000 / 10B = $0.0015 per token
 **Step 3: Identify high-value optimization targets**
 
 Not all token consumption is created equal. Prioritize by:
+
 - **Size**: Features consuming the most tokens (biggest bang for buck)
 - **Repeatable**: Use cases with high call volume (compound savings)
 - **Low risk**: Optimizations unlikely to degrade quality
 
 **Quick priority scoring:**
+
 ```
 Priority Score = (Monthly Tokens) × (Estimated Savings %) / (Quality Risk)
 ```
 
 High-priority targets:
+
 - System prompts on high-volume endpoints (100K+ daily calls)
 - RAG pipelines retrieving excessive context
 - Batch jobs still using real-time pricing
@@ -444,12 +475,14 @@ Every LLM API call must include metadata. Minimum schema:
 **Step 2: Instrument at the API gateway**
 
 Don't rely on individual services to tag calls. Use a centralized LLM gateway (LiteLLM, LangChain proxy, or custom middleware) that:
+
 - Intercepts all LLM API calls
 - Adds metadata automatically (by service + feature)
 - Logs to observability system (DataDog, New Relic, Splunk)
 - Enforces rate limits and budgets
 
 **Example gateway configuration:**
+
 ```yaml
 services:
   email_generator:
@@ -466,12 +499,14 @@ services:
 **Step 3: Set up cost tracking**
 
 Join metadata logs with provider billing data:
+
 - Daily: Export logs from gateway
 - Daily: Pull token counts from provider API
 - Join on: timestamp, model, tokens
 - Store in data warehouse (BigQuery, Snowflake, etc.)
 
 **Output:** Allocation reports queryable by:
+
 - Team
 - Service
 - Feature
@@ -522,6 +557,7 @@ Decide: will you charge teams back for token costs, or simply report them?
 Create a self-serve dashboard accessible to all stakeholders:
 
 **For Engineers:**
+
 - Cost breakdown by service/feature
 - Model usage distribution
 - Token yield rate by use case
@@ -529,12 +565,14 @@ Create a self-serve dashboard accessible to all stakeholders:
 - API error rates (indicator of retry overhead)
 
 **For Finance:**
+
 - Team-level cost allocation
 - Trend lines (are we optimizing or growing faster than expected?)
 - Budget vs. actual
 - Cost per user, per request, per outcome
 
 **For Product:**
+
 - Cost per feature
 - Cost vs. revenue (if available)
 - Unit economics ($/paying user, for monetized features)
@@ -566,16 +604,19 @@ Create a self-serve dashboard accessible to all stakeholders:
 **Example: Classification task**
 
 Baseline: Using GPT-4o for customer sentiment classification
+
 - Model: GPT-4o
 - Accuracy: 97%
 - Cost: $0.0075 per call (2K input + 100 output tokens)
 
 Test: Evaluate cheaper models
+
 - Llama 3.1 70B: 94% accuracy, $0.00008 per call (95% cheaper)
 - GPT-4o Mini: 96% accuracy, $0.00025 per call (97% cheaper)
 - Claude 3.5 Haiku: 95% accuracy, $0.0002 per call (97% cheaper)
 
 **Decision:**
+
 - For important decisions (chargeback disputes, litigation holds): use GPT-4o (97% accuracy)
 - For routine classification: use GPT-4o Mini (96% accuracy, 97% cost reduction)
 - For bulk background scoring: use Llama (94% accuracy, 99% cost reduction)
@@ -620,6 +661,7 @@ User Query 2: "What's the maximum tokens Claude can handle?"
    - Typical for unique requests: 10-30% hit rate
 
 **Supported use cases:**
+
 - FAQ & documentation lookups (80%+ hit rate expected)
 - Product description generation (60%+ hit rate)
 - Repetitive extraction tasks (40%+ hit rate)
@@ -646,12 +688,14 @@ Cost per turn = $0.0375 (turn 1) → $0.1875 (turn 10) = 5x increase
 **Solutions:**
 
 **1. Sliding Window**
+
 ```
 Keep only last N turns:
 Turn 10: Only include last 3 turns + new query = 4,500 tokens (constant cost)
 ```
 
 **2. Conversation Summarization**
+
 ```
 After 5 turns, summarize prior conversation:
 Instead of: [turn 1, turn 2, turn 3, turn 4, turn 5, turn 6]
@@ -660,6 +704,7 @@ Saves: 30-50% input tokens while preserving context
 ```
 
 **3. Hierarchical Memory**
+
 ```
 System memory: Key decisions and facts (always included)
 Recent memory: Last 2 turns (always included)
@@ -678,6 +723,7 @@ Input: "What does this mean for Q4 guidance?"
 **Objective:** Route non-latency-sensitive workloads to batch APIs, which cost 50% less.
 
 **When to use batch:**
+
 - Nightly data enrichment (add customer segment, industry classification)
 - Bulk document processing (review contracts, extract terms)
 - Periodic report generation
@@ -686,11 +732,11 @@ Input: "What does this mean for Q4 guidance?"
 
 **Batch vs. Real-time pricing:**
 
-| Workload | Real-time API | Batch API | Savings |
-|---|---|---|---|
-| 1M embeddings overnight | $3,000 | $1,500 | 50% |
-| 100K document analysis | $300 | $150 | 50% |
-| Daily data enrichment | $5,000 | $2,500 | 50% |
+| Workload                | Real-time API | Batch API | Savings |
+| ----------------------- | ------------- | --------- | ------- |
+| 1M embeddings overnight | $3,000        | $1,500    | 50%     |
+| 100K document analysis  | $300          | $150      | 50%     |
+| Daily data enrichment   | $5,000        | $2,500    | 50%     |
 
 **Implementation:**
 
@@ -710,6 +756,7 @@ Input: "What does this mean for Q4 guidance?"
    - Ensure batch delays are acceptable to users
 
 **Example implementation:**
+
 ```python
 # Queue enrichment task
 enqueue_batch(
@@ -736,9 +783,10 @@ results = get_batch_results(batch_id)
 **Techniques:**
 
 **1. Remove example verbosity**
+
 ```
 ❌ Before (500 tokens):
-"For instance, if the input is 'I love this product' with sentiment 
+"For instance, if the input is 'I love this product' with sentiment
 classification task, the expected output format is:
 {
   'sentiment': 'positive',
@@ -752,6 +800,7 @@ Only include keywords that directly contributed to the sentiment decision."
 ```
 
 **2. Use templating instead of static examples**
+
 ```
 ❌ Before: Hard-code all examples in prompt
 System prompt = 2,000 tokens (always sent)
@@ -761,6 +810,7 @@ System prompt = 500 tokens + injected template values
 ```
 
 **3. Consolidate instructions**
+
 ```
 ❌ Before (300 tokens):
 "You are an expert financial analyst.
@@ -777,6 +827,7 @@ Always use JSON format."
 ```
 
 **4. Use programmatic constraints instead of rules**
+
 ```
 ❌ Before (instruction in prompt):
 "Never exceed 300 characters per bullet point"
@@ -787,6 +838,7 @@ bullets = [b[:300] for b in output.split('\n')]
 ```
 
 **Compression targets:**
+
 - Reduction: 20-50% typical
 - Quality impact: Validate via A/B testing on 10%+ of traffic
 - Tools: Use automated prompt optimization services (e.g., DSPy, Optillm)
@@ -809,15 +861,16 @@ Unit economics connect raw token consumption to business outcomes. They enable t
 
 #### **For Engineering Teams**
 
-| Metric | Formula | Target |
-|---|---|---|
-| Cost per request | Total cost / Request count | Monitor for anomalies |
-| Tokens per request | Total tokens / Request count | Should stabilize over time |
-| Token yield rate | Valuable tokens / Total tokens | > 80% |
-| Cache hit rate | Cache hits / Total requests | Varies by use case |
-| API error rate | Failed calls / Total calls | < 1% |
+| Metric             | Formula                        | Target                     |
+| ------------------ | ------------------------------ | -------------------------- |
+| Cost per request   | Total cost / Request count     | Monitor for anomalies      |
+| Tokens per request | Total tokens / Request count   | Should stabilize over time |
+| Token yield rate   | Valuable tokens / Total tokens | > 80%                      |
+| Cache hit rate     | Cache hits / Total requests    | Varies by use case         |
+| API error rate     | Failed calls / Total calls     | < 1%                       |
 
 **Dashboard:**
+
 ```
 Today's Metrics:
 - Cost per request: $0.0045 (up 12% from yesterday)
@@ -831,15 +884,16 @@ Alert: Cost per request spiked 12%. Investigate model changes or prompt growth.
 
 #### **For Finance & FinOps**
 
-| Metric | Formula | Target |
-|---|---|---|
-| Cost by team | Sum of costs per team | For chargeback/allocation |
-| Cost trend | Month-over-month change | Should be flat or declining (if optimizing) |
-| Cost per feature | Sum of costs per feature | Prioritize high-cost features for optimization |
-| Token velocity | Tokens consumed per day | Should show optimization flattening curve |
-| Blended cost per token | Total cost / Total tokens | Target 20-30% reduction YoY |
+| Metric                 | Formula                   | Target                                         |
+| ---------------------- | ------------------------- | ---------------------------------------------- |
+| Cost by team           | Sum of costs per team     | For chargeback/allocation                      |
+| Cost trend             | Month-over-month change   | Should be flat or declining (if optimizing)    |
+| Cost per feature       | Sum of costs per feature  | Prioritize high-cost features for optimization |
+| Token velocity         | Tokens consumed per day   | Should show optimization flattening curve      |
+| Blended cost per token | Total cost / Total tokens | Target 20-30% reduction YoY                    |
 
 **Dashboard:**
+
 ```
 Team Cost Allocation (May 2026):
 - Marketing: $15,000 (35%)
@@ -856,14 +910,15 @@ Trend: Stable consumption despite 10% feature growth (good productivity)
 
 #### **For Product & Business**
 
-| Metric | Formula | Target |
-|---|---|---|
-| Cost per user | Total cost / Active users | For paid features |
-| Cost per outcome | Total cost / Desired outcomes | E.g., $/successful recommendation |
-| Feature margin | Revenue - Token cost | For profit-bearing features |
-| Token cost as % of feature revenue | Token cost / Feature revenue | < 10% for healthy margins |
+| Metric                             | Formula                       | Target                            |
+| ---------------------------------- | ----------------------------- | --------------------------------- |
+| Cost per user                      | Total cost / Active users     | For paid features                 |
+| Cost per outcome                   | Total cost / Desired outcomes | E.g., $/successful recommendation |
+| Feature margin                     | Revenue - Token cost          | For profit-bearing features       |
+| Token cost as % of feature revenue | Token cost / Feature revenue  | < 10% for healthy margins         |
 
 **Dashboard:**
+
 ```
 Feature Unit Economics:
 
@@ -908,13 +963,13 @@ Recommendation Engine (Internal):
 
 **Alerts to set up:**
 
-| Alert | Condition | Action |
-|---|---|---|
-| Cost anomaly | Daily cost > avg + 2σ | Page on-call engineer |
-| Budget overrun | Spend > 80% of monthly budget | Finance review |
-| Model drift | Avg cost per token rises 5% | Investigation |
-| Error rate spike | Errors > 2% of requests | Page on-call |
-| Cache miss rate drop | Cache hit rate < historical avg - 20% | Engineering review |
+| Alert                | Condition                             | Action                |
+| -------------------- | ------------------------------------- | --------------------- |
+| Cost anomaly         | Daily cost > avg + 2σ                 | Page on-call engineer |
+| Budget overrun       | Spend > 80% of monthly budget         | Finance review        |
+| Model drift          | Avg cost per token rises 5%           | Investigation         |
+| Error rate spike     | Errors > 2% of requests               | Page on-call          |
+| Cache miss rate drop | Cache hit rate < historical avg - 20% | Engineering review    |
 
 ---
 
@@ -960,11 +1015,13 @@ Status: On track
 ```
 
 **Budget enforcement:**
+
 - Soft alerts at 80% (team notified, optional action)
 - Hard limit at 100% (API calls throttled or fail)
 - Requires approval from finance to increase budget
 
 **Token budget review cycle:**
+
 - Monthly: Review actual vs. forecast
 - Quarterly: Adjust budgets based on business plans
 - Annually: Set budget targets aligned to growth plans
@@ -1017,6 +1074,7 @@ Before launching a new AI feature:
 Participants: Engineering leads, product managers, finance
 
 **Agenda:**
+
 1. **Metrics review** (10 min)
    - Total spend
    - Biggest cost drivers
@@ -1043,18 +1101,21 @@ Participants: Engineering leads, product managers, finance
 ### Case Study 1: SaaS Company Launches Chatbot
 
 **Situation:**
+
 - Company: B2B SaaS platform (CRM)
 - New feature: AI-powered customer support chatbot
 - Model chosen: GPT-4o (standard choice, not evaluated)
 - Pilot results: Feature is working, users like it
 
 **Baseline metrics:**
+
 - Monthly token consumption: 500M
 - Monthly cost: $750
 - Tokens per conversation: 5,000 (2K input + 3K output)
 - Daily calls: 100,000
 
 **Problem discovered after 3 months in production:**
+
 - Monthly token consumption: 5B (10x increase)
 - Monthly cost: $7,500
 - Did not plan for scale or optimize
@@ -1088,6 +1149,7 @@ Participants: Engineering leads, product managers, finance
    - **Impact: 25% overall reduction (40% of traffic × 62% × 50% cache savings)**
 
 **Results:**
+
 - Original: $7,500/month
 - After optimizations: $2,200/month
 - **Savings: 71% cost reduction**
@@ -1097,17 +1159,20 @@ Participants: Engineering leads, product managers, finance
 ### Case Study 2: Data Enrichment Pipeline
 
 **Situation:**
+
 - Company: Data analytics platform
 - Use case: Nightly job enriches customer data with classification (industry, size, intent)
 - Current: Real-time API calls, processing 1M records/night
 - Problem: $5,000/month spend on non-urgent work
 
 **Baseline:**
+
 - Real-time API: $3/1M input tokens + $15/1M output tokens
 - 1M records/night × 300 tokens/record = 300M tokens
 - Monthly cost: 300M × 30 × $0.0045 = $4,050
 
 **Optimization:**
+
 - Switch to batch API: $1.5/1M input tokens + $7.5/1M output tokens
 - Same 300M tokens/night
 - Monthly cost: 300M × 30 × $0.00225 = $2,025
@@ -1118,6 +1183,7 @@ Participants: Engineering leads, product managers, finance
 ### Scenario: Token Cost Forecast
 
 **Given:**
+
 - Current monthly consumption: 10B tokens
 - Blended cost: $0.0015 per token
 - Current monthly cost: $15,000
@@ -1145,6 +1211,7 @@ Year 1 total spend: ~$230,000 (assuming linear growth within each month)
 ```
 
 **With optimization (35% reduction target):**
+
 - Effective tokens: 17.96B × (1 - 0.35) = 11.67B
 - Cost: 11.67B × $0.00135 = $15,750
 - **Savings: $8,450 in month 12 alone; $45,000+ across year**
@@ -1157,19 +1224,20 @@ Year 1 total spend: ~$230,000 (assuming linear growth within each month)
 
 **Major Providers & Models:**
 
-| Provider | Model | Input Rate | Output Rate | Context Window | Best For |
-|---|---|---|---|---|---|
-| OpenAI | GPT-4o | $5/1M | $15/1M | 128K | Complex reasoning, analysis |
-| OpenAI | GPT-4o Mini | $0.15/1M | $0.60/1M | 128K | General tasks, cost-sensitive |
-| Anthropic | Claude 3.5 Sonnet | $3/1M | $15/1M | 200K | Long context, nuance |
-| Anthropic | Claude 3.5 Haiku | $0.80/1M | $4/1M | 200K | Fast, cheap classification |
-| Google | Gemini 2.0 Flash | $0.075/1M | $0.30/1M | 1M | High-volume, longer contexts |
-| Meta | Llama 3.1 70B | $0.40/1M | $0.60/1M | 128K | On-prem or via provider |
-| Mistral | Mistral Large | $2/1M | $6/1M | 128K | European compliance, EU hosting |
+| Provider  | Model             | Input Rate | Output Rate | Context Window | Best For                        |
+| --------- | ----------------- | ---------- | ----------- | -------------- | ------------------------------- |
+| OpenAI    | GPT-4o            | $5/1M      | $15/1M      | 128K           | Complex reasoning, analysis     |
+| OpenAI    | GPT-4o Mini       | $0.15/1M   | $0.60/1M    | 128K           | General tasks, cost-sensitive   |
+| Anthropic | Claude 3.5 Sonnet | $3/1M      | $15/1M      | 200K           | Long context, nuance            |
+| Anthropic | Claude 3.5 Haiku  | $0.80/1M   | $4/1M       | 200K           | Fast, cheap classification      |
+| Google    | Gemini 2.0 Flash  | $0.075/1M  | $0.30/1M    | 1M             | High-volume, longer contexts    |
+| Meta      | Llama 3.1 70B     | $0.40/1M   | $0.60/1M    | 128K           | On-prem or via provider         |
+| Mistral   | Mistral Large     | $2/1M      | $6/1M       | 128K           | European compliance, EU hosting |
 
 ### Appendix B: Cost Calculation Templates
 
 **Cost per request:**
+
 ```
 Tokens per request = input_tokens + output_tokens
 Cost per request = Tokens × (Input %, Output %) × (Input rate, Output rate)
@@ -1181,6 +1249,7 @@ Cost = (2,000 × $5/1M) + (500 × $15/1M)
 ```
 
 **Monthly cost forecast:**
+
 ```
 Monthly cost = Daily requests × Cost per request × 30 days
             = 100,000 × $0.0175 × 30
@@ -1188,6 +1257,7 @@ Monthly cost = Daily requests × Cost per request × 30 days
 ```
 
 **Blended cost per token:**
+
 ```
 Blended rate = Total cost / Total tokens
              = (Input tokens × Input rate + Output tokens × Output rate) / Total tokens
@@ -1217,13 +1287,13 @@ Before deploying a new system prompt:
 
 Use this matrix to choose the right model:
 
-| Task | Examples | Baseline Model | Cheaper Alternative | Testing Steps |
-|---|---|---|---|---|
-| Classification | Sentiment, category, spam detection | GPT-4o Mini | Llama 3.1 | Test on 1,000 cases |
-| Extraction | Entity extraction, field parsing | Claude Sonnet | GPT-4o Mini | Validate accuracy on 500 cases |
-| Summarization | Condense text, bullets, synopsis | Claude Sonnet | GPT-4o Mini | Human eval on 50 samples |
-| Generation | Email, content, code | GPT-4o | GPT-4o Mini | A/B test on 10% traffic |
-| Reasoning | Analysis, diagnosis, strategy | GPT-4o | Claude Sonnet | Validate on hard cases |
+| Task           | Examples                            | Baseline Model | Cheaper Alternative | Testing Steps                  |
+| -------------- | ----------------------------------- | -------------- | ------------------- | ------------------------------ |
+| Classification | Sentiment, category, spam detection | GPT-4o Mini    | Llama 3.1           | Test on 1,000 cases            |
+| Extraction     | Entity extraction, field parsing    | Claude Sonnet  | GPT-4o Mini         | Validate accuracy on 500 cases |
+| Summarization  | Condense text, bullets, synopsis    | Claude Sonnet  | GPT-4o Mini         | Human eval on 50 samples       |
+| Generation     | Email, content, code                | GPT-4o         | GPT-4o Mini         | A/B test on 10% traffic        |
+| Reasoning      | Analysis, diagnosis, strategy       | GPT-4o         | Claude Sonnet       | Validate on hard cases         |
 
 ### Appendix E: Instrumentation Checklist
 
