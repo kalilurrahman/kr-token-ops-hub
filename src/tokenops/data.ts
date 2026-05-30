@@ -192,3 +192,138 @@ export function downloadLibraryFile(file: string) {
   a.click();
   a.remove();
 }
+
+/* ─── Intelligent calculator engines (RAG, Routing, Budget, Caching ROI, TCO) ─── */
+
+export interface RAGCostInput {
+  docsPerQuery: number; avgChunkTokens: number; queriesPerDay: number;
+  systemPromptTokens: number; avgOutputTokens: number;
+  modelInputPrice: number; modelOutputPrice: number;
+  cacheHitRate: number; cachePriceDiscount: number;
+}
+export interface RAGCostResult {
+  inputTokensPerQuery: number; dailyInputTokens: number;
+  dailyCost: number; monthlyCost: number;
+  monthlyCostWithCache: number; cacheSavings: number; costPerQuery: number;
+}
+export function calcRAGCost(i: RAGCostInput): RAGCostResult {
+  const contextTokens = i.docsPerQuery * i.avgChunkTokens;
+  const inputTokensPerQuery = contextTokens + i.systemPromptTokens;
+  const dailyInputTokens = inputTokensPerQuery * i.queriesPerDay;
+  const dailyOutputTokens = i.avgOutputTokens * i.queriesPerDay;
+  const dailyCost =
+    (dailyInputTokens / 1_000_000) * i.modelInputPrice +
+    (dailyOutputTokens / 1_000_000) * i.modelOutputPrice;
+  const monthlyCost = dailyCost * 30;
+  const cachedFraction = i.cacheHitRate * (1 - i.cachePriceDiscount);
+  const monthlyCostWithCache = monthlyCost * (1 - i.cacheHitRate + cachedFraction);
+  return {
+    inputTokensPerQuery, dailyInputTokens, dailyCost, monthlyCost,
+    monthlyCostWithCache, cacheSavings: monthlyCost - monthlyCostWithCache,
+    costPerQuery: i.queriesPerDay ? dailyCost / i.queriesPerDay : 0,
+  };
+}
+
+export interface RoutingInput {
+  totalCallsPerMonth: number; premiumFraction: number; cheapFraction: number;
+  avgInputTokens: number; avgOutputTokens: number;
+  premiumInputPrice: number; premiumOutputPrice: number;
+  cheapInputPrice: number; cheapOutputPrice: number;
+}
+export interface RoutingResult {
+  baselineMonthlyCost: number; optimisedMonthlyCost: number;
+  monthlySavings: number; annualSavings: number; savingsPercent: number;
+  premiumCallCost: number; cheapCallCost: number;
+}
+export function calcRoutingSavings(r: RoutingInput): RoutingResult {
+  const per = (i: number, o: number) =>
+    (r.avgInputTokens / 1_000_000) * i + (r.avgOutputTokens / 1_000_000) * o;
+  const premiumCallCost = per(r.premiumInputPrice, r.premiumOutputPrice);
+  const cheapCallCost = per(r.cheapInputPrice, r.cheapOutputPrice);
+  const baseline = r.totalCallsPerMonth * premiumCallCost;
+  const optimised =
+    r.totalCallsPerMonth * r.premiumFraction * premiumCallCost +
+    r.totalCallsPerMonth * r.cheapFraction * cheapCallCost;
+  const monthlySavings = baseline - optimised;
+  return {
+    baselineMonthlyCost: baseline, optimisedMonthlyCost: optimised,
+    monthlySavings, annualSavings: monthlySavings * 12,
+    savingsPercent: baseline ? (monthlySavings / baseline) * 100 : 0,
+    premiumCallCost, cheapCallCost,
+  };
+}
+
+export interface BudgetInput {
+  monthlyBudgetUSD: number; currentDayOfMonth: number;
+  spendToDate: number; projectedGrowthRate: number;
+}
+export interface BudgetResult {
+  dailyBurnRate: number; projectedMonthEnd: number;
+  budgetUtilization: number; daysUntilBudgetHit: number | null;
+  status: "on-track" | "warning" | "over-budget";
+  recommendedDailyBudget: number;
+}
+export function calcBudgetBurnRate(b: BudgetInput): BudgetResult {
+  const dailyBurnRate = b.currentDayOfMonth ? b.spendToDate / b.currentDayOfMonth : 0;
+  const daysLeft = Math.max(0, 30 - b.currentDayOfMonth);
+  const projectedMonthEnd = b.spendToDate + dailyBurnRate * daysLeft;
+  const budgetUtilization = b.monthlyBudgetUSD ? (projectedMonthEnd / b.monthlyBudgetUSD) * 100 : 0;
+  const remaining = b.monthlyBudgetUSD - b.spendToDate;
+  const daysUntilBudgetHit = dailyBurnRate > 0 && remaining > 0
+    ? Math.floor(remaining / dailyBurnRate) : null;
+  const status = budgetUtilization > 100 ? "over-budget" : budgetUtilization > 80 ? "warning" : "on-track";
+  return {
+    dailyBurnRate, projectedMonthEnd, budgetUtilization,
+    daysUntilBudgetHit, status,
+    recommendedDailyBudget: b.monthlyBudgetUSD / 30,
+  };
+}
+
+export interface CachingROIInput {
+  systemPromptTokens: number; callsPerDay: number;
+  modelInputPrice: number; cacheWritePrice: number;
+  cacheReadPrice: number; cacheHitRate: number;
+}
+export interface CachingROIResult {
+  baselineDailyCost: number; cachedDailyCost: number;
+  dailySavings: number; monthlySavings: number; breakEvenCalls: number;
+}
+export function calcCachingROI(c: CachingROIInput): CachingROIResult {
+  const basePerCall = (c.systemPromptTokens / 1_000_000) * c.modelInputPrice;
+  const writePerCall = (c.systemPromptTokens / 1_000_000) * c.cacheWritePrice;
+  const readPerCall = (c.systemPromptTokens / 1_000_000) * c.cacheReadPrice;
+  const cachedPerCall = (1 - c.cacheHitRate) * writePerCall + c.cacheHitRate * readPerCall;
+  const baselineDailyCost = basePerCall * c.callsPerDay;
+  const cachedDailyCost = cachedPerCall * c.callsPerDay;
+  const dailySavings = baselineDailyCost - cachedDailyCost;
+  const breakEvenCalls = writePerCall > basePerCall
+    ? Infinity
+    : Math.ceil(writePerCall / Math.max(0.0000001, basePerCall - readPerCall));
+  return { baselineDailyCost, cachedDailyCost, dailySavings, monthlySavings: dailySavings * 30, breakEvenCalls };
+}
+
+export interface TCOInput {
+  monthlyTokenCostUSD: number; monthlyInfraUSD: number;
+  monthlyEngineeringHours: number; engineerHourlyRate: number;
+  monthlyOperationsHours: number; opsHourlyRate: number;
+  monthlyRevenueLift: number; monthlyChurnReduction: number;
+}
+export interface TCOResult {
+  totalMonthlyCost: number; totalMonthlyBenefit: number;
+  netMonthlyCashflow: number; roi: number;
+  tokenCostFraction: number; paybackMonths: number | null;
+}
+export function calcTCO(t: TCOInput): TCOResult {
+  const totalMonthlyCost =
+    t.monthlyTokenCostUSD + t.monthlyInfraUSD +
+    t.monthlyEngineeringHours * t.engineerHourlyRate +
+    t.monthlyOperationsHours * t.opsHourlyRate;
+  const totalMonthlyBenefit = t.monthlyRevenueLift + t.monthlyChurnReduction;
+  const netMonthlyCashflow = totalMonthlyBenefit - totalMonthlyCost;
+  const roi = totalMonthlyCost ? (netMonthlyCashflow / totalMonthlyCost) * 100 : 0;
+  return {
+    totalMonthlyCost, totalMonthlyBenefit, netMonthlyCashflow, roi,
+    tokenCostFraction: totalMonthlyCost ? (t.monthlyTokenCostUSD / totalMonthlyCost) * 100 : 0,
+    paybackMonths: netMonthlyCashflow > 0 ? Math.ceil(totalMonthlyCost / netMonthlyCashflow) : null,
+  };
+}
