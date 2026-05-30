@@ -74,6 +74,11 @@
 [data-theme="light"] .tokenops-root footer { border-color: var(--line) !important; }
 [data-theme="light"] .tokenops-root header { background: rgba(255, 255, 255, 0.92) !important; }
 [data-theme="light"] .tokenops-root footer { background: rgba(248, 251, 255, 0.82) !important; }
+[data-theme="light"] .tokenops-root header a > span:first-child,
+[data-theme="light"] .tokenops-root footer span:first-child {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb, #38bdf8) !important;
+  color: #ffffff !important;
+}
 [data-theme="light"] .tokenops-root header span,
 [data-theme="light"] .tokenops-root footer p { color: var(--ink) !important; }
 [data-theme="light"] .tokenops-root header a:not([class*="primary-action"]),
