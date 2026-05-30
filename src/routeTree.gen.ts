@@ -17,6 +17,7 @@ import { Route as PatternsRouteImport } from './routes/patterns'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HubRouteImport } from './routes/hub'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as AboutRouteImport } from './routes/about'
@@ -63,6 +64,11 @@ const GuideRoute = GuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
   '/dashboard': typeof DashboardRoute
+  '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
   '/dashboard': typeof DashboardRoute
+  '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
   '/dashboard': typeof DashboardRoute
+  '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
@@ -142,6 +151,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/calculator'
     | '/dashboard'
+    | '/glossary'
     | '/guide'
     | '/hub'
     | '/library'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/calculator'
     | '/dashboard'
+    | '/glossary'
     | '/guide'
     | '/hub'
     | '/library'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/calculator'
     | '/dashboard'
+    | '/glossary'
     | '/guide'
     | '/hub'
     | '/library'
@@ -188,6 +200,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CalculatorRoute: typeof CalculatorRoute
   DashboardRoute: typeof DashboardRoute
+  GlossaryRoute: typeof GlossaryRoute
   GuideRoute: typeof GuideRoute
   HubRoute: typeof HubRoute
   LibraryRoute: typeof LibraryRoute
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -300,6 +320,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CalculatorRoute: CalculatorRoute,
   DashboardRoute: DashboardRoute,
+  GlossaryRoute: GlossaryRoute,
   GuideRoute: GuideRoute,
   HubRoute: HubRoute,
   LibraryRoute: LibraryRoute,
@@ -313,3 +334,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

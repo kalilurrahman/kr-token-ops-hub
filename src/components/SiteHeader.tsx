@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X, BookOpen, Gauge, Calculator, Zap, FolderDown, FileText, Layers, Info, Github, Library, Sparkles } from "lucide-react";
+import { Menu, X, BookOpen, Gauge, Calculator, Zap, FolderDown, FileText, Layers, Info, Github, Library, Sparkles, BookMarked } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Home", icon: Gauge },
@@ -8,6 +9,7 @@ const NAV = [
   { to: "/guide", label: "Guide", icon: BookOpen },
   { to: "/patterns", label: "Patterns", icon: Layers },
   { to: "/calculator", label: "Calculator", icon: Calculator },
+  { to: "/glossary", label: "Glossary", icon: BookMarked },
   { to: "/dashboard", label: "Dashboard", icon: Gauge },
   { to: "/toolkit", label: "Toolkit", icon: Zap },
   { to: "/resources", label: "Resources", icon: FolderDown },
@@ -57,6 +59,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <a
             href="https://kalilurrahman.lovable.app"
             target="_blank"
