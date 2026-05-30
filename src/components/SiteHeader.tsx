@@ -24,16 +24,13 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[rgba(197,160,71,0.18)] bg-[#06090f]/90 backdrop-blur-xl">
+    <header className="site-header sticky top-0 z-50 border-b backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-3">
         <Link to="/" className="flex items-center gap-3 shrink-0">
-          <span
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold text-[#06090f]"
-            style={{ background: "linear-gradient(135deg,#9d7f38,#c5a047,#e6c879)" }}
-          >
+          <span className="brand-mark flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold">
             TO
           </span>
-          <span className="hidden font-semibold tracking-wider text-[#f4f1ea] sm:block" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "1.05rem", letterSpacing: "0.08em" }}>
+          <span className="brand-wordmark hidden font-semibold tracking-wider sm:block">
             TOKENOPS ATLAS
           </span>
         </Link>
@@ -45,11 +42,7 @@ export function SiteHeader() {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
-                  active
-                    ? "bg-[#c5a047]/10 text-[#c5a047] border border-[#c5a047]/40"
-                    : "text-[#a89e88] hover:text-[#c5a047] hover:bg-[#c5a047]/5 border border-transparent"
-                }`}
+                className={`nav-link flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${active ? "active" : ""}`}
               >
                 <item.icon className="h-3.5 w-3.5" />
                 {item.label}
@@ -64,12 +57,12 @@ export function SiteHeader() {
             href="https://kalilurrahman.lovable.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 rounded-md border border-[#c5a047]/40 px-3 py-1.5 text-xs font-medium text-[#c5a047] hover:bg-[#c5a047]/10 transition-colors"
+            className="header-link hidden md:inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors"
           >
             KR Home
           </a>
           <button
-            className="xl:hidden flex h-9 w-9 items-center justify-center rounded-md border border-[rgba(197,160,71,0.18)] text-[#a89e88] hover:text-[#c5a047]"
+            className="header-menu-button xl:hidden flex h-9 w-9 items-center justify-center rounded-md border"
             onClick={() => setOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
           >
@@ -79,7 +72,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="xl:hidden border-t border-[rgba(197,160,71,0.18)] bg-[#06090f]/95 px-4 py-3">
+        <div className="site-mobile-menu xl:hidden border-t px-4 py-3">
           <div className="grid grid-cols-2 gap-1">
             {NAV.map((item) => {
               const active = pathname === item.to;
@@ -88,9 +81,7 @@ export function SiteHeader() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
-                    active ? "bg-[#c5a047]/10 text-[#c5a047]" : "text-[#a89e88] hover:bg-[#c5a047]/5"
-                  }`}
+                  className={`nav-link flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${active ? "active" : ""}`}
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
