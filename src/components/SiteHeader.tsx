@@ -1,6 +1,21 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X, BookOpen, Gauge, Calculator, Zap, FolderDown, FileText, Layers, Info, Github, Library, Sparkles, BookMarked } from "lucide-react";
+import {
+  Menu,
+  X,
+  BookOpen,
+  Gauge,
+  Calculator,
+  Zap,
+  FolderDown,
+  FileText,
+  Layers,
+  Info,
+  Github,
+  Library,
+  Sparkles,
+  BookMarked,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
@@ -42,7 +57,9 @@ export function SiteHeader() {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`nav-link flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${active ? "active" : ""}`}
+                className={`nav-link flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
+                  active ? "active" : ""
+                }`}
               >
                 <item.icon className="h-3.5 w-3.5" />
                 {item.label}
@@ -81,7 +98,9 @@ export function SiteHeader() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className={`nav-link flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${active ? "active" : ""}`}
+                  className={`nav-link flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
+                    active ? "active" : ""
+                  }`}
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
