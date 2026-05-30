@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 type Theme = "dark" | "light";
-const KEY = "tokenops-theme";
+const KEY = "tokenops-theme-v2";
 
 function getInitial(): Theme {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
   const stored = window.localStorage.getItem(KEY) as Theme | null;
   if (stored === "light" || stored === "dark") return stored;
-  return "dark";
+  return "light";
 }
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const t = getInitial();
@@ -24,7 +24,11 @@ export function ThemeToggle() {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
-    try { window.localStorage.setItem(KEY, next); } catch {}
+    try {
+      window.localStorage.setItem(KEY, next);
+    } catch {
+      return;
+    }
   };
 
   return (

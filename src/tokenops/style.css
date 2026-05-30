@@ -1714,3 +1714,367 @@ code, pre, .font-mono {
   .hub-bar-lbl { width: 110px; font-size: 0.74rem; }
   .hub-metric-val { font-size: 1.3rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Readable default theme fix
+   Light mode is the baseline; dark mode is opt-in via the toggle.
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --bg: #f8fbff;
+  --bg-1: #ffffff;
+  --bg-2: #f1f6fd;
+  --bg-3: #e7f0fb;
+  --surface: #ffffff;
+  --surface-2: #f5f9ff;
+  --ink: #0f172a;
+  --muted: #475569;
+  --muted-2: #64748b;
+  --subtle: #64748b;
+  --line: rgba(37, 99, 235, 0.16);
+  --line-bright: rgba(37, 99, 235, 0.34);
+  --gold: #2563eb;
+  --gold-dim: #1d4ed8;
+  --gold-light: #1d4ed8;
+  --gold-dark: #1e40af;
+  --gold-glow: rgba(37, 99, 235, 0.10);
+  --blue: #0f62fe;
+  --green: #047857;
+  --amber: #b45309;
+  --red: #b91c1c;
+  --shadow: 0 14px 38px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #06090f;
+  --bg-1: #0a0f17;
+  --bg-2: #101725;
+  --bg-3: #1a2334;
+  --surface: #101725;
+  --surface-2: #151f2e;
+  --ink: #f4f1ea;
+  --muted: #a89e88;
+  --muted-2: #857d6c;
+  --subtle: #857d6c;
+  --line: rgba(197, 160, 71, 0.14);
+  --line-bright: rgba(197, 160, 71, 0.40);
+  --gold: #c5a047;
+  --gold-dim: #9d7f38;
+  --gold-light: #e6c879;
+  --gold-dark: #9d7f38;
+  --gold-glow: rgba(197, 160, 71, 0.16);
+  --blue: #c5a047;
+  --green: #34d399;
+  --amber: #c5a047;
+  --red: #ef4444;
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background:
+    radial-gradient(900px 420px at 18% -8%, rgba(37, 99, 235, 0.08), transparent 62%),
+    radial-gradient(800px 380px at 105% 5%, rgba(14, 165, 233, 0.07), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  color: var(--ink) !important;
+  font-family: "Inter", "DM Sans", "Segoe UI", system-ui, sans-serif !important;
+}
+
+[data-theme="dark"] body {
+  background:
+    radial-gradient(ellipse at top, rgba(197, 160, 71, 0.10) 0%, transparent 55%),
+    linear-gradient(180deg, #0a0f17 0%, #06090f 100%) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display,
+.guide h1,
+.guide h2,
+.guide h3,
+.guide h4 {
+  font-family: "Inter", "DM Sans", "Segoe UI", system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+.site-header,
+.site-footer,
+.site-mobile-menu {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] .site-header,
+[data-theme="dark"] .site-footer,
+[data-theme="dark"] .site-mobile-menu {
+  background: rgba(6, 9, 15, 0.92) !important;
+}
+
+.brand-mark {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb, #38bdf8) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .brand-mark {
+  background: linear-gradient(135deg, #9d7f38, #c5a047, #e6c879) !important;
+  color: #06090f !important;
+}
+
+.brand-wordmark,
+.footer-muted,
+.social-link,
+.header-link,
+.header-menu-button,
+.tokenops-root .nav-link {
+  color: var(--ink) !important;
+}
+
+.brand-wordmark {
+  font-family: "Inter", "DM Sans", "Segoe UI", system-ui, sans-serif !important;
+  letter-spacing: 0.06em !important;
+}
+
+.footer-muted,
+.social-link,
+.header-link,
+.header-menu-button,
+.tokenops-root .nav-link:not(.active) {
+  color: var(--muted) !important;
+}
+
+.social-link,
+.header-link,
+.header-menu-button,
+.theme-toggle,
+.tokenops-root .nav-link {
+  border-color: var(--line) !important;
+}
+
+.footer-heart {
+  color: var(--gold) !important;
+  fill: var(--gold) !important;
+}
+
+.social-link:hover,
+.header-link:hover,
+.header-menu-button:hover,
+.tokenops-root .nav-link:hover,
+.tokenops-root .nav-link.active {
+  background: var(--gold-glow) !important;
+  color: var(--gold) !important;
+}
+
+.tokenops-root .hero-band,
+.tokenops-root .starter-kit-banner,
+.tokenops-root .about-cta {
+  background:
+    radial-gradient(circle at 82% 16%, rgba(37, 99, 235, 0.10) 0%, transparent 48%),
+    linear-gradient(135deg, #ffffff 0%, #f2f7ff 58%, #e8f1ff 100%) !important;
+  border-color: var(--line) !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] .tokenops-root .hero-band {
+  background:
+    radial-gradient(circle at 80% 20%, rgba(197, 160, 71, 0.14) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0f17 0%, #101725 60%, #1a2334 100%) !important;
+  border-color: var(--line-bright) !important;
+  box-shadow: 0 0 80px rgba(197, 160, 71, 0.08), 0 30px 80px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .tokenops-root .starter-kit-banner,
+[data-theme="dark"] .tokenops-root .about-cta {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(197, 160, 71, 0.18) 0%, transparent 50%),
+    linear-gradient(135deg, #101725 0%, #1a2334 100%) !important;
+  border-color: var(--line-bright) !important;
+}
+
+.tokenops-root .hero-copy,
+.tokenops-root .starter-kit-banner p,
+.tokenops-root .starter-kit-items span,
+.tokenops-root .resource-card-header p,
+.tokenops-root .tile p,
+.tokenops-root .about-feature-card p,
+.tokenops-root .panel-row span,
+.tokenops-root .metric-row span,
+.tokenops-root .page-heading p,
+.tokenops-root .split-section p,
+.tokenops-root .dash-card span,
+.tokenops-root .about-hero-desc,
+.tokenops-root .about-stat span,
+.tokenops-root .toolkit-panel-header p,
+.tokenops-root label,
+.hub-hero p,
+.hub-kc-section p,
+.hub-kc-section li,
+.hub-gloss-card .gdef {
+  color: var(--muted) !important;
+}
+
+.tokenops-root .tile,
+.tokenops-root .dash-card,
+.tokenops-root .dash-panel,
+.tokenops-root .control-surface,
+.tokenops-root .result-surface,
+.tokenops-root .toolkit-panel,
+.tokenops-root .resource-card,
+.tokenops-root .about-feature-card,
+.tokenops-root .command-panel,
+.tokenops-root .article-shell aside,
+.tokenops-root .anomaly-board,
+.tokenops-root .about-hero,
+.tokenops-root .source-list,
+.tokenops-root .guide,
+.tokenops-root .about-stat,
+.tokenops-root .loading-panel,
+.tokenops-root .exec-summary,
+.tokenops-root .calc-card,
+.hub-card,
+.hub-compare-card,
+.glossary-item {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.tokenops-root input,
+.tokenops-root select,
+.tokenops-root textarea,
+.hub-search input,
+.hub-row select {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+
+[data-theme="dark"] .tokenops-root input,
+[data-theme="dark"] .tokenops-root select,
+[data-theme="dark"] .tokenops-root textarea,
+[data-theme="dark"] .hub-search input,
+[data-theme="dark"] .hub-row select {
+  background: rgba(0, 0, 0, 0.30) !important;
+}
+
+.tokenops-root .primary-action,
+.tokenops-root .button-action,
+.tokenops-root .starter-kit-banner .download-btn,
+.tokenops-root .download-btn.primary,
+.tokenops-root .download-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.20) !important;
+}
+
+[data-theme="dark"] .tokenops-root .primary-action,
+[data-theme="dark"] .tokenops-root .button-action,
+[data-theme="dark"] .tokenops-root .starter-kit-banner .download-btn,
+[data-theme="dark"] .tokenops-root .download-btn.primary,
+[data-theme="dark"] .tokenops-root .download-btn:hover {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+  color: #06090f !important;
+  box-shadow: 0 8px 24px rgba(197, 160, 71, 0.25) !important;
+}
+
+.tokenops-root .secondary-action,
+.tokenops-root .download-btn,
+.reader-icon-btn {
+  background: var(--surface) !important;
+  color: var(--gold) !important;
+  border-color: var(--line-bright) !important;
+}
+
+.tokenops-root .guide,
+.reader-article {
+  font-size: 1rem;
+  line-height: 1.72;
+}
+
+.tokenops-root .guide h1,
+.tokenops-root .guide h2,
+.tokenops-root .guide h3,
+.reader-title-block h1,
+.hub-hero h1,
+.hub-sec-title,
+.hub-kc-section h3,
+.hub-gloss-card .gterm,
+.glossary-item h3 {
+  color: var(--gold-light) !important;
+}
+
+.tokenops-root .guide p,
+.tokenops-root .guide li,
+.tokenops-root .guide td,
+.reader-article p,
+.reader-article li,
+.reader-article td {
+  color: #1e293b !important;
+}
+
+[data-theme="dark"] .tokenops-root .guide p,
+[data-theme="dark"] .tokenops-root .guide li,
+[data-theme="dark"] .tokenops-root .guide td,
+[data-theme="dark"] .reader-article p,
+[data-theme="dark"] .reader-article li,
+[data-theme="dark"] .reader-article td {
+  color: var(--ink) !important;
+}
+
+.tokenops-root .guide code {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+}
+
+[data-theme="dark"] .tokenops-root .guide code {
+  background: rgba(197, 160, 71, 0.10) !important;
+  color: var(--gold-light) !important;
+}
+
+.tokenops-root .guide pre {
+  background: #f8fbff !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+
+[data-theme="dark"] .tokenops-root .guide pre {
+  background: #06090f !important;
+  color: var(--ink) !important;
+}
+
+.reader-toolbar-title {
+  background: color-mix(in srgb, var(--bg) 88%, transparent) !important;
+}
+
+.reader-article table,
+.exec-summary table,
+.hub-table {
+  max-width: 100%;
+}
+
+.reader-article th,
+.reader-article td,
+.exec-summary th,
+.exec-summary td,
+.hub-table th,
+.hub-table td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .app-shell { width: min(100% - 20px, 1200px); }
+  .hero-band { padding: 28px 18px !important; }
+  .reader-title-block h1 { font-size: 1.55rem; line-height: 1.12; }
+  .reader-article { padding: 16px; }
+  .reader-icon-btn-wide { min-width: auto; }
+}
