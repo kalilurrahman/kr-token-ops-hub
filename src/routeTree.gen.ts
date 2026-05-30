@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as SourcesRouteImport } from './routes/sources'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PatternsRouteImport } from './routes/patterns'
 import { Route as LibraryRouteImport } from './routes/library'
@@ -37,6 +38,11 @@ const TemplatesRoute = TemplatesRouteImport.update({
 const SourcesRoute = SourcesRouteImport.update({
   id: '/sources',
   path: '/sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/patterns': typeof PatternsRoute
   '/resources': typeof ResourcesRoute
+  '/roadmap': typeof RoadmapRoute
   '/sources': typeof SourcesRoute
   '/templates': typeof TemplatesRoute
   '/toolkit': typeof ToolkitRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/patterns': typeof PatternsRoute
   '/resources': typeof ResourcesRoute
+  '/roadmap': typeof RoadmapRoute
   '/sources': typeof SourcesRoute
   '/templates': typeof TemplatesRoute
   '/toolkit': typeof ToolkitRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/patterns': typeof PatternsRoute
   '/resources': typeof ResourcesRoute
+  '/roadmap': typeof RoadmapRoute
   '/sources': typeof SourcesRoute
   '/templates': typeof TemplatesRoute
   '/toolkit': typeof ToolkitRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/patterns'
     | '/resources'
+    | '/roadmap'
     | '/sources'
     | '/templates'
     | '/toolkit'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/patterns'
     | '/resources'
+    | '/roadmap'
     | '/sources'
     | '/templates'
     | '/toolkit'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/patterns'
     | '/resources'
+    | '/roadmap'
     | '/sources'
     | '/templates'
     | '/toolkit'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   PatternsRoute: typeof PatternsRoute
   ResourcesRoute: typeof ResourcesRoute
+  RoadmapRoute: typeof RoadmapRoute
   SourcesRoute: typeof SourcesRoute
   TemplatesRoute: typeof TemplatesRoute
   ToolkitRoute: typeof ToolkitRoute
@@ -233,6 +246,13 @@ declare module '@tanstack/react-router' {
       path: '/sources'
       fullPath: '/sources'
       preLoaderRoute: typeof SourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -326,6 +346,7 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   PatternsRoute: PatternsRoute,
   ResourcesRoute: ResourcesRoute,
+  RoadmapRoute: RoadmapRoute,
   SourcesRoute: SourcesRoute,
   TemplatesRoute: TemplatesRoute,
   ToolkitRoute: ToolkitRoute,
