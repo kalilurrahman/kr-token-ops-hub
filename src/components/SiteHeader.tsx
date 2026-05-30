@@ -15,6 +15,7 @@ import {
   Library,
   Sparkles,
   BookMarked,
+  Map as MapIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -24,6 +25,7 @@ const NAV = [
   { to: "/guide", label: "Guide", icon: BookOpen },
   { to: "/patterns", label: "Patterns", icon: Layers },
   { to: "/calculator", label: "Calculator", icon: Calculator },
+  { to: "/roadmap", label: "Roadmap", icon: MapIcon },
   { to: "/glossary", label: "Glossary", icon: BookMarked },
   { to: "/dashboard", label: "Dashboard", icon: Gauge },
   { to: "/toolkit", label: "Toolkit", icon: Zap },
