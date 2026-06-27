@@ -19,10 +19,10 @@ const categories = [
 ] as const;
 
 const impactColor: Record<Technique["impact"], string> = {
-  "Very High": "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
-  High: "bg-sky-500/15 text-sky-600 dark:text-sky-400",
-  Medium: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
-  Low: "bg-muted text-muted-foreground",
+  "Very High": "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300",
+  High: "bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300",
+  Medium: "bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-300",
+  Low: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200",
 };
 
 function TechniquesPage() {
