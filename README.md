@@ -15,6 +15,28 @@ TokenOps applies visibility, allocation, optimization, and governance to LLM tok
 
 ## Application Sections
 
+### Optimize (Token Optimization Playbook)
+
+The Optimize hub (`/optimize`) is the exhaustive, tool-by-tool guide to spending the
+fewest tokens and credits for the best result. It contains:
+
+- **Techniques Catalog** (`/techniques`) — every high-leverage lever: prompt caching,
+  Caveman/semantic compression, model routing, context editing, compaction, RAG,
+  prompt compression, semantic caching, batching, output control, instruction files,
+  agent budgets, distillation, and FinOps metering — each with typical savings,
+  effort, and impact.
+- **Tool-Specific Guides** (`/tool-guides`) — credit/token playbooks for Claude &
+  Claude Code, Lovable, ChatGPT/OpenAI, Google Gemini, Cursor, GitHub Copilot, and
+  media/productivity tools, plus a caching & batch comparison table.
+- **Caveman Compression** (`/caveman`) — the telegram-style prompt method: keep/drop
+  rules, before→after, realistic savings (14–45%), and a drop-in skill snippet.
+- **Prompt Templates & Checklists** (`/prompt-templates`) — copy-paste scaffolds for
+  caching, routing, output control, compaction, and project memory, plus pre-flight,
+  per-prompt, production, and FinOps checklists.
+
+> Pricing, discounts, and TTLs change frequently — figures are reviewed June 2026.
+> Always confirm current numbers in each provider's own docs before budgeting.
+
 ### Home
 
 The landing page providing an executive summary of TokenOps and the core value proposition.
