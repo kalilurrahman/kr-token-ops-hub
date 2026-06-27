@@ -37,7 +37,7 @@ const cards = [
     stat: "Deep dive",
   },
   {
-    to: "/templates",
+    to: "/prompt-templates",
     icon: ClipboardList,
     title: "Prompt Templates",
     desc: "Copy-paste scaffolds for caching, routing, output control, compaction and project memory.",

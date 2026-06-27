@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Copy, CheckCheck } from "lucide-react";
 import { templates, checklists } from "../data/tokenopsContent";
 
-export const Route = createFileRoute("/templates")({
+export const Route = createFileRoute("/prompt-templates")({
   component: TemplatesPage,
 });
 
