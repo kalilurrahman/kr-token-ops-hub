@@ -10,16 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
+import { Route as ToolGuidesRouteImport } from './routes/tool-guides'
 import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as TechniquesRouteImport } from './routes/techniques'
 import { Route as SourcesRouteImport } from './routes/sources'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as PromptTemplatesRouteImport } from './routes/prompt-templates'
 import { Route as PatternsRouteImport } from './routes/patterns'
+import { Route as OptimizeRouteImport } from './routes/optimize'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HubRouteImport } from './routes/hub'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CavemanRouteImport } from './routes/caveman'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -30,9 +35,19 @@ const ToolkitRoute = ToolkitRouteImport.update({
   path: '/toolkit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolGuidesRoute = ToolGuidesRouteImport.update({
+  id: '/tool-guides',
+  path: '/tool-guides',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TemplatesRoute = TemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TechniquesRoute = TechniquesRouteImport.update({
+  id: '/techniques',
+  path: '/techniques',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SourcesRoute = SourcesRouteImport.update({
@@ -50,9 +65,19 @@ const ResourcesRoute = ResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PromptTemplatesRoute = PromptTemplatesRouteImport.update({
+  id: '/prompt-templates',
+  path: '/prompt-templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PatternsRoute = PatternsRouteImport.update({
   id: '/patterns',
   path: '/patterns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OptimizeRoute = OptimizeRouteImport.update({
+  id: '/optimize',
+  path: '/optimize',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -80,6 +105,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CavemanRoute = CavemanRouteImport.update({
+  id: '/caveman',
+  path: '/caveman',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalculatorRoute = CalculatorRouteImport.update({
   id: '/calculator',
   path: '/calculator',
@@ -105,16 +135,21 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
+  '/caveman': typeof CavemanRoute
   '/dashboard': typeof DashboardRoute
   '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
+  '/optimize': typeof OptimizeRoute
   '/patterns': typeof PatternsRoute
+  '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
   '/sources': typeof SourcesRoute
+  '/techniques': typeof TechniquesRoute
   '/templates': typeof TemplatesRoute
+  '/tool-guides': typeof ToolGuidesRoute
   '/toolkit': typeof ToolkitRoute
   '/read/$': typeof ReadSplatRoute
 }
@@ -122,16 +157,21 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
+  '/caveman': typeof CavemanRoute
   '/dashboard': typeof DashboardRoute
   '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
+  '/optimize': typeof OptimizeRoute
   '/patterns': typeof PatternsRoute
+  '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
   '/sources': typeof SourcesRoute
+  '/techniques': typeof TechniquesRoute
   '/templates': typeof TemplatesRoute
+  '/tool-guides': typeof ToolGuidesRoute
   '/toolkit': typeof ToolkitRoute
   '/read/$': typeof ReadSplatRoute
 }
@@ -140,16 +180,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
+  '/caveman': typeof CavemanRoute
   '/dashboard': typeof DashboardRoute
   '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
+  '/optimize': typeof OptimizeRoute
   '/patterns': typeof PatternsRoute
+  '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
   '/sources': typeof SourcesRoute
+  '/techniques': typeof TechniquesRoute
   '/templates': typeof TemplatesRoute
+  '/tool-guides': typeof ToolGuidesRoute
   '/toolkit': typeof ToolkitRoute
   '/read/$': typeof ReadSplatRoute
 }
@@ -159,16 +204,21 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/calculator'
+    | '/caveman'
     | '/dashboard'
     | '/glossary'
     | '/guide'
     | '/hub'
     | '/library'
+    | '/optimize'
     | '/patterns'
+    | '/prompt-templates'
     | '/resources'
     | '/roadmap'
     | '/sources'
+    | '/techniques'
     | '/templates'
+    | '/tool-guides'
     | '/toolkit'
     | '/read/$'
   fileRoutesByTo: FileRoutesByTo
@@ -176,16 +226,21 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/calculator'
+    | '/caveman'
     | '/dashboard'
     | '/glossary'
     | '/guide'
     | '/hub'
     | '/library'
+    | '/optimize'
     | '/patterns'
+    | '/prompt-templates'
     | '/resources'
     | '/roadmap'
     | '/sources'
+    | '/techniques'
     | '/templates'
+    | '/tool-guides'
     | '/toolkit'
     | '/read/$'
   id:
@@ -193,16 +248,21 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/calculator'
+    | '/caveman'
     | '/dashboard'
     | '/glossary'
     | '/guide'
     | '/hub'
     | '/library'
+    | '/optimize'
     | '/patterns'
+    | '/prompt-templates'
     | '/resources'
     | '/roadmap'
     | '/sources'
+    | '/techniques'
     | '/templates'
+    | '/tool-guides'
     | '/toolkit'
     | '/read/$'
   fileRoutesById: FileRoutesById
@@ -211,16 +271,21 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   CalculatorRoute: typeof CalculatorRoute
+  CavemanRoute: typeof CavemanRoute
   DashboardRoute: typeof DashboardRoute
   GlossaryRoute: typeof GlossaryRoute
   GuideRoute: typeof GuideRoute
   HubRoute: typeof HubRoute
   LibraryRoute: typeof LibraryRoute
+  OptimizeRoute: typeof OptimizeRoute
   PatternsRoute: typeof PatternsRoute
+  PromptTemplatesRoute: typeof PromptTemplatesRoute
   ResourcesRoute: typeof ResourcesRoute
   RoadmapRoute: typeof RoadmapRoute
   SourcesRoute: typeof SourcesRoute
+  TechniquesRoute: typeof TechniquesRoute
   TemplatesRoute: typeof TemplatesRoute
+  ToolGuidesRoute: typeof ToolGuidesRoute
   ToolkitRoute: typeof ToolkitRoute
   ReadSplatRoute: typeof ReadSplatRoute
 }
@@ -234,11 +299,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolkitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tool-guides': {
+      id: '/tool-guides'
+      path: '/tool-guides'
+      fullPath: '/tool-guides'
+      preLoaderRoute: typeof ToolGuidesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/templates': {
       id: '/templates'
       path: '/templates'
       fullPath: '/templates'
       preLoaderRoute: typeof TemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/techniques': {
+      id: '/techniques'
+      path: '/techniques'
+      fullPath: '/techniques'
+      preLoaderRoute: typeof TechniquesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sources': {
@@ -262,11 +341,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prompt-templates': {
+      id: '/prompt-templates'
+      path: '/prompt-templates'
+      fullPath: '/prompt-templates'
+      preLoaderRoute: typeof PromptTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/patterns': {
       id: '/patterns'
       path: '/patterns'
       fullPath: '/patterns'
       preLoaderRoute: typeof PatternsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/optimize': {
+      id: '/optimize'
+      path: '/optimize'
+      fullPath: '/optimize'
+      preLoaderRoute: typeof OptimizeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -304,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/caveman': {
+      id: '/caveman'
+      path: '/caveman'
+      fullPath: '/caveman'
+      preLoaderRoute: typeof CavemanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculator': {
       id: '/calculator'
       path: '/calculator'
@@ -339,29 +439,24 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   CalculatorRoute: CalculatorRoute,
+  CavemanRoute: CavemanRoute,
   DashboardRoute: DashboardRoute,
   GlossaryRoute: GlossaryRoute,
   GuideRoute: GuideRoute,
   HubRoute: HubRoute,
   LibraryRoute: LibraryRoute,
+  OptimizeRoute: OptimizeRoute,
   PatternsRoute: PatternsRoute,
+  PromptTemplatesRoute: PromptTemplatesRoute,
   ResourcesRoute: ResourcesRoute,
   RoadmapRoute: RoadmapRoute,
   SourcesRoute: SourcesRoute,
+  TechniquesRoute: TechniquesRoute,
   TemplatesRoute: TemplatesRoute,
+  ToolGuidesRoute: ToolGuidesRoute,
   ToolkitRoute: ToolkitRoute,
   ReadSplatRoute: ReadSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

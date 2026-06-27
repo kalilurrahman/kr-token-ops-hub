@@ -8,6 +8,9 @@ import {
   Map,
   BookMarked,
   Wrench,
+  Sparkles,
+  Layers,
+  ClipboardList,
 } from "lucide-react";
 import { operatingPillars, playbook } from "@/tokenops/data";
 import content from "@/tokenops/content.json";
@@ -94,6 +97,45 @@ function Index() {
             width={1024}
             height={1024}
           />
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-[1200px] px-4">
+        <Link
+          to="/optimize"
+          className="group flex flex-col gap-3 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent p-6 transition hover:border-emerald-500/70 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              <Sparkles className="h-4 w-4" /> New
+            </div>
+            <h2 className="mt-1 text-2xl font-semibold">Token Optimization Playbook</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Techniques, tool-specific guides, the Caveman method, and copy-paste templates — spend the fewest tokens for the best result.
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1 self-start rounded-full bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-700 dark:text-emerald-300 sm:self-auto">
+            Open Optimize <ArrowRight className="h-4 w-4 transition-all group-hover:translate-x-0.5" />
+          </span>
+        </Link>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { to: "/techniques", icon: Layers, title: "Techniques", desc: "Caching, routing, compression, RAG." },
+            { to: "/tool-guides", icon: Wrench, title: "Tool Guides", desc: "Claude, Lovable, GPT, Gemini, Cursor." },
+            { to: "/caveman", icon: Sparkles, title: "Caveman", desc: "Telegram-style prompts: 14–45% savings." },
+            { to: "/prompt-templates", icon: ClipboardList, title: "Templates", desc: "Copy-paste prompts & checklists." },
+          ].map((t) => (
+            <Link
+              key={t.to}
+              to={t.to}
+              className="rounded-xl border border-border bg-card p-4 transition hover:border-emerald-500/50"
+            >
+              <t.icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="mt-2 font-semibold">{t.title}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{t.desc}</div>
+            </Link>
+          ))}
         </div>
       </section>
 
