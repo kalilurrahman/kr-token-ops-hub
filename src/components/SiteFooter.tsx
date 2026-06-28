@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 
 export function SiteFooter() {
   return (
@@ -15,15 +16,7 @@ export function SiteFooter() {
           <Link to="/library" className="hover:underline">Library</Link>
         </nav>
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
-          <div className="flex items-center gap-3">
-            <span className="brand-mark flex h-9 w-9 items-center justify-center rounded-lg text-xs font-bold">
-              TO
-            </span>
-            <div>
-              <p className="brand-wordmark text-sm font-semibold tracking-wider">TOKENOPS ATLAS</p>
-              <p className="footer-muted text-xs">FinOps for LLM token consumption</p>
-            </div>
-          </div>
+          <TokenOpsLogo size={36} showWordmark showTagline />
 
           <div className="flex items-center gap-3">
             <Social href="https://github.com/kalilurrahman" label="GitHub">
