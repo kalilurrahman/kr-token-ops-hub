@@ -19,9 +19,19 @@ import {
   Wrench,
   ClipboardList,
 } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 
-const NAV = [
+const PRIMARY_NAV = [
+  { to: "/", label: "Home", icon: Gauge },
+  { to: "/optimize", label: "Optimize", icon: Sparkles },
+  { to: "/techniques", label: "Techniques", icon: Layers },
+  { to: "/tool-guides", label: "Tools", icon: Wrench },
+  { to: "/calculator", label: "Calculator", icon: Calculator },
+  { to: "/roadmap", label: "Roadmap", icon: MapIcon },
+  { to: "/library", label: "Library", icon: Library },
+] as const;
+
+const FULL_NAV = [
   { to: "/", label: "Home", icon: Gauge },
   { to: "/hub", label: "Hub", icon: Sparkles },
   { to: "/guide", label: "Guide", icon: BookOpen },
@@ -48,25 +58,24 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="site-header sticky top-0 z-50 border-b backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="flex items-center gap-3 shrink-0">
-          <span className="brand-mark flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold">
-            TO
-          </span>
-          <span className="brand-wordmark hidden font-semibold tracking-wider sm:block">
-            TOKENOPS ATLAS
-          </span>
-        </Link>
+    <header
+      className="site-header sticky top-0 z-50 border-b backdrop-blur-xl"
+      style={{
+        background: "rgba(8,9,13,0.72)",
+        borderColor: "var(--line)",
+      }}
+    >
+      <div className="mx-auto grid max-w-[1280px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:flex lg:justify-between">
+        <TokenOpsLogo size={34} showWordmark showTagline={false} />
 
-        <nav className="hidden items-center gap-1 xl:flex">
-          {NAV.map((item) => {
+        <nav className="hidden items-center gap-1 lg:flex">
+          {PRIMARY_NAV.map((item) => {
             const active = pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`nav-link flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
+                className={`nav-link flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-all ${
                   active ? "active" : ""
                 }`}
               >
@@ -77,20 +86,21 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <a
-            href="https://kalilurrahman.lovable.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="header-link hidden md:inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors"
+        <div className="flex items-center gap-2 justify-self-end">
+          <Link
+            to="/calculator"
+            className="to-btn-gold hidden md:inline-flex items-center gap-1.5 text-xs"
           >
-            KR Home
-          </a>
+            <Calculator className="h-3.5 w-3.5" />
+            Open calculator
+          </Link>
           <button
-            className="header-menu-button xl:hidden flex h-9 w-9 items-center justify-center rounded-md border"
+            type="button"
+            className="header-menu-button flex h-10 w-10 items-center justify-center rounded-md border"
+            style={{ borderColor: "var(--line)", color: "var(--ink)" }}
             onClick={() => setOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -98,9 +108,18 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="site-mobile-menu xl:hidden border-t px-4 py-3">
-          <div className="grid grid-cols-2 gap-1">
-            {NAV.map((item) => {
+        <div
+          className="site-mobile-menu border-t px-4 py-4"
+          style={{
+            background: "rgba(8,9,13,0.96)",
+            borderColor: "var(--line)",
+            maxHeight: "75vh",
+            overflowY: "auto",
+          }}
+        >
+          <p className="to-eyebrow mb-3">// All sections</p>
+          <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
+            {FULL_NAV.map((item) => {
               const active = pathname === item.to;
               return (
                 <Link
@@ -117,6 +136,15 @@ export function SiteHeader() {
               );
             })}
           </div>
+          <a
+            href="https://kalilurrahman.lovable.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium"
+            style={{ color: "var(--muted)" }}
+          >
+            ↗ KR Home
+          </a>
         </div>
       )}
     </header>
