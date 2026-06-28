@@ -20,6 +20,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const PRIMARY_NAV = [
   { to: "/", label: "Home", icon: Gauge },
@@ -61,45 +62,61 @@ export function SiteHeader() {
     <header
       className="site-header sticky top-0 z-50 border-b backdrop-blur-xl"
       style={{
-        background: "rgba(8,9,13,0.72)",
+        background: "color-mix(in srgb, var(--bg-1) 80%, transparent)",
         borderColor: "var(--line)",
       }}
     >
-      <div className="mx-auto grid max-w-[1280px] grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:flex lg:justify-between">
-        <TokenOpsLogo size={34} showWordmark showTagline={false} />
+      <div className="mx-auto grid w-full max-w-[1280px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-3 sm:px-4 lg:flex lg:justify-between">
+        <div className="min-w-0 flex items-center">
+          <TokenOpsLogo size={30} showWordmark showTagline={false} />
+        </div>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        {/* Tablet (md): icon-only condensed nav. Desktop (lg): full labels. */}
+        <nav className="hidden md:flex lg:flex items-center gap-1 justify-self-center">
           {PRIMARY_NAV.map((item) => {
             const active = pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`nav-link flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-all ${
+                title={item.label}
+                className={`nav-link flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[13px] font-medium transition-all ${
                   active ? "active" : ""
                 }`}
               >
-                <item.icon className="h-3.5 w-3.5" />
-                {item.label}
+                <item.icon className="h-4 w-4 shrink-0" />
+                <span className="hidden lg:inline">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-2 justify-self-end">
+        <div className="flex items-center gap-2 justify-self-end shrink-0">
           <Link
             to="/calculator"
-            className="to-btn-gold hidden md:inline-flex items-center gap-1.5 text-xs"
+            className="to-btn-gold hidden xl:inline-flex items-center gap-1.5 text-xs"
           >
             <Calculator className="h-3.5 w-3.5" />
-            Open calculator
+            Calculator
           </Link>
+          <ThemeToggle />
           <button
             type="button"
-            className="header-menu-button flex h-10 w-10 items-center justify-center rounded-md border"
+            className="header-menu-button flex h-10 w-10 items-center justify-center rounded-md border lg:hidden"
             style={{ borderColor: "var(--line)", color: "var(--ink)" }}
             onClick={() => setOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+          {/* Desktop "all sections" trigger */}
+          <button
+            type="button"
+            className="header-menu-button hidden lg:flex h-10 w-10 items-center justify-center rounded-md border"
+            style={{ borderColor: "var(--line)", color: "var(--ink)" }}
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Close menu" : "All sections"}
             aria-expanded={open}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -109,16 +126,16 @@ export function SiteHeader() {
 
       {open && (
         <div
-          className="site-mobile-menu border-t px-4 py-4"
+          className="site-mobile-menu border-t px-3 py-4 sm:px-4"
           style={{
-            background: "rgba(8,9,13,0.96)",
+            background: "color-mix(in srgb, var(--bg-1) 96%, transparent)",
             borderColor: "var(--line)",
             maxHeight: "75vh",
             overflowY: "auto",
           }}
         >
           <p className="to-eyebrow mb-3">// All sections</p>
-          <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 md:grid-cols-4">
             {FULL_NAV.map((item) => {
               const active = pathname === item.to;
               return (
@@ -126,12 +143,12 @@ export function SiteHeader() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className={`nav-link flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
+                  className={`nav-link flex min-w-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
                     active ? "active" : ""
                   }`}
                 >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
+                  <item.icon className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{item.label}</span>
                 </Link>
               );
             })}
