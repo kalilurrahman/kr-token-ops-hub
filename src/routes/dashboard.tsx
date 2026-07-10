@@ -98,7 +98,7 @@ function DashboardPage() {
 
       <div className="dashboard-grid">
         <article className="dash-panel wide">
-          <h3>Spend trend and token yield</h3>
+          <h2>Spend trend and token yield</h2>
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={300}>
               <ComposedChart data={monthlyTrend}>
@@ -138,7 +138,7 @@ function DashboardPage() {
         </article>
 
         <article className="dash-panel">
-          <h3>Spend by team</h3>
+          <h2>Spend by team</h2>
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={270}>
               <BarChart data={teamData}>
@@ -157,7 +157,7 @@ function DashboardPage() {
         </article>
 
         <article className="dash-panel">
-          <h3>Spend by model</h3>
+          <h2>Spend by model</h2>
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={270}>
               <BarChart data={modelData}>
@@ -173,7 +173,7 @@ function DashboardPage() {
       </div>
 
       <section className="anomaly-board">
-        <h3>Top anomalies</h3>
+        <h2>Top anomalies</h2>
         {anomalies.map(([feature, signal, cause]) => (
           <div className="anomaly-row" key={feature}>
             <strong>{feature}</strong>
