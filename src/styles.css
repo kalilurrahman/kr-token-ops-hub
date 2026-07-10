@@ -99,8 +99,9 @@
   color-scheme: light;
 }
 
-/* `.dark` mirrors :root — the app is dark-first */
+/* Dark-mode overrides (opt-in via .dark class / [data-theme="dark"]) */
 .dark {
+  color-scheme: dark;
   --sds-background: hsl(228 24% 4%);
   --sds-foreground: hsl(48 14% 89%);
   --sds-card: hsl(225 22% 8%);
