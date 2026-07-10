@@ -63,44 +63,45 @@
 
 :root {
   --sds-radius: 0.625rem;
-  /* Dark-first data-ops palette (matches src/tokenops/style.css) */
-  --sds-background: hsl(228 24% 4%);
-  --sds-foreground: hsl(48 14% 89%);
-  --sds-card: hsl(225 22% 8%);
-  --sds-card-foreground: hsl(48 14% 89%);
-  --sds-popover: hsl(226 24% 6%);
-  --sds-popover-foreground: hsl(48 14% 89%);
-  --sds-primary: hsl(39 74% 65%);
-  --sds-primary-foreground: hsl(30 70% 8%);
-  --sds-secondary: hsl(225 16% 12%);
-  --sds-secondary-foreground: hsl(48 14% 89%);
-  --sds-muted: hsl(225 14% 14%);
-  --sds-muted-foreground: hsl(218 11% 65%);
-  --sds-accent: hsl(171 64% 57%);
-  --sds-accent-foreground: hsl(200 40% 6%);
-  --sds-destructive: hsl(12 72% 60%);
-  --sds-destructive-foreground: hsl(48 14% 95%);
-  --sds-border: hsl(225 16% 16%);
-  --sds-input: hsl(225 16% 16%);
-  --sds-ring: hsl(39 74% 65%);
-  --sds-chart-1: hsl(39 74% 65%);
-  --sds-chart-2: hsl(171 64% 57%);
-  --sds-chart-3: hsl(41 80% 67%);
-  --sds-chart-4: hsl(169 70% 62%);
-  --sds-chart-5: hsl(38 53% 52%);
-  --sds-sidebar: hsl(225 22% 8%);
-  --sds-sidebar-foreground: hsl(48 14% 89%);
-  --sds-sidebar-primary: hsl(39 74% 65%);
-  --sds-sidebar-primary-foreground: hsl(30 70% 8%);
-  --sds-sidebar-accent: hsl(225 16% 12%);
-  --sds-sidebar-accent-foreground: hsl(48 14% 89%);
-  --sds-sidebar-border: hsl(225 16% 16%);
-  --sds-sidebar-ring: hsl(39 74% 65%);
-  color-scheme: dark;
+  /* Light-mode default palette (matches tokenops light :root) */
+  --sds-background: hsl(210 40% 98%);
+  --sds-foreground: hsl(222 47% 11%);
+  --sds-card: hsl(0 0% 100%);
+  --sds-card-foreground: hsl(222 47% 11%);
+  --sds-popover: hsl(0 0% 100%);
+  --sds-popover-foreground: hsl(222 47% 11%);
+  --sds-primary: hsl(221 83% 53%);
+  --sds-primary-foreground: hsl(0 0% 100%);
+  --sds-secondary: hsl(210 40% 96%);
+  --sds-secondary-foreground: hsl(222 47% 11%);
+  --sds-muted: hsl(210 40% 94%);
+  --sds-muted-foreground: hsl(215 16% 35%);
+  --sds-accent: hsl(210 40% 94%);
+  --sds-accent-foreground: hsl(222 47% 11%);
+  --sds-destructive: hsl(0 72% 46%);
+  --sds-destructive-foreground: hsl(0 0% 100%);
+  --sds-border: hsl(215 25% 88%);
+  --sds-input: hsl(215 25% 88%);
+  --sds-ring: hsl(221 83% 53%);
+  --sds-chart-1: hsl(221 83% 53%);
+  --sds-chart-2: hsl(171 64% 40%);
+  --sds-chart-3: hsl(41 80% 45%);
+  --sds-chart-4: hsl(160 60% 40%);
+  --sds-chart-5: hsl(280 60% 55%);
+  --sds-sidebar: hsl(0 0% 100%);
+  --sds-sidebar-foreground: hsl(222 47% 11%);
+  --sds-sidebar-primary: hsl(221 83% 53%);
+  --sds-sidebar-primary-foreground: hsl(0 0% 100%);
+  --sds-sidebar-accent: hsl(210 40% 94%);
+  --sds-sidebar-accent-foreground: hsl(222 47% 11%);
+  --sds-sidebar-border: hsl(215 25% 88%);
+  --sds-sidebar-ring: hsl(221 83% 53%);
+  color-scheme: light;
 }
 
-/* `.dark` mirrors :root — the app is dark-first */
+/* Dark-mode overrides (opt-in via .dark class / [data-theme="dark"]) */
 .dark {
+  color-scheme: dark;
   --sds-background: hsl(228 24% 4%);
   --sds-foreground: hsl(48 14% 89%);
   --sds-card: hsl(225 22% 8%);
