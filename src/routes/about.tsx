@@ -92,7 +92,7 @@ function AboutPage() {
         {features.map(({ icon: Icon, title, desc, to }) => (
           <Link className="about-feature-card" to={to} key={title}>
             <Icon size={22} />
-            <h3>{title}</h3>
+            <h2>{title}</h2>
             <p>{desc}</p>
             <ArrowRight size={16} className="card-arrow" />
           </Link>
