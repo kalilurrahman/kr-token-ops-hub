@@ -1,0 +1,34 @@
+# TokenOps Atlas
+
+> The open reference for FinOps-style visibility, allocation, optimization, and governance of LLM token spend.
+
+TokenOps Atlas is a public, vendor-neutral guide to running large language model
+token and credit spend as an engineered operating discipline. It covers the full
+lifecycle: discovering usage, baselining cost, defining allocation rules,
+optimizing prompts and models, and operationalizing governance.
+
+## Pages
+
+- [Home](/): Overview of the TokenOps operating model.
+- [About](/about): What TokenOps Atlas is and who it's for.
+- [Operating manual](/guide): The complete TokenOps guide in one page.
+- [Implementation roadmap](/roadmap): Discover, measure, govern, optimize, scale.
+- [Optimize hub](/optimize): Entry point to every optimization surface.
+- [Techniques catalog](/techniques): Full library of token-saving techniques.
+- [Tool-specific guides](/tool-guides): Playbooks for Claude, ChatGPT, Gemini, Cursor, Copilot, Lovable, and more.
+- [Caveman compression](/caveman): The telegram-style prompt method.
+- [Prompt templates](/prompt-templates): Copy-paste scaffolds and checklists.
+- [Optimization patterns](/patterns): Reusable recipes for reducing waste.
+- [Toolkit](/toolkit): Interactive tools and calculators overview.
+- [Cost calculator](/calculator): Model spend calculator.
+- [Dashboard](/dashboard): Sample operational dashboard.
+- [Hub](/hub): Calculators, glossary, and operating manual entry.
+- [Glossary](/glossary): TokenOps terminology.
+- [Content library](/library): 29 guides, playbooks, checklists, references, and templates.
+- [Resources](/resources): Documents and starter artifacts.
+- [Templates](/templates): Starter operating artifacts.
+- [Sources](/sources): Reference material.
+
+## Optional
+
+- [Sitemap](/sitemap.xml): Machine-readable list of all public routes.

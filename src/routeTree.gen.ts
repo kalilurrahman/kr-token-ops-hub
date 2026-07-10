@@ -14,6 +14,7 @@ import { Route as ToolGuidesRouteImport } from './routes/tool-guides'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as TechniquesRouteImport } from './routes/techniques'
 import { Route as SourcesRouteImport } from './routes/sources'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PromptTemplatesRouteImport } from './routes/prompt-templates'
@@ -53,6 +54,11 @@ const TechniquesRoute = TechniquesRouteImport.update({
 const SourcesRoute = SourcesRouteImport.update({
   id: '/sources',
   path: '/sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoadmapRoute = RoadmapRouteImport.update({
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sources': typeof SourcesRoute
   '/techniques': typeof TechniquesRoute
   '/templates': typeof TemplatesRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sources': typeof SourcesRoute
   '/techniques': typeof TechniquesRoute
   '/templates': typeof TemplatesRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sources': typeof SourcesRoute
   '/techniques': typeof TechniquesRoute
   '/templates': typeof TemplatesRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/prompt-templates'
     | '/resources'
     | '/roadmap'
+    | '/sitemap.xml'
     | '/sources'
     | '/techniques'
     | '/templates'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/prompt-templates'
     | '/resources'
     | '/roadmap'
+    | '/sitemap.xml'
     | '/sources'
     | '/techniques'
     | '/templates'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/prompt-templates'
     | '/resources'
     | '/roadmap'
+    | '/sitemap.xml'
     | '/sources'
     | '/techniques'
     | '/templates'
@@ -282,6 +294,7 @@ export interface RootRouteChildren {
   PromptTemplatesRoute: typeof PromptTemplatesRoute
   ResourcesRoute: typeof ResourcesRoute
   RoadmapRoute: typeof RoadmapRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SourcesRoute: typeof SourcesRoute
   TechniquesRoute: typeof TechniquesRoute
   TemplatesRoute: typeof TemplatesRoute
@@ -325,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/sources'
       fullPath: '/sources'
       preLoaderRoute: typeof SourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roadmap': {
@@ -450,6 +470,7 @@ const rootRouteChildren: RootRouteChildren = {
   PromptTemplatesRoute: PromptTemplatesRoute,
   ResourcesRoute: ResourcesRoute,
   RoadmapRoute: RoadmapRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SourcesRoute: SourcesRoute,
   TechniquesRoute: TechniquesRoute,
   TemplatesRoute: TemplatesRoute,

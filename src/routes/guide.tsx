@@ -10,7 +10,42 @@ export const Route = createFileRoute("/guide")({
   head: () => ({
     meta: [
       { title: "Guide — TokenOps Atlas" },
-      { name: "description", content: "The complete TokenOps operating manual." },
+      {
+        name: "description",
+        content:
+          "The complete TokenOps operating manual — a FinOps-style playbook for LLM token visibility, allocation, optimization, and governance across teams and models.",
+      },
+      { property: "og:type", content: "article" },
+      { property: "og:title", content: "TokenOps Operating Manual" },
+      {
+        property: "og:description",
+        content:
+          "The complete TokenOps operating manual — a FinOps-style playbook for LLM token visibility, allocation, optimization, and governance.",
+      },
+      { property: "og:url", content: "https://tokenops.kalilurrahman.com/guide" },
+    ],
+    links: [{ rel: "canonical", href: "https://tokenops.kalilurrahman.com/guide" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "TokenOps Operating Manual",
+          description:
+            "The complete TokenOps operating manual — a FinOps-style playbook for LLM token visibility, allocation, optimization, and governance.",
+          author: { "@type": "Person", name: "Kalilur Rahman" },
+          publisher: {
+            "@type": "Organization",
+            name: "TokenOps Atlas",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://tokenops.kalilurrahman.com/icon-512.png",
+            },
+          },
+          mainEntityOfPage: "https://tokenops.kalilurrahman.com/guide",
+        }),
+      },
     ],
   }),
 });

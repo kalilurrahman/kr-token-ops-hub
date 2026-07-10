@@ -89,6 +89,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "TokenOps Atlas" },
+      { property: "og:url", content: "https://tokenops.kalilurrahman.com/" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "TokenOps Atlas — FinOps for LLM Tokens" },
@@ -128,6 +130,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children: `(function(){try{var t=localStorage.getItem('tokenops-theme-v2');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.toggle('dark',t==='dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('dark');}})();`,
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "TokenOps Atlas",
+          url: "https://tokenops.kalilurrahman.com",
+          logo: "https://tokenops.kalilurrahman.com/icon-512.png",
+          founder: { "@type": "Person", name: "Kalilur Rahman" },
+          sameAs: ["https://www.linkedin.com/in/kalilurrahman/"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "TokenOps Atlas",
+          url: "https://tokenops.kalilurrahman.com",
+          description:
+            "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
+        }),
       },
     ],
   }),
