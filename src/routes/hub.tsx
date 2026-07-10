@@ -908,7 +908,7 @@ function KeyConcepts() {
 function KCSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="hub-kc-section">
-      <h3>{title}</h3>
+      <h2>{title}</h2>
       {children}
     </div>
   );
