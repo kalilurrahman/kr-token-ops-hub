@@ -247,6 +247,10 @@ export const libraryCategoryMeta: Record<string, { label: string; tagline: strin
     label: "Operating",
     tagline: "Day-to-day artifacts: runbooks, QBRs, scorecards, SLAs.",
   },
+  Trends: {
+    label: "Trends 2026",
+    tagline: "Latest pricing, caching economics, reasoning governance, and agentic cost patterns.",
+  },
 };
 
 export function downloadLibraryFile(file: string) {
