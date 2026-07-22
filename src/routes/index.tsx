@@ -300,6 +300,37 @@ function Index() {
           </article>
         ))}
       </section>
+
+      <section className="mx-auto w-full max-w-[1200px] px-4">
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <div>
+            <p className="eyebrow" style={{ marginBottom: 4 }}>What's new</p>
+            <h2 style={{ margin: 0 }}>2026 TokenOps trends</h2>
+          </div>
+          <Link to="/library" className="secondary-action">Browse all →</Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { file: "trends/2026-pricing-landscape.md", title: "2026 Pricing Landscape", desc: "GPT-5, Claude Opus 4.5, Gemini 3, DeepSeek V3.2 — and the tokenizer inflation trap." },
+            { file: "trends/prompt-caching-2026.md", title: "Prompt Caching: The 90% Discount", desc: "Discount rates, TTLs, write premiums, and the break-even model across providers." },
+            { file: "trends/reasoning-token-governance.md", title: "Reasoning Token Governance", desc: "Right-size thinking budgets across o3/o4, GPT-5, Claude Adaptive Thinking, Deep Think." },
+            { file: "trends/agentic-cost-loop-tax.md", title: "The Loop Tax", desc: "The $47K runaway agent, the 5–30× estimation error, and the six required agent controls." },
+            { file: "trends/greenops-focus-2026.md", title: "GreenOps & FOCUS", desc: "FOCUS 1.4/1.5 for AI and the dual-reporting playbook for dollars and carbon." },
+            { file: "trends/enterprise-case-studies-2026.md", title: "Enterprise Case Studies", desc: "AT&T 90% cut, fintech 73% saved, SaaS $48K→$19K — and the stack behind each." },
+          ].map((t) => (
+            <Link
+              key={t.file}
+              to="/read/$"
+              params={{ _splat: `library/${t.file}` }}
+              className="rounded-xl border border-border bg-card p-4 transition hover:border-emerald-500/50"
+            >
+              <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="mt-2 font-semibold">{t.title}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{t.desc}</div>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
