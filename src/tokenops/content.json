@@ -172,7 +172,6 @@
       "format": "Markdown",
       "file": "advanced/prompt-versioning-workflow.md"
     },
-
     {
       "title": "Quarterly Cost Optimization Audit",
       "desc": "Audit checklist covering tagging coverage, model mix, retry rates, caching, and waste reduction.",
@@ -201,7 +200,6 @@
       "format": "Markdown",
       "file": "checklists/vendor-contract-negotiation-checklist.md"
     },
-
     {
       "title": "TokenOps Case Studies",
       "desc": "Real-world optimization stories with starting state, interventions, and measurable savings.",
@@ -237,7 +235,6 @@
       "format": "Markdown",
       "file": "guides/tokenops-maturity-model.md"
     },
-
     {
       "title": "Executive Briefing Template",
       "desc": "C-suite-ready deck outline for presenting TokenOps results, asks, and roadmap.",
@@ -266,7 +263,6 @@
       "format": "Markdown",
       "file": "playbooks/rag-cost-optimization-playbook.md"
     },
-
     {
       "title": "LLM Provider Comparison Matrix",
       "desc": "Side-by-side comparison of pricing, context windows, features, and SLAs across providers.",
@@ -295,7 +291,6 @@
       "format": "Markdown",
       "file": "references/tool-landscape-guide.md"
     },
-
     {
       "title": "Incident Response Runbook",
       "desc": "Step-by-step runbook for triaging and resolving token-cost incidents at any severity.",
@@ -330,6 +325,48 @@
       "category": "Operating",
       "format": "Markdown",
       "file": "templates/vendor-evaluation-scorecard.md"
+    },
+    {
+      "title": "The 2026 LLM Pricing Landscape",
+      "desc": "GPT-5, Claude Opus 4.5, Gemini 3, DeepSeek V3.2 — per-1M-token pricing snapshot plus the tokenizer inflation trap.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/2026-pricing-landscape.md"
+    },
+    {
+      "title": "Prompt Caching in 2026: The 90% Discount",
+      "desc": "Discount rates, TTLs, write premiums, and the break-even model for OpenAI, Anthropic, Gemini, and DeepSeek caching.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/prompt-caching-2026.md"
+    },
+    {
+      "title": "Reasoning Token Governance",
+      "desc": "How to right-size thinking budgets across o3/o4, GPT-5 reasoning, Claude Adaptive Thinking, and Gemini Deep Think.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/reasoning-token-governance.md"
+    },
+    {
+      "title": "The Loop Tax: Agentic Workflow Cost Patterns",
+      "desc": "The $47K runaway agent, the 5–30× estimation error, MCP schema tax, and the six required controls for agentic spend.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/agentic-cost-loop-tax.md"
+    },
+    {
+      "title": "GreenOps & FOCUS: TokenOps' Environmental Twin",
+      "desc": "FOCUS 1.4/1.5 for AI, GreenOps research, and the dual-reporting playbook for dollars and carbon.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/greenops-focus-2026.md"
+    },
+    {
+      "title": "Enterprise TokenOps Case Studies (2025–2026)",
+      "desc": "AT&T 90% cut, fintech 73% saved, SaaS $48K→$19K — the stack that produced each result.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/enterprise-case-studies-2026.md"
     }
   ]
 }
