@@ -317,6 +317,17 @@ function Index() {
             { file: "trends/agentic-cost-loop-tax.md", title: "The Loop Tax", desc: "The $47K runaway agent, the 5–30× estimation error, and the six required agent controls." },
             { file: "trends/greenops-focus-2026.md", title: "GreenOps & FOCUS", desc: "FOCUS 1.4/1.5 for AI and the dual-reporting playbook for dollars and carbon." },
             { file: "trends/enterprise-case-studies-2026.md", title: "Enterprise Case Studies", desc: "AT&T 90% cut, fintech 73% saved, SaaS $48K→$19K — and the stack behind each." },
+            { file: "trends/semantic-caching-2026.md", title: "Semantic Caching Beyond Exact-Match", desc: "The two-cache stack, similarity thresholds, invalidation strategy, and when it adds cost." },
+            { file: "trends/slm-production-2026.md", title: "Small Language Models in Production", desc: "The 2026 SLM shortlist, hosting break-evens, and the routing pattern behind 60–90% traffic shifts." },
+            { file: "trends/multi-agent-orchestration-cost.md", title: "Multi-Agent Cost Reality", desc: "Why multi-agent costs 5–15× single-agent, the context-inheritance tax, and four cost controls." },
+            { file: "trends/batch-api-arbitrage-2026.md", title: "Batch API Arbitrage", desc: "The 50% discount every provider ships — migration pattern, hidden traps, and the sharding trick." },
+            { file: "trends/embedding-and-vector-db-costs-2026.md", title: "Embedding & Vector DB Tuning", desc: "Matryoshka truncation, chunking recall vs cost, and the object-storage vector-DB shift." },
+            { file: "trends/structured-output-json-mode-2026.md", title: "Structured Output Economics", desc: "Why strict schemas add tokens, when JSON mode wins, and the retry-loop trap." },
+            { file: "trends/observability-stack-2026.md", title: "The Observability Stack", desc: "Five categories, must-have span fields, and the five alerts that catch 80% of incidents." },
+            { file: "trends/context-engineering-2026.md", title: "Context Engineering: The Discipline", desc: "Seven layers, per-layer token budgets, five compression techniques, and a new engineering role." },
+            { file: "trends/fine-tuning-economics-2026.md", title: "Fine-Tuning vs Prompting Economics", desc: "When to distil, when to prompt-cache, when to stay stateless — with break-even math." },
+            { file: "trends/tokenops-kpis-benchmarks-2026.md", title: "KPI Benchmarks 2026", desc: "Four tiers of KPIs with benchmark numbers and the six questions Level 4 programs answer on demand." },
+            { file: "trends/model-arbitrage-playbook-2026.md", title: "Cross-Provider Arbitrage Playbook", desc: "The arbitrage matrix, four patterns, negotiation floor discounts, cost-aware gateway routing." },
           ].map((t) => (
             <Link
               key={t.file}
