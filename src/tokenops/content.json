@@ -159,7 +159,7 @@
       "file": "advanced/multi-provider-routing-config.yaml"
     },
     {
-      "title": "Optimization Patterns — Detailed",
+      "title": "Optimization Patterns \u2014 Detailed",
       "desc": "Ten battle-tested patterns for reducing token cost without sacrificing quality.",
       "category": "Advanced",
       "format": "Markdown",
@@ -216,7 +216,7 @@
     },
     {
       "title": "TokenOps FAQ",
-      "desc": "Answers to the most common TokenOps questions — from \"what is it?\" to multi-tenant billing.",
+      "desc": "Answers to the most common TokenOps questions \u2014 from \"what is it?\" to multi-tenant billing.",
       "category": "Guide",
       "format": "Markdown",
       "file": "guides/tokenops-faq.md"
@@ -243,7 +243,7 @@
       "file": "playbooks/executive-briefing-template.md"
     },
     {
-      "title": "Single-Model → Multi-Model Migration",
+      "title": "Single-Model \u2192 Multi-Model Migration",
       "desc": "8-week playbook to migrate from a single LLM to a routed multi-model architecture.",
       "category": "Playbook",
       "format": "Markdown",
@@ -272,14 +272,14 @@
     },
     {
       "title": "TokenOps KPI Dashboard Spec",
-      "desc": "Technical spec for a complete TokenOps monitoring dashboard — metrics, panels, alerts.",
+      "desc": "Technical spec for a complete TokenOps monitoring dashboard \u2014 metrics, panels, alerts.",
       "category": "Reference",
       "format": "Markdown",
       "file": "references/tokenops-kpi-dashboard-spec.md"
     },
     {
       "title": "TokenOps Metrics Reference",
-      "desc": "Every metric used in TokenOps — definition, formula, owner, alert thresholds.",
+      "desc": "Every metric used in TokenOps \u2014 definition, formula, owner, alert thresholds.",
       "category": "Reference",
       "format": "Markdown",
       "file": "references/tokenops-metrics-reference.md"
@@ -307,7 +307,7 @@
     },
     {
       "title": "ROI Justification Template",
-      "desc": "Build a defensible ROI case for funding a TokenOps program — costs, savings, payback.",
+      "desc": "Build a defensible ROI case for funding a TokenOps program \u2014 costs, savings, payback.",
       "category": "Operating",
       "format": "Markdown",
       "file": "templates/roi-justification-template.md"
@@ -328,7 +328,7 @@
     },
     {
       "title": "The 2026 LLM Pricing Landscape",
-      "desc": "GPT-5, Claude Opus 4.5, Gemini 3, DeepSeek V3.2 — per-1M-token pricing snapshot plus the tokenizer inflation trap.",
+      "desc": "GPT-5, Claude Opus 4.5, Gemini 3, DeepSeek V3.2 \u2014 per-1M-token pricing snapshot plus the tokenizer inflation trap.",
       "category": "Trends",
       "format": "Markdown",
       "file": "trends/2026-pricing-landscape.md"
@@ -349,7 +349,7 @@
     },
     {
       "title": "The Loop Tax: Agentic Workflow Cost Patterns",
-      "desc": "The $47K runaway agent, the 5–30× estimation error, MCP schema tax, and the six required controls for agentic spend.",
+      "desc": "The $47K runaway agent, the 5\u201330\u00d7 estimation error, MCP schema tax, and the six required controls for agentic spend.",
       "category": "Trends",
       "format": "Markdown",
       "file": "trends/agentic-cost-loop-tax.md"
@@ -362,11 +362,88 @@
       "file": "trends/greenops-focus-2026.md"
     },
     {
-      "title": "Enterprise TokenOps Case Studies (2025–2026)",
-      "desc": "AT&T 90% cut, fintech 73% saved, SaaS $48K→$19K — the stack that produced each result.",
+      "title": "Enterprise TokenOps Case Studies (2025\u20132026)",
+      "desc": "AT&T 90% cut, fintech 73% saved, SaaS $48K\u2192$19K \u2014 the stack that produced each result.",
       "category": "Trends",
       "format": "Markdown",
       "file": "trends/enterprise-case-studies-2026.md"
+    },
+    {
+      "title": "Semantic Caching in 2026: Beyond Exact-Match",
+      "desc": "The two-cache stack, similarity thresholds, invalidation strategy, and vendors \u2014 plus when semantic caching adds cost instead of saving it.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/semantic-caching-2026.md"
+    },
+    {
+      "title": "Small Language Models in Production (2026)",
+      "desc": "The 2026 SLM shortlist (Phi-4, Llama 3.3, Gemma 3, Qwen 2.5, Ministral, GPT-5 Nano), hosting break-evens, and the routing pattern behind 60\u201390% traffic shifts.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/slm-production-2026.md"
+    },
+    {
+      "title": "Multi-Agent Orchestration: The 2026 Cost Reality",
+      "desc": "Why multi-agent systems cost 5\u201315\u00d7 single-agent equivalents, the context-inheritance tax, and the four cost controls that actually work.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/multi-agent-orchestration-cost.md"
+    },
+    {
+      "title": "Batch API Arbitrage: The 50% Discount You're Not Using",
+      "desc": "OpenAI, Anthropic, Gemini, DeepSeek, and Bedrock batch tiers \u2014 the migration pattern, the hidden traps, and the sharding trick.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/batch-api-arbitrage-2026.md"
+    },
+    {
+      "title": "Embedding & Vector DB Cost Tuning (2026)",
+      "desc": "Matryoshka truncation, chunking recall vs cost, reranking economics, and the object-storage vector-DB shift.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/embedding-and-vector-db-costs-2026.md"
+    },
+    {
+      "title": "Structured Output & JSON Mode: Cost, Quality, Failure Modes (2026)",
+      "desc": "Why strict schemas add tokens, when JSON mode wins, the retry-loop trap, and the 2026 default pattern.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/structured-output-json-mode-2026.md"
+    },
+    {
+      "title": "The TokenOps Observability Stack (2026)",
+      "desc": "The five categories (tracing, gateway, eval, FinOps, prod), the must-have span fields, and the five alerts that catch 80% of incidents.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/observability-stack-2026.md"
+    },
+    {
+      "title": "Context Engineering: The Discipline (2026)",
+      "desc": "The seven context layers, per-layer token budgets, the five compression techniques, and the emerging Context Engineer role.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/context-engineering-2026.md"
+    },
+    {
+      "title": "Fine-Tuning vs Prompting Economics (2026)",
+      "desc": "When to distil, when to prompt-cache, when to stay stateless \u2014 with break-even math and the managed-OSS-SLM shift.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/fine-tuning-economics-2026.md"
+    },
+    {
+      "title": "TokenOps KPI Benchmarks (2026)",
+      "desc": "Four tiers of KPIs (cost, governance, quality, environmental), 2026 benchmark numbers, and the six questions a Level 4 program answers on demand.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/tokenops-kpis-benchmarks-2026.md"
+    },
+    {
+      "title": "Cross-Provider Arbitrage Playbook (2026)",
+      "desc": "The current arbitrage matrix, four arbitrage patterns, negotiation floor discounts, and cost-aware gateway fallback routing.",
+      "category": "Trends",
+      "format": "Markdown",
+      "file": "trends/model-arbitrage-playbook-2026.md"
     }
   ]
 }
