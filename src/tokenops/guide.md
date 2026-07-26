@@ -67,8 +67,8 @@ An LLM processes input as **tokens**—discrete units of text. A token is roughl
 ```
 "What is the capital of France?"
 ↓
-[4, 5, 16, 5, 1, 1289, 4, 4843, 8]
-(9 tokens)
+["What", " is", " the", " capital", " of", " France", "?"]
+(7 tokens with a typical BPE tokenizer — exact splits and numeric token IDs vary by model)
 ```
 
 Every LLM API call involves two token types:
@@ -115,13 +115,14 @@ Token costs compound invisibly. Consider this scenario:
 
 - Daily calls: 10,000
 - Avg tokens/call: 2,000 input + 500 output
-- Daily cost: 10,000 × (2,000 × $0.003 + 500 × $0.015) = **$135/day = ~$4,000/month**
+- Cost per call at $3/M input + $15/M output: (2,000 × $3/M) + (500 × $15/M) = $0.0135
+- Daily cost: 10,000 × $0.0135 = **$135/day = ~$4,000/month**
 
 **Month 6 (Production): Multiple Features, Multiple Teams**
 
 - Daily calls across all features: 500,000
-- Avg tokens/call: 2,000 input + 500 output
-- Daily cost: 500,000 × (2,000 × $0.003 + 500 × $0.015) = **$6,750/day = ~$200,000/month**
+- Avg tokens/call: 2,000 input + 500 output (same $0.0135 per call)
+- Daily cost: 500,000 × $0.0135 = **$6,750/day = ~$200,000/month**
 
 **No single decision triggered this 50x increase.** It accumulated across:
 
@@ -204,8 +205,8 @@ Follow these rules:
 
 - Endpoint receives: 100,000 daily calls
 - System prompt: 1,200 tokens per call
-- Daily system prompt tokens: 100,000 × 1,200 = **120 million tokens/day**
-- Monthly cost: 120M × 30 × $0.003 = **$10,800/month** (before a single user query)
+- Daily system prompt tokens: 100,000 × 1,200 = **120 million tokens/day** (3.6B/month)
+- Monthly cost at $3.00 per million input tokens: 3.6B × $3.00/M = **$10,800/month** (before a single user query)
 
 **Optimization lever: Prompt compression**
 
@@ -417,15 +418,15 @@ Pull data from your LLM provider's API logs or billing dashboard:
 **Formula:**
 
 ```
-Blended Cost Per Token = Total Cost / Total Tokens
+Blended Cost per Million Tokens = Total Cost ÷ Total Tokens (in millions)
 ```
 
 Example:
 
 ```
-Total monthly tokens: 10 billion
+Total monthly tokens: 10 billion (10,000M)
 Total monthly cost: $15,000
-Blended cost: $15,000 / 10B = $0.0015 per token
+Blended cost: $15,000 ÷ 10,000M = $1.50 per million tokens
 ```
 
 **Step 3: Identify high-value optimization targets**
@@ -890,7 +891,7 @@ Alert: Cost per request spiked 12%. Investigate model changes or prompt growth.
 | Cost trend             | Month-over-month change   | Should be flat or declining (if optimizing)    |
 | Cost per feature       | Sum of costs per feature  | Prioritize high-cost features for optimization |
 | Token velocity         | Tokens consumed per day   | Should show optimization flattening curve      |
-| Blended cost per token | Total cost / Total tokens | Target 20-30% reduction YoY                    |
+| Blended cost per 1M tokens | Total cost ÷ total tokens (millions) | Target 20-30% reduction YoY        |
 
 **Dashboard:**
 
@@ -1047,14 +1048,14 @@ Before launching a new AI feature:
 ## Cost Analysis
 - Estimated tokens/request: 3,000 (2,000 input + 1,000 output)
 - Estimated daily requests: 50,000
-- Estimated daily cost: $225 (50K × 3,000 × $0.0015)
+- Estimated daily cost: $225 (50K requests × 3,000 tokens = 150M tokens × $1.50/M blended)
 - Estimated monthly cost: $6,750
 
 ## Unit Economics
 - Support cost/ticket (manual): $15
-- Token cost/ticket (automated): $0.225
-- Cost savings per ticket: $14.775
-- ROI: Break-even at <1% deflection rate
+- Token cost/ticket (automated): ~$0.005 (3,000 tokens × $1.50/M)
+- Cost savings per deflected ticket: ~$15 (effectively the full manual cost)
+- ROI: Break-even at well under 1% deflection rate
 
 ## Optimization Roadmap
 - Q1: Semantic caching for FAQ (50% cost reduction expected)
@@ -1110,9 +1111,9 @@ Participants: Engineering leads, product managers, finance
 **Baseline metrics:**
 
 - Monthly token consumption: 500M
-- Monthly cost: $750
+- Monthly cost: $750 (≈ $1.50 blended per million tokens)
 - Tokens per conversation: 5,000 (2K input + 3K output)
-- Daily calls: 100,000
+- Conversations: ~3,300/day (≈ 100K/month × 5,000 tokens = 500M tokens)
 
 **Problem discovered after 3 months in production:**
 
@@ -1162,20 +1163,21 @@ Participants: Engineering leads, product managers, finance
 
 - Company: Data analytics platform
 - Use case: Nightly job enriches customer data with classification (industry, size, intent)
-- Current: Real-time API calls, processing 1M records/night
-- Problem: $5,000/month spend on non-urgent work
+- Current: Real-time API calls, processing 100K records/night
+- Problem: ~$4,000/month spend on non-urgent work
 
 **Baseline:**
 
 - Real-time API: $3/1M input tokens + $15/1M output tokens
-- 1M records/night × 300 tokens/record = 300M tokens
-- Monthly cost: 300M × 30 × $0.0045 = $4,050
+- 100K records/night × 300 tokens/record = 30M tokens/night (~900M/month)
+- Blended price ≈ $4.50/1M tokens (classification is input-heavy: ~7:1 input:output mix)
+- Monthly cost: 900M × $4.50/M = $4,050
 
 **Optimization:**
 
-- Switch to batch API: $1.5/1M input tokens + $7.5/1M output tokens
-- Same 300M tokens/night
-- Monthly cost: 300M × 30 × $0.00225 = $2,025
+- Switch to batch API: $1.5/1M input tokens + $7.5/1M output tokens (documented 50% discount)
+- Same 900M tokens/month, blended price drops to ≈ $2.25/M
+- Monthly cost: 900M × $2.25/M = $2,025
 - **Savings: $2,025/month (50% reduction)**
 
 **Trade-off:** 2-4 hour processing delay (acceptable for overnight batch job)
@@ -1185,76 +1187,77 @@ Participants: Engineering leads, product managers, finance
 **Given:**
 
 - Current monthly consumption: 10B tokens
-- Blended cost: $0.0015 per token
+- Blended cost: $1.50 per million tokens
 - Current monthly cost: $15,000
 - Growth rate: 5% per month (feature launches, user growth)
-- Price decline: 10% per year (historical trend)
+- Price decline: 10% per year, applied linearly across the year (historical trend)
 
 **Question:** What will token costs be in 12 months without optimization?
 
-**Calculation:**
+**Calculation** (tokens in month n = 10B × 1.05^(n−1); price in month n = $1.50/M × (1 − 0.10 × (n−1)/12)):
 
 ```
-Month 1: 10B tokens × $0.0015 = $15,000
+Month 1: 10B tokens × $1.50/M = $15,000
 
 Month 6:
 Tokens: 10B × (1.05^5) = 12.76B
-Price: $0.0015 × (1 - 0.10^(6/12)) = $0.00141
-Cost: 12.76B × $0.00141 = $18,000
+Price: $1.50/M × (1 − 0.10 × 5/12) = $1.4375/M
+Cost: 12.76B × $1.4375/M ≈ $18,300
 
 Month 12:
-Tokens: 10B × (1.05^12) = 17.96B
-Price: $0.0015 × (1 - 0.10) = $0.00135
-Cost: 17.96B × $0.00135 = $24,200
+Tokens: 10B × (1.05^11) = 17.10B
+Price: $1.50/M × (1 − 0.10 × 11/12) = $1.3625/M
+Cost: 17.10B × $1.3625/M ≈ $23,300
 
-Year 1 total spend: ~$230,000 (assuming linear growth within each month)
+Year 1 total spend: ≈ $227,000 (sum of the 12 monthly costs)
 ```
 
 **With optimization (35% reduction target):**
 
-- Effective tokens: 17.96B × (1 - 0.35) = 11.67B
-- Cost: 11.67B × $0.00135 = $15,750
-- **Savings: $8,450 in month 12 alone; $45,000+ across year**
+- Effective month-12 tokens: 17.10B × (1 − 0.35) = 11.12B
+- Cost: 11.12B × $1.3625/M ≈ $15,100
+- **Savings: ≈ $8,200 in month 12 alone; ≈ $44,000 across the second half of the year if the 35% reduction is in place from month 7**
 
 ---
 
 ## Appendices
 
-### Appendix A: Token Pricing Reference (May 2026)
+### Appendix A: Token Pricing Reference
 
-**Major Providers & Models:**
+Live prices, source links, and monthly changelog are maintained in the single dataset the site's calculators and every table on this page consume:
 
-| Provider  | Model             | Input Rate | Output Rate | Context Window | Best For                        |
-| --------- | ----------------- | ---------- | ----------- | -------------- | ------------------------------- |
-| OpenAI    | GPT-4o            | $5/1M      | $15/1M      | 128K           | Complex reasoning, analysis     |
-| OpenAI    | GPT-4o Mini       | $0.15/1M   | $0.60/1M    | 128K           | General tasks, cost-sensitive   |
-| Anthropic | Claude 3.5 Sonnet | $3/1M      | $15/1M      | 200K           | Long context, nuance            |
-| Anthropic | Claude 3.5 Haiku  | $0.80/1M   | $4/1M       | 200K           | Fast, cheap classification      |
-| Google    | Gemini 2.0 Flash  | $0.075/1M  | $0.30/1M    | 1M             | High-volume, longer contexts    |
-| Meta      | Llama 3.1 70B     | $0.40/1M   | $0.60/1M    | 128K           | On-prem or via provider         |
-| Mistral   | Mistral Large     | $2/1M      | $6/1M       | 128K           | European compliance, EU hosting |
+- **Dataset:** [`data/pricing.json`](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing.json)
+- **Provider-comparison snapshot:** [`references/provider-comparison-matrix.md`](/library/references/provider-comparison-matrix.md) (auto-generated)
+- **Full pricing reference snapshot:** [`templates/token-pricing-reference.md`](/templates/token-pricing-reference.md) (auto-generated)
+- **Public changelog:** [`data/pricing-changelog.md`](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md)
+- **SLA:** reviewed monthly; provider changes reflected within 7 days; every figure carries a verification date and a source link.
+
+No pricing figures are hand-typed in this guide — this is a deliberate anti-staleness measure. If a number appears in a worked example, it is either (a) a stable illustrative constant the example depends on and labeled as such, or (b) rendered from the dataset at build time. Enterprise/negotiated/self-hosted pricing is out of scope for the dataset — go to the provider.
 
 ### Appendix B: Cost Calculation Templates
 
 **Cost per request:**
 
 ```
-Tokens per request = input_tokens + output_tokens
-Cost per request = Tokens × (Input %, Output %) × (Input rate, Output rate)
+cost_per_request = (input_tokens  × input_$/M  ÷ 1_000_000)
+                 + (output_tokens × output_$/M ÷ 1_000_000)
 
-Example: 2,000 input + 500 output, GPT-4o
-Cost = (2,000 × $5/1M) + (500 × $15/1M)
-     = $0.010 + $0.0075
-     = $0.0175 per request
+Illustrative example at $3/M input + $15/M output — 2,000 input + 500 output:
+  = (2,000 × $3 ÷ 1_000_000) + (500 × $15 ÷ 1_000_000)
+  = $0.006 + $0.0075
+  = $0.0135 per request
 ```
 
 **Monthly cost forecast:**
 
 ```
-Monthly cost = Daily requests × Cost per request × 30 days
-            = 100,000 × $0.0175 × 30
-            = $52,500/month
+monthly_cost = daily_requests × cost_per_request × 30
+
+  = 100,000 × $0.0135 × 30
+  = $40,500/month
 ```
+
+Real per-model rates: see Appendix A.
 
 **Blended cost per token:**
 

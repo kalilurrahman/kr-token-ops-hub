@@ -6,7 +6,7 @@ export const Route = createFileRoute("/glossary")({
   component: GlossaryPage,
   head: () => ({
     meta: [
-      { title: "TokenOps Glossary — 30 essential terms" },
+      { title: "TokenOps Glossary — the canonical reference" },
       {
         name: "description",
         content:
@@ -24,6 +24,10 @@ const GLOSSARY: Entry[] = [
     def: "Asynchronous API mode (OpenAI, Anthropic) processing jobs at ~50% reduced cost with 24-hour SLA. Ideal for enrichment pipelines and evaluation runs.",
   },
   {
+    term: "Blended cost per 1M tokens",
+    def: "Total spend ÷ total tokens consumed (in millions). Tracks the efficiency of your model mix over time — the single number that captures whether routing, caching, and prompt work are landing. Target: 20–30% YoY reduction.",
+  },
+  {
     term: "Cache Hit Rate",
     def: "Fraction of API calls where a cached prompt prefix was reused instead of reprocessed. Target >80% for workloads with stable system prompts.",
   },
@@ -36,8 +40,12 @@ const GLOSSARY: Entry[] = [
     def: "Splitting source documents into smaller segments for embedding and RAG retrieval. Optimal range: 200–512 tokens per chunk.",
   },
   {
+    term: "Context Trimming",
+    def: "Reducing the volume of retrieved or accumulated context passed to the model — by relevance filtering, summarization, or sliding windows. Typical achievable input token reduction: 30–60% when the workload has run without discipline for months.",
+  },
+  {
     term: "Context Window",
-    def: "Maximum tokens (input + output) a model processes in one call. GPT-4o: 128K; Claude 3.5 Sonnet: 200K; Gemini 1.5 Pro: 1M.",
+    def: "Maximum tokens (input + output) a model processes in one call. Ranges from 128K on older frontier models to 200K (Claude Opus 4.5, Sonnet 5), 400K (GPT-5), 1M (Gemini 3 Pro), and up to 10M on long-context specialists (Llama 4 Scout).",
   },
   {
     term: "Cost per Outcome",
@@ -56,6 +64,10 @@ const GLOSSARY: Entry[] = [
     def: "Budget threshold that actively blocks API calls once reached. Protects against runaway spend; requires fallback logic in application code.",
   },
   {
+    term: "Inference Cost",
+    def: "The compute cost of running an LLM API call — distinct from training cost. Priced per token by all major providers. In hosted contexts it is the only cost that shows up on your invoice.",
+  },
+  {
     term: "Input Token",
     def: "Tokens in the request sent to the model: system prompt + history + context + user query. Priced per 1M tokens.",
   },
@@ -69,7 +81,11 @@ const GLOSSARY: Entry[] = [
   },
   {
     term: "Model Tier",
-    def: "Classification by cost and capability: Frontier (GPT-4o, Claude Sonnet), Mid-tier (Llama 70B, Mistral), Nano (GPT-4o Mini, Gemini Flash).",
+    def: "Classification by cost and capability: Frontier (GPT-5, Claude Opus 4.5, Gemini 3 Pro), Mid (Claude Haiku 4.5, GPT-5 Mini, Gemini 2.5 Flash), Cheap/Nano (GPT-5 Nano, DeepSeek V3.2, Gemini 2.0 Flash Lite).",
+  },
+  {
+    term: "Output Constraints",
+    def: "Prompt techniques or API parameters that limit or structure the model's output — JSON schema, function calls, bullet-count limits. Reduces output tokens 20–40% and cuts parsing failures at the same time.",
   },
   {
     term: "Output Token",
@@ -81,7 +97,27 @@ const GLOSSARY: Entry[] = [
   },
   {
     term: "Prompt Compression",
-    def: "Removing redundancy, fluff words, and verbose phrasing from prompts without changing task intent. Typical saving: 15–30% of input tokens.",
+    def: "Removing redundancy, fluff words, and verbose phrasing from prompts without changing task intent. Typical saving: 15–30% of input tokens. See the Caveman method in /caveman for a specific recipe.",
+  },
+  {
+    term: "Prompt Versioning",
+    def: "Tracking system prompt changes with version control, enabling rollback when quality or cost metrics degrade and audit trails for compliance. Non-negotiable once prompts drive real revenue.",
+  },
+  {
+    term: "Semantic Caching",
+    def: "Storing LLM responses indexed by query embedding, and serving cached responses for semantically similar subsequent queries. Distinct from prompt caching, which discounts repeated prefixes provider-side. Can reduce token consumption 40–80% on repetitive workloads, at the cost of correctness risk on near-miss queries.",
+  },
+  {
+    term: "Sliding Window",
+    def: "Conversation-history management technique that keeps only the last N turns and discards or summarizes older ones, preventing input token cost from growing linearly with conversation length. The default agent history strategy in 2026.",
+  },
+  {
+    term: "Token Budget",
+    def: "An explicit monthly limit on token consumption for a service or feature, enforced at the API gateway. Standard pattern: soft alert at 80%, hard limit at 100%, explicit approval required to increase.",
+  },
+  {
+    term: "Token Velocity",
+    def: "Tokens consumed per day or per hour. The key leading indicator for cost forecasting. Flat or declining velocity alongside feature growth signals successful optimization; rising velocity without feature growth is a drift alarm.",
   },
   {
     term: "RAG (Retrieval-Augmented Generation)",
@@ -173,8 +209,9 @@ function GlossaryPage() {
         <p className="eyebrow">Reference</p>
         <h1>TokenOps Glossary</h1>
         <p>
-          {GLOSSARY.length} essential terms used across TokenOps practices, dashboards, and vendor
-          contracts.
+          The canonical TokenOps glossary — {GLOSSARY.length} terms used across TokenOps practices,
+          dashboards, and vendor contracts. Every concept is defined here once; the guide,
+          playbooks, and calculators all point back to this page.
         </p>
       </div>
 
@@ -186,7 +223,7 @@ function GlossaryPage() {
         <input
           className="glossary-search"
           style={{ paddingLeft: 40 }}
-          placeholder="Search 30 terms (e.g. caching, RAG, gateway, chargeback)…"
+          placeholder={`Search ${GLOSSARY.length} terms (e.g. caching, RAG, gateway, chargeback)…`}
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />

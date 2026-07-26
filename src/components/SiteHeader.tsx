@@ -36,6 +36,7 @@ const FULL_NAV = [
   { to: "/", label: "Home", icon: Gauge },
   { to: "/hub", label: "Hub", icon: Sparkles },
   { to: "/guide", label: "Guide", icon: BookOpen },
+  { to: "/sample-chapter", label: "Free Chapter", icon: BookMarked },
   { to: "/optimize", label: "Optimize", icon: Sparkles },
   { to: "/techniques", label: "Techniques", icon: Layers },
   { to: "/tool-guides", label: "Tool Guides", icon: Wrench },

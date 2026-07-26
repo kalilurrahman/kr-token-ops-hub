@@ -15,6 +15,7 @@ import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as TechniquesRouteImport } from './routes/techniques'
 import { Route as SourcesRouteImport } from './routes/sources'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SampleChapterRouteImport } from './routes/sample-chapter'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PromptTemplatesRouteImport } from './routes/prompt-templates'
@@ -59,6 +60,11 @@ const SourcesRoute = SourcesRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SampleChapterRoute = SampleChapterRouteImport.update({
+  id: '/sample-chapter',
+  path: '/sample-chapter',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoadmapRoute = RoadmapRouteImport.update({
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
+  '/sample-chapter': typeof SampleChapterRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sources': typeof SourcesRoute
   '/techniques': typeof TechniquesRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
+  '/sample-chapter': typeof SampleChapterRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sources': typeof SourcesRoute
   '/techniques': typeof TechniquesRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/prompt-templates': typeof PromptTemplatesRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
+  '/sample-chapter': typeof SampleChapterRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sources': typeof SourcesRoute
   '/techniques': typeof TechniquesRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/prompt-templates'
     | '/resources'
     | '/roadmap'
+    | '/sample-chapter'
     | '/sitemap.xml'
     | '/sources'
     | '/techniques'
@@ -247,6 +257,7 @@ export interface FileRouteTypes {
     | '/prompt-templates'
     | '/resources'
     | '/roadmap'
+    | '/sample-chapter'
     | '/sitemap.xml'
     | '/sources'
     | '/techniques'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/prompt-templates'
     | '/resources'
     | '/roadmap'
+    | '/sample-chapter'
     | '/sitemap.xml'
     | '/sources'
     | '/techniques'
@@ -294,6 +306,7 @@ export interface RootRouteChildren {
   PromptTemplatesRoute: typeof PromptTemplatesRoute
   ResourcesRoute: typeof ResourcesRoute
   RoadmapRoute: typeof RoadmapRoute
+  SampleChapterRoute: typeof SampleChapterRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SourcesRoute: typeof SourcesRoute
   TechniquesRoute: typeof TechniquesRoute
@@ -345,6 +358,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sample-chapter': {
+      id: '/sample-chapter'
+      path: '/sample-chapter'
+      fullPath: '/sample-chapter'
+      preLoaderRoute: typeof SampleChapterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roadmap': {
@@ -470,6 +490,7 @@ const rootRouteChildren: RootRouteChildren = {
   PromptTemplatesRoute: PromptTemplatesRoute,
   ResourcesRoute: ResourcesRoute,
   RoadmapRoute: RoadmapRoute,
+  SampleChapterRoute: SampleChapterRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SourcesRoute: SourcesRoute,
   TechniquesRoute: TechniquesRoute,
@@ -481,3 +502,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

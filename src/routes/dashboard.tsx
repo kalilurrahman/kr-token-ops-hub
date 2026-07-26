@@ -23,10 +23,10 @@ const teamData = [
 ];
 
 const modelData = [
-  { model: "GPT-4o", spend: 28000 },
-  { model: "GPT-4o Mini", spend: 37000 },
-  { model: "Claude Sonnet", spend: 33000 },
-  { model: "Gemini Flash", spend: 20000 },
+  { model: "GPT-5", spend: 28000 },
+  { model: "GPT-5 Nano", spend: 37000 },
+  { model: "Claude Sonnet 5", spend: 33000 },
+  { model: "Gemini 2.5 Flash", spend: 20000 },
 ];
 
 const monthlyTrend = [
@@ -50,11 +50,11 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
   head: () => ({
     meta: [
-      { title: "Operational Dashboard — TokenOps Atlas" },
+      { title: "Operational Dashboard (Sample Data Demo) — TokenOps Atlas" },
       {
         name: "description",
         content:
-          "Visibility, allocation, optimization progress, and anomalies for LLM token spend.",
+          "A sample-data demo of a TokenOps dashboard: visibility, allocation, optimization progress, and anomalies for LLM token spend.",
       },
     ],
   }),
@@ -85,6 +85,10 @@ function DashboardPage() {
       <div className="page-heading">
         <h1>Operational Dashboard</h1>
         <p>Visibility, allocation, optimization progress, and anomalies in one operating view.</p>
+        <p className="badge">
+          Sample data demo — every figure on this page is illustrative, showing what a TokenOps
+          dashboard looks like. Wire it to your own metering to make it real.
+        </p>
       </div>
 
       <div className="dashboard-kpis">

@@ -1,5 +1,37 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import pricingData from "../../data/pricing.json";
+
+// PRESETS and MODELS are DERIVED from data/pricing.json — the single pricing
+// source of truth for the site. See data/README.md.
+
+type PricingModel = {
+  display_name: string;
+  input_per_mtok: number;
+  output_per_mtok: number;
+  context_tokens: number;
+  tier: string;
+};
+type PricingDataset = {
+  providers: Record<string, { label: string; models: Record<string, PricingModel> }>;
+  presets: Record<string, { label: string; premium_model: string; cheap_model: string }>;
+};
+const dataset = pricingData as PricingDataset;
+
+const formatCtx = (n: number) => (n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`);
+const tierLabel: Record<string, string> = {
+  frontier: "Frontier",
+  reasoning: "Reasoning",
+  mid: "Mid",
+  cheap: "Cheap",
+};
+
+function modelById(qualifiedId: string): PricingModel {
+  const [providerKey, modelKey] = qualifiedId.split("/");
+  const m = dataset.providers[providerKey]?.models[modelKey];
+  if (!m) throw new Error(`data/pricing.json missing ${qualifiedId}`);
+  return m;
+}
 
 export const Route = createFileRoute("/hub")({
   head: () => ({
@@ -15,125 +47,24 @@ export const Route = createFileRoute("/hub")({
   component: HubPage,
 });
 
-const PRESETS = {
-  openai: { inp: 5, out: 15, name: "OpenAI GPT-4o" },
-  anthropic: { inp: 3, out: 15, name: "Anthropic Claude" },
-  google: { inp: 0.075, out: 0.3, name: "Google Gemini Flash" },
-  mixed: { inp: 3, out: 10, name: "Mixed fleet" },
-} as const;
-type PresetKey = keyof typeof PRESETS;
+const PRESETS: Record<string, { inp: number; out: number; name: string }> = Object.fromEntries(
+  Object.entries(dataset.presets).map(([key, preset]) => {
+    const premium = modelById(preset.premium_model);
+    return [key, { inp: premium.input_per_mtok, out: premium.output_per_mtok, name: preset.label }];
+  }),
+);
+type PresetKey = string;
 
-const MODELS = [
-  { provider: "OpenAI", model: "GPT-4o", inp: 5, out: 15, ctx: "128K", tier: "Frontier" },
-  { provider: "OpenAI", model: "GPT-4o Mini", inp: 0.15, out: 0.6, ctx: "128K", tier: "Mid" },
-  { provider: "Anthropic", model: "Claude Sonnet", inp: 3, out: 15, ctx: "200K", tier: "Frontier" },
-  { provider: "Anthropic", model: "Claude Haiku", inp: 0.8, out: 4, ctx: "200K", tier: "Mid" },
-  { provider: "Google", model: "Gemini 2.0 Flash", inp: 0.075, out: 0.3, ctx: "1M", tier: "Cheap" },
-  { provider: "Meta", model: "Llama 3.1 70B", inp: 0.4, out: 0.6, ctx: "128K", tier: "Cheap" },
-] as const;
-
-const GLOSSARY = [
-  {
-    t: "Token",
-    d: "The fundamental unit of LLM computation. Roughly 4 characters of English text. Every API call is priced on tokens consumed.",
-  },
-  {
-    t: "Input tokens",
-    d: "All text sent to the model in a single API call: system prompt, retrieved context, conversation history, user query, and format instructions.",
-  },
-  {
-    t: "Output tokens",
-    d: "The model's generated response. Priced at 2–10× the input rate on most APIs, making output length a primary cost lever.",
-  },
-  {
-    t: "Token yield rate",
-    d: "The core TokenOps metric: (valuable output tokens) ÷ (total consumed tokens) × 100%. Target 80%+. Low yield signals waste from retries, irrelevant context, or discarded outputs.",
-  },
-  {
-    t: "Semantic caching",
-    d: "Storing LLM responses indexed by query embedding, and serving cached responses for semantically similar subsequent queries. Can reduce token consumption 40–80% on repetitive workloads.",
-  },
-  {
-    t: "Model tiering",
-    d: "Routing each request to the cheapest model that meets its quality requirements. Classification → Llama, extraction → mid-tier, complex reasoning → frontier. Typically reduces blended cost 30–70%.",
-  },
-  {
-    t: "Context window",
-    d: "The maximum number of tokens a model can process in a single call (input + output combined). Ranges from 128K (GPT-4o) to 1M (Gemini 2.0 Flash).",
-  },
-  {
-    t: "RAG (retrieval-augmented generation)",
-    d: "Architecture where relevant documents are retrieved from a vector store and injected into the prompt. A major source of input token inflation when retrieval is imprecise or over-broad.",
-  },
-  {
-    t: "Prompt compression",
-    d: "Reducing the token length of system prompts without degrading output quality. Techniques include removing redundant instructions, compressing examples, and using templating.",
-  },
-  {
-    t: "Batch API",
-    d: "Provider API variant that queues non-urgent requests for processing during off-peak hours. Universally priced at 50% of real-time rates. Ideal for nightly enrichment, bulk analysis, and scheduled jobs.",
-  },
-  {
-    t: "Sliding window",
-    d: "Context management technique that keeps only the last N conversation turns, discarding older turns, to prevent input token cost from growing linearly with conversation length.",
-  },
-  {
-    t: "Chargeback",
-    d: "Token cost allocation model where teams pay for their own consumption from their own budget. Creates strong optimization incentives but requires mature measurement infrastructure.",
-  },
-  {
-    t: "Showback",
-    d: "Informational-only token cost allocation: costs are reported to teams but not charged. Lower political friction; recommended as a starting point before transitioning to chargeback.",
-  },
-  {
-    t: "LLM gateway",
-    d: "Centralized middleware that intercepts all LLM API calls, adds metadata tags, enforces rate limits and budgets, and logs usage data. LiteLLM, LangChain proxy, and custom solutions are common.",
-  },
-  {
-    t: "Blended cost per token",
-    d: "Total spend ÷ total tokens consumed. Tracks efficiency of the overall model mix over time. Target: 20–30% YoY reduction through optimization and model tiering.",
-  },
-  {
-    t: "Token velocity",
-    d: "Tokens consumed per day or per hour. The key leading indicator for cost forecasting. Flat or declining velocity alongside feature growth signals successful optimization.",
-  },
-  {
-    t: "System prompt",
-    d: "The foundational instruction included in every API call to an endpoint. At 100K calls/day, a 1,200-token system prompt costs $10,800/month before any user query.",
-  },
-  {
-    t: "Context trimming",
-    d: "Reducing the volume of retrieved or accumulated context passed to the model, by relevance filtering, summarization, or sliding windows. Can achieve 30–60% input token reduction.",
-  },
-  {
-    t: "Output constraints",
-    d: "Prompt techniques or API parameters that limit or structure the model's output. E.g., requesting JSON with 5 bullet points instead of free-form prose. Reduces output tokens 20–40%.",
-  },
-  {
-    t: "Retry overhead",
-    d: "Extra tokens consumed when API calls fail and must be retried. A request requiring 2 retries can consume 4× its intended token budget.",
-  },
-  {
-    t: "Cost per outcome",
-    d: "Total token cost ÷ number of successful outcomes (decisions, deflections, conversions). Connects token spend to business value.",
-  },
-  {
-    t: "Token budget",
-    d: "An explicit monthly limit on token consumption for a service or feature, enforced at the API gateway. Includes soft alerts (80%) and hard limits (100%) with required approval to increase.",
-  },
-  {
-    t: "FinOps",
-    d: "The operational discipline of bringing financial accountability to cloud infrastructure. TokenOps mirrors FinOps one layer up the stack, applying the same visibility-optimize-govern cycle to LLM token spend.",
-  },
-  {
-    t: "Prompt versioning",
-    d: "Tracking system prompt changes with version control, enabling rollback when quality or cost metrics degrade and audit trails for compliance.",
-  },
-  {
-    t: "Inference cost",
-    d: "The compute cost of running an LLM API call. Distinct from training cost. Priced per token by all major providers.",
-  },
-].sort((a, b) => a.t.localeCompare(b.t));
+const MODELS = Object.entries(dataset.providers).flatMap(([_pk, provider]) =>
+  Object.values(provider.models).map((m) => ({
+    provider: provider.label,
+    model: m.display_name,
+    inp: m.input_per_mtok,
+    out: m.output_per_mtok,
+    ctx: formatCtx(m.context_tokens),
+    tier: tierLabel[m.tier] ?? m.tier,
+  })),
+);
 
 const CHECKLISTS = [
   { t: "Inventory all LLM API calls across services", l: 1 },
@@ -253,7 +184,7 @@ function HubPage() {
       {tab === "unit" && <UnitEconomics />}
       {tab === "models" && <ModelComparer />}
       {tab === "maturity" && <MaturityChecker />}
-      {tab === "glossary" && <Glossary />}
+      {tab === "glossary" && <GlossaryPointer />}
       {tab === "summary" && <KeyConcepts />}
     </div>
   );
@@ -305,10 +236,11 @@ function SavingsCalc() {
         <div className="hub-row">
           <label>Provider preset</label>
           <select value={preset} onChange={(e) => setPreset(e.target.value as PresetKey)}>
-            <option value="openai">OpenAI (GPT-4o mix)</option>
-            <option value="anthropic">Anthropic (Claude mix)</option>
-            <option value="google">Google (Gemini mix)</option>
-            <option value="mixed">Mixed provider fleet</option>
+            {Object.entries(PRESETS).map(([key, p]) => (
+              <option key={key} value={key}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
         <Slider
@@ -734,29 +666,21 @@ function MaturityChecker() {
   );
 }
 
-function Glossary() {
-  const [q, setQ] = useState("");
-  const filtered = GLOSSARY.filter(
-    (g) =>
-      g.t.toLowerCase().includes(q.toLowerCase()) || g.d.toLowerCase().includes(q.toLowerCase()),
-  );
+function GlossaryPointer() {
   return (
     <section className="hub-pane">
-      <div className="hub-search">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Search 25+ TokenOps terms…"
-        />
-      </div>
-      <div className="hub-glossary-grid">
-        {filtered.map((g) => (
-          <div key={g.t} className="hub-card hub-gloss-card">
-            <div className="gterm">{g.t}</div>
-            <div className="gdef">{g.d}</div>
-          </div>
-        ))}
-        {filtered.length === 0 && <div className="hub-empty">No terms match "{q}".</div>}
+      <div className="hub-card">
+        <h3>The glossary lives in one place</h3>
+        <p>
+          Every TokenOps term — tokens, caching, routing, RAG, gateways, governance, unit economics
+          — is defined once in the canonical searchable glossary, so no definition can drift out of
+          sync with another copy.
+        </p>
+        <p>
+          <Link to="/glossary" className="hub-link">
+            Open the TokenOps Glossary →
+          </Link>
+        </p>
       </div>
     </section>
   );

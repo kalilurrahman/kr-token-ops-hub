@@ -14,6 +14,7 @@ export function SiteFooter() {
           <Link to="/prompt-templates" className="hover:underline">Prompt Templates</Link>
           <Link to="/calculator" className="hover:underline">Calculator</Link>
           <Link to="/library" className="hover:underline">Library</Link>
+          <Link to="/sample-chapter" className="hover:underline">Free Chapter</Link>
         </nav>
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
           <TokenOpsLogo size={36} showWordmark showTagline />

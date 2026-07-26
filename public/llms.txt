@@ -12,6 +12,7 @@ optimizing prompts and models, and operationalizing governance.
 - [Home](/): Overview of the TokenOps operating model.
 - [About](/about): What TokenOps Atlas is and who it's for.
 - [Operating manual](/guide): The complete TokenOps guide in one page.
+- [Free chapter: Prompt Caching Economics](/sample-chapter): Chapter 8 of The TokenOps Handbook, 2026 Edition, published in full — cache break-even math, provider mechanics, anti-patterns, and a worked example.
 - [Implementation roadmap](/roadmap): Discover, measure, govern, optimize, scale.
 - [Optimize hub](/optimize): Entry point to every optimization surface.
 - [Techniques catalog](/techniques): Full library of token-saving techniques.
@@ -24,7 +25,7 @@ optimizing prompts and models, and operationalizing governance.
 - [Dashboard](/dashboard): Sample operational dashboard.
 - [Hub](/hub): Calculators, glossary, and operating manual entry.
 - [Glossary](/glossary): TokenOps terminology.
-- [Content library](/library): 29 guides, playbooks, checklists, references, and templates.
+- [Content library](/library): 44 guides, playbooks, checklists, references, and templates.
 - [Resources](/resources): Documents and starter artifacts.
 - [Templates](/templates): Starter operating artifacts.
 - [Sources](/sources): Reference material.

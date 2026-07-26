@@ -10,6 +10,39 @@ import {
   Target,
   type LucideIcon,
 } from "lucide-react";
+import pricingData from "../../data/pricing.json";
+
+// ── The pricing source of truth ─────────────────────────────────────────────
+// providerPresets and modelPricingData are DERIVED from data/pricing.json.
+// Do not hand-edit prices here — edit the dataset and let this file follow.
+// Pipeline and SLA documented in data/README.md.
+
+type PricingModel = {
+  display_name: string;
+  input_per_mtok: number;
+  cached_input_per_mtok?: number;
+  output_per_mtok: number;
+  context_tokens: number;
+  tier: string;
+};
+type PricingProvider = { label: string; models: Record<string, PricingModel> };
+type PricingDataset = {
+  meta: { reviewed_date: string; version: string; unit: string };
+  providers: Record<string, PricingProvider>;
+  presets: Record<string, { label: string; premium_model: string; cheap_model: string }>;
+};
+
+const dataset = pricingData as PricingDataset;
+
+export const pricingReviewedDate = dataset.meta.reviewed_date;
+export const pricingVersion = dataset.meta.version;
+
+function resolveModel(qualifiedId: string): PricingModel {
+  const [providerKey, modelKey] = qualifiedId.split("/");
+  const model = dataset.providers[providerKey]?.models[modelKey];
+  if (!model) throw new Error(`data/pricing.json is missing ${qualifiedId} — check pricing.json`);
+  return model;
+}
 
 export const providerPresets: Record<
   string,
@@ -20,29 +53,22 @@ export const providerPresets: Record<
     cheapOutput: number;
     label: string;
   }
-> = {
-  openai: {
-    premiumInput: 5,
-    premiumOutput: 15,
-    cheapInput: 0.15,
-    cheapOutput: 0.6,
-    label: "OpenAI mix",
-  },
-  anthropic: {
-    premiumInput: 3,
-    premiumOutput: 15,
-    cheapInput: 0.8,
-    cheapOutput: 4,
-    label: "Anthropic mix",
-  },
-  google: {
-    premiumInput: 1.25,
-    premiumOutput: 10,
-    cheapInput: 0.075,
-    cheapOutput: 0.3,
-    label: "Google mix",
-  },
-};
+> = Object.fromEntries(
+  Object.entries(dataset.presets).map(([key, preset]) => {
+    const premium = resolveModel(preset.premium_model);
+    const cheap = resolveModel(preset.cheap_model);
+    return [
+      key,
+      {
+        label: preset.label,
+        premiumInput: premium.input_per_mtok,
+        premiumOutput: premium.output_per_mtok,
+        cheapInput: cheap.input_per_mtok,
+        cheapOutput: cheap.output_per_mtok,
+      },
+    ];
+  }),
+);
 
 export const operatingPillars: { icon: LucideIcon; title: string; body: string }[] = [
   {
@@ -81,14 +107,15 @@ export const playbook = [
   },
 ];
 
-export const modelPricingData: Record<string, { input: number; output: number }> = {
-  "GPT-4o": { input: 5, output: 15 },
-  "GPT-4o Mini": { input: 0.15, output: 0.6 },
-  "Claude 3.5 Sonnet": { input: 3, output: 15 },
-  "Claude 3.5 Haiku": { input: 0.8, output: 4 },
-  "Gemini 2.0 Flash": { input: 0.075, output: 0.3 },
-  "Llama 3.1 70B": { input: 0.4, output: 0.6 },
-};
+export const modelPricingData: Record<string, { input: number; output: number }> =
+  Object.fromEntries(
+    Object.values(dataset.providers).flatMap((p) =>
+      Object.values(p.models).map((m) => [
+        m.display_name,
+        { input: m.input_per_mtok, output: m.output_per_mtok },
+      ]),
+    ),
+  );
 
 export const formatIcons: Record<string, LucideIcon> = {
   YAML: FileCode2,

@@ -14,8 +14,7 @@ export const Route = createFileRoute("/library")({
       { title: "Library — TokenOps Atlas" },
       {
         name: "description",
-        content:
-          "29 guides, playbooks, checklists, references, and operating templates for running TokenOps in production.",
+        content: `${data.library.length} guides, playbooks, checklists, references, and operating templates for running TokenOps in production.`,
       },
       { property: "og:title", content: "TokenOps Library" },
       {

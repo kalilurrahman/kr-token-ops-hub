@@ -20,9 +20,9 @@ Frontier model prices have fallen roughly **10× in 18 months** while raw capabi
 
 ## The tokenizer inflation trap
 
-Anthropic's newer tokenizer (Opus 4.7+, Sonnet 5, Fable 5) produces **~30% more tokens for the same text**. A headline price cut of 40% shrinks to ~15% real savings once tokenizer inflation is applied.
+Different provider tokenizers split the same text into different numbers of tokens — sometimes materially so. A model whose per-token price is 40% lower can still be more expensive per task if its tokenizer emits meaningfully more tokens on your workload, or if it produces longer outputs by default.
 
-**Rule:** benchmark cost per *task*, not cost per token. A "cheaper" model that emits 40% more output tokens on your workload isn't cheaper.
+**Rule:** benchmark cost per *task*, not cost per token. Measure token counts empirically on a representative sample of your traffic before locking in a "cheaper" model.
 
 ## What the price war means for architecture
 
