@@ -24,7 +24,7 @@ optimizing prompts and models, and operationalizing governance.
 - [Dashboard](/dashboard): Sample operational dashboard.
 - [Hub](/hub): Calculators, glossary, and operating manual entry.
 - [Glossary](/glossary): TokenOps terminology.
-- [Content library](/library): 29 guides, playbooks, checklists, references, and templates.
+- [Content library](/library): 44 guides, playbooks, checklists, references, and templates.
 - [Resources](/resources): Documents and starter artifacts.
 - [Templates](/templates): Starter operating artifacts.
 - [Sources](/sources): Reference material.

@@ -50,11 +50,11 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
   head: () => ({
     meta: [
-      { title: "Operational Dashboard — TokenOps Atlas" },
+      { title: "Operational Dashboard (Sample Data Demo) — TokenOps Atlas" },
       {
         name: "description",
         content:
-          "Visibility, allocation, optimization progress, and anomalies for LLM token spend.",
+          "A sample-data demo of a TokenOps dashboard: visibility, allocation, optimization progress, and anomalies for LLM token spend.",
       },
     ],
   }),
@@ -85,6 +85,10 @@ function DashboardPage() {
       <div className="page-heading">
         <h1>Operational Dashboard</h1>
         <p>Visibility, allocation, optimization progress, and anomalies in one operating view.</p>
+        <p className="badge">
+          Sample data demo — every figure on this page is illustrative, showing what a TokenOps
+          dashboard looks like. Wire it to your own metering to make it real.
+        </p>
       </div>
 
       <div className="dashboard-kpis">
