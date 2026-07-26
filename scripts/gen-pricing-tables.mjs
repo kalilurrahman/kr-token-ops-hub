@@ -16,7 +16,12 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..");
 const pricing = JSON.parse(readFileSync(join(ROOT, "data/pricing.json"), "utf8"));
 
-const money = (n) => (n == null ? "—" : `$${Number(n).toFixed(Number(n) < 1 ? 3 : 2).replace(/\.?0+$/, "")}`);
+const money = (n) =>
+  n == null
+    ? "—"
+    : `$${Number(n)
+        .toFixed(Number(n) < 1 ? 3 : 2)
+        .replace(/\.?0+$/, "")}`;
 const ctx = (n) => (n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`);
 const tierLabel = { frontier: "Frontier", reasoning: "Reasoning", mid: "Mid", cheap: "Cheap" };
 
@@ -29,13 +34,21 @@ function tokenPricingReference() {
   lines.push(banner, "");
   lines.push("# Token Pricing Reference — Major LLM Providers");
   lines.push("");
-  lines.push(`> **Snapshot of \`data/pricing.json\` (v${pricing.meta.version}) — reviewed ${pricing.meta.reviewed_date}.**`);
-  lines.push("> This file is regenerated from the dataset. To propose a correction, edit `data/pricing.json` and re-run the generator.");
-  lines.push(`> **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md). **SLA:** ${pricing.meta.sla}`);
+  lines.push(
+    `> **Snapshot of \`data/pricing.json\` (v${pricing.meta.version}) — reviewed ${pricing.meta.reviewed_date}.**`,
+  );
+  lines.push(
+    "> This file is regenerated from the dataset. To propose a correction, edit `data/pricing.json` and re-run the generator.",
+  );
+  lines.push(
+    `> **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md). **SLA:** ${pricing.meta.sla}`,
+  );
   lines.push("", "---", "", "## Pricing Tables", "");
   for (const [_pk, provider] of Object.entries(pricing.providers)) {
     lines.push(`### ${provider.label}`, "");
-    lines.push("| Model | Input ($/1M) | Cached Input ($/1M) | Output ($/1M) | Context | Tier | Source |");
+    lines.push(
+      "| Model | Input ($/1M) | Cached Input ($/1M) | Output ($/1M) | Context | Tier | Source |",
+    );
     lines.push("|---|---|---|---|---|---|---|");
     for (const m of Object.values(provider.models)) {
       const overNote =
@@ -75,7 +88,9 @@ function tokenPricingReference() {
   lines.push("                  +  output_tokens × output_$/M) ÷ 1_000_000");
   lines.push("```");
   lines.push("");
-  lines.push("The site's calculators (`/calculator`, `/hub`) apply these formulas against this same dataset.");
+  lines.push(
+    "The site's calculators (`/calculator`, `/hub`) apply these formulas against this same dataset.",
+  );
   return lines.join("\n") + "\n";
 }
 
@@ -84,9 +99,13 @@ function providerComparisonMatrix() {
   lines.push(banner, "");
   lines.push("# LLM Provider Comparison Matrix");
   lines.push("");
-  lines.push(`> **Snapshot of \`data/pricing.json\` (v${pricing.meta.version}) — reviewed ${pricing.meta.reviewed_date}.**`);
+  lines.push(
+    `> **Snapshot of \`data/pricing.json\` (v${pricing.meta.version}) — reviewed ${pricing.meta.reviewed_date}.**`,
+  );
   lines.push("> Regenerated from the dataset; edit `data/pricing.json` to correct.");
-  lines.push(`> **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md).`);
+  lines.push(
+    `> **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md).`,
+  );
   lines.push("", "---", "", "## Per-Token Pricing (USD per 1M tokens)", "");
   lines.push("| Provider | Model | Input | Cached Input | Output | Context | Tier |");
   lines.push("|---|---|---|---|---|---|---|");
@@ -130,7 +149,12 @@ function providerComparisonMatrix() {
 }
 
 const outputs = [
-  { path: "public/templates/token-pricing-reference.md", bundleKey: null, bundleSection: null, content: tokenPricingReference() },
+  {
+    path: "public/templates/token-pricing-reference.md",
+    bundleKey: null,
+    bundleSection: null,
+    content: tokenPricingReference(),
+  },
   {
     path: "public/library/references/provider-comparison-matrix.md",
     bundleKey: "references/provider-comparison-matrix.md",

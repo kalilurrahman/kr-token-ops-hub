@@ -48,10 +48,10 @@ cost(N) = 1 + 0.10 × (N − 1)      [at a 90% cached-input discount]
 Caching wins from the second call, always. There is no break-even to compute and no decision to make — the only question is whether your prefix is stable enough to hit.
 
 | Calls (N) | Cost vs. no cache | Saving |
-| --- | --- | --- |
-| 2 | 1.10× vs 2× | 45.0% |
-| 10 | 1.90× vs 10× | 81.0% |
-| 100 | 10.90× vs 100× | 89.1% |
+| --------- | ----------------- | ------ |
+| 2         | 1.10× vs 2×       | 45.0%  |
+| 10        | 1.90× vs 10×      | 81.0%  |
+| 100       | 10.90× vs 100×    | 89.1%  |
 
 The asymptote is the discount itself: at high reuse you converge on paying 10% of the un-cached price for the cached portion.
 
@@ -65,13 +65,13 @@ cost(N) = write_multiplier + 0.10 × N
 
 This creates a genuine break-even threshold, and it is the single most important number in this chapter:
 
-| Reuses within TTL | 5-min cache (1.25× write) | 1-hour cache (2.0× write) |
-| --- | --- | --- |
-| 1 | 1.35× — **35% worse than no cache** | 2.10× — **110% worse** |
-| 2 | 1.45× vs 2× → **saves 27.5%** | 2.20× vs 2× → **10% worse** |
-| 3 | 1.55× vs 3× → saves 48.3% | 2.30× vs 3× → **saves 23.3%** |
-| 10 | 2.25× vs 10× → saves 77.5% | 3.00× vs 10× → saves 70.0% |
-| 100 | 11.25× vs 100× → saves 88.8% | 12.00× vs 100× → saves 88.0% |
+| Reuses within TTL | 5-min cache (1.25× write)           | 1-hour cache (2.0× write)     |
+| ----------------- | ----------------------------------- | ----------------------------- |
+| 1                 | 1.35× — **35% worse than no cache** | 2.10× — **110% worse**        |
+| 2                 | 1.45× vs 2× → **saves 27.5%**       | 2.20× vs 2× → **10% worse**   |
+| 3                 | 1.55× vs 3× → saves 48.3%           | 2.30× vs 3× → **saves 23.3%** |
+| 10                | 2.25× vs 10× → saves 77.5%          | 3.00× vs 10× → saves 70.0%    |
+| 100               | 11.25× vs 100× → saves 88.8%        | 12.00× vs 100× → saves 88.0%  |
 
 **The rules that fall out of this table:**
 
@@ -85,19 +85,19 @@ The choice between TTLs is not "longer is better." It is a function of your inte
 
 Current rates for the models most teams deploy in production (from the maintained dataset; per 1M tokens):
 
-| Model | Input | Cached read | 5-min write | 1-hr write | Output |
-| --- | --- | --- | --- | --- | --- |
-| GPT-5 | $1.25 | $0.125 | — | — | $10.00 |
-| GPT-5 Mini | $0.25 | $0.025 | — | — | $2.00 |
-| GPT-5 Nano | $0.05 | $0.005 | — | — | $0.40 |
-| Claude Opus 4.5 | $5.00 | $0.50 | $6.25 | $10.00 | $25.00 |
-| Claude Sonnet 5 | $2.00 | $0.20 | $2.50 | $4.00 | $10.00 |
-| Claude Haiku 4.5 | $1.00 | $0.10 | $1.25 | $2.00 | $5.00 |
-| DeepSeek V3.2 | $0.28 | $0.028 | — | — | $0.42 |
+| Model            | Input | Cached read | 5-min write | 1-hr write | Output |
+| ---------------- | ----- | ----------- | ----------- | ---------- | ------ |
+| GPT-5            | $1.25 | $0.125      | —           | —          | $10.00 |
+| GPT-5 Mini       | $0.25 | $0.025      | —           | —          | $2.00  |
+| GPT-5 Nano       | $0.05 | $0.005      | —           | —          | $0.40  |
+| Claude Opus 4.5  | $5.00 | $0.50       | $6.25       | $10.00     | $25.00 |
+| Claude Sonnet 5  | $2.00 | $0.20       | $2.50       | $4.00      | $10.00 |
+| Claude Haiku 4.5 | $1.00 | $0.10       | $1.25       | $2.00      | $5.00  |
+| DeepSeek V3.2    | $0.28 | $0.028      | —           | —          | $0.42  |
 
 _Claude Sonnet 5 rates above are introductory and revert per Anthropic's published schedule — the dataset changelog tracks the reversion. Always price against the dataset, not against this table._
 
-**OpenAI.** Automatic on GPT-5-family models. Caching activates at a minimum prefix length (1,024 tokens on current models) and matches on exact prefix. TTL is a short sliding window — roughly 5–10 minutes, extended by hits. No code changes; the only work is prompt *ordering* (§8.4). The `usage` object reports `prompt_tokens_details.cached_tokens` — that field is your hit-rate instrument.
+**OpenAI.** Automatic on GPT-5-family models. Caching activates at a minimum prefix length (1,024 tokens on current models) and matches on exact prefix. TTL is a short sliding window — roughly 5–10 minutes, extended by hits. No code changes; the only work is prompt _ordering_ (§8.4). The `usage` object reports `prompt_tokens_details.cached_tokens` — that field is your hit-rate instrument.
 
 **Anthropic.** Explicit. You place up to four `cache_control` breakpoints; everything before a breakpoint is cacheable as a prefix.
 
@@ -118,7 +118,7 @@ response = client.messages.create(
 
 Those three `usage` fields are the entire measurement story on Anthropic. Log all three from day one; §8.5 explains what their ratios tell you.
 
-**Google Gemini.** Two modes. *Implicit* caching is on by default for 2.5+ models — no storage cost, no configuration, discount applied automatically on prefix hits. *Explicit* (managed) caching guarantees the discount for a context you register and reference by handle, with a storage charge for the retention period. Rule: on Flash-tier models, implicit captures most of the upside for free. Reserve explicit for Pro-tier models holding one large context reused many times within an hour — a 200-page contract, a large codebase snapshot.
+**Google Gemini.** Two modes. _Implicit_ caching is on by default for 2.5+ models — no storage cost, no configuration, discount applied automatically on prefix hits. _Explicit_ (managed) caching guarantees the discount for a context you register and reference by handle, with a storage charge for the retention period. Rule: on Flash-tier models, implicit captures most of the upside for free. Reserve explicit for Pro-tier models holding one large context reused many times within an hour — a 200-page contract, a large codebase snapshot.
 
 **DeepSeek.** Disk-based context caching, automatic, no write premium, hours-long retention. Economically the friendliest shape in the table: a 90% discount with no decision to make.
 
@@ -147,21 +147,21 @@ The broken column is not a strawman. Injecting a timestamp "so the model knows t
 **What to cache, in priority order:**
 
 1. **System prompts.** Always. Stable by definition, long, and present on every single call.
-2. **Tool and function schemas.** For agents this is the sleeper cost: 40 tool definitions at 500 tokens each is 20,000 input tokens re-sent on *every turn of every loop*, whether or not any tool gets called. Caching these is often a bigger win than caching the system prompt.
+2. **Tool and function schemas.** For agents this is the sleeper cost: 40 tool definitions at 500 tokens each is 20,000 input tokens re-sent on _every turn of every loop_, whether or not any tool gets called. Caching these is often a bigger win than caching the system prompt.
 3. **Few-shot examples.** Stable, expensive per token, and usually the longest stable block after tool schemas.
 4. **High-hit-rate retrieved chunks.** In FAQ-style RAG where the top-K rarely changes, the retrieved block is effectively stable. Order chunks deterministically (by document ID, not by score) so identical retrieval sets produce identical prefixes — score-ordering makes byte-identical sets look different to the cache.
 5. **Long documents in multi-turn chat.** The canonical win: a 100K-token document cached once and referenced across ten turns.
 
 **What not to cache:**
 
-- Prefixes containing per-user personalization *before* stable content. Restructure so the shared content comes first.
+- Prefixes containing per-user personalization _before_ stable content. Restructure so the shared content comes first.
 - Prompts below the provider's minimum cacheable length.
 - One-shot batch jobs. No reuse means no benefit, and on Anthropic it means a write-premium loss. Batch API discounts are the right lever there (Chapter 10).
 - Anything you are about to edit. A prompt under active iteration will invalidate on every deploy; wait until it stabilizes.
 
 ## 8.5 Instrumentation: proving it worked
 
-Caching is the easiest optimization to *believe* you have and not have. Three metrics, logged per request, settle it.
+Caching is the easiest optimization to _believe_ you have and not have. Three metrics, logged per request, settle it.
 
 **1. Cache hit rate.**
 
@@ -217,10 +217,10 @@ output:       50,000 ×   300 =  15.00M × $25.00/M =  $375.00/day
 
 **The result:**
 
-| Layer | Before | After | Reduction |
-| --- | --- | --- | --- |
+| Layer                            | Before        | After       | Reduction |
+| -------------------------------- | ------------- | ----------- | --------- |
 | Stable prefix (the cached layer) | $1,000.00/day | $106.62/day | **89.3%** |
-| Total request cost | $1,425.00/day | $531.62/day | **62.7%** |
+| Total request cost               | $1,425.00/day | $531.62/day | **62.7%** |
 
 **Monthly saving: ~$26,800.** Implementation: four lines of `cache_control` and a prompt reorder.
 
@@ -238,7 +238,7 @@ Each of these has cost a real team real money. Five of the six are invisible wit
 
 **3. Caching a prompt under active development.** Every edit is a full invalidation plus a fresh write premium. During prompt iteration you pay the tax and get none of the benefit. **Fix:** ship caching after the prompt stabilizes; treat prompts as versioned immutable artifacts (Chapter 16).
 
-**4. Wrong TTL for the traffic shape.** A 1-hour cache on an endpoint that gets three requests an hour never reaches its 3-reuse break-even. A 5-minute cache on an endpoint with 20-minute gaps expires before every call — paying the write premium on 100% of requests, which is *worse* than not caching. **Fix:** measure your inter-request gap distribution, then pick the TTL that captures the bulk of it.
+**4. Wrong TTL for the traffic shape.** A 1-hour cache on an endpoint that gets three requests an hour never reaches its 3-reuse break-even. A 5-minute cache on an endpoint with 20-minute gaps expires before every call — paying the write premium on 100% of requests, which is _worse_ than not caching. **Fix:** measure your inter-request gap distribution, then pick the TTL that captures the bulk of it.
 
 **5. Untracked write premiums in cost reporting.** Dashboards that sum "input tokens" hide that some of those tokens were billed at 1.25× and others at 0.10×. A cache can be losing money while the token count looks flat. **Fix:** the three separate `usage` counters, always logged separately.
 
@@ -254,7 +254,7 @@ Ship in this order. Steps 1–2 are measurement, and doing them first is what ma
 - [ ] **Make retrieval deterministic** — stable sort key on chunks before assembly.
 - [ ] **Verify prefix length** clears the provider minimum (1,024 tokens on current OpenAI models).
 - [ ] **Place breakpoints** (Anthropic/Gemini explicit) after the last stable block, ordered longest-stable-first.
-- [ ] **Confirm break-even per endpoint** before enabling on Shape-B providers: ≥2 reuses within a 5-min TTL, ≥3 within 1-hour. Endpoints that fail this get caching *off*.
+- [ ] **Confirm break-even per endpoint** before enabling on Shape-B providers: ≥2 reuses within a 5-min TTL, ≥3 within 1-hour. Endpoints that fail this get caching _off_.
 - [ ] **Watch hit rate and churn for one week** post-deploy. Hit rate climbing toward 80%+ and churn under 0.1 means it landed.
 - [ ] **Publish the effective $/M** before-and-after on the team dashboard. This is the artifact that funds the next optimization.
 - [ ] **Add a regression alarm:** hit rate dropping >20 points week-over-week means someone edited a prompt or reintroduced dynamic content. Caching decays silently; alarm on it.
@@ -263,7 +263,7 @@ Ship in this order. Steps 1–2 are measurement, and doing them first is what ma
 
 For a workload with a stable prefix and steady traffic, prompt caching reduces the cached input layer by ~90% at the published rates — the largest single documented discount available in LLM pricing, at the lowest implementation cost and zero quality risk.
 
-Two caveats to carry forward. First, the discount applies to the *cached layer only* — as §8.6 shows, a 89.3% cut on the prefix became a 62.7% cut on the bill, and output tokens then dominated what remained. Second, on write-premium providers the lever has a *negative* range: below break-even you pay more than not caching at all. Both facts argue for the same discipline — measure per endpoint, then decide per endpoint.
+Two caveats to carry forward. First, the discount applies to the _cached layer only_ — as §8.6 shows, a 89.3% cut on the prefix became a 62.7% cut on the bill, and output tokens then dominated what remained. Second, on write-premium providers the lever has a _negative_ range: below break-even you pay more than not caching at all. Both facts argue for the same discipline — measure per endpoint, then decide per endpoint.
 
 Chapter 9 takes the workload you have now re-priced and asks the next question: of the traffic that remains, how much of it needs a frontier model at all?
 

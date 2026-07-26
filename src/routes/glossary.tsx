@@ -105,7 +105,19 @@ const GLOSSARY: Entry[] = [
   },
   {
     term: "Semantic Caching",
-    def: "Removing redundancy, fluff words, and verbose phrasing from prompts without changing task intent. Typical saving: 15–30% of input tokens.",
+    def: "Storing LLM responses indexed by query embedding, and serving cached responses for semantically similar subsequent queries. Distinct from prompt caching, which discounts repeated prefixes provider-side. Can reduce token consumption 40–80% on repetitive workloads, at the cost of correctness risk on near-miss queries.",
+  },
+  {
+    term: "Sliding Window",
+    def: "Conversation-history management technique that keeps only the last N turns and discards or summarizes older ones, preventing input token cost from growing linearly with conversation length. The default agent history strategy in 2026.",
+  },
+  {
+    term: "Token Budget",
+    def: "An explicit monthly limit on token consumption for a service or feature, enforced at the API gateway. Standard pattern: soft alert at 80%, hard limit at 100%, explicit approval required to increase.",
+  },
+  {
+    term: "Token Velocity",
+    def: "Tokens consumed per day or per hour. The key leading indicator for cost forecasting. Flat or declining velocity alongside feature growth signals successful optimization; rising velocity without feature growth is a drift alarm.",
   },
   {
     term: "RAG (Retrieval-Augmented Generation)",
@@ -198,8 +210,8 @@ function GlossaryPage() {
         <h1>TokenOps Glossary</h1>
         <p>
           The canonical TokenOps glossary — {GLOSSARY.length} terms used across TokenOps practices,
-          dashboards, and vendor contracts. Every concept is defined here once; the guide, playbooks,
-          and calculators all point back to this page.
+          dashboards, and vendor contracts. Every concept is defined here once; the guide,
+          playbooks, and calculators all point back to this page.
         </p>
       </div>
 

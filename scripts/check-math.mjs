@@ -94,7 +94,11 @@ check("forecast H2 savings @35%", h2Savings, 44_000, 0.02);
   check("cache 1-hr N=10", saving(10, shapeB(10, 2.0)), 70.0, 0.001);
   check("cache 1-hr N=100", saving(100, shapeB(100, 2.0)), 88.0, 0.001);
   // Break-even thresholds quoted as rules in §8.2
-  const breakEven = (wm) => { let n = 1; while (shapeB(n, wm) >= n) n++; return n; };
+  const breakEven = (wm) => {
+    let n = 1;
+    while (shapeB(n, wm) >= n) n++;
+    return n;
+  };
   check("break-even 5-min = 2 reuses", breakEven(1.25), 2, 0);
   check("break-even 1-hr = 3 reuses", breakEven(2.0), 3, 0);
 
@@ -107,7 +111,11 @@ check("forecast H2 savings @35%", h2Savings, 44_000, 0.02);
   // §8.6 worked example — Claude Opus 4.5 support agent.
   // Rates pulled from the dataset so the chapter can never drift from pricing.json.
   const opus = pricingRef().providers.anthropic.models["claude-opus-4-5"];
-  const CALLS = 50_000, PREFIX = 4_000, USER = 200, OUT = 300, WRITES = 288;
+  const CALLS = 50_000,
+    PREFIX = 4_000,
+    USER = 200,
+    OUT = 300,
+    WRITES = 288;
   const perM = (tokens, rate) => (tokens / 1e6) * rate;
   const baseInput = perM(CALLS * (PREFIX + USER), opus.input_per_mtok);
   const baseOutput = perM(CALLS * OUT, opus.output_per_mtok);
@@ -126,8 +134,18 @@ check("forecast H2 savings @35%", h2Savings, 44_000, 0.02);
   check("§8.6 cached total/month", cachedTotal * 30, 15_949, 0.001);
 
   const prefixBase = perM(CALLS * PREFIX, opus.input_per_mtok);
-  check("§8.6 prefix-layer reduction %", (100 * (prefixBase - (writeCost + readCost))) / prefixBase, 89.3, 0.001);
-  check("§8.6 total reduction %", (100 * (baseInput + baseOutput - cachedTotal)) / (baseInput + baseOutput), 62.7, 0.001);
+  check(
+    "§8.6 prefix-layer reduction %",
+    (100 * (prefixBase - (writeCost + readCost))) / prefixBase,
+    89.3,
+    0.001,
+  );
+  check(
+    "§8.6 total reduction %",
+    (100 * (baseInput + baseOutput - cachedTotal)) / (baseInput + baseOutput),
+    62.7,
+    0.001,
+  );
   check("§8.6 monthly saving", (baseInput + baseOutput - cachedTotal) * 30, 26_800, 0.005);
   check("§8.6 output share of remainder %", (100 * baseOutput) / cachedTotal, 71, 0.01);
   // §8.1 prompt-anatomy percentages
@@ -152,7 +170,15 @@ for (const [pk, provider] of Object.entries(pricing.providers)) {
     console.error(`FAIL ${pk}: missing pricing_url`);
   }
   for (const [mk, m] of Object.entries(provider.models)) {
-    for (const field of ["display_name", "input_per_mtok", "output_per_mtok", "context_tokens", "tier", "verified_url", "verified_date"]) {
+    for (const field of [
+      "display_name",
+      "input_per_mtok",
+      "output_per_mtok",
+      "context_tokens",
+      "tier",
+      "verified_url",
+      "verified_date",
+    ]) {
       if (m[field] === undefined || m[field] === null) {
         failures++;
         console.error(`FAIL ${pk}/${mk}: missing ${field}`);
@@ -173,7 +199,10 @@ for (const [pk, preset] of Object.entries(pricing.presets)) {
     }
   }
 }
-if (!failures) console.log(`ok   data/pricing.json shape (v${pricing.meta.version}, reviewed ${pricing.meta.reviewed_date})`);
+if (!failures)
+  console.log(
+    `ok   data/pricing.json shape (v${pricing.meta.version}, reviewed ${pricing.meta.reviewed_date})`,
+  );
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed — fix guide.md or the check before publishing.`);

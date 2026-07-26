@@ -12,7 +12,7 @@ One page. Applies to everything a buyer or prospect reads: the Handbook, trend b
 
 **Second person.** "You" — one reader at a time. Not "engineers," not "practitioners," not "one." "Teams" is acceptable when talking about org-level outcomes.
 
-**No hedging filler.** Cut on sight: *just*, *simply*, *basically*, *actually*, *really*, *very*, *quite*, *arguably*, *perhaps*, *some*, *many*, *typically* (unless it modifies a real number), "it's important to note," "worth mentioning," "the fact that," "in order to." A search that finds any of these is a mandatory revision — usually into a shorter, better sentence.
+**No hedging filler.** Cut on sight: _just_, _simply_, _basically_, _actually_, _really_, _very_, _quite_, _arguably_, _perhaps_, _some_, _many_, _typically_ (unless it modifies a real number), "it's important to note," "worth mentioning," "the fact that," "in order to." A search that finds any of these is a mandatory revision — usually into a shorter, better sentence.
 
 **Ranges only with conditions.** "20–50% savings" alone is category filler. "20–50% savings when the system prompt is ≥1K tokens, cache hit rate ≥60%, and cache-write surcharges land in your favor" is content.
 
@@ -32,10 +32,10 @@ One page. Applies to everything a buyer or prospect reads: the Handbook, trend b
 - **No emoji.** Not in prose, not in headings, not in tables.
 - **No "As you can see."** The reader has eyes.
 - **No "In this section, we will."** Just do it.
-- **No aggregate savings claims without a source.** The banned pattern: *"teams typically cut LLM spend by 30–60%."* We have no primary data for that — replace with the mechanism it references (prompt caching, model routing, batch API) tied to a provider-documented rate.
+- **No aggregate savings claims without a source.** The banned pattern: _"teams typically cut LLM spend by 30–60%."_ We have no primary data for that — replace with the mechanism it references (prompt caching, model routing, batch API) tied to a provider-documented rate.
 - **No screenshotted terminal output** we can't reproduce. If we cite a benchmark, the harness ships in the companion repo.
-- **No em-dashes as sentence connectors**  where a period works — but freely as pause or aside, like this one. If a sentence has two em-dashes and neither could be a comma or parenthesis, one of them is wrong.
-- **No AI-model self-references.** The words *AI-generated*, *LLM-drafted*, *Claude*, *GPT*, *ChatGPT* appear only as subjects of a sentence about a product, never as the voice of one.
+- **No em-dashes as sentence connectors** where a period works — but freely as pause or aside, like this one. If a sentence has two em-dashes and neither could be a comma or parenthesis, one of them is wrong.
+- **No AI-model self-references.** The words _AI-generated_, _LLM-drafted_, _Claude_, _GPT_, _ChatGPT_ appear only as subjects of a sentence about a product, never as the voice of one.
 
 ## The three-question edit
 

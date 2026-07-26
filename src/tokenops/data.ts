@@ -29,10 +29,7 @@ type PricingProvider = { label: string; models: Record<string, PricingModel> };
 type PricingDataset = {
   meta: { reviewed_date: string; version: string; unit: string };
   providers: Record<string, PricingProvider>;
-  presets: Record<
-    string,
-    { label: string; premium_model: string; cheap_model: string }
-  >;
+  presets: Record<string, { label: string; premium_model: string; cheap_model: string }>;
 };
 
 const dataset = pricingData as PricingDataset;
@@ -43,8 +40,7 @@ export const pricingVersion = dataset.meta.version;
 function resolveModel(qualifiedId: string): PricingModel {
   const [providerKey, modelKey] = qualifiedId.split("/");
   const model = dataset.providers[providerKey]?.models[modelKey];
-  if (!model)
-    throw new Error(`data/pricing.json is missing ${qualifiedId} — check pricing.json`);
+  if (!model) throw new Error(`data/pricing.json is missing ${qualifiedId} — check pricing.json`);
   return model;
 }
 

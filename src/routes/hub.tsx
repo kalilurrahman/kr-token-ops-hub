@@ -14,15 +14,11 @@ type PricingModel = {
 };
 type PricingDataset = {
   providers: Record<string, { label: string; models: Record<string, PricingModel> }>;
-  presets: Record<
-    string,
-    { label: string; premium_model: string; cheap_model: string }
-  >;
+  presets: Record<string, { label: string; premium_model: string; cheap_model: string }>;
 };
 const dataset = pricingData as PricingDataset;
 
-const formatCtx = (n: number) =>
-  n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`;
+const formatCtx = (n: number) => (n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`);
 const tierLabel: Record<string, string> = {
   frontier: "Frontier",
   reasoning: "Reasoning",
@@ -51,16 +47,12 @@ export const Route = createFileRoute("/hub")({
   component: HubPage,
 });
 
-const PRESETS: Record<string, { inp: number; out: number; name: string }> =
-  Object.fromEntries(
-    Object.entries(dataset.presets).map(([key, preset]) => {
-      const premium = modelById(preset.premium_model);
-      return [
-        key,
-        { inp: premium.input_per_mtok, out: premium.output_per_mtok, name: preset.label },
-      ];
-    }),
-  );
+const PRESETS: Record<string, { inp: number; out: number; name: string }> = Object.fromEntries(
+  Object.entries(dataset.presets).map(([key, preset]) => {
+    const premium = modelById(preset.premium_model);
+    return [key, { inp: premium.input_per_mtok, out: premium.output_per_mtok, name: preset.label }];
+  }),
+);
 type PresetKey = string;
 
 const MODELS = Object.entries(dataset.providers).flatMap(([_pk, provider]) =>
@@ -680,8 +672,8 @@ function GlossaryPointer() {
       <div className="hub-card">
         <h3>The glossary lives in one place</h3>
         <p>
-          Every TokenOps term — tokens, caching, routing, RAG, gateways, governance, unit economics —
-          is defined once in the canonical searchable glossary, so no definition can drift out of
+          Every TokenOps term — tokens, caching, routing, RAG, gateways, governance, unit economics
+          — is defined once in the canonical searchable glossary, so no definition can drift out of
           sync with another copy.
         </p>
         <p>
