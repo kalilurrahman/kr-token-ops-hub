@@ -5,8 +5,14 @@ const features = [
   {
     icon: BookOpen,
     title: "Comprehensive Guide",
-    desc: "45,000-word operating manual covering foundations, framework, implementation, and governance.",
+    desc: "The operating manual, in seven parts: foundations, framework, implementation, and governance — with every price rendered from the maintained dataset.",
     to: "/guide",
+  },
+  {
+    icon: BookOpen,
+    title: "Free Chapter: Prompt Caching",
+    desc: "Chapter 8 of The TokenOps Handbook in full — cache break-even math, provider mechanics, six anti-patterns, and a worked example cutting a support agent's bill 62.7%.",
+    to: "/sample-chapter",
   },
   {
     icon: LineChart,
