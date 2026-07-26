@@ -1,5 +1,41 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import pricingData from "../../data/pricing.json";
+
+// PRESETS and MODELS are DERIVED from data/pricing.json — the single pricing
+// source of truth for the site. See data/README.md.
+
+type PricingModel = {
+  display_name: string;
+  input_per_mtok: number;
+  output_per_mtok: number;
+  context_tokens: number;
+  tier: string;
+};
+type PricingDataset = {
+  providers: Record<string, { label: string; models: Record<string, PricingModel> }>;
+  presets: Record<
+    string,
+    { label: string; premium_model: string; cheap_model: string }
+  >;
+};
+const dataset = pricingData as PricingDataset;
+
+const formatCtx = (n: number) =>
+  n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`;
+const tierLabel: Record<string, string> = {
+  frontier: "Frontier",
+  reasoning: "Reasoning",
+  mid: "Mid",
+  cheap: "Cheap",
+};
+
+function modelById(qualifiedId: string): PricingModel {
+  const [providerKey, modelKey] = qualifiedId.split("/");
+  const m = dataset.providers[providerKey]?.models[modelKey];
+  if (!m) throw new Error(`data/pricing.json missing ${qualifiedId}`);
+  return m;
+}
 
 export const Route = createFileRoute("/hub")({
   head: () => ({
@@ -15,22 +51,28 @@ export const Route = createFileRoute("/hub")({
   component: HubPage,
 });
 
-const PRESETS = {
-  openai: { inp: 5, out: 15, name: "OpenAI GPT-4o" },
-  anthropic: { inp: 3, out: 15, name: "Anthropic Claude" },
-  google: { inp: 0.075, out: 0.3, name: "Google Gemini Flash" },
-  mixed: { inp: 3, out: 10, name: "Mixed fleet" },
-} as const;
-type PresetKey = keyof typeof PRESETS;
+const PRESETS: Record<string, { inp: number; out: number; name: string }> =
+  Object.fromEntries(
+    Object.entries(dataset.presets).map(([key, preset]) => {
+      const premium = modelById(preset.premium_model);
+      return [
+        key,
+        { inp: premium.input_per_mtok, out: premium.output_per_mtok, name: preset.label },
+      ];
+    }),
+  );
+type PresetKey = string;
 
-const MODELS = [
-  { provider: "OpenAI", model: "GPT-4o", inp: 5, out: 15, ctx: "128K", tier: "Frontier" },
-  { provider: "OpenAI", model: "GPT-4o Mini", inp: 0.15, out: 0.6, ctx: "128K", tier: "Mid" },
-  { provider: "Anthropic", model: "Claude Sonnet", inp: 3, out: 15, ctx: "200K", tier: "Frontier" },
-  { provider: "Anthropic", model: "Claude Haiku", inp: 0.8, out: 4, ctx: "200K", tier: "Mid" },
-  { provider: "Google", model: "Gemini 2.0 Flash", inp: 0.075, out: 0.3, ctx: "1M", tier: "Cheap" },
-  { provider: "Meta", model: "Llama 3.1 70B", inp: 0.4, out: 0.6, ctx: "128K", tier: "Cheap" },
-] as const;
+const MODELS = Object.entries(dataset.providers).flatMap(([_pk, provider]) =>
+  Object.values(provider.models).map((m) => ({
+    provider: provider.label,
+    model: m.display_name,
+    inp: m.input_per_mtok,
+    out: m.output_per_mtok,
+    ctx: formatCtx(m.context_tokens),
+    tier: tierLabel[m.tier] ?? m.tier,
+  })),
+);
 
 const GLOSSARY = [
   {
@@ -59,7 +101,7 @@ const GLOSSARY = [
   },
   {
     t: "Context window",
-    d: "The maximum number of tokens a model can process in a single call (input + output combined). Ranges from 128K (GPT-4o) to 1M (Gemini 2.0 Flash).",
+    d: "The maximum number of tokens a model can process in a single call (input + output combined). Ranges from 128K on older frontier models to 1M–10M on 2026-generation long-context models (Gemini 3, Llama 4 Scout).",
   },
   {
     t: "RAG (retrieval-augmented generation)",
@@ -305,10 +347,11 @@ function SavingsCalc() {
         <div className="hub-row">
           <label>Provider preset</label>
           <select value={preset} onChange={(e) => setPreset(e.target.value as PresetKey)}>
-            <option value="openai">OpenAI (GPT-4o mix)</option>
-            <option value="anthropic">Anthropic (Claude mix)</option>
-            <option value="google">Google (Gemini mix)</option>
-            <option value="mixed">Mixed provider fleet</option>
+            {Object.entries(PRESETS).map(([key, p]) => (
+              <option key={key} value={key}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
         <Slider

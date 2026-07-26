@@ -23,10 +23,10 @@ const teamData = [
 ];
 
 const modelData = [
-  { model: "GPT-4o", spend: 28000 },
-  { model: "GPT-4o Mini", spend: 37000 },
-  { model: "Claude Sonnet", spend: 33000 },
-  { model: "Gemini Flash", spend: 20000 },
+  { model: "GPT-5", spend: 28000 },
+  { model: "GPT-5 Nano", spend: 37000 },
+  { model: "Claude Sonnet 5", spend: 33000 },
+  { model: "Gemini 2.5 Flash", spend: 20000 },
 ];
 
 const monthlyTrend = [

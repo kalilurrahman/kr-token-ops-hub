@@ -9,6 +9,12 @@
  * formula. Add a check here for every new worked example before publishing it.
  */
 
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
 let failures = 0;
 function check(label, actual, expected, tolerance = 0.005) {
   const ok = Math.abs(actual - expected) <= Math.abs(expected) * tolerance;
@@ -63,6 +69,47 @@ check("forecast optimized month 12", tokensB(12) * 0.65 * 1_000 * priceM(12), 15
 let h2Savings = 0;
 for (let n = 7; n <= 12; n++) h2Savings += monthCost(n) * 0.35;
 check("forecast H2 savings @35%", h2Savings, 44_000, 0.02);
+
+// ── Pricing dataset shape check ─────────────────────────────────────────────
+// Every model row in data/pricing.json must carry input/output/context plus a
+// verified_url and verified_date. This guards against silent staleness — the
+// exact failure the audit found in the pre-refactor site.
+const pricing = JSON.parse(readFileSync(join(ROOT, "data/pricing.json"), "utf8"));
+const requiredMetaKeys = ["version", "reviewed_date", "sla", "unit"];
+for (const k of requiredMetaKeys) {
+  if (!pricing.meta[k]) {
+    failures++;
+    console.error(`FAIL data/pricing.json meta missing: ${k}`);
+  }
+}
+for (const [pk, provider] of Object.entries(pricing.providers)) {
+  if (!provider.pricing_url) {
+    failures++;
+    console.error(`FAIL ${pk}: missing pricing_url`);
+  }
+  for (const [mk, m] of Object.entries(provider.models)) {
+    for (const field of ["display_name", "input_per_mtok", "output_per_mtok", "context_tokens", "tier", "verified_url", "verified_date"]) {
+      if (m[field] === undefined || m[field] === null) {
+        failures++;
+        console.error(`FAIL ${pk}/${mk}: missing ${field}`);
+      }
+    }
+    if (m.verified_date && !/^\d{4}-\d{2}-\d{2}$/.test(m.verified_date)) {
+      failures++;
+      console.error(`FAIL ${pk}/${mk}: verified_date not YYYY-MM-DD (${m.verified_date})`);
+    }
+  }
+}
+for (const [pk, preset] of Object.entries(pricing.presets)) {
+  for (const which of ["premium_model", "cheap_model"]) {
+    const [providerKey, modelKey] = preset[which].split("/");
+    if (!pricing.providers[providerKey]?.models[modelKey]) {
+      failures++;
+      console.error(`FAIL preset ${pk}.${which} references missing model ${preset[which]}`);
+    }
+  }
+}
+if (!failures) console.log(`ok   data/pricing.json shape (v${pricing.meta.version}, reviewed ${pricing.meta.reviewed_date})`);
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed — fix guide.md or the check before publishing.`);

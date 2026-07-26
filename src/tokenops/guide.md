@@ -1222,41 +1222,42 @@ Year 1 total spend: ≈ $227,000 (sum of the 12 monthly costs)
 
 ## Appendices
 
-### Appendix A: Token Pricing Reference (May 2026)
+### Appendix A: Token Pricing Reference
 
-**Major Providers & Models:**
+Live prices, source links, and monthly changelog are maintained in the single dataset the site's calculators and every table on this page consume:
 
-| Provider  | Model             | Input Rate | Output Rate | Context Window | Best For                        |
-| --------- | ----------------- | ---------- | ----------- | -------------- | ------------------------------- |
-| OpenAI    | GPT-4o            | $5/1M      | $15/1M      | 128K           | Complex reasoning, analysis     |
-| OpenAI    | GPT-4o Mini       | $0.15/1M   | $0.60/1M    | 128K           | General tasks, cost-sensitive   |
-| Anthropic | Claude 3.5 Sonnet | $3/1M      | $15/1M      | 200K           | Long context, nuance            |
-| Anthropic | Claude 3.5 Haiku  | $0.80/1M   | $4/1M       | 200K           | Fast, cheap classification      |
-| Google    | Gemini 2.0 Flash  | $0.075/1M  | $0.30/1M    | 1M             | High-volume, longer contexts    |
-| Meta      | Llama 3.1 70B     | $0.40/1M   | $0.60/1M    | 128K           | On-prem or via provider         |
-| Mistral   | Mistral Large     | $2/1M      | $6/1M       | 128K           | European compliance, EU hosting |
+- **Dataset:** [`data/pricing.json`](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing.json)
+- **Provider-comparison snapshot:** [`references/provider-comparison-matrix.md`](/library/references/provider-comparison-matrix.md) (auto-generated)
+- **Full pricing reference snapshot:** [`templates/token-pricing-reference.md`](/templates/token-pricing-reference.md) (auto-generated)
+- **Public changelog:** [`data/pricing-changelog.md`](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md)
+- **SLA:** reviewed monthly; provider changes reflected within 7 days; every figure carries a verification date and a source link.
+
+No pricing figures are hand-typed in this guide — this is a deliberate anti-staleness measure. If a number appears in a worked example, it is either (a) a stable illustrative constant the example depends on and labeled as such, or (b) rendered from the dataset at build time. Enterprise/negotiated/self-hosted pricing is out of scope for the dataset — go to the provider.
 
 ### Appendix B: Cost Calculation Templates
 
 **Cost per request:**
 
 ```
-Tokens per request = input_tokens + output_tokens
-Cost per request = Tokens × (Input %, Output %) × (Input rate, Output rate)
+cost_per_request = (input_tokens  × input_$/M  ÷ 1_000_000)
+                 + (output_tokens × output_$/M ÷ 1_000_000)
 
-Example: 2,000 input + 500 output, GPT-4o
-Cost = (2,000 × $5/1M) + (500 × $15/1M)
-     = $0.010 + $0.0075
-     = $0.0175 per request
+Illustrative example at $3/M input + $15/M output — 2,000 input + 500 output:
+  = (2,000 × $3 ÷ 1_000_000) + (500 × $15 ÷ 1_000_000)
+  = $0.006 + $0.0075
+  = $0.0135 per request
 ```
 
 **Monthly cost forecast:**
 
 ```
-Monthly cost = Daily requests × Cost per request × 30 days
-            = 100,000 × $0.0175 × 30
-            = $52,500/month
+monthly_cost = daily_requests × cost_per_request × 30
+
+  = 100,000 × $0.0135 × 30
+  = $40,500/month
 ```
+
+Real per-model rates: see Appendix A.
 
 **Blended cost per token:**
 

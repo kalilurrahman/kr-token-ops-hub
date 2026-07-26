@@ -37,7 +37,7 @@ const GLOSSARY: Entry[] = [
   },
   {
     term: "Context Window",
-    def: "Maximum tokens (input + output) a model processes in one call. GPT-4o: 128K; Claude 3.5 Sonnet: 200K; Gemini 1.5 Pro: 1M.",
+    def: "Maximum tokens (input + output) a model processes in one call. Ranges from 128K on older frontier models to 200K (Claude Opus 4.5, Sonnet 5), 400K (GPT-5), 1M (Gemini 3 Pro), and up to 10M on long-context specialists (Llama 4 Scout).",
   },
   {
     term: "Cost per Outcome",
@@ -69,7 +69,7 @@ const GLOSSARY: Entry[] = [
   },
   {
     term: "Model Tier",
-    def: "Classification by cost and capability: Frontier (GPT-4o, Claude Sonnet), Mid-tier (Llama 70B, Mistral), Nano (GPT-4o Mini, Gemini Flash).",
+    def: "Classification by cost and capability: Frontier (GPT-5, Claude Opus 4.5, Gemini 3 Pro), Mid (Claude Haiku 4.5, GPT-5 Mini, Gemini 2.5 Flash), Cheap/Nano (GPT-5 Nano, DeepSeek V3.2, Gemini 2.0 Flash Lite).",
   },
   {
     term: "Output Token",
