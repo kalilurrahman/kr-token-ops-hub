@@ -278,6 +278,10 @@ export const libraryCategoryMeta: Record<string, { label: string; tagline: strin
     label: "Trends 2026",
     tagline: "Latest pricing, caching economics, reasoning governance, and agentic cost patterns.",
   },
+  Techniques: {
+    label: "Techniques",
+    tagline: "Hands-on optimization techniques: compression, caching, routing, retrieval, batch, and the improvement loop.",
+  },
 };
 
 export function downloadLibraryFile(file: string) {
