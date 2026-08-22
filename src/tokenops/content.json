@@ -444,6 +444,62 @@
       "category": "Trends",
       "format": "Markdown",
       "file": "trends/model-arbitrage-playbook-2026.md"
+    },
+    {
+      "title": "Prompt Compression Techniques (2026)",
+      "desc": "The compression ladder, instruction hygiene, RAG pruning, and how to gate compression on a golden eval set.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/prompt-compression-techniques-2026.md"
+    },
+    {
+      "title": "Output Token Control (2026)",
+      "desc": "max_tokens discipline, artifact-not-essay prompting, reasoning budgets, structured output economics, and retry caps.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/output-token-control-2026.md"
+    },
+    {
+      "title": "Cache-Aware Prompt Architecture",
+      "desc": "Layered prompt layout, break-even math, TTL strategy, multi-tenant namespacing, and prefix-hash instrumentation.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/cache-aware-prompt-architecture.md"
+    },
+    {
+      "title": "Model Routing & Cascades",
+      "desc": "Static, cascade, and learned routing; task-to-tier mapping, escalation signals, and the quality gates before a swap.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/model-routing-and-cascades.md"
+    },
+    {
+      "title": "Agentic Loop Cost Controls",
+      "desc": "Six hard controls, context-inheritance tax, tool schema tax, planning ratio, and the spans you must emit per step.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/agentic-loop-cost-controls.md"
+    },
+    {
+      "title": "RAG & Retrieval Efficiency",
+      "desc": "Chunking that pays, retrieve-wide-send-narrow, Matryoshka truncation, query-side savings, and the metrics that matter.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/rag-retrieval-efficiency.md"
+    },
+    {
+      "title": "Batch & Async Arbitrage",
+      "desc": "Qualifying workloads, stacked discounts, sharding and idempotency, hidden traps, and the pre-generation patterns.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/batch-and-async-arbitrage.md"
+    },
+    {
+      "title": "The TokenOps Continuous Improvement Loop",
+      "desc": "Weekly, monthly, and quarterly cadences, the savings ledger schema, six drift alerts, and the culture rules that make it stick.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/continuous-improvement-loop.md"
     }
   ]
 }
