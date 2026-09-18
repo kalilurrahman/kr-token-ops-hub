@@ -500,6 +500,41 @@
       "category": "Techniques",
       "format": "Markdown",
       "file": "techniques/continuous-improvement-loop.md"
+    },
+    {
+      "title": "GPT-6 Astra: TokenOps Deployment & Cost Controls",
+      "desc": "A deployment playbook for Astra covering the 272K pricing boundary, reasoning and tool budgets, cache economics, selective escalation, and rollout controls.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/openai-gpt-6-astra-tokenops.md"
+    },
+    {
+      "title": "GPT-5.6 Sol, Terra & Luna: Routing Economics",
+      "desc": "A three-tier routing strategy with unit economics, cache-aware prompts, quality gates, promotional-price controls, and accepted-outcome measurement.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/openai-gpt-5-6-routing-economics.md"
+    },
+    {
+      "title": "Claude Fable 5.1: Cache Economics for Agents",
+      "desc": "Break-even math for cache writes and reads, agent prompt architecture, compaction controls, budget envelopes, and operational metrics.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/claude-fable-5-1-cache-economics.md"
+    },
+    {
+      "title": "Gemini 3.8 Flash: Agent Economics",
+      "desc": "Introductory pricing, the scheduled 2027 rate step, thinking-token governance, cache storage economics, and long-context controls.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/gemini-3-8-flash-agent-economics.md"
+    },
+    {
+      "title": "Frontier Model Routing Playbook — September 2026",
+      "desc": "A vendor-neutral five-route architecture for GPT-6 Astra, GPT-5.6, Claude Fable 5.1, and Gemini 3.8 Flash with evaluation and governance controls.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/frontier-model-routing-playbook-september-2026.md"
     }
   ]
 }
