@@ -1,0 +1,62 @@
+import type { ModelComparisonEntry } from "@/types/model-comparison.types";
+
+export const MODEL_REVIEW_DATE = "18/09/2026";
+
+export const modelComparisonEntries: ModelComparisonEntry[] = [
+  {
+    id: "astra",
+    name: "GPT-6 Astra",
+    role: "Frontier escalation",
+    capabilities: "Highest-complexity reasoning, coding, research, tool use, and end-to-end professional work.",
+    contextLimit: "1.05M input · 128K output · material price boundary above 272K input",
+    pricing: "$10/M input · $1/M cached · $50/M output. Batch/Flex 50% lower; long context and Fast mode carry premiums.",
+    latency: "Expect deliberate reasoning. Measure p95 with tools; reserve for high-value work where completion quality outweighs delay.",
+    recommendedUses: ["Complex research", "Hard coding escalations", "Gated cybersecurity", "Cross-document judgement"],
+    briefingFile: "models/openai-gpt-6-astra-tokenops.md",
+  },
+  {
+    id: "gpt-56",
+    name: "GPT-5.6 portfolio",
+    role: "Three-tier routing ladder",
+    capabilities: "Luna for utility work, Terra for balanced generation, and Sol for complex professional tasks.",
+    contextLimit: "1.05M input · 128K output · long-context premium above 272K input",
+    pricing: "Luna $0.20/$1.20, Terra $2/$12, Sol $4/$20 per M input/output. Sol pricing is promotional.",
+    latency: "Route for the product SLO: Luna for interactive volume, Terra for balanced work, Sol when additional reasoning is justified.",
+    recommendedUses: ["Classification", "Extraction", "Drafting", "Tiered coding and analysis"],
+    briefingFile: "models/openai-gpt-5-6-routing-economics.md",
+  },
+  {
+    id: "fable",
+    name: "Claude Fable 5.1",
+    role: "Cache-efficient premium agent",
+    capabilities: "Demanding coding and knowledge work with unusually strong repeated-context cache economics and compaction.",
+    contextLimit: "Confirm current provider limit before deployment; the briefing does not publish a context figure.",
+    pricing: "$10/M input · $50/M output · $0.25/M cache reads. Cache writes break even after roughly 2–3 uses within TTL.",
+    latency: "No stable public figure in the briefing. Benchmark full agent runs, including tools and compaction, against your SLO.",
+    recommendedUses: ["Repository agents", "Repeated evidence packs", "High-value analysis", "Stable tool-schema workloads"],
+    briefingFile: "models/claude-fable-5-1-cache-economics.md",
+  },
+  {
+    id: "gemini",
+    name: "Gemini 3.8 Flash",
+    role: "Cost-efficient agent workhorse",
+    capabilities: "Long-horizon coding and agents, multimodal input, built-in tools, tunable thinking, caching, Batch and priority tiers.",
+    contextLimit: "1,048,576 input · 65,536 output",
+    pricing: "Introductory $0.75/M input and $3.75/M output through 31/12/2026; listed rates double on 01/01/2027.",
+    latency: "Designed for efficient work, but validate p50/p95 including thinking and tools. Use Batch only for delay-tolerant jobs.",
+    recommendedUses: ["Agentic workflows", "Multimodal context", "High-volume coding", "Batch enrichment"],
+    briefingFile: "models/gemini-3-8-flash-agent-economics.md",
+  },
+  {
+    id: "routing-playbook",
+    name: "Frontier routing playbook",
+    role: "Decision framework — not a model",
+    capabilities: "Five-route governance framework spanning utility, balanced, long-context, agentic, and frontier work.",
+    contextLimit: "Not applicable. Enforces workload-specific context admission and budget thresholds.",
+    pricing: "Normalizes input, cache, reasoning/output, tool, retry, fallback, regional, and priority costs across providers.",
+    latency: "Requires per-route p50/p95, retry, timeout, and failover evidence instead of relying on provider claims.",
+    recommendedUses: ["Portfolio design", "Governance", "Evaluation planning", "Procurement and telemetry"],
+    briefingFile: "models/frontier-model-routing-playbook-september-2026.md",
+    isFramework: true,
+  },
+];
