@@ -18,9 +18,11 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SampleChapterRouteImport } from './routes/sample-chapter'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as ReadingListsRouteImport } from './routes/reading-lists'
 import { Route as PromptTemplatesRouteImport } from './routes/prompt-templates'
 import { Route as PatternsRouteImport } from './routes/patterns'
 import { Route as OptimizeRouteImport } from './routes/optimize'
+import { Route as ModelsRouteImport } from './routes/models'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as HubRouteImport } from './routes/hub'
 import { Route as GuideRouteImport } from './routes/guide'
@@ -77,6 +79,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReadingListsRoute = ReadingListsRouteImport.update({
+  id: '/reading-lists',
+  path: '/reading-lists',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PromptTemplatesRoute = PromptTemplatesRouteImport.update({
   id: '/prompt-templates',
   path: '/prompt-templates',
@@ -90,6 +97,11 @@ const PatternsRoute = PatternsRouteImport.update({
 const OptimizeRoute = OptimizeRouteImport.update({
   id: '/optimize',
   path: '/optimize',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -153,9 +165,11 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
+  '/models': typeof ModelsRoute
   '/optimize': typeof OptimizeRoute
   '/patterns': typeof PatternsRoute
   '/prompt-templates': typeof PromptTemplatesRoute
+  '/reading-lists': typeof ReadingListsRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
   '/sample-chapter': typeof SampleChapterRoute
@@ -177,9 +191,11 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
+  '/models': typeof ModelsRoute
   '/optimize': typeof OptimizeRoute
   '/patterns': typeof PatternsRoute
   '/prompt-templates': typeof PromptTemplatesRoute
+  '/reading-lists': typeof ReadingListsRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
   '/sample-chapter': typeof SampleChapterRoute
@@ -202,9 +218,11 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/hub': typeof HubRoute
   '/library': typeof LibraryRoute
+  '/models': typeof ModelsRoute
   '/optimize': typeof OptimizeRoute
   '/patterns': typeof PatternsRoute
   '/prompt-templates': typeof PromptTemplatesRoute
+  '/reading-lists': typeof ReadingListsRoute
   '/resources': typeof ResourcesRoute
   '/roadmap': typeof RoadmapRoute
   '/sample-chapter': typeof SampleChapterRoute
@@ -228,9 +246,11 @@ export interface FileRouteTypes {
     | '/guide'
     | '/hub'
     | '/library'
+    | '/models'
     | '/optimize'
     | '/patterns'
     | '/prompt-templates'
+    | '/reading-lists'
     | '/resources'
     | '/roadmap'
     | '/sample-chapter'
@@ -252,9 +272,11 @@ export interface FileRouteTypes {
     | '/guide'
     | '/hub'
     | '/library'
+    | '/models'
     | '/optimize'
     | '/patterns'
     | '/prompt-templates'
+    | '/reading-lists'
     | '/resources'
     | '/roadmap'
     | '/sample-chapter'
@@ -276,9 +298,11 @@ export interface FileRouteTypes {
     | '/guide'
     | '/hub'
     | '/library'
+    | '/models'
     | '/optimize'
     | '/patterns'
     | '/prompt-templates'
+    | '/reading-lists'
     | '/resources'
     | '/roadmap'
     | '/sample-chapter'
@@ -301,9 +325,11 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   HubRoute: typeof HubRoute
   LibraryRoute: typeof LibraryRoute
+  ModelsRoute: typeof ModelsRoute
   OptimizeRoute: typeof OptimizeRoute
   PatternsRoute: typeof PatternsRoute
   PromptTemplatesRoute: typeof PromptTemplatesRoute
+  ReadingListsRoute: typeof ReadingListsRoute
   ResourcesRoute: typeof ResourcesRoute
   RoadmapRoute: typeof RoadmapRoute
   SampleChapterRoute: typeof SampleChapterRoute
@@ -381,6 +407,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reading-lists': {
+      id: '/reading-lists'
+      path: '/reading-lists'
+      fullPath: '/reading-lists'
+      preLoaderRoute: typeof ReadingListsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/prompt-templates': {
       id: '/prompt-templates'
       path: '/prompt-templates'
@@ -400,6 +433,13 @@ declare module '@tanstack/react-router' {
       path: '/optimize'
       fullPath: '/optimize'
       preLoaderRoute: typeof OptimizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -485,9 +525,11 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   HubRoute: HubRoute,
   LibraryRoute: LibraryRoute,
+  ModelsRoute: ModelsRoute,
   OptimizeRoute: OptimizeRoute,
   PatternsRoute: PatternsRoute,
   PromptTemplatesRoute: PromptTemplatesRoute,
+  ReadingListsRoute: ReadingListsRoute,
   ResourcesRoute: ResourcesRoute,
   RoadmapRoute: RoadmapRoute,
   SampleChapterRoute: SampleChapterRoute,

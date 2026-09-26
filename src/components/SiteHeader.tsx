@@ -18,6 +18,7 @@ import {
   Map as MapIcon,
   Wrench,
   ClipboardList,
+  Scale,
 } from "lucide-react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -26,6 +27,7 @@ const PRIMARY_NAV = [
   { to: "/", label: "Home", icon: Gauge },
   { to: "/optimize", label: "Optimize", icon: Sparkles },
   { to: "/techniques", label: "Techniques", icon: Layers },
+  { to: "/models", label: "Models", icon: Scale },
   { to: "/tool-guides", label: "Tools", icon: Wrench },
   { to: "/calculator", label: "Calculator", icon: Calculator },
   { to: "/roadmap", label: "Roadmap", icon: MapIcon },
@@ -39,6 +41,8 @@ const FULL_NAV = [
   { to: "/sample-chapter", label: "Free Chapter", icon: BookMarked },
   { to: "/optimize", label: "Optimize", icon: Sparkles },
   { to: "/techniques", label: "Techniques", icon: Layers },
+  { to: "/models", label: "Models", icon: Scale },
+  { to: "/reading-lists", label: "Reading Lists", icon: BookMarked },
   { to: "/tool-guides", label: "Tool Guides", icon: Wrench },
   { to: "/caveman", label: "Caveman", icon: Zap },
   { to: "/prompt-templates", label: "Prompts", icon: ClipboardList },

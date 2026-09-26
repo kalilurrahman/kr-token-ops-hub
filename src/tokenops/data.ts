@@ -282,6 +282,10 @@ export const libraryCategoryMeta: Record<string, { label: string; tagline: strin
     label: "Techniques",
     tagline: "Hands-on optimization techniques: compression, caching, routing, retrieval, batch, and the improvement loop.",
   },
+  Models: {
+    label: "Models",
+    tagline: "Dated model briefings covering capability, context, routing economics, and production controls.",
+  },
 };
 
 export function downloadLibraryFile(file: string) {

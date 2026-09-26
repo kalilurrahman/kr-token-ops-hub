@@ -4,7 +4,7 @@ import { ArrowDown, ArrowLeft, ArrowUp, Bookmark, BookmarkCheck, BrainCircuit, C
 import { marked } from "marked";
 import { Button } from "@/components/ui/button";
 import { recommendWorkload } from "@/lib/workload-adviser.functions";
-import { DEFAULT_COLLECTION_ID, getReadingCollections, READING_LISTS_CHANGED, toggleBriefingInCollection } from "@/lib/reading-lists";
+import { getReadingCollections, READING_LISTS_CHANGED, toggleBriefingInCollection } from "@/lib/reading-lists";
 import content from "@/tokenops/content.json";
 import documents from "@/tokenops/documents.json";
 import type { TokenOpsContent } from "@/tokenops/data";
@@ -180,7 +180,7 @@ function ReaderPage() {
           >
             <Download size={18} />
           </button>
-          {bookmarkEligible && item && <ReaderBookmark item={{ file: item.key, title: item.title, description: item.desc, category: item.category, savedAt: new Date().toISOString() }} />}
+          {bookmarkEligible && item && <ReaderBookmark item={{ file: item.key, title: item.title, description: item.desc, category: item.category, savedAt: "" }} />}
         </div>
       </header>
 

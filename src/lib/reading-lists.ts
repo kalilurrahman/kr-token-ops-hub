@@ -80,7 +80,7 @@ export async function toggleBriefingInCollection(collectionId: string, briefing:
   const exists = collection.items.some((entry) => entry.file === briefing.file);
   const items = exists
     ? collection.items.filter((entry) => entry.file !== briefing.file)
-    : [...collection.items, briefing];
+    : [...collection.items, { ...briefing, savedAt: new Date().toISOString() }];
   await saveCollection({ ...collection, items });
   return !exists;
 }
