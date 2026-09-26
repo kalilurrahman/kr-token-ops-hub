@@ -28,6 +28,9 @@ export const Route = createFileRoute("/library")({
 
 const CATEGORIES = [
   "All",
+  "Models",
+  "Techniques",
+  "Trends",
   "Advanced",
   "Checklist",
   "Guide",
@@ -65,7 +68,7 @@ function LibraryPage() {
       </div>
 
       {filter !== "All" && libraryCategoryMeta[filter] && (
-        <p className="hero-copy" style={{ marginTop: -8, color: "var(--muted)" }}>
+        <p className="hero-copy -mt-2 text-[var(--muted)]">
           {libraryCategoryMeta[filter].tagline}
         </p>
       )}
@@ -83,11 +86,11 @@ function LibraryPage() {
               </div>
             </div>
             <div className="resource-card-footer">
-              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="badge">{item.format}</span>
                 <span className="category-tag">{item.category}</span>
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
+              <div className="flex gap-2">
                 <Link className="download-btn" to="/read/$" params={{ _splat: item.file }}>
                   <BookOpen size={15} /> Read
                 </Link>

@@ -9,6 +9,8 @@ export function SiteFooter() {
         <nav className="footer-muted mb-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs">
           <Link to="/optimize" className="hover:underline">Optimize</Link>
           <Link to="/techniques" className="hover:underline">Techniques</Link>
+          <Link to="/models" className="hover:underline">Models</Link>
+          <Link to="/reading-lists" className="hover:underline">Reading Lists</Link>
           <Link to="/tool-guides" className="hover:underline">Tool Guides</Link>
           <Link to="/caveman" className="hover:underline">Caveman</Link>
           <Link to="/prompt-templates" className="hover:underline">Prompt Templates</Link>
