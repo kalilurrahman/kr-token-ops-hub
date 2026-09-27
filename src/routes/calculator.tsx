@@ -9,6 +9,10 @@ import {
   calcBudgetBurnRate,
   calcCachingROI,
   calcTCO,
+  calcSelfHostedEconomics,
+  hostedModelOptions,
+  openModelOptions,
+  pricingReviewedDate,
 } from "@/tokenops/data";
 
 export const Route = createFileRoute("/calculator")({
@@ -92,8 +96,8 @@ function CalculatorPage() {
         <p className="eyebrow">Calculators</p>
         <h1>TokenOps Savings Calculator</h1>
         <p>
-          Six intelligent calculators: blended savings, RAG cost, model routing, budget burn rate,
-          prompt caching ROI, and total cost of ownership.
+          Seven calculators backed by the model catalogue reviewed {pricingReviewedDate}: blended
+          savings, RAG, routing, budget, caching, self-hosted economics, and total cost of ownership.
         </p>
       </div>
       <div className="calculator-layout">
@@ -207,6 +211,7 @@ function CalculatorPage() {
         <RoutingCalculator />
         <BudgetCalculator />
         <CachingCalculator />
+        <SelfHostedCalculator />
         <TCOCalculator />
       </div>
     </section>
@@ -241,14 +246,33 @@ function NumField({
   );
 }
 
+function ModelField({ label, value, set }: { label: string; value: string; set: (id: string) => void }) {
+  return (
+    <label>
+      {label}
+      <select value={value} onChange={(event) => set(event.target.value)}>
+        {hostedModelOptions.map((model) => (
+          <option key={model.id} value={model.id}>{model.provider} · {model.name}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function getHostedModel(id: string) {
+  return hostedModelOptions.find((model) => model.id === id) ?? hostedModelOptions[0];
+}
+
 function RAGCalculator() {
+  const [modelId, setModelId] = useState("anthropic/claude-sonnet-5");
   const [docs, setDocs] = useState(5);
   const [chunk, setChunk] = useState(350);
   const [qpd, setQpd] = useState(12000);
   const [sys, setSys] = useState(1200);
   const [out, setOut] = useState(400);
-  const [pIn, setPIn] = useState(3);
-  const [pOut, setPOut] = useState(15);
+  const selectedModel = getHostedModel(modelId);
+  const pIn = selectedModel?.inputPrice ?? 0;
+  const pOut = selectedModel?.outputPrice ?? 0;
   const [hit, setHit] = useState(0.5);
   const [disc, setDisc] = useState(0.9);
   const r = useMemo(
@@ -275,13 +299,12 @@ function RAGCalculator() {
       </p>
       <div className="calc-grid">
         <form onSubmit={(e) => e.preventDefault()}>
+          <ModelField label="Hosted model" value={modelId} set={setModelId} />
           <NumField label="Chunks retrieved per query" value={docs} set={setDocs} />
           <NumField label="Avg tokens per chunk" value={chunk} set={setChunk} />
           <NumField label="Queries per day" value={qpd} set={setQpd} />
           <NumField label="System prompt tokens" value={sys} set={setSys} />
           <NumField label="Avg output tokens" value={out} set={setOut} />
-          <NumField label="Input $ / 1M" value={pIn} set={setPIn} step={0.01} />
-          <NumField label="Output $ / 1M" value={pOut} set={setPOut} step={0.01} />
           <NumField label="Cache hit rate (0–1)" value={hit} set={setHit} step={0.05} />
           <NumField label="Cache discount (0–1)" value={disc} set={setDisc} step={0.05} />
         </form>
@@ -317,15 +340,19 @@ function RAGCalculator() {
 }
 
 function RoutingCalculator() {
+  const [premiumModelId, setPremiumModelId] = useState("openai/gpt-6-astra");
+  const [economyModelId, setEconomyModelId] = useState("openai/gpt-5-6-luna");
   const [calls, setCalls] = useState(3_000_000);
   const [premF, setPremF] = useState(0.3);
   const [cheapF, setCheapF] = useState(0.7);
   const [inT, setInT] = useState(1500);
   const [outT, setOutT] = useState(400);
-  const [pI, setPI] = useState(3);
-  const [pO, setPO] = useState(15);
-  const [cI, setCI] = useState(0.15);
-  const [cO, setCO] = useState(0.6);
+  const premiumModel = getHostedModel(premiumModelId);
+  const economyModel = getHostedModel(economyModelId);
+  const pI = premiumModel?.inputPrice ?? 0;
+  const pO = premiumModel?.outputPrice ?? 0;
+  const cI = economyModel?.inputPrice ?? 0;
+  const cO = economyModel?.outputPrice ?? 0;
   const r = useMemo(
     () =>
       calcRoutingSavings({
@@ -350,15 +377,13 @@ function RoutingCalculator() {
       </p>
       <div className="calc-grid">
         <form onSubmit={(e) => e.preventDefault()}>
+          <ModelField label="Premium route" value={premiumModelId} set={setPremiumModelId} />
+          <ModelField label="Economy route" value={economyModelId} set={setEconomyModelId} />
           <NumField label="Total calls / month" value={calls} set={setCalls} />
           <NumField label="Premium share (0–1)" value={premF} set={setPremF} step={0.05} />
           <NumField label="Cheap share (0–1)" value={cheapF} set={setCheapF} step={0.05} />
           <NumField label="Avg input tokens" value={inT} set={setInT} />
           <NumField label="Avg output tokens" value={outT} set={setOutT} />
-          <NumField label="Premium in $/1M" value={pI} set={setPI} step={0.01} />
-          <NumField label="Premium out $/1M" value={pO} set={setPO} step={0.01} />
-          <NumField label="Cheap in $/1M" value={cI} set={setCI} step={0.01} />
-          <NumField label="Cheap out $/1M" value={cO} set={setCO} step={0.01} />
         </form>
         <div className="calc-results">
           <div className="row">
