@@ -108,9 +108,9 @@ check("forecast H2 savings @35%", h2Savings, 44_000, 0.02);
   check("auto-cache N=10", saving(10, shapeA(10)), 81.0, 0.001);
   check("auto-cache N=100", saving(100, shapeA(100)), 89.1, 0.001);
 
-  // §8.6 worked example — Claude Opus 4.5 support agent.
+  // §8.6 worked example — Claude Opus-class support agent.
   // Rates pulled from the dataset so the chapter can never drift from pricing.json.
-  const opus = pricingRef().providers.anthropic.models["claude-opus-4-5"];
+  const opus = pricingRef().providers.anthropic.models["claude-opus-5"];
   const CALLS = 50_000,
     PREFIX = 4_000,
     USER = 200,

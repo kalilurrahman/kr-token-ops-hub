@@ -33,6 +33,11 @@ function modelById(qualifiedId: string): PricingModel {
   return m;
 }
 
+function hostedPrice(value: number | null, qualifiedId: string): number {
+  if (value === null) throw new Error(`${qualifiedId} has no universal hosted token price`);
+  return value;
+}
+
 export const Route = createFileRoute("/hub")({
   head: () => ({
     meta: [
@@ -50,7 +55,11 @@ export const Route = createFileRoute("/hub")({
 const PRESETS: Record<string, { inp: number; out: number; name: string }> = Object.fromEntries(
   Object.entries(dataset.presets).map(([key, preset]) => {
     const premium = modelById(preset.premium_model);
-    return [key, { inp: premium.input_per_mtok, out: premium.output_per_mtok, name: preset.label }];
+    return [key, {
+      inp: hostedPrice(premium.input_per_mtok, preset.premium_model),
+      out: hostedPrice(premium.output_per_mtok, preset.premium_model),
+      name: preset.label,
+    }];
   }),
 );
 type PresetKey = string;
