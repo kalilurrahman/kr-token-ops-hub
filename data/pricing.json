@@ -1,248 +1,372 @@
 {
   "$schema": "./pricing.schema.json",
   "meta": {
-    "version": "2026.07",
-    "reviewed_date": "2026-07-26",
+    "version": "2026.09",
+    "reviewed_date": "2026-09-27",
     "sla": "Reviewed monthly. Provider pricing changes reflected within 7 days. Every figure carries a verification date and a source link.",
     "unit": "USD per 1,000,000 tokens",
     "upstream_feed": "https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json",
     "changelog": "./pricing-changelog.md",
-    "coverage": "Public, list-price rates for major hosted-API providers. Enterprise / negotiated / self-hosted pricing is out of scope."
+    "coverage": "Public list pricing for current hosted APIs plus deployment and licence metadata for open-weight/open-source models. Self-hosted costs are workload-specific and calculated separately."
   },
   "providers": {
     "openai": {
       "label": "OpenAI",
-      "pricing_url": "https://openai.com/api/pricing",
+      "pricing_url": "https://developers.openai.com/api/docs/pricing",
       "batch_discount_percent": 50,
       "batch_sla_hours": 24,
-      "prompt_caching_notes": "Automatic caching on repeated context; ~75-90% off cached input on current-gen models.",
+      "prompt_caching_notes": "Automatic prefix caching; model-specific cached-input rates shown below.",
       "models": {
-        "gpt-5": {
-          "display_name": "GPT-5",
-          "input_per_mtok": 1.25,
-          "cached_input_per_mtok": 0.125,
-          "output_per_mtok": 10.0,
-          "context_tokens": 400000,
+        "gpt-6-astra": {
+          "display_name": "GPT-6 Astra",
+          "input_per_mtok": 10,
+          "output_per_mtok": 50,
+          "context_tokens": 1050000,
           "tier": "frontier",
-          "verified_url": "https://openai.com/api/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "~55% cheaper than GPT-4o at launch; 90% cached-input discount."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://developers.openai.com/api/docs/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Frontier reasoning and agent model. Inputs above 272K carry long-context premiums; validate current tier rules.",
+          "cached_input_per_mtok": 1
         },
-        "gpt-5-mini": {
-          "display_name": "GPT-5 Mini",
-          "input_per_mtok": 0.25,
-          "cached_input_per_mtok": 0.025,
-          "output_per_mtok": 2.0,
-          "context_tokens": 400000,
+        "gpt-5-6-sol": {
+          "display_name": "GPT-5.6 Sol",
+          "input_per_mtok": 4,
+          "output_per_mtok": 20,
+          "context_tokens": 1050000,
+          "tier": "frontier",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+          "verified_date": "2026-09-27",
+          "notes": "Complex professional work; promotional pricing may expire. Inputs above 272K carry premiums.",
+          "cached_input_per_mtok": 0.4
+        },
+        "gpt-5-6-terra": {
+          "display_name": "GPT-5.6 Terra",
+          "input_per_mtok": 2,
+          "output_per_mtok": 12,
+          "context_tokens": 1050000,
           "tier": "mid",
-          "verified_url": "https://openai.com/api/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Default for routine tasks."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/",
+          "verified_date": "2026-09-27",
+          "notes": "Balanced generation and analysis; verify serving-tier premiums.",
+          "cached_input_per_mtok": 0.2
         },
-        "gpt-5-nano": {
-          "display_name": "GPT-5 Nano",
-          "input_per_mtok": 0.05,
-          "cached_input_per_mtok": 0.005,
-          "output_per_mtok": 0.4,
-          "context_tokens": 128000,
+        "gpt-5-6-luna": {
+          "display_name": "GPT-5.6 Luna",
+          "input_per_mtok": 0.2,
+          "output_per_mtok": 1.2,
+          "context_tokens": 1050000,
           "tier": "cheap",
-          "verified_url": "https://openai.com/api/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Classification, extraction, routing at infrastructure prices."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/",
+          "verified_date": "2026-09-27",
+          "notes": "High-volume utility, extraction, and routing tier.",
+          "cached_input_per_mtok": 0.02
         },
-        "o3": {
-          "display_name": "o3",
-          "input_per_mtok": 2.0,
-          "output_per_mtok": 8.0,
-          "context_tokens": 200000,
-          "tier": "reasoning",
-          "verified_url": "https://openai.com/api/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Reasoning model; output includes billed reasoning tokens."
+        "gpt-oss-120b": {
+          "display_name": "gpt-oss-120b",
+          "input_per_mtok": null,
+          "output_per_mtok": null,
+          "context_tokens": 128000,
+          "tier": "open",
+          "access_model": "open-source",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "Apache 2.0",
+          "verified_url": "https://github.com/openai/gpt-oss",
+          "verified_date": "2026-09-27",
+          "notes": "Downloadable weights; no OpenAI API token price. Use infrastructure economics."
+        },
+        "gpt-oss-20b": {
+          "display_name": "gpt-oss-20b",
+          "input_per_mtok": null,
+          "output_per_mtok": null,
+          "context_tokens": 128000,
+          "tier": "open",
+          "access_model": "open-source",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "Apache 2.0",
+          "verified_url": "https://github.com/openai/gpt-oss",
+          "verified_date": "2026-09-27",
+          "notes": "Smaller downloadable model for local or dedicated inference."
         }
       }
     },
     "anthropic": {
       "label": "Anthropic",
-      "pricing_url": "https://www.anthropic.com/pricing",
+      "pricing_url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
       "batch_discount_percent": 50,
       "batch_sla_hours": 24,
-      "prompt_caching_notes": "Explicit cache control; 5-min TTL default. Cache writes billed at 1.25x (5-min) or 2.0x (1-hr) base input; cache reads at ~10% of base input.",
+      "prompt_caching_notes": "Explicit cache control; cache writes and reads are billed separately.",
       "models": {
-        "claude-opus-4-5": {
-          "display_name": "Claude Opus 4.5",
-          "input_per_mtok": 5.0,
+        "claude-fable-5-1": {
+          "display_name": "Claude Fable 5.1",
+          "input_per_mtok": 10,
+          "output_per_mtok": 50,
+          "context_tokens": 1000000,
+          "tier": "frontier",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Premium agentic coding and knowledge work; strong repeated-context cache economics.",
+          "cached_input_per_mtok": 0.25,
+          "cache_write_5min_per_mtok": 12.5,
+          "cache_write_1hr_per_mtok": 20
+        },
+        "claude-opus-5": {
+          "display_name": "Claude Opus 5",
+          "input_per_mtok": 5,
+          "output_per_mtok": 25,
+          "context_tokens": 1000000,
+          "tier": "frontier",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://www.anthropic.com/news/claude-opus-5",
+          "verified_date": "2026-09-27",
+          "notes": "High-value coding and agentic work at a lower rate than Fable.",
           "cached_input_per_mtok": 0.5,
           "cache_write_5min_per_mtok": 6.25,
-          "cache_write_1hr_per_mtok": 10.0,
-          "output_per_mtok": 25.0,
-          "context_tokens": 200000,
-          "tier": "frontier",
-          "verified_url": "https://www.anthropic.com/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "67% price cut vs Opus 4.1."
+          "cache_write_1hr_per_mtok": 10
         },
         "claude-sonnet-5": {
           "display_name": "Claude Sonnet 5",
-          "input_per_mtok": 2.0,
+          "input_per_mtok": 2,
+          "output_per_mtok": 10,
+          "context_tokens": 1000000,
+          "tier": "mid",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://www.anthropic.com/news/claude-sonnet-5",
+          "verified_date": "2026-09-27",
+          "notes": "Balanced default for professional and high-volume agent workflows.",
           "cached_input_per_mtok": 0.2,
           "cache_write_5min_per_mtok": 2.5,
-          "cache_write_1hr_per_mtok": 4.0,
-          "output_per_mtok": 10.0,
-          "context_tokens": 200000,
-          "tier": "frontier",
-          "verified_url": "https://www.anthropic.com/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Introductory pricing; reverts to $3/$15 after 2026-08-31 per Anthropic launch announcement."
+          "cache_write_1hr_per_mtok": 4
         },
         "claude-haiku-4-5": {
           "display_name": "Claude Haiku 4.5",
-          "input_per_mtok": 1.0,
+          "input_per_mtok": 1,
+          "output_per_mtok": 5,
+          "context_tokens": 200000,
+          "tier": "cheap",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Current small Claude tier; no verified Haiku 5 release at review date.",
           "cached_input_per_mtok": 0.1,
           "cache_write_5min_per_mtok": 1.25,
-          "cache_write_1hr_per_mtok": 2.0,
-          "output_per_mtok": 5.0,
-          "context_tokens": 200000,
-          "tier": "mid",
-          "verified_url": "https://www.anthropic.com/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Cheapest current-generation Claude."
+          "cache_write_1hr_per_mtok": 2
         }
       }
     },
     "google": {
       "label": "Google",
-      "pricing_url": "https://ai.google.dev/pricing",
-      "batch_discount_percent": null,
-      "prompt_caching_notes": "Implicit automatic caching on Gemini 2.5+; discount surfaces on the invoice.",
+      "pricing_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "batch_discount_percent": 50,
+      "batch_sla_hours": 24,
+      "prompt_caching_notes": "Model-specific context caching and batch rates apply; verify region and long-context tiers.",
       "models": {
-        "gemini-3-pro": {
-          "display_name": "Gemini 3 Pro",
-          "input_per_mtok": 2.0,
-          "input_per_mtok_over_200k": 3.5,
-          "output_per_mtok": 12.0,
-          "output_per_mtok_over_200k": 14.0,
+        "gemini-3-1-pro": {
+          "display_name": "Gemini 3.1 Pro",
+          "input_per_mtok": 2,
+          "output_per_mtok": 12,
           "context_tokens": 1000000,
           "tier": "frontier",
-          "verified_url": "https://ai.google.dev/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Tiered pricing by context length; implicit caching on 2.5+."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://ai.google.dev/gemini-api/docs/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Frontier reasoning tier; rates increase above 200K input.",
+          "cached_input_per_mtok": 0.2,
+          "input_per_mtok_over_200k": 4,
+          "output_per_mtok_over_200k": 18
         },
-        "gemini-2-5-flash": {
-          "display_name": "Gemini 2.5 Flash",
-          "input_per_mtok": 0.15,
-          "input_per_mtok_over_200k": 0.3,
-          "output_per_mtok": 0.6,
-          "output_per_mtok_over_200k": 1.8,
-          "context_tokens": 1000000,
+        "gemini-3-8-flash": {
+          "display_name": "Gemini 3.8 Flash",
+          "input_per_mtok": 0.75,
+          "output_per_mtok": 3.75,
+          "context_tokens": 1048576,
           "tier": "mid",
-          "verified_url": "https://ai.google.dev/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Tiered pricing by 200K context boundary."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://ai.google.dev/gemini-api/docs/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Introductory pricing through 31/12/2026; published rates double on 01/01/2027.",
+          "cached_input_per_mtok": 0.075
         },
-        "gemini-2-flash-lite": {
-          "display_name": "Gemini 2.0 Flash Lite",
-          "input_per_mtok": 0.075,
-          "output_per_mtok": 0.3,
-          "context_tokens": 1000000,
+        "gemini-3-1-flash-lite": {
+          "display_name": "Gemini 3.1 Flash-Lite",
+          "input_per_mtok": 0.3,
+          "output_per_mtok": 2.5,
+          "context_tokens": 1048576,
           "tier": "cheap",
-          "verified_url": "https://ai.google.dev/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Ultra-low-cost, high-throughput."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://ai.google.dev/gemini-api/docs/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Cost-efficient high-volume tier; verify modality-specific pricing.",
+          "cached_input_per_mtok": 0.03
         }
       }
     },
     "deepseek": {
       "label": "DeepSeek",
       "pricing_url": "https://api-docs.deepseek.com/quick_start/pricing",
-      "prompt_caching_notes": "Disk-based cache; ~90% discount on cached input.",
+      "prompt_caching_notes": "Hosted cache rates and availability vary by endpoint; self-hosting is compute-priced.",
       "models": {
-        "deepseek-v3-2": {
-          "display_name": "DeepSeek V3.2",
-          "input_per_mtok": 0.28,
-          "cached_input_per_mtok": 0.028,
-          "output_per_mtok": 0.42,
-          "context_tokens": 128000,
-          "tier": "cheap",
-          "verified_url": "https://api-docs.deepseek.com/quick_start/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Open-weights; aggressive cache pricing."
+        "deepseek-v4-pro": {
+          "display_name": "DeepSeek V4 Pro",
+          "input_per_mtok": null,
+          "output_per_mtok": null,
+          "context_tokens": 1000000,
+          "tier": "open",
+          "access_model": "open-weight",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "DeepSeek model licence",
+          "verified_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+          "verified_date": "2026-09-27",
+          "notes": "Open-weight MoE model; exact redistribution and use terms must be reviewed before deployment."
+        },
+        "deepseek-v4-flash": {
+          "display_name": "DeepSeek V4 Flash",
+          "input_per_mtok": null,
+          "output_per_mtok": null,
+          "context_tokens": 1000000,
+          "tier": "open",
+          "access_model": "open-weight",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "DeepSeek model licence",
+          "verified_url": "https://www.deepseek.com/en/news/v4-preview/",
+          "verified_date": "2026-09-27",
+          "notes": "Efficiency-oriented open-weight model; hosted rates vary by inference provider."
         }
       }
     },
-    "meta-hosted": {
-      "label": "Meta Llama (hosted)",
-      "pricing_url": "https://www.together.ai/pricing",
-      "prompt_caching_notes": "Varies by host.",
+    "meta": {
+      "label": "Meta",
+      "pricing_url": "https://llama.com/llama4/license",
+      "prompt_caching_notes": "No universal token price; rates depend on cloud host or owned infrastructure.",
       "models": {
         "llama-4-scout": {
           "display_name": "Llama 4 Scout",
-          "input_per_mtok": 0.15,
-          "output_per_mtok": 0.4,
+          "input_per_mtok": null,
+          "output_per_mtok": null,
           "context_tokens": 10000000,
-          "tier": "cheap",
-          "verified_url": "https://www.together.ai/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Open-weights via hosted APIs (Together / Fireworks / Groq / Bedrock); rates vary by host."
+          "tier": "open",
+          "access_model": "open-weight",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "Llama 4 Community License",
+          "verified_url": "https://github.com/meta-llama/llama-models/blob/main/models/llama4/MODEL_CARD.md",
+          "verified_date": "2026-09-27",
+          "notes": "Long-context open-weight model. Commercial terms include licence conditions."
         },
         "llama-4-maverick": {
           "display_name": "Llama 4 Maverick",
-          "input_per_mtok": 0.35,
-          "output_per_mtok": 1.4,
+          "input_per_mtok": null,
+          "output_per_mtok": null,
           "context_tokens": 1000000,
-          "tier": "mid",
-          "verified_url": "https://www.together.ai/pricing",
-          "verified_date": "2026-07-26",
-          "notes": "Multimodal open-weights option."
+          "tier": "open",
+          "access_model": "open-weight",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "Llama 4 Community License",
+          "verified_url": "https://github.com/meta-llama/llama-models/blob/main/models/llama4/MODEL_CARD.md",
+          "verified_date": "2026-09-27",
+          "notes": "Multimodal open-weight model with custom commercial licence terms."
+        }
+      }
+    },
+    "qwen": {
+      "label": "Qwen",
+      "pricing_url": "https://huggingface.co/Qwen",
+      "prompt_caching_notes": "No universal token price for downloaded weights; hosted rates vary.",
+      "models": {
+        "qwen3-8-flash-next": {
+          "display_name": "Qwen3.8-Flash-Next",
+          "input_per_mtok": null,
+          "output_per_mtok": null,
+          "context_tokens": 262144,
+          "tier": "open",
+          "access_model": "open-weight",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "Check model card",
+          "verified_url": "https://huggingface.co/Qwen",
+          "verified_date": "2026-09-27",
+          "notes": "Efficiency-focused open-weight model; confirm the exact model-card licence and extended-context configuration before use."
         }
       }
     },
     "mistral": {
-      "label": "Mistral",
-      "pricing_url": "https://mistral.ai/products",
+      "label": "Mistral AI",
+      "pricing_url": "https://mistral.ai/pricing",
+      "prompt_caching_notes": "API and self-deployment options differ by model and licence.",
       "models": {
         "mistral-large": {
           "display_name": "Mistral Large",
-          "input_per_mtok": 2.0,
-          "output_per_mtok": 6.0,
+          "input_per_mtok": 2,
+          "output_per_mtok": 6,
           "context_tokens": 128000,
           "tier": "frontier",
-          "verified_url": "https://mistral.ai/products",
-          "verified_date": "2026-07-26",
-          "notes": "EU-hosted option."
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://mistral.ai/pricing",
+          "verified_date": "2026-09-27",
+          "notes": "Hosted European-provider option; verify the active version before evaluation."
         },
-        "mistral-medium": {
-          "display_name": "Mistral Medium",
-          "input_per_mtok": 0.4,
-          "output_per_mtok": 1.2,
+        "ministral-8b": {
+          "display_name": "Ministral 8B",
+          "input_per_mtok": null,
+          "output_per_mtok": null,
           "context_tokens": 128000,
-          "tier": "mid",
-          "verified_url": "https://mistral.ai/products",
-          "verified_date": "2026-07-26"
+          "tier": "open",
+          "access_model": "open-weight",
+          "deployment": "Self-hosted or third-party inference",
+          "license": "Mistral model licence",
+          "verified_url": "https://mistral.ai/news/ministraux",
+          "verified_date": "2026-09-27",
+          "notes": "Compact open-weight family for edge and self-hosted inference."
         }
       }
     }
   },
   "presets": {
     "openai": {
-      "label": "OpenAI (GPT-5 + Nano mix)",
-      "premium_model": "openai/gpt-5",
-      "cheap_model": "openai/gpt-5-nano"
+      "label": "OpenAI (Astra + Luna)",
+      "premium_model": "openai/gpt-6-astra",
+      "cheap_model": "openai/gpt-5-6-luna"
     },
     "anthropic": {
-      "label": "Anthropic (Opus 4.5 + Haiku 4.5 mix)",
-      "premium_model": "anthropic/claude-opus-4-5",
+      "label": "Anthropic (Fable 5.1 + Haiku 4.5)",
+      "premium_model": "anthropic/claude-fable-5-1",
       "cheap_model": "anthropic/claude-haiku-4-5"
     },
     "google": {
-      "label": "Google (Gemini 3 Pro + 2.5 Flash mix)",
-      "premium_model": "google/gemini-3-pro",
-      "cheap_model": "google/gemini-2-5-flash"
+      "label": "Google (3.1 Pro + 3.1 Flash-Lite)",
+      "premium_model": "google/gemini-3-1-pro",
+      "cheap_model": "google/gemini-3-1-flash-lite"
     },
     "mixed": {
-      "label": "Mixed provider fleet",
-      "premium_model": "anthropic/claude-sonnet-5",
-      "cheap_model": "openai/gpt-5-mini"
+      "label": "Cross-provider (Astra + Gemini Flash-Lite)",
+      "premium_model": "openai/gpt-6-astra",
+      "cheap_model": "google/gemini-3-1-flash-lite"
     }
   }
 }
