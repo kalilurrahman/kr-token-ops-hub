@@ -120,7 +120,7 @@ Name a primary model and alternatives. Do not invent prices, latency figures, or
 export const recommendWorkload = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => workloadInputSchema.parse(input))
   .handler(async ({ data }) => {
-    const lovableApiKey = process.env['LOVABLE_API_KEY'];
+    const lovableApiKey = process.env["LOVABLE_API_KEY"];
     if (!lovableApiKey) throw new Error("Lovable AI is not configured for this project.");
 
     for (let attempt = 0; attempt < 3; attempt += 1) {

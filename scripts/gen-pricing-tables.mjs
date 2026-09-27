@@ -23,8 +23,18 @@ const money = (n) =>
         .toFixed(Number(n) < 1 ? 3 : 2)
         .replace(/\.?0+$/, "")}`;
 const ctx = (n) => (n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`);
-const tierLabel = { frontier: "Frontier", reasoning: "Reasoning", mid: "Mid", cheap: "Cheap", open: "Open model" };
-const accessLabel = { proprietary: "Proprietary", "open-weight": "Open weight", "open-source": "Open source" };
+const tierLabel = {
+  frontier: "Frontier",
+  reasoning: "Reasoning",
+  mid: "Mid",
+  cheap: "Cheap",
+  open: "Open model",
+};
+const accessLabel = {
+  proprietary: "Proprietary",
+  "open-weight": "Open weight",
+  "open-source": "Open source",
+};
 
 const banner = `<!-- AUTO-GENERATED FROM data/pricing.json — DO NOT HAND-EDIT.
      Run \`node scripts/gen-pricing-tables.mjs\` after editing pricing.json.
@@ -139,8 +149,14 @@ function providerComparisonMatrix() {
   }
   lines.push("");
   lines.push("## Reading open-model costs", "");
-  lines.push("A dash for token price means there is no universal vendor API rate for the downloadable weights. It does **not** mean inference is free. Use the site's open-model infrastructure calculator with measured throughput, utilisation, accelerator, platform, and operations costs.", "");
-  lines.push("Open weight means model parameters are downloadable under model-specific terms. Open source is reserved here for permissively licensed releases; always review the exact model card and acceptable-use terms.", "");
+  lines.push(
+    "A dash for token price means there is no universal vendor API rate for the downloadable weights. It does **not** mean inference is free. Use the site's open-model infrastructure calculator with measured throughput, utilisation, accelerator, platform, and operations costs.",
+    "",
+  );
+  lines.push(
+    "Open weight means model parameters are downloadable under model-specific terms. Open source is reserved here for permissively licensed releases; always review the exact model card and acceptable-use terms.",
+    "",
+  );
   lines.push("---", "");
   lines.push("## Provider pricing pages", "");
   lines.push("| Provider | URL |");

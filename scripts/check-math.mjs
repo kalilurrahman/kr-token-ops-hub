@@ -185,7 +185,10 @@ for (const [pk, provider] of Object.entries(pricing.providers)) {
         console.error(`FAIL ${pk}/${mk}: missing ${field}`);
       }
     }
-    if (m.access_model === "proprietary" && (m.input_per_mtok == null || m.output_per_mtok == null)) {
+    if (
+      m.access_model === "proprietary" &&
+      (m.input_per_mtok == null || m.output_per_mtok == null)
+    ) {
       failures++;
       console.error(`FAIL ${pk}/${mk}: proprietary hosted model requires input/output prices`);
     }

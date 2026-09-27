@@ -30,6 +30,7 @@ Baseline established. All figures verified against provider pages today; every m
 - **Mistral** · Mistral Large $2 / $6, Mistral Medium $0.40 / $1.20 · <https://mistral.ai/products>
 
 **Retired from the corpus** as part of the pricing consolidation:
+
 - `public/templates/token-pricing-reference.md` and `public/library/references/provider-comparison-matrix.md` are now generated snapshots of this dataset — do not hand-edit.
 - The `providerPresets` and `modelPricingData` tables in `src/tokenops/data.ts`, and the `PRESETS` and `MODELS` tables in `src/routes/hub.tsx`, now import from `data/pricing.json`.
 - `src/tokenops/guide.md` Appendix A retired in favor of a pointer to this dataset.

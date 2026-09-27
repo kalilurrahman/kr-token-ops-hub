@@ -11,7 +11,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import pricingData from "../../data/pricing.json";
-import type { ModelCatalogueEntry, SelfHostedEconomicsInput, SelfHostedEconomicsResult } from "@/types/model-economics.types";
+import type {
+  ModelCatalogueEntry,
+  SelfHostedEconomicsInput,
+  SelfHostedEconomicsResult,
+} from "@/types/model-economics.types";
 
 // ── The pricing source of truth ─────────────────────────────────────────────
 // providerPresets and modelPricingData are DERIVED from data/pricing.json.
@@ -155,7 +159,9 @@ export const modelPricingData: Record<string, { input: number; output: number }>
     ]),
   );
 
-export function calcSelfHostedEconomics(input: SelfHostedEconomicsInput): SelfHostedEconomicsResult {
+export function calcSelfHostedEconomics(
+  input: SelfHostedEconomicsInput,
+): SelfHostedEconomicsResult {
   const utilization = Math.min(100, Math.max(0, input.utilizationPercent)) / 100;
   const monthlyInfrastructureCost =
     input.accelerators * input.acceleratorHourlyCost * 730 +
@@ -163,15 +169,17 @@ export function calcSelfHostedEconomics(input: SelfHostedEconomicsInput): SelfHo
     input.monthlyPlatformCost;
   const effectiveMillionTokensPerMonth =
     (input.throughputTokensPerSecond * utilization * 60 * 60 * 730) / 1_000_000;
-  const selfHostedCostPerMillion = effectiveMillionTokensPerMonth > 0
-    ? monthlyInfrastructureCost / effectiveMillionTokensPerMonth
-    : 0;
+  const selfHostedCostPerMillion =
+    effectiveMillionTokensPerMonth > 0
+      ? monthlyInfrastructureCost / effectiveMillionTokensPerMonth
+      : 0;
   const inputShare = Math.min(100, Math.max(0, input.inputSharePercent)) / 100;
   const hostedBlendedCostPerMillion =
     input.hostedInputPrice * inputShare + input.hostedOutputPrice * (1 - inputShare);
-  const breakEvenMillionTokens = hostedBlendedCostPerMillion > 0
-    ? monthlyInfrastructureCost / hostedBlendedCostPerMillion
-    : null;
+  const breakEvenMillionTokens =
+    hostedBlendedCostPerMillion > 0
+      ? monthlyInfrastructureCost / hostedBlendedCostPerMillion
+      : null;
   const monthlyCostAtCapacityHosted = effectiveMillionTokensPerMonth * hostedBlendedCostPerMillion;
   return {
     monthlyInfrastructureCost,
@@ -347,11 +355,13 @@ export const libraryCategoryMeta: Record<string, { label: string; tagline: strin
   },
   Techniques: {
     label: "Techniques",
-    tagline: "Hands-on optimization techniques: compression, caching, routing, retrieval, batch, and the improvement loop.",
+    tagline:
+      "Hands-on optimization techniques: compression, caching, routing, retrieval, batch, and the improvement loop.",
   },
   Models: {
     label: "Models",
-    tagline: "Dated model briefings covering capability, context, routing economics, and production controls.",
+    tagline:
+      "Dated model briefings covering capability, context, routing economics, and production controls.",
   },
 };
 

@@ -10,12 +10,14 @@ export const Route = createFileRoute("/models")({
       { title: "Model comparison matrix — TokenOps Atlas" },
       {
         name: "description",
-        content: "Compare current proprietary, open-weight, and open-source models by capability, context, pricing, deployment, licence, and recommended workload.",
+        content:
+          "Compare current proprietary, open-weight, and open-source models by capability, context, pricing, deployment, licence, and recommended workload.",
       },
       { property: "og:title", content: "Model comparison matrix — TokenOps Atlas" },
       {
         property: "og:description",
-        content: "A practical, dated comparison of frontier model capabilities and routing economics.",
+        content:
+          "A practical, dated comparison of frontier model capabilities and routing economics.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -32,22 +34,31 @@ const columns = [
 
 function ModelsPage() {
   const [accessFilter, setAccessFilter] = useState("All");
-  const entries = accessFilter === "All"
-    ? modelComparisonEntries
-    : modelComparisonEntries.filter((entry) => entry.accessModel === accessFilter);
+  const entries =
+    accessFilter === "All"
+      ? modelComparisonEntries
+      : modelComparisonEntries.filter((entry) => entry.accessModel === accessFilter);
   return (
     <section className="stack">
       <div className="page-heading">
         <p className="eyebrow">Model intelligence</p>
         <h1>Model comparison matrix</h1>
         <p>
-          Compare proprietary, open-weight, and open-source options before choosing a route. Guidance was reviewed on {MODEL_REVIEW_DATE}; verify current terms, licences, and hardware benchmarks before production use.
+          Compare proprietary, open-weight, and open-source options before choosing a route.
+          Guidance was reviewed on {MODEL_REVIEW_DATE}; verify current terms, licences, and hardware
+          benchmarks before production use.
         </p>
       </div>
 
       <div className="filter-tabs" aria-label="Filter model access">
         {["All", "Proprietary", "Open weight", "Open source", "Framework"].map((filter) => (
-          <button className={`filter-tab ${accessFilter === filter ? "active" : ""}`} key={filter} onClick={() => setAccessFilter(filter)}>{filter}</button>
+          <button
+            className={`filter-tab ${accessFilter === filter ? "active" : ""}`}
+            key={filter}
+            onClick={() => setAccessFilter(filter)}
+          >
+            {filter}
+          </button>
         ))}
       </div>
 
@@ -56,27 +67,48 @@ function ModelsPage() {
           <thead>
             <tr className="border-b border-[var(--line)]">
               <th className="w-[16%] p-4 text-[var(--ink)]">Model / framework</th>
-              {columns.map((column) => <th className="p-4 text-[var(--ink)]" key={column.key}>{column.label}</th>)}
+              {columns.map((column) => (
+                <th className="p-4 text-[var(--ink)]" key={column.key}>
+                  {column.label}
+                </th>
+              ))}
               <th className="p-4 text-[var(--ink)]">Deployment / licence</th>
               <th className="w-[17%] p-4 text-[var(--ink)]">Recommended use cases</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((entry) => (
-              <tr className="border-b border-[var(--line)] align-top last:border-b-0" key={entry.id}>
+              <tr
+                className="border-b border-[var(--line)] align-top last:border-b-0"
+                key={entry.id}
+              >
                 <td className="p-4">
                   <strong className="block text-[var(--ink)]">{entry.name}</strong>
                   <span className="mt-1 block text-xs text-[var(--muted)]">{entry.role}</span>
                   <span className="category-tag mt-2 inline-flex">{entry.accessModel}</span>
-                  <Link className="mt-3 inline-flex items-center gap-1 font-semibold text-[var(--blue)]" to="/read/$" params={{ _splat: entry.briefingFile }}>
+                  <Link
+                    className="mt-3 inline-flex items-center gap-1 font-semibold text-[var(--blue)]"
+                    to="/read/$"
+                    params={{ _splat: entry.briefingFile }}
+                  >
                     Read briefing <ArrowRight size={14} />
                   </Link>
                 </td>
-                {columns.map((column) => <td className="p-4 leading-6 text-[var(--muted)]" key={column.key}>{entry[column.key]}</td>)}
-                <td className="p-4 leading-6 text-[var(--muted)]">{entry.deployment}<br /><span className="text-xs">{entry.license}</span></td>
+                {columns.map((column) => (
+                  <td className="p-4 leading-6 text-[var(--muted)]" key={column.key}>
+                    {entry[column.key]}
+                  </td>
+                ))}
+                <td className="p-4 leading-6 text-[var(--muted)]">
+                  {entry.deployment}
+                  <br />
+                  <span className="text-xs">{entry.license}</span>
+                </td>
                 <td className="p-4">
                   <ul className="m-0 grid gap-2 pl-4 text-[var(--muted)]">
-                    {entry.recommendedUses.map((use) => <li key={use}>{use}</li>)}
+                    {entry.recommendedUses.map((use) => (
+                      <li key={use}>{use}</li>
+                    ))}
                   </ul>
                 </td>
               </tr>
@@ -98,15 +130,27 @@ function ModelsPage() {
               <ComparisonDetail icon={Ruler} label="Context limits" value={entry.contextLimit} />
               <ComparisonDetail icon={Coins} label="Pricing" value={entry.pricing} />
               <ComparisonDetail icon={Clock3} label="Latency" value={entry.latency} />
-              <ComparisonDetail icon={Scale} label="Deployment and licence" value={`${entry.deployment ?? "Verify provider"} · ${entry.license ?? "Verify terms"}`} />
+              <ComparisonDetail
+                icon={Scale}
+                label="Deployment and licence"
+                value={`${entry.deployment ?? "Verify provider"} · ${entry.license ?? "Verify terms"}`}
+              />
             </dl>
             <div>
               <h3>Recommended use cases</h3>
               <div className="flex flex-wrap gap-2">
-                {entry.recommendedUses.map((use) => <span className="category-tag" key={use}>{use}</span>)}
+                {entry.recommendedUses.map((use) => (
+                  <span className="category-tag" key={use}>
+                    {use}
+                  </span>
+                ))}
               </div>
             </div>
-            <Link className="download-btn w-fit" to="/read/$" params={{ _splat: entry.briefingFile }}>
+            <Link
+              className="download-btn w-fit"
+              to="/read/$"
+              params={{ _splat: entry.briefingFile }}
+            >
               Read full briefing <ArrowRight size={15} />
             </Link>
           </article>
@@ -116,10 +160,21 @@ function ModelsPage() {
   );
 }
 
-function ComparisonDetail({ icon: Icon, label, value }: { icon: typeof Layers3; label: string; value: string }) {
+function ComparisonDetail({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof Layers3;
+  label: string;
+  value: string;
+}) {
   return (
     <div>
-      <dt className="mb-1 flex items-center gap-2 font-semibold text-[var(--ink)]"><Icon size={16} />{label}</dt>
+      <dt className="mb-1 flex items-center gap-2 font-semibold text-[var(--ink)]">
+        <Icon size={16} />
+        {label}
+      </dt>
       <dd className="m-0 text-sm leading-6 text-[var(--muted)]">{value}</dd>
     </div>
   );

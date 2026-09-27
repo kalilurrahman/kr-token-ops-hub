@@ -14,23 +14,23 @@ An open model is not automatically free, portable, private, or open source. Toke
 
 ## Open source versus open weight
 
-| Label | What it means in this guide | TokenOps consequence |
-|---|---|---|
-| Proprietary | Weights are unavailable; access is through a provider-controlled service | Measure token, tool, storage, region, and service-tier charges |
-| Open weight | Weights are downloadable under model-specific terms | Review licence and acceptable-use terms; calculate infrastructure TCO |
-| Open source | Weights and relevant code use a permissive open licence | Still account for compute, operations, security, evaluation, and updates |
+| Label       | What it means in this guide                                              | TokenOps consequence                                                     |
+| ----------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Proprietary | Weights are unavailable; access is through a provider-controlled service | Measure token, tool, storage, region, and service-tier charges           |
+| Open weight | Weights are downloadable under model-specific terms                      | Review licence and acceptable-use terms; calculate infrastructure TCO    |
+| Open source | Weights and relevant code use a permissive open licence                  | Still account for compute, operations, security, evaluation, and updates |
 
 Do not use “open source” as a marketing synonym for downloadable weights. Llama uses a custom community licence. DeepSeek and Qwen terms are model-specific. OpenAI's gpt-oss repository uses Apache 2.0, but downstream serving tools and packaged derivatives can carry separate terms.
 
 ## September 2026 portfolio
 
-| Family | Classification | Reference context | Deployment profile | Best-fit evaluation |
-|---|---|---:|---|---|
-| gpt-oss 120B / 20B | Open source, Apache 2.0 | 128K | Local, private cloud, or specialist host | Reasoning under a permissive licence; controlled adaptation |
-| DeepSeek V4 Pro / Flash | Open weight | 1M | Multi-accelerator or specialist hosted inference | Large-context and high-volume workloads |
-| Llama 4 Scout / Maverick | Open weight, custom community licence | 10M / 1M | Broad serving ecosystem | Long-context retrieval, multimodal workflows, portability |
-| Qwen3.8-Flash-Next | Open weight; verify exact card | 262K native | Efficiency-focused serving | Multilingual, coding, and throughput-sensitive work |
-| Ministral 8B | Open weight; model-specific terms | 128K reference | Edge, workstation, or compact server | Offline, regulated, and latency-sensitive narrow tasks |
+| Family                   | Classification                        | Reference context | Deployment profile                               | Best-fit evaluation                                         |
+| ------------------------ | ------------------------------------- | ----------------: | ------------------------------------------------ | ----------------------------------------------------------- |
+| gpt-oss 120B / 20B       | Open source, Apache 2.0               |              128K | Local, private cloud, or specialist host         | Reasoning under a permissive licence; controlled adaptation |
+| DeepSeek V4 Pro / Flash  | Open weight                           |                1M | Multi-accelerator or specialist hosted inference | Large-context and high-volume workloads                     |
+| Llama 4 Scout / Maverick | Open weight, custom community licence |          10M / 1M | Broad serving ecosystem                          | Long-context retrieval, multimodal workflows, portability   |
+| Qwen3.8-Flash-Next       | Open weight; verify exact card        |       262K native | Efficiency-focused serving                       | Multilingual, coding, and throughput-sensitive work         |
+| Ministral 8B             | Open weight; model-specific terms     |    128K reference | Edge, workstation, or compact server             | Offline, regulated, and latency-sensitive narrow tasks      |
 
 Context is a capacity ceiling, not a recommendation. Test quality, latency, memory use, and cost at the context lengths your application actually sends.
 
@@ -83,14 +83,14 @@ Continuous batching, prefix caching, speculative decoding, and tensor/pipeline p
 
 ## Deployment decision matrix
 
-| Situation | Default starting point |
-|---|---|
-| Early product, uncertain demand | Hosted API; avoid stranded capacity |
-| Bursty traffic | Serverless or shared hosted inference |
-| Stable high utilisation | Dedicated hosted or self-hosted benchmark |
-| Strict data boundary | Private managed endpoint or self-hosted deployment |
-| Edge/offline requirement | Compact model fitted to device memory and power |
-| Frequent model changes | Hosted portfolio plus abstraction layer |
+| Situation                          | Default starting point                                    |
+| ---------------------------------- | --------------------------------------------------------- |
+| Early product, uncertain demand    | Hosted API; avoid stranded capacity                       |
+| Bursty traffic                     | Serverless or shared hosted inference                     |
+| Stable high utilisation            | Dedicated hosted or self-hosted benchmark                 |
+| Strict data boundary               | Private managed endpoint or self-hosted deployment        |
+| Edge/offline requirement           | Compact model fitted to device memory and power           |
+| Frequent model changes             | Hosted portfolio plus abstraction layer                   |
 | Deep adaptation is differentiating | Open model with governed training and evaluation pipeline |
 
 ## Governance gates

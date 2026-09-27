@@ -97,7 +97,8 @@ function CalculatorPage() {
         <h1>TokenOps Savings Calculator</h1>
         <p>
           Seven calculators backed by the model catalogue reviewed {pricingReviewedDate}: blended
-          savings, RAG, routing, budget, caching, self-hosted economics, and total cost of ownership.
+          savings, RAG, routing, budget, caching, self-hosted economics, and total cost of
+          ownership.
         </p>
       </div>
       <div className="calculator-layout">
@@ -246,13 +247,23 @@ function NumField({
   );
 }
 
-function ModelField({ label, value, set }: { label: string; value: string; set: (id: string) => void }) {
+function ModelField({
+  label,
+  value,
+  set,
+}: {
+  label: string;
+  value: string;
+  set: (id: string) => void;
+}) {
   return (
     <label>
       {label}
       <select value={value} onChange={(event) => set(event.target.value)}>
         {hostedModelOptions.map((model) => (
-          <option key={model.id} value={model.id}>{model.provider} · {model.name}</option>
+          <option key={model.id} value={model.id}>
+            {model.provider} · {model.name}
+          </option>
         ))}
       </select>
     </label>
@@ -544,7 +555,8 @@ function SelfHostedCalculator() {
   const [platform, setPlatform] = useState(1200);
   const [inputShare, setInputShare] = useState(80);
   const hostedModel = getHostedModel(hostedModelId);
-  const openModel = openModelOptions.find((model) => model.id === openModelId) ?? openModelOptions[0];
+  const openModel =
+    openModelOptions.find((model) => model.id === openModelId) ?? openModelOptions[0];
   const result = useMemo(
     () =>
       calcSelfHostedEconomics({
@@ -558,7 +570,16 @@ function SelfHostedCalculator() {
         hostedOutputPrice: hostedModel?.outputPrice ?? 0,
         inputSharePercent: inputShare,
       }),
-    [accelerators, hourlyCost, utilization, throughput, operations, platform, hostedModel, inputShare],
+    [
+      accelerators,
+      hourlyCost,
+      utilization,
+      throughput,
+      operations,
+      platform,
+      hostedModel,
+      inputShare,
+    ],
   );
   const status = result.monthlySavingsAtCapacity > 0 ? "ok" : "warn";
 
@@ -575,13 +596,20 @@ function SelfHostedCalculator() {
             Open model
             <select value={openModelId} onChange={(event) => setOpenModelId(event.target.value)}>
               {openModelOptions.map((model) => (
-                <option key={model.id} value={model.id}>{model.provider} · {model.name}</option>
+                <option key={model.id} value={model.id}>
+                  {model.provider} · {model.name}
+                </option>
               ))}
             </select>
           </label>
           <ModelField label="Hosted comparison" value={hostedModelId} set={setHostedModelId} />
           <NumField label="Accelerators / replicas" value={accelerators} set={setAccelerators} />
-          <NumField label="Cost per accelerator hour ($)" value={hourlyCost} set={setHourlyCost} step={0.01} />
+          <NumField
+            label="Cost per accelerator hour ($)"
+            value={hourlyCost}
+            set={setHourlyCost}
+            step={0.01}
+          />
           <NumField label="Sustained utilisation (%)" value={utilization} set={setUtilization} />
           <NumField label="Throughput (tokens / second)" value={throughput} set={setThroughput} />
           <NumField label="Monthly operations ($)" value={operations} set={setOperations} />
@@ -589,16 +617,51 @@ function SelfHostedCalculator() {
           <NumField label="Input share of tokens (%)" value={inputShare} set={setInputShare} />
         </form>
         <div className="calc-results">
-          <div className="row"><span>Model access</span><strong>{openModel?.accessModel === "open-source" ? "Open source" : "Open weight"}</strong></div>
-          <div className="row"><span>Licence</span><strong>{openModel?.license ?? "Verify model card"}</strong></div>
-          <div className="row"><span>Monthly infrastructure</span><strong>{usd(result.monthlyInfrastructureCost)}</strong></div>
-          <div className="row"><span>Effective capacity</span><strong>{fmt(result.effectiveMillionTokensPerMonth, 1)}M tokens</strong></div>
-          <div className="row accent"><span>Self-hosted cost / 1M</span><strong>{usd(result.selfHostedCostPerMillion, 2)}</strong></div>
-          <div className="row"><span>Hosted blended / 1M</span><strong>{usd(result.hostedBlendedCostPerMillion, 2)}</strong></div>
-          <div className="row"><span>Break-even volume</span><strong>{result.breakEvenMillionTokens === null ? "—" : `${fmt(result.breakEvenMillionTokens, 1)}M tokens / mo`}</strong></div>
-          <div className="row"><span>Savings at full effective capacity</span><strong>{usd(result.monthlySavingsAtCapacity)}</strong></div>
-          <span className={`calc-status ${status}`}>{result.monthlySavingsAtCapacity > 0 ? "Potentially economical" : "Hosted API cheaper"}</span>
-          <small>Excludes procurement lead time, idle failover capacity, data-centre energy, and model-quality differences. Benchmark accepted outcomes before deciding.</small>
+          <div className="row">
+            <span>Model access</span>
+            <strong>
+              {openModel?.accessModel === "open-source" ? "Open source" : "Open weight"}
+            </strong>
+          </div>
+          <div className="row">
+            <span>Licence</span>
+            <strong>{openModel?.license ?? "Verify model card"}</strong>
+          </div>
+          <div className="row">
+            <span>Monthly infrastructure</span>
+            <strong>{usd(result.monthlyInfrastructureCost)}</strong>
+          </div>
+          <div className="row">
+            <span>Effective capacity</span>
+            <strong>{fmt(result.effectiveMillionTokensPerMonth, 1)}M tokens</strong>
+          </div>
+          <div className="row accent">
+            <span>Self-hosted cost / 1M</span>
+            <strong>{usd(result.selfHostedCostPerMillion, 2)}</strong>
+          </div>
+          <div className="row">
+            <span>Hosted blended / 1M</span>
+            <strong>{usd(result.hostedBlendedCostPerMillion, 2)}</strong>
+          </div>
+          <div className="row">
+            <span>Break-even volume</span>
+            <strong>
+              {result.breakEvenMillionTokens === null
+                ? "—"
+                : `${fmt(result.breakEvenMillionTokens, 1)}M tokens / mo`}
+            </strong>
+          </div>
+          <div className="row">
+            <span>Savings at full effective capacity</span>
+            <strong>{usd(result.monthlySavingsAtCapacity)}</strong>
+          </div>
+          <span className={`calc-status ${status}`}>
+            {result.monthlySavingsAtCapacity > 0 ? "Potentially economical" : "Hosted API cheaper"}
+          </span>
+          <small>
+            Excludes procurement lead time, idle failover capacity, data-centre energy, and
+            model-quality differences. Benchmark accepted outcomes before deciding.
+          </small>
         </div>
       </div>
     </div>
