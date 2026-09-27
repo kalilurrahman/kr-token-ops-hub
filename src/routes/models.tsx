@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock3, Coins, Layers3, Ruler } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Clock3, Coins, Layers3, Ruler, Scale } from "lucide-react";
 import { modelComparisonEntries, MODEL_REVIEW_DATE } from "@/lib/model-comparison";
 
 export const Route = createFileRoute("/models")({
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/models")({
       { title: "Model comparison matrix — TokenOps Atlas" },
       {
         name: "description",
-        content: "Compare five current TokenOps model briefings by capability, context, pricing, latency, and recommended workload.",
+        content: "Compare current proprietary, open-weight, and open-source models by capability, context, pricing, deployment, licence, and recommended workload.",
       },
       { property: "og:title", content: "Model comparison matrix — TokenOps Atlas" },
       {
@@ -30,14 +31,24 @@ const columns = [
 ] as const;
 
 function ModelsPage() {
+  const [accessFilter, setAccessFilter] = useState("All");
+  const entries = accessFilter === "All"
+    ? modelComparisonEntries
+    : modelComparisonEntries.filter((entry) => entry.accessModel === accessFilter);
   return (
     <section className="stack">
       <div className="page-heading">
         <p className="eyebrow">Model intelligence</p>
         <h1>Model comparison matrix</h1>
         <p>
-          Compare capability and operating economics before choosing a route. Guidance was reviewed on {MODEL_REVIEW_DATE}; verify current provider terms before procurement or production use.
+          Compare proprietary, open-weight, and open-source options before choosing a route. Guidance was reviewed on {MODEL_REVIEW_DATE}; verify current terms, licences, and hardware benchmarks before production use.
         </p>
+      </div>
+
+      <div className="filter-tabs" aria-label="Filter model access">
+        {["All", "Proprietary", "Open weight", "Open source", "Framework"].map((filter) => (
+          <button className={`filter-tab ${accessFilter === filter ? "active" : ""}`} key={filter} onClick={() => setAccessFilter(filter)}>{filter}</button>
+        ))}
       </div>
 
       <div className="hidden overflow-x-auto rounded-lg border border-[var(--line)] bg-[var(--surface)] shadow-[var(--shadow)] lg:block">
@@ -50,11 +61,12 @@ function ModelsPage() {
             </tr>
           </thead>
           <tbody>
-            {modelComparisonEntries.map((entry) => (
+            {entries.map((entry) => (
               <tr className="border-b border-[var(--line)] align-top last:border-b-0" key={entry.id}>
                 <td className="p-4">
                   <strong className="block text-[var(--ink)]">{entry.name}</strong>
                   <span className="mt-1 block text-xs text-[var(--muted)]">{entry.role}</span>
+                  <span className="category-tag mt-2 inline-flex">{entry.accessModel}</span>
                   <Link className="mt-3 inline-flex items-center gap-1 font-semibold text-[var(--blue)]" to="/read/$" params={{ _splat: entry.briefingFile }}>
                     Read briefing <ArrowRight size={14} />
                   </Link>
@@ -72,7 +84,7 @@ function ModelsPage() {
       </div>
 
       <div className="grid gap-4 lg:hidden">
-        {modelComparisonEntries.map((entry) => (
+        {entries.map((entry) => (
           <article className="resource-card" key={entry.id}>
             <div>
               <span className="badge">{entry.isFramework ? "Framework" : "Model"}</span>
@@ -84,6 +96,7 @@ function ModelsPage() {
               <ComparisonDetail icon={Ruler} label="Context limits" value={entry.contextLimit} />
               <ComparisonDetail icon={Coins} label="Pricing" value={entry.pricing} />
               <ComparisonDetail icon={Clock3} label="Latency" value={entry.latency} />
+              <ComparisonDetail icon={Scale} label="Deployment and licence" value={`${entry.deployment ?? "Verify provider"} · ${entry.license ?? "Verify terms"}`} />
             </dl>
             <div>
               <h3>Recommended use cases</h3>
