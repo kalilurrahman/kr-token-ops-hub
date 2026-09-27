@@ -7,8 +7,8 @@ import pricingData from "../../data/pricing.json";
 
 type PricingModel = {
   display_name: string;
-  input_per_mtok: number;
-  output_per_mtok: number;
+  input_per_mtok: number | null;
+  output_per_mtok: number | null;
   context_tokens: number;
   tier: string;
 };
@@ -56,11 +56,11 @@ const PRESETS: Record<string, { inp: number; out: number; name: string }> = Obje
 type PresetKey = string;
 
 const MODELS = Object.entries(dataset.providers).flatMap(([_pk, provider]) =>
-  Object.values(provider.models).map((m) => ({
+  Object.values(provider.models).filter((m) => m.input_per_mtok !== null && m.output_per_mtok !== null).map((m) => ({
     provider: provider.label,
     model: m.display_name,
-    inp: m.input_per_mtok,
-    out: m.output_per_mtok,
+    inp: m.input_per_mtok ?? 0,
+    out: m.output_per_mtok ?? 0,
     ctx: formatCtx(m.context_tokens),
     tier: tierLabel[m.tier] ?? m.tier,
   })),

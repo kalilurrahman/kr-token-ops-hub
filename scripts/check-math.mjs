@@ -172,10 +172,11 @@ for (const [pk, provider] of Object.entries(pricing.providers)) {
   for (const [mk, m] of Object.entries(provider.models)) {
     for (const field of [
       "display_name",
-      "input_per_mtok",
-      "output_per_mtok",
       "context_tokens",
       "tier",
+      "access_model",
+      "deployment",
+      "license",
       "verified_url",
       "verified_date",
     ]) {
@@ -183,6 +184,10 @@ for (const [pk, provider] of Object.entries(pricing.providers)) {
         failures++;
         console.error(`FAIL ${pk}/${mk}: missing ${field}`);
       }
+    }
+    if (m.access_model === "proprietary" && (m.input_per_mtok == null || m.output_per_mtok == null)) {
+      failures++;
+      console.error(`FAIL ${pk}/${mk}: proprietary hosted model requires input/output prices`);
     }
     if (m.verified_date && !/^\d{4}-\d{2}-\d{2}$/.test(m.verified_date)) {
       failures++;
