@@ -217,10 +217,10 @@ const monthlyInfrastructure = 2 * 3 * 730 + 2000 + 500;
 const effectiveMillionTokens = (200 * 0.5 * 3600 * 730) / 1_000_000;
 const selfHostedPerMillion = monthlyInfrastructure / effectiveMillionTokens;
 const hostedBlendedPerMillion = 0.8 * 2 + 0.2 * 10;
-close("self-hosted monthly infrastructure", monthlyInfrastructure, 6880);
-close("self-hosted effective M tokens/month", effectiveMillionTokens, 262.8);
-close("self-hosted $/M tokens", selfHostedPerMillion, 26.1796, 0.001);
-close(
+check("self-hosted monthly infrastructure", monthlyInfrastructure, 6880);
+check("self-hosted effective M tokens/month", effectiveMillionTokens, 262.8);
+check("self-hosted $/M tokens", selfHostedPerMillion, 26.1796, 0.001);
+check(
   "self-hosted break-even M tokens/month",
   monthlyInfrastructure / hostedBlendedPerMillion,
   1911.1111,
