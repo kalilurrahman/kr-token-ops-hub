@@ -57,6 +57,7 @@ function ModelsPage() {
             <tr className="border-b border-[var(--line)]">
               <th className="w-[16%] p-4 text-[var(--ink)]">Model / framework</th>
               {columns.map((column) => <th className="p-4 text-[var(--ink)]" key={column.key}>{column.label}</th>)}
+              <th className="p-4 text-[var(--ink)]">Deployment / licence</th>
               <th className="w-[17%] p-4 text-[var(--ink)]">Recommended use cases</th>
             </tr>
           </thead>
@@ -72,6 +73,7 @@ function ModelsPage() {
                   </Link>
                 </td>
                 {columns.map((column) => <td className="p-4 leading-6 text-[var(--muted)]" key={column.key}>{entry[column.key]}</td>)}
+                <td className="p-4 leading-6 text-[var(--muted)]">{entry.deployment}<br /><span className="text-xs">{entry.license}</span></td>
                 <td className="p-4">
                   <ul className="m-0 grid gap-2 pl-4 text-[var(--muted)]">
                     {entry.recommendedUses.map((use) => <li key={use}>{use}</li>)}

@@ -75,11 +75,12 @@ Risk: ${data.risk}
 Priority: ${data.priority}
 Current briefing: ${data.currentBriefing ?? "none"}
 
-TOKENOPS EVIDENCE SNAPSHOT (reviewed 18/09/2026)
+TOKENOPS EVIDENCE SNAPSHOT (reviewed 27/09/2026)
 - GPT-6 Astra: hardest reasoning, coding and research; 1.05M context; expensive; entire request reprices above 272K input; use selective escalation.
 - GPT-5.6 portfolio: Luna for high-volume utility work, Terra for balanced generation, Sol for difficult professional work; 1.05M context; tiered cascade economics.
 - Claude Fable 5.1: premium coding/knowledge agent; strongest economics when stable context is reused through low-cost cache reads; validate current context limit.
 - Gemini 3.8 Flash: cost-efficient multimodal and agentic workhorse; 1,048,576 input; introductory pricing doubles on 01/01/2027.
+- Open models: gpt-oss is Apache-2.0 open source; DeepSeek V4, Llama 4, Qwen, and Ministral families are open weight under model-specific terms. They have no universal token price: compare measured infrastructure cost, utilisation, throughput, operations, and accepted-output quality.
 - Routing policy: measure cost per accepted outcome, use deterministic validation, cap retries/tool loops, and allow at most one premium escalation by default.
 
 Return a concise professional recommendation with exactly these headings:
