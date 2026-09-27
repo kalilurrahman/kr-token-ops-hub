@@ -533,6 +533,78 @@ function CachingCalculator() {
   );
 }
 
+function SelfHostedCalculator() {
+  const [openModelId, setOpenModelId] = useState("openai/gpt-oss-120b");
+  const [hostedModelId, setHostedModelId] = useState("openai/gpt-5-6-terra");
+  const [accelerators, setAccelerators] = useState(2);
+  const [hourlyCost, setHourlyCost] = useState(3.5);
+  const [utilization, setUtilization] = useState(55);
+  const [throughput, setThroughput] = useState(220);
+  const [operations, setOperations] = useState(4500);
+  const [platform, setPlatform] = useState(1200);
+  const [inputShare, setInputShare] = useState(80);
+  const hostedModel = getHostedModel(hostedModelId);
+  const openModel = openModelOptions.find((model) => model.id === openModelId) ?? openModelOptions[0];
+  const result = useMemo(
+    () =>
+      calcSelfHostedEconomics({
+        accelerators,
+        acceleratorHourlyCost: hourlyCost,
+        utilizationPercent: utilization,
+        throughputTokensPerSecond: throughput,
+        monthlyOperationsCost: operations,
+        monthlyPlatformCost: platform,
+        hostedInputPrice: hostedModel?.inputPrice ?? 0,
+        hostedOutputPrice: hostedModel?.outputPrice ?? 0,
+        inputSharePercent: inputShare,
+      }),
+    [accelerators, hourlyCost, utilization, throughput, operations, platform, hostedModel, inputShare],
+  );
+  const status = result.monthlySavingsAtCapacity > 0 ? "ok" : "warn";
+
+  return (
+    <div className="calc-card">
+      <h2>Open-model infrastructure economics</h2>
+      <p>
+        Compare owned or dedicated inference with a hosted API. Downloadable weights have no
+        universal token price, so this model uses your measured throughput and infrastructure cost.
+      </p>
+      <div className="calc-grid">
+        <form onSubmit={(event) => event.preventDefault()}>
+          <label>
+            Open model
+            <select value={openModelId} onChange={(event) => setOpenModelId(event.target.value)}>
+              {openModelOptions.map((model) => (
+                <option key={model.id} value={model.id}>{model.provider} · {model.name}</option>
+              ))}
+            </select>
+          </label>
+          <ModelField label="Hosted comparison" value={hostedModelId} set={setHostedModelId} />
+          <NumField label="Accelerators / replicas" value={accelerators} set={setAccelerators} />
+          <NumField label="Cost per accelerator hour ($)" value={hourlyCost} set={setHourlyCost} step={0.01} />
+          <NumField label="Sustained utilisation (%)" value={utilization} set={setUtilization} />
+          <NumField label="Throughput (tokens / second)" value={throughput} set={setThroughput} />
+          <NumField label="Monthly operations ($)" value={operations} set={setOperations} />
+          <NumField label="Monthly platform overhead ($)" value={platform} set={setPlatform} />
+          <NumField label="Input share of tokens (%)" value={inputShare} set={setInputShare} />
+        </form>
+        <div className="calc-results">
+          <div className="row"><span>Model access</span><strong>{openModel?.accessModel === "open-source" ? "Open source" : "Open weight"}</strong></div>
+          <div className="row"><span>Licence</span><strong>{openModel?.license ?? "Verify model card"}</strong></div>
+          <div className="row"><span>Monthly infrastructure</span><strong>{usd(result.monthlyInfrastructureCost)}</strong></div>
+          <div className="row"><span>Effective capacity</span><strong>{fmt(result.effectiveMillionTokensPerMonth, 1)}M tokens</strong></div>
+          <div className="row accent"><span>Self-hosted cost / 1M</span><strong>{usd(result.selfHostedCostPerMillion, 2)}</strong></div>
+          <div className="row"><span>Hosted blended / 1M</span><strong>{usd(result.hostedBlendedCostPerMillion, 2)}</strong></div>
+          <div className="row"><span>Break-even volume</span><strong>{result.breakEvenMillionTokens === null ? "—" : `${fmt(result.breakEvenMillionTokens, 1)}M tokens / mo`}</strong></div>
+          <div className="row"><span>Savings at full effective capacity</span><strong>{usd(result.monthlySavingsAtCapacity)}</strong></div>
+          <span className={`calc-status ${status}`}>{result.monthlySavingsAtCapacity > 0 ? "Potentially economical" : "Hosted API cheaper"}</span>
+          <small>Excludes procurement lead time, idle failover capacity, data-centre energy, and model-quality differences. Benchmark accepted outcomes before deciding.</small>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TCOCalculator() {
   const [tok, setTok] = useState(45_000);
   const [infra, setInfra] = useState(8_000);
