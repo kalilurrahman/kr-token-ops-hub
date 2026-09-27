@@ -144,7 +144,12 @@ export const modelCatalogue: ModelCatalogueEntry[] = Object.entries(dataset.prov
 );
 
 export const hostedModelOptions = modelCatalogue.filter(
-  (model) => model.inputPrice !== null && model.outputPrice !== null,
+  (
+    model,
+  ): model is ModelCatalogueEntry & {
+    inputPrice: number;
+    outputPrice: number;
+  } => model.inputPrice !== null && model.outputPrice !== null,
 );
 
 export const openModelOptions = modelCatalogue.filter(

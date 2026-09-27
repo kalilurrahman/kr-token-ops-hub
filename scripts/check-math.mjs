@@ -212,6 +212,21 @@ if (!failures)
     `ok   data/pricing.json shape (v${pricing.meta.version}, reviewed ${pricing.meta.reviewed_date})`,
   );
 
+// Self-hosted economics calculator reference case.
+const monthlyInfrastructure = 2 * 3 * 730 + 2000 + 500;
+const effectiveMillionTokens = (200 * 0.5 * 3600 * 730) / 1_000_000;
+const selfHostedPerMillion = monthlyInfrastructure / effectiveMillionTokens;
+const hostedBlendedPerMillion = 0.8 * 2 + 0.2 * 10;
+close("self-hosted monthly infrastructure", monthlyInfrastructure, 6880);
+close("self-hosted effective M tokens/month", effectiveMillionTokens, 262.8);
+close("self-hosted $/M tokens", selfHostedPerMillion, 26.1796, 0.001);
+close(
+  "self-hosted break-even M tokens/month",
+  monthlyInfrastructure / hostedBlendedPerMillion,
+  1911.1111,
+  0.001,
+);
+
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed — fix guide.md or the check before publishing.`);
   process.exit(1);
