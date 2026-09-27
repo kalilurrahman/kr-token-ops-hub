@@ -1,53 +1,38 @@
-# Model intelligence, saved reading lists, and AI workload adviser
+# September 2026 model and pricing overhaul
 
 ## Outcome
-Add three connected capabilities without rebuilding the site:
+Replace the dated May/July model picture with a source-backed September 2026 catalogue supporting both reference reading and realistic cost calculation.
 
-1. A responsive comparison matrix covering the five new model briefings.
-2. Private, device-local reading lists with named collections and bookmarks from cards and the reader.
-3. An AI workload adviser inside the reader that recommends a model, routing strategy, and cost controls.
+## What will change
 
-## What will be built
+### Model and pricing data
+- Refresh the central pricing dataset from official provider and model sources, with a visible 27/09/2026 review date.
+- Cover current proprietary frontier, balanced, and economy tiers across OpenAI, Anthropic, Google, and relevant hosted providers.
+- Expand coverage across major open-weight and genuinely open-source families, clearly labelling the distinction.
+- Record context limits, public input/output/cache rates, licence or access model, deployment mode, source URL, and verification date.
+- Retain older entries only when useful, labelling superseded models instead of presenting them as current defaults.
 
-### Model comparison
-- Add a dedicated `/models` page using the existing TokenOps visual language.
-- Compare the five briefing subjects across capabilities, context limits, pricing considerations, latency guidance, and recommended workloads.
-- Link every row/card directly to its full briefing.
-- Add the `Models` category to the library filters and navigation.
-- Use a compact desktop table plus stacked mobile cards so no horizontal scrolling is required.
-- Clearly date volatile pricing guidance and retain links to source briefings rather than presenting figures as permanent.
+### Calculators and comparison
+- Feed current hosted API rates into every calculator through the central dataset.
+- Add model selectors so RAG and routing scenarios can use catalogue values without manual transcription.
+- Add a self-hosted model economics calculator covering accelerator cost, utilisation, throughput, replicas, operational overhead, and hosted-model break-even volume.
+- Expand the model comparison view with proprietary, open-weight, and open-source filters plus deployment and licensing guidance.
+- Date volatile prices and explain that hosted open-model rates vary by inference provider.
 
-### Saved reading lists
-- Add bookmark controls to model and technique briefing cards and to the full-screen reader toolbar.
-- Add a `/reading-lists` page where users can create, rename, and delete collections; add or remove briefings; and reopen saved articles.
-- Store collections in IndexedDB on the current device only. This preserves privacy, requires no account, and follows the project rule against using localStorage beyond theme state.
-- Provide clear empty states and accessible labels; keep bookmarked state synchronized across open pages.
+### Curated reference content
+- Add an “Open models in TokenOps” guide covering licences, weights versus source openness, hosting, quantisation, batching, throughput, infrastructure cost, governance, and evaluation.
+- Add an updated model-landscape briefing and practical selection checklist with authoritative links.
+- Register and bundle the new articles so Read opens them in-app and users can bookmark them.
 
-### AI workload adviser
-- Add an “Ask TokenOps” panel in the reader for model and technique briefings.
-- Let readers describe workload type, volume, context size, latency sensitivity, quality/risk level, and budget priorities.
-- Send the request server-side through Lovable AI Gateway using `openai/gpt-6-astra` on the Responses API with streamed reasoning summaries and answer text.
-- Ground the prompt in the five model briefings and require a concise recommendation containing:
-  - primary model and rationale;
-  - routing/fallback strategy;
-  - caching, context, output, retry, and agent-loop controls;
-  - important pricing assumptions and validation steps.
-- Show the Gateway’s safe error message. Retry only bounded transient `429`/`5xx` failures with backoff; treat all other failures, denials, refusals, and empty results as terminal.
-- Keep the API key server-only and propagate the Gateway run identifier.
-
-## Technical approach
-- Enable Lovable Cloud for secure server-side AI execution; no database or authentication will be added.
-- Add the AI SDK packages needed for the Responses API and a server-only Gateway helper.
-- Add shared types under `src/types/`, small reusable bookmark/collection utilities, and focused UI components kept below the project size limit.
-- Use existing shadcn controls, Lucide icons, semantic colour tokens, and current light/dark themes.
-- Add unique title, description, Open Graph, type, and Twitter metadata to every new content route.
+## Technical details
+- Keep `data/pricing.json` as the single source of truth and extend its fields instead of duplicating prices in pages.
+- Update the generator so reference tables expose model type, deployment, licence, and dated sources; regenerate public and bundled copies together.
+- Add focused calculation utilities and tests for hosted request cost, self-hosted monthly cost, unit cost, and break-even volume.
+- Preserve current themes, navigation, reading lists, AI adviser, disclaimers, and privacy rules; no accounts, tracking, or unrelated redesign.
+- Record the expanded pricing-data contract in the project architecture notes.
 
 ## Validation
-- Run lint with zero warnings, TypeScript checks, and the full available test suite.
-- Make one live AI Gateway request through the app route and inspect its streamed response before declaring it complete.
-- Verify model comparison, collection management, bookmarking, and adviser flows at desktop and mobile widths in the preview.
-- Confirm no horizontal overflow, unreadable table text, broken article links, exposed secret, account flow, analytics, or tracking is introduced.
-
-## Scope boundary
-- Existing content, calculators, themes, disclaimers, external links, and reader navigation remain intact.
-- “Honing” is limited to fixes discovered while validating these three features; no unrelated redesign will be introduced.
+- Run lint, strict TypeScript checks, calculation tests, and the pricing consistency checker.
+- Verify calculator outputs against independent calculations.
+- Test the models, calculator, library, and reader at desktop and mobile widths with no horizontal overflow.
+- Confirm every factual model entry has a dated authoritative source and no unverified claim is presented as fact.
