@@ -23,7 +23,18 @@ const money = (n) =>
         .toFixed(Number(n) < 1 ? 3 : 2)
         .replace(/\.?0+$/, "")}`;
 const ctx = (n) => (n >= 1_000_000 ? `${n / 1_000_000}M` : `${n / 1_000}K`);
-const tierLabel = { frontier: "Frontier", reasoning: "Reasoning", mid: "Mid", cheap: "Cheap" };
+const tierLabel = {
+  frontier: "Frontier",
+  reasoning: "Reasoning",
+  mid: "Mid",
+  cheap: "Cheap",
+  open: "Open model",
+};
+const accessLabel = {
+  proprietary: "Proprietary",
+  "open-weight": "Open weight",
+  "open-source": "Open source",
+};
 
 const banner = `<!-- AUTO-GENERATED FROM data/pricing.json — DO NOT HAND-EDIT.
      Run \`node scripts/gen-pricing-tables.mjs\` after editing pricing.json.
@@ -47,9 +58,9 @@ function tokenPricingReference() {
   for (const [_pk, provider] of Object.entries(pricing.providers)) {
     lines.push(`### ${provider.label}`, "");
     lines.push(
-      "| Model | Input ($/1M) | Cached Input ($/1M) | Output ($/1M) | Context | Tier | Source |",
+      "| Model | Access | Deployment / licence | Input ($/1M) | Cached Input ($/1M) | Output ($/1M) | Context | Tier | Source |",
     );
-    lines.push("|---|---|---|---|---|---|---|");
+    lines.push("|---|---|---|---|---|---|---|---|---|");
     for (const m of Object.values(provider.models)) {
       const overNote =
         m.input_per_mtok_over_200k != null
@@ -60,7 +71,7 @@ function tokenPricingReference() {
           ? ` / ${money(m.output_per_mtok_over_200k)} (>200K ctx)`
           : "";
       lines.push(
-        `| ${m.display_name} | ${money(m.input_per_mtok)}${overNote} | ${money(m.cached_input_per_mtok)} | ${money(m.output_per_mtok)}${outNote} | ${ctx(m.context_tokens)} | ${tierLabel[m.tier] ?? m.tier} | [verified ${m.verified_date}](${m.verified_url}) |`,
+        `| ${m.display_name} | ${accessLabel[m.access_model] ?? m.access_model} | ${m.deployment}; ${m.license} | ${money(m.input_per_mtok)}${overNote} | ${money(m.cached_input_per_mtok)} | ${money(m.output_per_mtok)}${outNote} | ${ctx(m.context_tokens)} | ${tierLabel[m.tier] ?? m.tier} | [verified ${m.verified_date}](${m.verified_url}) |`,
       );
     }
     if (provider.prompt_caching_notes) {
@@ -107,12 +118,12 @@ function providerComparisonMatrix() {
     `> **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md).`,
   );
   lines.push("", "---", "", "## Per-Token Pricing (USD per 1M tokens)", "");
-  lines.push("| Provider | Model | Input | Cached Input | Output | Context | Tier |");
-  lines.push("|---|---|---|---|---|---|---|");
+  lines.push("| Provider | Model | Access | Input | Cached Input | Output | Context | Tier |");
+  lines.push("|---|---|---|---|---|---|---|---|");
   for (const provider of Object.values(pricing.providers)) {
     for (const m of Object.values(provider.models)) {
       lines.push(
-        `| **${provider.label}** | ${m.display_name} | ${money(m.input_per_mtok)} | ${money(m.cached_input_per_mtok)} | ${money(m.output_per_mtok)} | ${ctx(m.context_tokens)} | ${tierLabel[m.tier] ?? m.tier} |`,
+        `| **${provider.label}** | ${m.display_name} | ${accessLabel[m.access_model] ?? m.access_model} | ${money(m.input_per_mtok)} | ${money(m.cached_input_per_mtok)} | ${money(m.output_per_mtok)} | ${ctx(m.context_tokens)} | ${tierLabel[m.tier] ?? m.tier} |`,
       );
     }
   }
@@ -137,6 +148,15 @@ function providerComparisonMatrix() {
     }
   }
   lines.push("");
+  lines.push("## Reading open-model costs", "");
+  lines.push(
+    "A dash for token price means there is no universal vendor API rate for the downloadable weights. It does **not** mean inference is free. Use the site's open-model infrastructure calculator with measured throughput, utilisation, accelerator, platform, and operations costs.",
+    "",
+  );
+  lines.push(
+    "Open weight means model parameters are downloadable under model-specific terms. Open source is reserved here for permissively licensed releases; always review the exact model card and acceptable-use terms.",
+    "",
+  );
   lines.push("---", "");
   lines.push("## Provider pricing pages", "");
   lines.push("| Provider | URL |");

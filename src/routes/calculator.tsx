@@ -9,6 +9,10 @@ import {
   calcBudgetBurnRate,
   calcCachingROI,
   calcTCO,
+  calcSelfHostedEconomics,
+  hostedModelOptions,
+  openModelOptions,
+  pricingReviewedDate,
 } from "@/tokenops/data";
 
 export const Route = createFileRoute("/calculator")({
@@ -92,8 +96,9 @@ function CalculatorPage() {
         <p className="eyebrow">Calculators</p>
         <h1>TokenOps Savings Calculator</h1>
         <p>
-          Six intelligent calculators: blended savings, RAG cost, model routing, budget burn rate,
-          prompt caching ROI, and total cost of ownership.
+          Seven calculators backed by the model catalogue reviewed {pricingReviewedDate}: blended
+          savings, RAG, routing, budget, caching, self-hosted economics, and total cost of
+          ownership.
         </p>
       </div>
       <div className="calculator-layout">
@@ -207,6 +212,7 @@ function CalculatorPage() {
         <RoutingCalculator />
         <BudgetCalculator />
         <CachingCalculator />
+        <SelfHostedCalculator />
         <TCOCalculator />
       </div>
     </section>
@@ -241,14 +247,43 @@ function NumField({
   );
 }
 
+function ModelField({
+  label,
+  value,
+  set,
+}: {
+  label: string;
+  value: string;
+  set: (id: string) => void;
+}) {
+  return (
+    <label>
+      {label}
+      <select value={value} onChange={(event) => set(event.target.value)}>
+        {hostedModelOptions.map((model) => (
+          <option key={model.id} value={model.id}>
+            {model.provider} · {model.name}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function getHostedModel(id: string) {
+  return hostedModelOptions.find((model) => model.id === id) ?? hostedModelOptions[0];
+}
+
 function RAGCalculator() {
+  const [modelId, setModelId] = useState("anthropic/claude-sonnet-5");
   const [docs, setDocs] = useState(5);
   const [chunk, setChunk] = useState(350);
   const [qpd, setQpd] = useState(12000);
   const [sys, setSys] = useState(1200);
   const [out, setOut] = useState(400);
-  const [pIn, setPIn] = useState(3);
-  const [pOut, setPOut] = useState(15);
+  const selectedModel = getHostedModel(modelId);
+  const pIn = selectedModel?.inputPrice ?? 0;
+  const pOut = selectedModel?.outputPrice ?? 0;
   const [hit, setHit] = useState(0.5);
   const [disc, setDisc] = useState(0.9);
   const r = useMemo(
@@ -275,13 +310,12 @@ function RAGCalculator() {
       </p>
       <div className="calc-grid">
         <form onSubmit={(e) => e.preventDefault()}>
+          <ModelField label="Hosted model" value={modelId} set={setModelId} />
           <NumField label="Chunks retrieved per query" value={docs} set={setDocs} />
           <NumField label="Avg tokens per chunk" value={chunk} set={setChunk} />
           <NumField label="Queries per day" value={qpd} set={setQpd} />
           <NumField label="System prompt tokens" value={sys} set={setSys} />
           <NumField label="Avg output tokens" value={out} set={setOut} />
-          <NumField label="Input $ / 1M" value={pIn} set={setPIn} step={0.01} />
-          <NumField label="Output $ / 1M" value={pOut} set={setPOut} step={0.01} />
           <NumField label="Cache hit rate (0–1)" value={hit} set={setHit} step={0.05} />
           <NumField label="Cache discount (0–1)" value={disc} set={setDisc} step={0.05} />
         </form>
@@ -317,15 +351,19 @@ function RAGCalculator() {
 }
 
 function RoutingCalculator() {
+  const [premiumModelId, setPremiumModelId] = useState("openai/gpt-6-astra");
+  const [economyModelId, setEconomyModelId] = useState("openai/gpt-5-6-luna");
   const [calls, setCalls] = useState(3_000_000);
   const [premF, setPremF] = useState(0.3);
   const [cheapF, setCheapF] = useState(0.7);
   const [inT, setInT] = useState(1500);
   const [outT, setOutT] = useState(400);
-  const [pI, setPI] = useState(3);
-  const [pO, setPO] = useState(15);
-  const [cI, setCI] = useState(0.15);
-  const [cO, setCO] = useState(0.6);
+  const premiumModel = getHostedModel(premiumModelId);
+  const economyModel = getHostedModel(economyModelId);
+  const pI = premiumModel?.inputPrice ?? 0;
+  const pO = premiumModel?.outputPrice ?? 0;
+  const cI = economyModel?.inputPrice ?? 0;
+  const cO = economyModel?.outputPrice ?? 0;
   const r = useMemo(
     () =>
       calcRoutingSavings({
@@ -350,15 +388,13 @@ function RoutingCalculator() {
       </p>
       <div className="calc-grid">
         <form onSubmit={(e) => e.preventDefault()}>
+          <ModelField label="Premium route" value={premiumModelId} set={setPremiumModelId} />
+          <ModelField label="Economy route" value={economyModelId} set={setEconomyModelId} />
           <NumField label="Total calls / month" value={calls} set={setCalls} />
           <NumField label="Premium share (0–1)" value={premF} set={setPremF} step={0.05} />
           <NumField label="Cheap share (0–1)" value={cheapF} set={setCheapF} step={0.05} />
           <NumField label="Avg input tokens" value={inT} set={setInT} />
           <NumField label="Avg output tokens" value={outT} set={setOutT} />
-          <NumField label="Premium in $/1M" value={pI} set={setPI} step={0.01} />
-          <NumField label="Premium out $/1M" value={pO} set={setPO} step={0.01} />
-          <NumField label="Cheap in $/1M" value={cI} set={setCI} step={0.01} />
-          <NumField label="Cheap out $/1M" value={cO} set={setCO} step={0.01} />
         </form>
         <div className="calc-results">
           <div className="row">
@@ -502,6 +538,130 @@ function CachingCalculator() {
             <span>Break-even calls</span>
             <strong>{Number.isFinite(r.breakEvenCalls) ? fmt(r.breakEvenCalls) : "—"}</strong>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SelfHostedCalculator() {
+  const [openModelId, setOpenModelId] = useState("openai/gpt-oss-120b");
+  const [hostedModelId, setHostedModelId] = useState("openai/gpt-5-6-terra");
+  const [accelerators, setAccelerators] = useState(2);
+  const [hourlyCost, setHourlyCost] = useState(3.5);
+  const [utilization, setUtilization] = useState(55);
+  const [throughput, setThroughput] = useState(220);
+  const [operations, setOperations] = useState(4500);
+  const [platform, setPlatform] = useState(1200);
+  const [inputShare, setInputShare] = useState(80);
+  const hostedModel = getHostedModel(hostedModelId);
+  const openModel =
+    openModelOptions.find((model) => model.id === openModelId) ?? openModelOptions[0];
+  const result = useMemo(
+    () =>
+      calcSelfHostedEconomics({
+        accelerators,
+        acceleratorHourlyCost: hourlyCost,
+        utilizationPercent: utilization,
+        throughputTokensPerSecond: throughput,
+        monthlyOperationsCost: operations,
+        monthlyPlatformCost: platform,
+        hostedInputPrice: hostedModel?.inputPrice ?? 0,
+        hostedOutputPrice: hostedModel?.outputPrice ?? 0,
+        inputSharePercent: inputShare,
+      }),
+    [
+      accelerators,
+      hourlyCost,
+      utilization,
+      throughput,
+      operations,
+      platform,
+      hostedModel,
+      inputShare,
+    ],
+  );
+  const status = result.monthlySavingsAtCapacity > 0 ? "ok" : "warn";
+
+  return (
+    <div className="calc-card">
+      <h2>Open-model infrastructure economics</h2>
+      <p>
+        Compare owned or dedicated inference with a hosted API. Downloadable weights have no
+        universal token price, so this model uses your measured throughput and infrastructure cost.
+      </p>
+      <div className="calc-grid">
+        <form onSubmit={(event) => event.preventDefault()}>
+          <label>
+            Open model
+            <select value={openModelId} onChange={(event) => setOpenModelId(event.target.value)}>
+              {openModelOptions.map((model) => (
+                <option key={model.id} value={model.id}>
+                  {model.provider} · {model.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <ModelField label="Hosted comparison" value={hostedModelId} set={setHostedModelId} />
+          <NumField label="Accelerators / replicas" value={accelerators} set={setAccelerators} />
+          <NumField
+            label="Cost per accelerator hour ($)"
+            value={hourlyCost}
+            set={setHourlyCost}
+            step={0.01}
+          />
+          <NumField label="Sustained utilisation (%)" value={utilization} set={setUtilization} />
+          <NumField label="Throughput (tokens / second)" value={throughput} set={setThroughput} />
+          <NumField label="Monthly operations ($)" value={operations} set={setOperations} />
+          <NumField label="Monthly platform overhead ($)" value={platform} set={setPlatform} />
+          <NumField label="Input share of tokens (%)" value={inputShare} set={setInputShare} />
+        </form>
+        <div className="calc-results">
+          <div className="row">
+            <span>Model access</span>
+            <strong>
+              {openModel?.accessModel === "open-source" ? "Open source" : "Open weight"}
+            </strong>
+          </div>
+          <div className="row">
+            <span>Licence</span>
+            <strong>{openModel?.license ?? "Verify model card"}</strong>
+          </div>
+          <div className="row">
+            <span>Monthly infrastructure</span>
+            <strong>{usd(result.monthlyInfrastructureCost)}</strong>
+          </div>
+          <div className="row">
+            <span>Effective capacity</span>
+            <strong>{fmt(result.effectiveMillionTokensPerMonth, 1)}M tokens</strong>
+          </div>
+          <div className="row accent">
+            <span>Self-hosted cost / 1M</span>
+            <strong>{usd(result.selfHostedCostPerMillion, 2)}</strong>
+          </div>
+          <div className="row">
+            <span>Hosted blended / 1M</span>
+            <strong>{usd(result.hostedBlendedCostPerMillion, 2)}</strong>
+          </div>
+          <div className="row">
+            <span>Break-even volume</span>
+            <strong>
+              {result.breakEvenMillionTokens === null
+                ? "—"
+                : `${fmt(result.breakEvenMillionTokens, 1)}M tokens / mo`}
+            </strong>
+          </div>
+          <div className="row">
+            <span>Savings at full effective capacity</span>
+            <strong>{usd(result.monthlySavingsAtCapacity)}</strong>
+          </div>
+          <span className={`calc-status ${status}`}>
+            {result.monthlySavingsAtCapacity > 0 ? "Potentially economical" : "Hosted API cheaper"}
+          </span>
+          <small>
+            Excludes procurement lead time, idle failover capacity, data-centre energy, and
+            model-quality differences. Benchmark accepted outcomes before deciding.
+          </small>
         </div>
       </div>
     </div>

@@ -11,6 +11,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import pricingData from "../../data/pricing.json";
+import type {
+  ModelCatalogueEntry,
+  SelfHostedEconomicsInput,
+  SelfHostedEconomicsResult,
+} from "@/types/model-economics.types";
 
 // ── The pricing source of truth ─────────────────────────────────────────────
 // providerPresets and modelPricingData are DERIVED from data/pricing.json.
@@ -19,11 +24,17 @@ import pricingData from "../../data/pricing.json";
 
 type PricingModel = {
   display_name: string;
-  input_per_mtok: number;
+  input_per_mtok: number | null;
   cached_input_per_mtok?: number;
-  output_per_mtok: number;
+  output_per_mtok: number | null;
   context_tokens: number;
   tier: string;
+  access_model: "proprietary" | "open-weight" | "open-source";
+  deployment: string;
+  license: string;
+  verified_date: string;
+  verified_url: string;
+  notes: string;
 };
 type PricingProvider = { label: string; models: Record<string, PricingModel> };
 type PricingDataset = {
@@ -44,6 +55,11 @@ function resolveModel(qualifiedId: string): PricingModel {
   return model;
 }
 
+function requireHostedPrice(value: number | null, qualifiedId: string): number {
+  if (value === null) throw new Error(`${qualifiedId} has no universal hosted token price`);
+  return value;
+}
+
 export const providerPresets: Record<
   string,
   {
@@ -61,10 +77,10 @@ export const providerPresets: Record<
       key,
       {
         label: preset.label,
-        premiumInput: premium.input_per_mtok,
-        premiumOutput: premium.output_per_mtok,
-        cheapInput: cheap.input_per_mtok,
-        cheapOutput: cheap.output_per_mtok,
+        premiumInput: requireHostedPrice(premium.input_per_mtok, preset.premium_model),
+        premiumOutput: requireHostedPrice(premium.output_per_mtok, preset.premium_model),
+        cheapInput: requireHostedPrice(cheap.input_per_mtok, preset.cheap_model),
+        cheapOutput: requireHostedPrice(cheap.output_per_mtok, preset.cheap_model),
       },
     ];
   }),
@@ -107,15 +123,79 @@ export const playbook = [
   },
 ];
 
+export const modelCatalogue: ModelCatalogueEntry[] = Object.entries(dataset.providers).flatMap(
+  ([providerKey, provider]) =>
+    Object.entries(provider.models).map(([modelKey, model]) => ({
+      id: `${providerKey}/${modelKey}`,
+      provider: provider.label,
+      name: model.display_name,
+      inputPrice: model.input_per_mtok,
+      cachedInputPrice: model.cached_input_per_mtok ?? null,
+      outputPrice: model.output_per_mtok,
+      contextTokens: model.context_tokens,
+      tier: model.tier,
+      accessModel: model.access_model,
+      deployment: model.deployment,
+      license: model.license,
+      verifiedDate: model.verified_date,
+      verifiedUrl: model.verified_url,
+      notes: model.notes,
+    })),
+);
+
+export const hostedModelOptions = modelCatalogue.filter(
+  (
+    model,
+  ): model is ModelCatalogueEntry & {
+    inputPrice: number;
+    outputPrice: number;
+  } => model.inputPrice !== null && model.outputPrice !== null,
+);
+
+export const openModelOptions = modelCatalogue.filter(
+  (model) => model.accessModel !== "proprietary",
+);
+
 export const modelPricingData: Record<string, { input: number; output: number }> =
   Object.fromEntries(
-    Object.values(dataset.providers).flatMap((p) =>
-      Object.values(p.models).map((m) => [
-        m.display_name,
-        { input: m.input_per_mtok, output: m.output_per_mtok },
-      ]),
-    ),
+    hostedModelOptions.map((model) => [
+      model.name,
+      { input: model.inputPrice, output: model.outputPrice },
+    ]),
   );
+
+export function calcSelfHostedEconomics(
+  input: SelfHostedEconomicsInput,
+): SelfHostedEconomicsResult {
+  const utilization = Math.min(100, Math.max(0, input.utilizationPercent)) / 100;
+  const monthlyInfrastructureCost =
+    input.accelerators * input.acceleratorHourlyCost * 730 +
+    input.monthlyOperationsCost +
+    input.monthlyPlatformCost;
+  const effectiveMillionTokensPerMonth =
+    (input.throughputTokensPerSecond * utilization * 60 * 60 * 730) / 1_000_000;
+  const selfHostedCostPerMillion =
+    effectiveMillionTokensPerMonth > 0
+      ? monthlyInfrastructureCost / effectiveMillionTokensPerMonth
+      : 0;
+  const inputShare = Math.min(100, Math.max(0, input.inputSharePercent)) / 100;
+  const hostedBlendedCostPerMillion =
+    input.hostedInputPrice * inputShare + input.hostedOutputPrice * (1 - inputShare);
+  const breakEvenMillionTokens =
+    hostedBlendedCostPerMillion > 0
+      ? monthlyInfrastructureCost / hostedBlendedCostPerMillion
+      : null;
+  const monthlyCostAtCapacityHosted = effectiveMillionTokensPerMonth * hostedBlendedCostPerMillion;
+  return {
+    monthlyInfrastructureCost,
+    effectiveMillionTokensPerMonth,
+    selfHostedCostPerMillion,
+    hostedBlendedCostPerMillion,
+    breakEvenMillionTokens,
+    monthlyCostAtCapacityHosted,
+    monthlySavingsAtCapacity: monthlyCostAtCapacityHosted - monthlyInfrastructureCost,
+  };
+}
 
 export const formatIcons: Record<string, LucideIcon> = {
   YAML: FileCode2,
@@ -280,11 +360,13 @@ export const libraryCategoryMeta: Record<string, { label: string; tagline: strin
   },
   Techniques: {
     label: "Techniques",
-    tagline: "Hands-on optimization techniques: compression, caching, routing, retrieval, batch, and the improvement loop.",
+    tagline:
+      "Hands-on optimization techniques: compression, caching, routing, retrieval, batch, and the improvement loop.",
   },
   Models: {
     label: "Models",
-    tagline: "Dated model briefings covering capability, context, routing economics, and production controls.",
+    tagline:
+      "Dated model briefings covering capability, context, routing economics, and production controls.",
   },
 };
 

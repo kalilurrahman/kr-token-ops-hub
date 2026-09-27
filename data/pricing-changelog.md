@@ -6,6 +6,18 @@ The site's calculators, guide tables, and every published pricing figure render 
 
 ---
 
+## 2026-09-27 · v2026.09 — Current and open-model overhaul
+
+Replaced the July hosted-only snapshot with current proprietary tiers and explicit open-model metadata. Every row now records access type, deployment mode, licence, source, and verification date.
+
+- **OpenAI** · Added GPT-6 Astra and GPT-5.6 Sol/Terra/Luna; added Apache-2.0 gpt-oss 120B/20B as compute-priced open-source options.
+- **Anthropic** · Added Claude Fable 5.1 and Opus 5; retained Sonnet 5 and Haiku 4.5 as balanced/economy routes.
+- **Google** · Added Gemini 3.1 Pro, Gemini 3.8 Flash, and Gemini 3.1 Flash-Lite, including dated introductory pricing where applicable.
+- **Open-weight portfolio** · Added DeepSeek V4 Pro/Flash, Llama 4 Scout/Maverick, Qwen3.8-Flash-Next, and Ministral 8B without fabricating universal token rates.
+- **Calculators** · Hosted selectors now derive from priced catalogue rows; self-hosted economics use infrastructure, utilisation, throughput, platform, and operations assumptions.
+
+Open-weight and open-source are now distinct classifications. A missing token rate means “calculate infrastructure economics,” never “free inference.”
+
 ## 2026-07-26 · v2026.07 — Initial published dataset
 
 Baseline established. All figures verified against provider pages today; every model row in `pricing.json` carries `verified_url` and `verified_date=2026-07-26`.
@@ -18,6 +30,7 @@ Baseline established. All figures verified against provider pages today; every m
 - **Mistral** · Mistral Large $2 / $6, Mistral Medium $0.40 / $1.20 · <https://mistral.ai/products>
 
 **Retired from the corpus** as part of the pricing consolidation:
+
 - `public/templates/token-pricing-reference.md` and `public/library/references/provider-comparison-matrix.md` are now generated snapshots of this dataset — do not hand-edit.
 - The `providerPresets` and `modelPricingData` tables in `src/tokenops/data.ts`, and the `PRESETS` and `MODELS` tables in `src/routes/hub.tsx`, now import from `data/pricing.json`.
 - `src/tokenops/guide.md` Appendix A retired in favor of a pointer to this dataset.

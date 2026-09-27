@@ -7,8 +7,8 @@ import pricingData from "../../data/pricing.json";
 
 type PricingModel = {
   display_name: string;
-  input_per_mtok: number;
-  output_per_mtok: number;
+  input_per_mtok: number | null;
+  output_per_mtok: number | null;
   context_tokens: number;
   tier: string;
 };
@@ -33,6 +33,11 @@ function modelById(qualifiedId: string): PricingModel {
   return m;
 }
 
+function hostedPrice(value: number | null, qualifiedId: string): number {
+  if (value === null) throw new Error(`${qualifiedId} has no universal hosted token price`);
+  return value;
+}
+
 export const Route = createFileRoute("/hub")({
   head: () => ({
     meta: [
@@ -50,20 +55,29 @@ export const Route = createFileRoute("/hub")({
 const PRESETS: Record<string, { inp: number; out: number; name: string }> = Object.fromEntries(
   Object.entries(dataset.presets).map(([key, preset]) => {
     const premium = modelById(preset.premium_model);
-    return [key, { inp: premium.input_per_mtok, out: premium.output_per_mtok, name: preset.label }];
+    return [
+      key,
+      {
+        inp: hostedPrice(premium.input_per_mtok, preset.premium_model),
+        out: hostedPrice(premium.output_per_mtok, preset.premium_model),
+        name: preset.label,
+      },
+    ];
   }),
 );
 type PresetKey = string;
 
 const MODELS = Object.entries(dataset.providers).flatMap(([_pk, provider]) =>
-  Object.values(provider.models).map((m) => ({
-    provider: provider.label,
-    model: m.display_name,
-    inp: m.input_per_mtok,
-    out: m.output_per_mtok,
-    ctx: formatCtx(m.context_tokens),
-    tier: tierLabel[m.tier] ?? m.tier,
-  })),
+  Object.values(provider.models)
+    .filter((m) => m.input_per_mtok !== null && m.output_per_mtok !== null)
+    .map((m) => ({
+      provider: provider.label,
+      model: m.display_name,
+      inp: m.input_per_mtok ?? 0,
+      out: m.output_per_mtok ?? 0,
+      ctx: formatCtx(m.context_tokens),
+      tier: tierLabel[m.tier] ?? m.tier,
+    })),
 );
 
 const CHECKLISTS = [

@@ -108,9 +108,9 @@ check("forecast H2 savings @35%", h2Savings, 44_000, 0.02);
   check("auto-cache N=10", saving(10, shapeA(10)), 81.0, 0.001);
   check("auto-cache N=100", saving(100, shapeA(100)), 89.1, 0.001);
 
-  // §8.6 worked example — Claude Opus 4.5 support agent.
+  // §8.6 worked example — Claude Opus-class support agent.
   // Rates pulled from the dataset so the chapter can never drift from pricing.json.
-  const opus = pricingRef().providers.anthropic.models["claude-opus-4-5"];
+  const opus = pricingRef().providers.anthropic.models["claude-opus-5"];
   const CALLS = 50_000,
     PREFIX = 4_000,
     USER = 200,
@@ -172,10 +172,11 @@ for (const [pk, provider] of Object.entries(pricing.providers)) {
   for (const [mk, m] of Object.entries(provider.models)) {
     for (const field of [
       "display_name",
-      "input_per_mtok",
-      "output_per_mtok",
       "context_tokens",
       "tier",
+      "access_model",
+      "deployment",
+      "license",
       "verified_url",
       "verified_date",
     ]) {
@@ -183,6 +184,13 @@ for (const [pk, provider] of Object.entries(pricing.providers)) {
         failures++;
         console.error(`FAIL ${pk}/${mk}: missing ${field}`);
       }
+    }
+    if (
+      m.access_model === "proprietary" &&
+      (m.input_per_mtok == null || m.output_per_mtok == null)
+    ) {
+      failures++;
+      console.error(`FAIL ${pk}/${mk}: proprietary hosted model requires input/output prices`);
     }
     if (m.verified_date && !/^\d{4}-\d{2}-\d{2}$/.test(m.verified_date)) {
       failures++;
@@ -203,6 +211,21 @@ if (!failures)
   console.log(
     `ok   data/pricing.json shape (v${pricing.meta.version}, reviewed ${pricing.meta.reviewed_date})`,
   );
+
+// Self-hosted economics calculator reference case.
+const monthlyInfrastructure = 2 * 3 * 730 + 2000 + 500;
+const effectiveMillionTokens = (200 * 0.5 * 3600 * 730) / 1_000_000;
+const selfHostedPerMillion = monthlyInfrastructure / effectiveMillionTokens;
+const hostedBlendedPerMillion = 0.8 * 2 + 0.2 * 10;
+check("self-hosted monthly infrastructure", monthlyInfrastructure, 6880);
+check("self-hosted effective M tokens/month", effectiveMillionTokens, 262.8);
+check("self-hosted $/M tokens", selfHostedPerMillion, 26.1796, 0.001);
+check(
+  "self-hosted break-even M tokens/month",
+  monthlyInfrastructure / hostedBlendedPerMillion,
+  1911.1111,
+  0.001,
+);
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed — fix guide.md or the check before publishing.`);
