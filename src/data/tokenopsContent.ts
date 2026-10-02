@@ -77,6 +77,24 @@ export interface GlossaryTerm {
 
 export const techniques: Technique[] = [
   {
+    id: "small-model-first",
+    name: "Small-model-first execution",
+    category: "Model Strategy",
+    summary:
+      "Start routine classification, extraction, tagging, and FAQ work on the smallest model that clears a measured quality threshold.",
+    how: [
+      "Define task-specific quality and latency thresholds before comparing model tiers.",
+      "Benchmark small models on representative production cases, including known failure modes.",
+      "Escalate only low-confidence, failed-validation, or genuinely complex requests.",
+    ],
+    typicalSavings: "Can move the routine majority of traffic away from premium model rates.",
+    effort: "Low",
+    impact: "Very High",
+    appliesTo: ["FAQ", "Classification", "Extraction", "Tagging"],
+    pitfalls:
+      "A lower token price is not a saving when retries or quality failures rise. Compare cost per accepted outcome.",
+  },
+  {
     id: "prompt-caching",
     name: "Prompt caching (stable prefixes)",
     category: "Caching",
