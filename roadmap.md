@@ -9,3 +9,4 @@
 - [ ] Extend calculators and comparison views for hosted token pricing and self-hosted infrastructure economics.
 - [ ] Add source-backed guidance covering model openness, licensing, deployment, and selection trade-offs.
 - [ ] Regenerate references and validate calculations, metadata, links, and responsive layouts.
+- [ ] Integrate the uploaded 15-pattern optimization framework into the technique catalogue and reader without duplicating existing guidance.
