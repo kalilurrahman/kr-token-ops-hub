@@ -502,6 +502,13 @@
       "file": "techniques/continuous-improvement-loop.md"
     },
     {
+      "title": "15 Essential Token Optimization Controls",
+      "desc": "A practical sequence for avoiding unnecessary model calls, shrinking context, right-sizing models, controlling generation, and measuring accepted outcomes.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/essential-token-optimization-controls.md"
+    },
+    {
       "title": "GPT-6 Astra: TokenOps Deployment & Cost Controls",
       "desc": "A deployment playbook for Astra covering the 272K pricing boundary, reasoning and tool budgets, cache economics, selective escalation, and rollout controls.",
       "category": "Models",

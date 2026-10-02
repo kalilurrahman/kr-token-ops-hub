@@ -77,6 +77,24 @@ export interface GlossaryTerm {
 
 export const techniques: Technique[] = [
   {
+    id: "small-model-first",
+    name: "Small-model-first execution",
+    category: "Model Strategy",
+    summary:
+      "Start routine classification, extraction, tagging, and FAQ work on the smallest model that clears a measured quality threshold.",
+    how: [
+      "Define task-specific quality and latency thresholds before comparing model tiers.",
+      "Benchmark small models on representative production cases, including known failure modes.",
+      "Escalate only low-confidence, failed-validation, or genuinely complex requests.",
+    ],
+    typicalSavings: "Can move the routine majority of traffic away from premium model rates.",
+    effort: "Low",
+    impact: "Very High",
+    appliesTo: ["FAQ", "Classification", "Extraction", "Tagging"],
+    pitfalls:
+      "A lower token price is not a saving when retries or quality failures rise. Compare cost per accepted outcome.",
+  },
+  {
     id: "prompt-caching",
     name: "Prompt caching (stable prefixes)",
     category: "Caching",
@@ -212,6 +230,24 @@ export const techniques: Technique[] = [
     appliesTo: ["Production apps", "Redis/vector cache"],
   },
   {
+    id: "response-cache",
+    name: "Exact response caching",
+    category: "Caching",
+    summary:
+      "Return a previously validated answer for an identical request instead of paying for another model call.",
+    how: [
+      "Build the key from the normalized request, prompt version, model configuration, and tenant boundary.",
+      "Cache only validated responses and define a TTL from the underlying information's freshness requirement.",
+      "Record hit, miss, stale, and bypass outcomes so the cache's economics and correctness stay visible.",
+    ],
+    typicalSavings: "Avoids the full model cost and latency on every valid cache hit.",
+    effort: "Low",
+    impact: "High",
+    appliesTo: ["FAQ", "Deterministic generation", "Repeated lookups"],
+    pitfalls:
+      "Never share private answers across users or serve a cached answer after its source data or prompt version changes.",
+  },
+  {
     id: "batch-api",
     name: "Batch / async processing",
     category: "Model Strategy",
@@ -243,6 +279,60 @@ export const techniques: Technique[] = [
     effort: "Low",
     impact: "High",
     appliesTo: ["All providers"],
+  },
+  {
+    id: "structured-outputs",
+    name: "Structured outputs",
+    category: "Output Control",
+    summary:
+      "Request the smallest machine-readable artifact the workflow needs, reducing prose, parse failures, and repair calls.",
+    how: [
+      "Use a concise JSON schema, enum, or typed field set rather than asking for an explanatory essay.",
+      "Validate locally and repair deterministic formatting issues without another model call.",
+      "Track schema-valid response rate and cost per accepted result, not only raw output tokens.",
+    ],
+    typicalSavings: "Often removes 20–80% of unnecessary output and prevents malformed-output retries.",
+    effort: "Low",
+    impact: "High",
+    appliesTo: ["Extraction", "Classification", "APIs", "Agent tools"],
+    pitfalls:
+      "Large schemas also consume input tokens. Keep them narrow and avoid returning fields the next step does not use.",
+  },
+  {
+    id: "tool-first",
+    name: "Tool-first architecture",
+    category: "Agentic Workflow",
+    summary:
+      "Use deterministic code, search, calculators, databases, and APIs first; invoke a model only where language understanding or reasoning adds value.",
+    how: [
+      "Map each request class to the cheapest reliable executor before adding an LLM route.",
+      "Use direct tools for time, arithmetic, lookup, conversion, validation, and known business rules.",
+      "Send only the tool result needed for synthesis instead of the full transaction or document history.",
+    ],
+    typicalSavings: "Eliminates model calls entirely for deterministic work and reduces hallucination-driven retries.",
+    effort: "Medium",
+    impact: "Very High",
+    appliesTo: ["Agents", "Assistants", "Workflow automation", "Support"],
+    pitfalls:
+      "Tool access must be allow-listed, authenticated, bounded, and observable; deterministic does not mean automatically safe.",
+  },
+  {
+    id: "query-classification",
+    name: "Preflight query classification",
+    category: "Model Strategy",
+    summary:
+      "Classify intent and complexity before execution so each request takes the shortest valid path: cache, search, RAG, tool, small model, or agent.",
+    how: [
+      "Start with rules or a compact classifier using a small, stable label set.",
+      "Route common intents directly and reserve agent workflows for requests that genuinely need planning or multiple tools.",
+      "Measure route accuracy, fallback rate, accepted-outcome cost, and latency for each class.",
+    ],
+    typicalSavings: "Prevents expensive agent and frontier-model paths from becoming the default.",
+    effort: "Medium",
+    impact: "Very High",
+    appliesTo: ["Gateways", "Support", "RAG", "Agent platforms"],
+    pitfalls:
+      "A confident misroute can cost more than no router. Use explicit fallbacks and sample routed traffic for quality review.",
   },
   {
     id: "instruction-files",
