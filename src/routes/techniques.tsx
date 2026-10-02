@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight, BookOpen, FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { techniques, type Technique } from "../data/tokenopsContent";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
@@ -47,6 +48,24 @@ const impactColor: Record<Technique["impact"], string> = {
   Low: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200",
 };
 
+const essentialControls = [
+  "Small models",
+  "Multi-model routing",
+  "Context trimming",
+  "History summaries",
+  "Output limits",
+  "Focused RAG",
+  "Response caching",
+  "Prompt caching",
+  "Semantic caching",
+  "Structured outputs",
+  "Batch processing",
+  "Agent guardrails",
+  "Tool-first execution",
+  "Query classification",
+  "Cost dashboards",
+] as const;
+
 function TechniquesPage() {
   const [cat, setCat] = useState<(typeof categories)[number]>("All");
   const list = useMemo(
@@ -65,6 +84,41 @@ function TechniquesPage() {
         articles, then browse the catalog of every technique sorted by category — each with typical
         savings, effort, and impact.
       </p>
+
+      <section className="mt-8 border-y border-border py-6" aria-labelledby="essential-controls">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="eyebrow" style={{ marginBottom: 4 }}>
+              Practical framework
+            </p>
+            <h2 id="essential-controls" className="text-2xl font-semibold">
+              15 essential cost controls
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              Apply them in sequence: avoid the call, reduce the context, right-size execution,
+              constrain generation, then measure accepted outcomes.
+            </p>
+          </div>
+          <Button asChild variant="outline">
+            <Link
+              to="/read/$"
+              params={{ _splat: "library/techniques/essential-token-optimization-controls.md" }}
+            >
+              <BookOpen /> Read the framework
+            </Link>
+          </Button>
+        </div>
+        <ol className="mt-5 grid gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+          {essentialControls.map((control, index) => (
+            <li key={control} className="flex items-center gap-3 text-sm text-foreground">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary">
+                {index + 1}
+              </span>
+              {control}
+            </li>
+          ))}
+        </ol>
+      </section>
 
       {/* ── Technique briefings grid (quick links to each article) ── */}
       <section className="mt-10">
