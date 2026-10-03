@@ -4,7 +4,7 @@
  * Caveman, Templates, Comparison, Checklists and Glossary pages.
  *
  * Framework-agnostic typed data. No runtime dependencies.
- * Last reviewed: June 2026.
+ * Last reviewed: October 2026.
  */
 
 export type Effort = "Low" | "Medium" | "High";
