@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight, BookOpen, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { techniques, type Technique } from "../data/tokenopsContent";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/techniques")({
         content:
           "A landing grid of technique briefings plus a full catalog of token-saving methods with savings, effort, and impact.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
@@ -49,21 +52,21 @@ const impactColor: Record<Technique["impact"], string> = {
 };
 
 const essentialControls = [
-  "Small models",
-  "Multi-model routing",
-  "Context trimming",
-  "History summaries",
-  "Output limits",
-  "Focused RAG",
-  "Response caching",
-  "Prompt caching",
-  "Semantic caching",
-  "Structured outputs",
-  "Batch processing",
-  "Agent guardrails",
-  "Tool-first execution",
-  "Query classification",
-  "Cost dashboards",
+  { label: "Small models", techniqueId: "small-model-first" },
+  { label: "Multi-model routing", techniqueId: "model-routing" },
+  { label: "Context trimming", techniqueId: "context-editing" },
+  { label: "History summaries", techniqueId: "compaction" },
+  { label: "Output limits", techniqueId: "output-control" },
+  { label: "Focused RAG", techniqueId: "rag-not-stuffing" },
+  { label: "Response caching", techniqueId: "response-cache" },
+  { label: "Prompt caching", techniqueId: "prompt-caching" },
+  { label: "Semantic caching", techniqueId: "semantic-cache" },
+  { label: "Structured outputs", techniqueId: "structured-outputs" },
+  { label: "Batch processing", techniqueId: "batch-api" },
+  { label: "Agent guardrails", techniqueId: "agent-budgets" },
+  { label: "Tool-first execution", techniqueId: "tool-first" },
+  { label: "Query classification", techniqueId: "query-classification" },
+  { label: "Cost dashboards", techniqueId: "finops-metering" },
 ] as const;
 
 function TechniquesPage() {
@@ -75,22 +78,18 @@ function TechniquesPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <p className="eyebrow" style={{ marginBottom: 6 }}>
-        Techniques
-      </p>
+      <p className="eyebrow mb-1.5">Techniques</p>
       <h1 className="text-4xl font-bold tracking-tight">Token Optimization Techniques</h1>
       <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-        The full toolbox of token-saving techniques. Start with the briefing grid below for deep-dive
-        articles, then browse the catalog of every technique sorted by category — each with typical
-        savings, effort, and impact.
+        The full toolbox of token-saving techniques. Start with the briefing grid below for
+        deep-dive articles, then browse the catalog of every technique sorted by category — each
+        with typical savings, effort, and impact.
       </p>
 
       <section className="mt-8 border-y border-border py-6" aria-labelledby="essential-controls">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="eyebrow" style={{ marginBottom: 4 }}>
-              Practical framework
-            </p>
+            <p className="eyebrow mb-1">Practical framework</p>
             <h2 id="essential-controls" className="text-2xl font-semibold">
               15 essential cost controls
             </h2>
@@ -110,11 +109,16 @@ function TechniquesPage() {
         </div>
         <ol className="mt-5 grid gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
           {essentialControls.map((control, index) => (
-            <li key={control} className="flex items-center gap-3 text-sm text-foreground">
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary">
-                {index + 1}
-              </span>
-              {control}
+            <li key={control.techniqueId}>
+              <a
+                href={`#${control.techniqueId}`}
+                className="group flex min-h-10 items-center gap-3 rounded-md px-1 text-sm text-foreground outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 font-mono text-xs font-semibold text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  {index + 1}
+                </span>
+                {control.label}
+              </a>
             </li>
           ))}
         </ol>
@@ -124,10 +128,8 @@ function TechniquesPage() {
       <section className="mt-10">
         <div className="flex items-center justify-between gap-4 mb-4">
           <div>
-            <p className="eyebrow" style={{ marginBottom: 4 }}>
-              Briefings
-            </p>
-            <h2 className="text-2xl font-semibold" style={{ margin: 0 }}>
+            <p className="eyebrow mb-1">Briefings</p>
+            <h2 className="m-0 text-2xl font-semibold">
               {techniqueBriefings.length} technique briefings
             </h2>
           </div>
@@ -142,15 +144,15 @@ function TechniquesPage() {
               key={item.file}
               to="/read/$"
               params={{ _splat: `library/${item.file}` }}
-              className="group flex flex-col rounded-2xl border border-border bg-card p-5 transition hover:border-emerald-500/50 hover:shadow-md"
+              className="group flex flex-col rounded-lg border border-border bg-card p-5 transition hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+              <div className="flex items-center gap-2 text-primary">
                 <FileText className="h-5 w-5" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Briefing</span>
               </div>
               <h3 className="mt-2 font-semibold leading-snug">{item.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground line-clamp-3">{item.desc}</p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">
                 Read <ArrowRight className="h-4 w-4 transition-all group-hover:translate-x-0.5" />
               </span>
             </Link>
@@ -161,12 +163,8 @@ function TechniquesPage() {
       {/* ── Full techniques catalog ── */}
       <section className="mt-14">
         <div className="mb-4">
-          <p className="eyebrow" style={{ marginBottom: 4 }}>
-            Catalog
-          </p>
-          <h2 className="text-2xl font-semibold" style={{ margin: 0 }}>
-            Full techniques catalog
-          </h2>
+          <p className="eyebrow mb-1">Catalog</p>
+          <h2 className="m-0 text-2xl font-semibold">Full techniques catalog</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Every technique with typical savings, effort, and where it applies.
           </p>
@@ -174,30 +172,36 @@ function TechniquesPage() {
 
         <div className="mt-6 flex flex-wrap gap-2">
           {categories.map((c) => (
-            <button
+            <Button
               key={c}
+              type="button"
+              size="sm"
+              variant={cat === c ? "default" : "outline"}
               onClick={() => setCat(c)}
-              className={`rounded-full border px-3 py-1.5 text-sm transition ${
-                cat === c
-                  ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                  : "border-border text-muted-foreground hover:border-emerald-500/40"
-              }`}
+              aria-pressed={cat === c}
+              className="rounded-full"
             >
               {c}
-            </button>
+            </Button>
           ))}
         </div>
 
         <div className="mt-8 space-y-4">
           {list.map((t) => (
-            <article key={t.id} className="rounded-2xl border border-border bg-card p-6">
+            <article
+              key={t.id}
+              id={t.id}
+              className="scroll-mt-24 rounded-lg border border-border bg-card p-5 sm:p-6"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-xl font-semibold">{t.name}</h3>
                 <div className="flex items-center gap-2 text-xs">
                   <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
                     {t.category}
                   </span>
-                  <span className={`rounded-full px-2.5 py-1 font-medium ${impactColor[t.impact]}`}>
+                  <span
+                    className={cn("rounded-full px-2.5 py-1 font-medium", impactColor[t.impact])}
+                  >
                     {t.impact} impact
                   </span>
                   <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">

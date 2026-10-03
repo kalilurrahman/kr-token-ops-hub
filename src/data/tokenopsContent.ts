@@ -4,7 +4,7 @@
  * Caveman, Templates, Comparison, Checklists and Glossary pages.
  *
  * Framework-agnostic typed data. No runtime dependencies.
- * Last reviewed: June 2026.
+ * Last reviewed: October 2026.
  */
 
 export type Effort = "Low" | "Medium" | "High";
@@ -144,7 +144,8 @@ export const techniques: Technique[] = [
       "In agent stacks, route subagent/tool work to cheap models — agent teams burn ~7x more tokens than single sessions.",
       "Examples: Claude Haiku → Sonnet → Opus; Gemini Flash → Pro; GPT-5.x Nano/Mini → full.",
     ],
-    typicalSavings: "Budget tiers cost 15–50x less than flagships; blended spend often drops 40–60%.",
+    typicalSavings:
+      "Budget tiers cost 15–50x less than flagships; blended spend often drops 40–60%.",
     effort: "Medium",
     impact: "Very High",
     appliesTo: ["All providers", "Agent frameworks", "Cursor", "Copilot"],
@@ -224,7 +225,8 @@ export const techniques: Technique[] = [
       "Great for FAQ-shaped traffic, repeated support questions, and common classifications.",
       "Set TTL and invalidation rules so answers don't go stale.",
     ],
-    typicalSavings: "Eliminates 100% of cost on cache hits; hit rates of 20–60% common in FAQ traffic.",
+    typicalSavings:
+      "Eliminates 100% of cost on cache hits; hit rates of 20–60% common in FAQ traffic.",
     effort: "Medium",
     impact: "High",
     appliesTo: ["Production apps", "Redis/vector cache"],
@@ -251,8 +253,7 @@ export const techniques: Technique[] = [
     id: "batch-api",
     name: "Batch / async processing",
     category: "Model Strategy",
-    summary:
-      "Send non-urgent work through batch endpoints for a flat discount.",
+    summary: "Send non-urgent work through batch endpoints for a flat discount.",
     how: [
       "Queue offline jobs (evals, enrichment, backfills, summaries) to the Batch API.",
       "OpenAI & Anthropic batch ≈ 50% off; stacks with prompt caching.",
@@ -267,8 +268,7 @@ export const techniques: Technique[] = [
     id: "output-control",
     name: "Output control",
     category: "Output Control",
-    summary:
-      "Output tokens are usually the priciest. Cap and shape them.",
+    summary: "Output tokens are usually the priciest. Cap and shape them.",
     how: [
       "Set max_tokens / max_output_tokens to a real ceiling.",
       "Ask for terse answers and a specific format; forbid preamble and restated questions.",
@@ -291,7 +291,8 @@ export const techniques: Technique[] = [
       "Validate locally and repair deterministic formatting issues without another model call.",
       "Track schema-valid response rate and cost per accepted result, not only raw output tokens.",
     ],
-    typicalSavings: "Often removes 20–80% of unnecessary output and prevents malformed-output retries.",
+    typicalSavings:
+      "Often removes 20–80% of unnecessary output and prevents malformed-output retries.",
     effort: "Low",
     impact: "High",
     appliesTo: ["Extraction", "Classification", "APIs", "Agent tools"],
@@ -309,7 +310,8 @@ export const techniques: Technique[] = [
       "Use direct tools for time, arithmetic, lookup, conversion, validation, and known business rules.",
       "Send only the tool result needed for synthesis instead of the full transaction or document history.",
     ],
-    typicalSavings: "Eliminates model calls entirely for deterministic work and reduces hallucination-driven retries.",
+    typicalSavings:
+      "Eliminates model calls entirely for deterministic work and reduces hallucination-driven retries.",
     effort: "Medium",
     impact: "Very High",
     appliesTo: ["Agents", "Assistants", "Workflow automation", "Support"],
@@ -354,8 +356,7 @@ export const techniques: Technique[] = [
     id: "few-shot-diet",
     name: "Few-shot diet",
     category: "Prompt Craft",
-    summary:
-      "Use the fewest, shortest examples that hit your quality bar — and cache them.",
+    summary: "Use the fewest, shortest examples that hit your quality bar — and cache them.",
     how: [
       "Trim example count; test where quality plateaus.",
       "Move the example bank into a cached system prefix so you pay for it once per TTL.",
@@ -370,8 +371,7 @@ export const techniques: Technique[] = [
     id: "diff-not-whole",
     name: "Send diffs, not whole files",
     category: "Context Engineering",
-    summary:
-      "Reference or diff instead of re-pasting entire files/datasets each turn.",
+    summary: "Reference or diff instead of re-pasting entire files/datasets each turn.",
     how: [
       "Share only the changed lines or a pointer/path the agent can read on demand.",
       "Strip comments, minify JSON, and dedupe boilerplate where safe.",
@@ -386,8 +386,7 @@ export const techniques: Technique[] = [
     id: "agent-budgets",
     name: "Agent token budgets & guardrails",
     category: "Agentic Workflow",
-    summary:
-      "Cap loops, steps, and tool calls so a runaway agent can't silently burn a fortune.",
+    summary: "Cap loops, steps, and tool calls so a runaway agent can't silently burn a fortune.",
     how: [
       "Set max-steps, max-tool-calls, and a hard token budget per task.",
       "Add early-exit on success and confidence checks before escalation.",
@@ -444,11 +443,28 @@ export const toolGuides: ToolGuide[] = [
     unit: "tokens",
     bestFor: "Long-context reasoning, agentic coding, tool use.",
     keyLevers: [
-      { title: "Prompt caching", detail: "Cached reads ~90% cheaper. Writes cost +25% (5-min TTL) or +100% (1-hour TTL). Mind the 5-min default since early 2026." },
-      { title: "Keepalive ping", detail: "For high-value caches, send a tiny request every ~4 min to keep the 5-min cache warm." },
-      { title: "Context editing", detail: "Auto-prune stale tool results & thinking blocks at configurable thresholds." },
-      { title: "Compaction", detail: "Use /compact at breakpoints and /clear between unrelated tasks in Claude Code." },
-      { title: "Model tiers", detail: "Plan/triage with Haiku, build with Sonnet, escalate hard reasoning to Opus." },
+      {
+        title: "Prompt caching",
+        detail:
+          "Cached reads ~90% cheaper. Writes cost +25% (5-min TTL) or +100% (1-hour TTL). Mind the 5-min default since early 2026.",
+      },
+      {
+        title: "Keepalive ping",
+        detail:
+          "For high-value caches, send a tiny request every ~4 min to keep the 5-min cache warm.",
+      },
+      {
+        title: "Context editing",
+        detail: "Auto-prune stale tool results & thinking blocks at configurable thresholds.",
+      },
+      {
+        title: "Compaction",
+        detail: "Use /compact at breakpoints and /clear between unrelated tasks in Claude Code.",
+      },
+      {
+        title: "Model tiers",
+        detail: "Plan/triage with Haiku, build with Sonnet, escalate hard reasoning to Opus.",
+      },
       { title: "Batch API", detail: "~50% off for offline jobs; stacks with caching." },
     ],
     doThis: [
@@ -462,7 +478,8 @@ export const toolGuides: ToolGuide[] = [
       "Carrying every tool output forward for the whole session.",
       "Running Opus for boilerplate edits.",
     ],
-    proTip: "Stability is the whole game for caching: same instructions, same attached context, same thread. Caching rewards sameness.",
+    proTip:
+      "Stability is the whole game for caching: same instructions, same attached context, same thread. Caching rewards sameness.",
   },
   {
     id: "lovable",
@@ -471,10 +488,25 @@ export const toolGuides: ToolGuide[] = [
     unit: "credits",
     bestFor: "Full-stack app building with no/low code.",
     keyLevers: [
-      { title: "Chat mode", detail: "Talk through and plan changes (inspect files, logs, DB) before spending build credits." },
-      { title: "Visual / Manual edits", detail: "Text, colors, spacing and styling tweaks are free — don't spend a generation on them." },
-      { title: "Batch edits", detail: "One precise prompt instead of ten follow-ups about the same button." },
-      { title: "External drafting", detail: "Architect and write detailed prompts in Claude/ChatGPT first, then paste the finalized prompt in." },
+      {
+        title: "Chat mode",
+        detail:
+          "Talk through and plan changes (inspect files, logs, DB) before spending build credits.",
+      },
+      {
+        title: "Visual / Manual edits",
+        detail:
+          "Text, colors, spacing and styling tweaks are free — don't spend a generation on them.",
+      },
+      {
+        title: "Batch edits",
+        detail: "One precise prompt instead of ten follow-ups about the same button.",
+      },
+      {
+        title: "External drafting",
+        detail:
+          "Architect and write detailed prompts in Claude/ChatGPT first, then paste the finalized prompt in.",
+      },
     ],
     doThis: [
       "Write one comprehensive, specific prompt per feature with acceptance criteria.",
@@ -487,7 +519,8 @@ export const toolGuides: ToolGuide[] = [
       "Asking for vague 'make it nicer' changes that trigger broad regenerations.",
       "Using build credits for styling you could do in Visual Edits.",
     ],
-    proTip: "The cheapest Lovable credit is the one you never spend: every minute of planning in a free chat saves an iteration loop.",
+    proTip:
+      "The cheapest Lovable credit is the one you never spend: every minute of planning in a free chat saves an iteration loop.",
   },
   {
     id: "openai",
@@ -496,11 +529,28 @@ export const toolGuides: ToolGuide[] = [
     unit: "tokens",
     bestFor: "General assistants, structured extraction, high-volume API workloads.",
     keyLevers: [
-      { title: "Auto prompt caching", detail: "Repeated prefixes discounted ~50–90% automatically — structure prompts to maximize hits." },
-      { title: "Batch API", detail: "Flat 50% off input+output for <24h jobs; stacks with caching for ~75%." },
-      { title: "Model picker", detail: "Use Instant/Mini/Nano tiers for routine work; reserve reasoning (o-series) for hard problems." },
-      { title: "Memory & custom instructions", detail: "Store durable preferences once instead of re-stating them each chat." },
-      { title: "Projects", detail: "Keep shared context in a Project so it isn't re-pasted per conversation." },
+      {
+        title: "Auto prompt caching",
+        detail:
+          "Repeated prefixes discounted ~50–90% automatically — structure prompts to maximize hits.",
+      },
+      {
+        title: "Batch API",
+        detail: "Flat 50% off input+output for <24h jobs; stacks with caching for ~75%.",
+      },
+      {
+        title: "Model picker",
+        detail:
+          "Use Instant/Mini/Nano tiers for routine work; reserve reasoning (o-series) for hard problems.",
+      },
+      {
+        title: "Memory & custom instructions",
+        detail: "Store durable preferences once instead of re-stating them each chat.",
+      },
+      {
+        title: "Projects",
+        detail: "Keep shared context in a Project so it isn't re-pasted per conversation.",
+      },
     ],
     doThis: [
       "Put system + reference content first; keep it identical across calls.",
@@ -511,7 +561,8 @@ export const toolGuides: ToolGuide[] = [
       "Defaulting every call to the flagship reasoning model.",
       "Re-pasting the same standing instructions in every message instead of using memory/custom instructions.",
     ],
-    proTip: "Output tokens dominate cost on chatty tasks — a 'be concise, no preamble, answer only' instruction is free money.",
+    proTip:
+      "Output tokens dominate cost on chatty tasks — a 'be concise, no preamble, answer only' instruction is free money.",
   },
   {
     id: "gemini",
@@ -520,9 +571,20 @@ export const toolGuides: ToolGuide[] = [
     unit: "tokens",
     bestFor: "Very long context (up to 1M+), document-heavy workloads.",
     keyLevers: [
-      { title: "Implicit caching", detail: "On by default for 2.5+ models, ~90% off cached tokens, no storage cost. Put large/common content at the start; send similar-prefix requests close in time." },
-      { title: "Explicit caching", detail: "Guaranteed 90% (2.5+) / 75% (2.0) discount on referenced context; has storage cost; min ~2,048 tokens." },
-      { title: "Flash vs Pro", detail: "Draft/route on Flash; reserve Pro for genuinely hard or long-reasoning tasks." },
+      {
+        title: "Implicit caching",
+        detail:
+          "On by default for 2.5+ models, ~90% off cached tokens, no storage cost. Put large/common content at the start; send similar-prefix requests close in time.",
+      },
+      {
+        title: "Explicit caching",
+        detail:
+          "Guaranteed 90% (2.5+) / 75% (2.0) discount on referenced context; has storage cost; min ~2,048 tokens.",
+      },
+      {
+        title: "Flash vs Pro",
+        detail: "Draft/route on Flash; reserve Pro for genuinely hard or long-reasoning tasks.",
+      },
     ],
     doThis: [
       "Lead prompts with the big shared document, then the per-request question.",
@@ -533,7 +595,8 @@ export const toolGuides: ToolGuide[] = [
       "Paying to store an explicit cache you only hit a couple of times — implicit usually wins on Flash.",
       "Shuffling the order of your context between calls (breaks prefix hits).",
     ],
-    proTip: "On Flash, implicit caching captures most of the upside for free; reserve explicit caching for Pro-tier, high-reuse contexts.",
+    proTip:
+      "On Flash, implicit caching captures most of the upside for free; reserve explicit caching for Pro-tier, high-reuse contexts.",
   },
   {
     id: "cursor",
@@ -542,10 +605,24 @@ export const toolGuides: ToolGuide[] = [
     unit: "requests",
     bestFor: "Repo-aware AI coding inside the editor.",
     keyLevers: [
-      { title: "@ mentions", detail: "Reference exactly what's needed: @file, @folder, @docs, @web — instead of broad @codebase." },
-      { title: "Rules (.cursor/rules)", detail: "Encode conventions once; they persist across sessions and cut repeated instruction tokens." },
-      { title: "Model selection", detail: "Pick cheaper models for routine edits; save premium models for hard changes." },
-      { title: "Context window indicator", detail: "Watch it; start a fresh chat when context bloats." },
+      {
+        title: "@ mentions",
+        detail:
+          "Reference exactly what's needed: @file, @folder, @docs, @web — instead of broad @codebase.",
+      },
+      {
+        title: "Rules (.cursor/rules)",
+        detail:
+          "Encode conventions once; they persist across sessions and cut repeated instruction tokens.",
+      },
+      {
+        title: "Model selection",
+        detail: "Pick cheaper models for routine edits; save premium models for hard changes.",
+      },
+      {
+        title: "Context window indicator",
+        detail: "Watch it; start a fresh chat when context bloats.",
+      },
     ],
     doThis: [
       "Scope context tightly with @file/@folder for the task at hand.",
@@ -556,7 +633,8 @@ export const toolGuides: ToolGuide[] = [
       "Reaching for @codebase when two files would do.",
       "Letting one mega-thread accumulate the whole day's context.",
     ],
-    proTip: "Encode project guidance once in rules rather than repeating it in every prompt — it's the .cursorrules tax break.",
+    proTip:
+      "Encode project guidance once in rules rather than repeating it in every prompt — it's the .cursorrules tax break.",
   },
   {
     id: "copilot",
@@ -565,30 +643,55 @@ export const toolGuides: ToolGuide[] = [
     unit: "requests",
     bestFor: "In-IDE completions and chat tied to the GitHub ecosystem.",
     keyLevers: [
-      { title: "Custom instructions", detail: ".github/copilot-instructions.md gives persistent project guidance." },
-      { title: "Ambient context", detail: "Copilot pulls PRs, issues, and Actions context — lean on it instead of pasting." },
-      { title: "Premium request budget", detail: "Track premium-request usage; route routine asks to included models." },
+      {
+        title: "Custom instructions",
+        detail: ".github/copilot-instructions.md gives persistent project guidance.",
+      },
+      {
+        title: "Ambient context",
+        detail: "Copilot pulls PRs, issues, and Actions context — lean on it instead of pasting.",
+      },
+      {
+        title: "Premium request budget",
+        detail: "Track premium-request usage; route routine asks to included models.",
+      },
     ],
     doThis: [
       "Maintain a clear instructions file so completions follow your patterns.",
       "Let issue/PR context do the explaining instead of re-describing the codebase.",
     ],
-    avoidThis: [
-      "Spending premium requests on trivial completions.",
-    ],
-    proTip: "Copilot's edge is ambient context — reference the PR/issue rather than re-pasting why the code exists.",
+    avoidThis: ["Spending premium requests on trivial completions."],
+    proTip:
+      "Copilot's edge is ambient context — reference the PR/issue rather than re-pasting why the code exists.",
   },
   {
     id: "media-tools",
     name: "Beyond coding: video, audio, text & productivity",
     tagline: "Credit economics mirror token economics.",
     unit: "credits",
-    bestFor: "Generative media (Runway/Sora/Pika/Kling), voice (ElevenLabs), research (Perplexity), and productivity AI (Notion, Zapier/Make).",
+    bestFor:
+      "Generative media (Runway/Sora/Pika/Kling), voice (ElevenLabs), research (Perplexity), and productivity AI (Notion, Zapier/Make).",
     keyLevers: [
-      { title: "Draft cheap, finish expensive", detail: "Generate drafts at low resolution / short duration / cheap models; only spend full quality on the keeper." },
-      { title: "Lock the seed", detail: "Reuse seeds/prompts so you iterate on one variable instead of re-rolling the whole generation." },
-      { title: "Chunk & batch", detail: "Voice/transcription bill by characters/minutes — chunk long inputs, batch jobs, and cache reusable clips." },
-      { title: "Smallest sufficient model", detail: "Perplexity/Notion/agents: pick the concise/standard model unless the task truly needs the heavy one." },
+      {
+        title: "Draft cheap, finish expensive",
+        detail:
+          "Generate drafts at low resolution / short duration / cheap models; only spend full quality on the keeper.",
+      },
+      {
+        title: "Lock the seed",
+        detail:
+          "Reuse seeds/prompts so you iterate on one variable instead of re-rolling the whole generation.",
+      },
+      {
+        title: "Chunk & batch",
+        detail:
+          "Voice/transcription bill by characters/minutes — chunk long inputs, batch jobs, and cache reusable clips.",
+      },
+      {
+        title: "Smallest sufficient model",
+        detail:
+          "Perplexity/Notion/agents: pick the concise/standard model unless the task truly needs the heavy one.",
+      },
     ],
     doThis: [
       "Plan the shot/script before generating; storyboard in text (free) first.",
@@ -599,7 +702,8 @@ export const toolGuides: ToolGuide[] = [
       "Re-rendering full-quality video to tweak one detail.",
       "Re-synthesizing entire narrations to fix one line — regenerate only the changed segment.",
     ],
-    proTip: "Whatever the unit — tokens, credits, characters, render-minutes — the same four moves win: plan first, pick the smallest sufficient model, reuse outputs, and batch.",
+    proTip:
+      "Whatever the unit — tokens, credits, characters, render-minutes — the same four moves win: plan first, pick the smallest sufficient model, reuse outputs, and batch.",
   },
 ];
 
@@ -608,8 +712,7 @@ export const toolGuides: ToolGuide[] = [
 /* ------------------------------------------------------------------ */
 
 export const caveman = {
-  what:
-    "Caveman is a rule-based semantic compression style: write to the model in terse, telegram-like language that drops grammatical filler while keeping every load-bearing word. Think 'cave drawing,' not 'essay.'",
+  what: "Caveman is a rule-based semantic compression style: write to the model in terse, telegram-like language that drops grammatical filler while keeping every load-bearing word. Think 'cave drawing,' not 'essay.'",
   keepList: [
     "Nouns & main verbs",
     "Numbers & units",
@@ -829,18 +932,65 @@ export const checklists: ChecklistGroup[] = [
 /* ------------------------------------------------------------------ */
 
 export const glossary: GlossaryTerm[] = [
-  { term: "Token", definition: "The unit LLMs read and bill on — roughly ¾ of a word in English. Input and output tokens are usually priced differently (output costs more)." },
-  { term: "Context window", definition: "The maximum tokens a model can consider at once (e.g. 200K for Claude, 272K input for GPT-5 family, 1M+ for Gemini)." },
-  { term: "Prompt caching", definition: "Reusing the processed form of a stable prompt prefix so repeated calls skip re-computing it — typically ~90% cheaper on cached reads." },
-  { term: "TTL", definition: "Time-to-live: how long a cache entry stays valid. Claude's default dropped to 5 minutes in early 2026 (1-hour option exists)." },
-  { term: "Context editing", definition: "Pruning stale tool results and thinking blocks from the running context instead of carrying them forward." },
-  { term: "Compaction", definition: "Summarizing earlier conversation into a compact state so the thread can continue without the full transcript." },
-  { term: "RAG", definition: "Retrieval-Augmented Generation: fetch only relevant chunks and feed those, instead of stuffing whole documents into the prompt." },
-  { term: "Semantic cache", definition: "App-level cache that matches semantically similar queries and returns a stored answer, skipping the model call." },
-  { term: "Batch API", definition: "Async endpoint that processes non-urgent jobs within ~24h for ~50% off." },
-  { term: "Model routing", definition: "Sending each request to the cheapest model that meets the quality bar; escalating only when needed." },
-  { term: "Caveman compression", definition: "Telegram-style prompt compression that drops grammatical filler while keeping load-bearing words." },
-  { term: "Distillation", definition: "Training a small model on a flagship model's outputs for a narrow task, then serving the cheap model." },
+  {
+    term: "Token",
+    definition:
+      "The unit LLMs read and bill on — roughly ¾ of a word in English. Input and output tokens are usually priced differently (output costs more).",
+  },
+  {
+    term: "Context window",
+    definition:
+      "The maximum tokens a model can consider at once (e.g. 200K for Claude, 272K input for GPT-5 family, 1M+ for Gemini).",
+  },
+  {
+    term: "Prompt caching",
+    definition:
+      "Reusing the processed form of a stable prompt prefix so repeated calls skip re-computing it — typically ~90% cheaper on cached reads.",
+  },
+  {
+    term: "TTL",
+    definition:
+      "Time-to-live: how long a cache entry stays valid. Claude's default dropped to 5 minutes in early 2026 (1-hour option exists).",
+  },
+  {
+    term: "Context editing",
+    definition:
+      "Pruning stale tool results and thinking blocks from the running context instead of carrying them forward.",
+  },
+  {
+    term: "Compaction",
+    definition:
+      "Summarizing earlier conversation into a compact state so the thread can continue without the full transcript.",
+  },
+  {
+    term: "RAG",
+    definition:
+      "Retrieval-Augmented Generation: fetch only relevant chunks and feed those, instead of stuffing whole documents into the prompt.",
+  },
+  {
+    term: "Semantic cache",
+    definition:
+      "App-level cache that matches semantically similar queries and returns a stored answer, skipping the model call.",
+  },
+  {
+    term: "Batch API",
+    definition: "Async endpoint that processes non-urgent jobs within ~24h for ~50% off.",
+  },
+  {
+    term: "Model routing",
+    definition:
+      "Sending each request to the cheapest model that meets the quality bar; escalating only when needed.",
+  },
+  {
+    term: "Caveman compression",
+    definition:
+      "Telegram-style prompt compression that drops grammatical filler while keeping load-bearing words.",
+  },
+  {
+    term: "Distillation",
+    definition:
+      "Training a small model on a flagship model's outputs for a narrow task, then serving the cheap model.",
+  },
 ];
 
 export const meta = {
