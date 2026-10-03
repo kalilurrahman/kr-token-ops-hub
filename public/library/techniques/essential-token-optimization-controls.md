@@ -4,23 +4,23 @@ Token optimization is a system design discipline, not a single prompt trick. The
 
 ## The control stack
 
-| # | Control | Primary decision | Measure |
-|---|---|---|---|
-| 1 | Small-model-first execution | Can a smaller model clear the quality threshold? | Cost per accepted outcome by model tier |
-| 2 | Multi-model routing | Which tier should handle this complexity? | Route share, escalation rate, quality by route |
-| 3 | Context trimming | Which tokens can be removed without changing the answer? | Input tokens by context layer |
-| 4 | Conversation summarization | Which history must remain verbatim? | History tokens, summary refresh rate |
-| 5 | Output token limits | What is the shortest useful result? | Output p50/p95, truncation rate |
-| 6 | Focused RAG | Which evidence is necessary for this question? | Retrieved versus sent tokens, grounded accuracy |
-| 7 | Exact response caching | Has this validated request already been answered? | Hit rate, stale rate, avoided calls |
-| 8 | Prompt caching | Which stable prefix repeats within the cache window? | Cached-read share, write-to-read ratio |
-| 9 | Semantic caching | Is a meaning-equivalent answer safe to reuse? | Similarity threshold, false-hit rate |
-| 10 | Structured outputs | What fields does the next step actually consume? | Schema-valid rate, retry rate |
-| 11 | Batch processing | Can the result arrive asynchronously? | Batch share, completion SLA, discount realized |
-| 12 | Agent guardrails | How much autonomy can one task consume? | Steps, tool calls, tokens, timeout rate |
-| 13 | Tool-first architecture | Can deterministic software answer without an LLM? | Model-call avoidance rate |
-| 14 | Query classification | Which execution path fits this request? | Route accuracy, fallback rate |
-| 15 | Cost monitoring dashboards | Is spend improving per successful outcome? | Cost per user, request, feature, and outcome |
+| #   | Control                     | Primary decision                                         | Measure                                         |
+| --- | --------------------------- | -------------------------------------------------------- | ----------------------------------------------- |
+| 1   | Small-model-first execution | Can a smaller model clear the quality threshold?         | Cost per accepted outcome by model tier         |
+| 2   | Multi-model routing         | Which tier should handle this complexity?                | Route share, escalation rate, quality by route  |
+| 3   | Context trimming            | Which tokens can be removed without changing the answer? | Input tokens by context layer                   |
+| 4   | Conversation summarization  | Which history must remain verbatim?                      | History tokens, summary refresh rate            |
+| 5   | Output token limits         | What is the shortest useful result?                      | Output p50/p95, truncation rate                 |
+| 6   | Focused RAG                 | Which evidence is necessary for this question?           | Retrieved versus sent tokens, grounded accuracy |
+| 7   | Exact response caching      | Has this validated request already been answered?        | Hit rate, stale rate, avoided calls             |
+| 8   | Prompt caching              | Which stable prefix repeats within the cache window?     | Cached-read share, write-to-read ratio          |
+| 9   | Semantic caching            | Is a meaning-equivalent answer safe to reuse?            | Similarity threshold, false-hit rate            |
+| 10  | Structured outputs          | What fields does the next step actually consume?         | Schema-valid rate, retry rate                   |
+| 11  | Batch processing            | Can the result arrive asynchronously?                    | Batch share, completion SLA, discount realized  |
+| 12  | Agent guardrails            | How much autonomy can one task consume?                  | Steps, tool calls, tokens, timeout rate         |
+| 13  | Tool-first architecture     | Can deterministic software answer without an LLM?        | Model-call avoidance rate                       |
+| 14  | Query classification        | Which execution path fits this request?                  | Route accuracy, fallback rate                   |
+| 15  | Cost monitoring dashboards  | Is spend improving per successful outcome?               | Cost per user, request, feature, and outcome    |
 
 ## 1. Use smaller models first
 

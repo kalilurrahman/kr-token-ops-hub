@@ -78,22 +78,18 @@ function TechniquesPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <p className="eyebrow mb-1.5">
-        Techniques
-      </p>
+      <p className="eyebrow mb-1.5">Techniques</p>
       <h1 className="text-4xl font-bold tracking-tight">Token Optimization Techniques</h1>
       <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-        The full toolbox of token-saving techniques. Start with the briefing grid below for deep-dive
-        articles, then browse the catalog of every technique sorted by category — each with typical
-        savings, effort, and impact.
+        The full toolbox of token-saving techniques. Start with the briefing grid below for
+        deep-dive articles, then browse the catalog of every technique sorted by category — each
+        with typical savings, effort, and impact.
       </p>
 
       <section className="mt-8 border-y border-border py-6" aria-labelledby="essential-controls">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="eyebrow mb-1">
-              Practical framework
-            </p>
+            <p className="eyebrow mb-1">Practical framework</p>
             <h2 id="essential-controls" className="text-2xl font-semibold">
               15 essential cost controls
             </h2>
@@ -132,9 +128,7 @@ function TechniquesPage() {
       <section className="mt-10">
         <div className="flex items-center justify-between gap-4 mb-4">
           <div>
-            <p className="eyebrow mb-1">
-              Briefings
-            </p>
+            <p className="eyebrow mb-1">Briefings</p>
             <h2 className="m-0 text-2xl font-semibold">
               {techniqueBriefings.length} technique briefings
             </h2>
@@ -169,12 +163,8 @@ function TechniquesPage() {
       {/* ── Full techniques catalog ── */}
       <section className="mt-14">
         <div className="mb-4">
-          <p className="eyebrow mb-1">
-            Catalog
-          </p>
-          <h2 className="m-0 text-2xl font-semibold">
-            Full techniques catalog
-          </h2>
+          <p className="eyebrow mb-1">Catalog</p>
+          <h2 className="m-0 text-2xl font-semibold">Full techniques catalog</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Every technique with typical savings, effort, and where it applies.
           </p>
@@ -209,7 +199,9 @@ function TechniquesPage() {
                   <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
                     {t.category}
                   </span>
-                  <span className={cn("rounded-full px-2.5 py-1 font-medium", impactColor[t.impact])}>
+                  <span
+                    className={cn("rounded-full px-2.5 py-1 font-medium", impactColor[t.impact])}
+                  >
                     {t.impact} impact
                   </span>
                   <span className="rounded-full bg-muted px-2.5 py-1 text-muted-foreground">
