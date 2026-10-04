@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 
 export function SiteFooter() {
@@ -57,7 +58,7 @@ function Social({
 }: {
   href: string;
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <a

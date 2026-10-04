@@ -12,6 +12,24 @@ import { techniques, toolGuides, meta } from "../data/tokenopsContent";
 
 export const Route = createFileRoute("/optimize")({
   component: OptimizeHub,
+  head: () => ({
+    meta: [
+      { title: "Token Optimization Playbook — TokenOps Atlas" },
+      {
+        name: "description",
+        content:
+          "Reduce AI token and credit spend with model routing, caching, context engineering, batching, and reusable prompt controls.",
+      },
+      { property: "og:title", content: "Token Optimization Playbook — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content:
+          "A practical hub for selecting and applying high-impact token optimization methods.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
 const cards = [

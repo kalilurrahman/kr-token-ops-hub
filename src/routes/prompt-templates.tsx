@@ -2,9 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Copy, CheckCheck } from "lucide-react";
 import { templates, checklists } from "../data/tokenopsContent";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/prompt-templates")({
   component: TemplatesPage,
+  head: () => ({
+    meta: [
+      { title: "Prompt Templates and Checklists — TokenOps Atlas" },
+      {
+        name: "description",
+        content:
+          "Copy practical prompt templates and operational checklists for caching, routing, output control, compaction, and project memory.",
+      },
+      { property: "og:title", content: "Prompt Templates and Checklists — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content:
+          "Reusable scaffolds for efficient prompts and production-ready TokenOps controls.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
 function TemplatesPage() {
@@ -28,9 +47,12 @@ function TemplatesPage() {
           <div key={t.id} className="rounded-2xl border border-border bg-card p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-semibold">{t.title}</h2>
-              <button
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
                 onClick={() => copy(t.id, t.body)}
-                className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs hover:border-emerald-500/50"
+                className="h-7 px-2.5 text-xs"
               >
                 {copiedId === t.id ? (
                   <CheckCheck className="h-3.5 w-3.5 text-emerald-500" />
@@ -38,7 +60,7 @@ function TemplatesPage() {
                   <Copy className="h-3.5 w-3.5" />
                 )}
                 {copiedId === t.id ? "Copied" : "Copy"}
-              </button>
+              </Button>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
               <span className="font-medium">Use when:</span> {t.useWhen}

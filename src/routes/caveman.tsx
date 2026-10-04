@@ -2,9 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, X, Copy, CheckCheck } from "lucide-react";
 import { caveman } from "../data/tokenopsContent";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/caveman")({
   component: CavemanPage,
+  head: () => ({
+    meta: [
+      { title: "Caveman Compression — TokenOps Atlas" },
+      {
+        name: "description",
+        content:
+          "Apply concise, telegram-style prompting to reduce token use while preserving intent, constraints, and essential context.",
+      },
+      { property: "og:title", content: "Caveman Compression — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content:
+          "A practical method for compressing prompts without losing the information models need.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
 function CavemanPage() {
@@ -98,13 +117,16 @@ function CavemanPage() {
       <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-zinc-950 text-zinc-100">
         <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
           <span className="text-xs text-zinc-400">caveman-skill.txt</span>
-          <button
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
             onClick={copy}
-            className="inline-flex items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1 text-xs hover:bg-white/20"
+            className="h-7 bg-primary-foreground/10 px-2.5 text-xs text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
           >
             {copied ? <CheckCheck className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? "Copied" : "Copy"}
-          </button>
+          </Button>
         </div>
         <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
           <code>{caveman.skillSnippet}</code>
