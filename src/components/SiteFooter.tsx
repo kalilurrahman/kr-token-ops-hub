@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 
 export function SiteFooter() {
@@ -7,16 +8,36 @@ export function SiteFooter() {
     <footer className="site-footer mt-12 border-t">
       <div className="mx-auto max-w-[1200px] px-4 py-10">
         <nav className="footer-muted mb-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs">
-          <Link to="/optimize" className="hover:underline">Optimize</Link>
-          <Link to="/techniques" className="hover:underline">Techniques</Link>
-          <Link to="/models" className="hover:underline">Models</Link>
-          <Link to="/reading-lists" className="hover:underline">Reading Lists</Link>
-          <Link to="/tool-guides" className="hover:underline">Tool Guides</Link>
-          <Link to="/caveman" className="hover:underline">Caveman</Link>
-          <Link to="/prompt-templates" className="hover:underline">Prompt Templates</Link>
-          <Link to="/calculator" className="hover:underline">Calculator</Link>
-          <Link to="/library" className="hover:underline">Library</Link>
-          <Link to="/sample-chapter" className="hover:underline">Free Chapter</Link>
+          <Link to="/optimize" className="hover:underline">
+            Optimize
+          </Link>
+          <Link to="/techniques" className="hover:underline">
+            Techniques
+          </Link>
+          <Link to="/models" className="hover:underline">
+            Models
+          </Link>
+          <Link to="/reading-lists" className="hover:underline">
+            Reading Lists
+          </Link>
+          <Link to="/tool-guides" className="hover:underline">
+            Tool Guides
+          </Link>
+          <Link to="/caveman" className="hover:underline">
+            Caveman
+          </Link>
+          <Link to="/prompt-templates" className="hover:underline">
+            Prompt Templates
+          </Link>
+          <Link to="/calculator" className="hover:underline">
+            Calculator
+          </Link>
+          <Link to="/library" className="hover:underline">
+            Library
+          </Link>
+          <Link to="/sample-chapter" className="hover:underline">
+            Free Chapter
+          </Link>
         </nav>
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
           <TokenOpsLogo size={36} showWordmark showTagline />
@@ -50,15 +71,7 @@ export function SiteFooter() {
   );
 }
 
-function Social({
-  href,
-  label,
-  children,
-}: {
-  href: string;
-  label: string;
-  children: React.ReactNode;
-}) {
+function Social({ href, label, children }: { href: string; label: string; children: ReactNode }) {
   return (
     <a
       href={href}

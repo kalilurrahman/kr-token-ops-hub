@@ -2,36 +2,57 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, X, Lightbulb } from "lucide-react";
 import { toolGuides, comparison } from "../data/tokenopsContent";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/tool-guides")({
   component: ToolGuidesPage,
+  head: () => ({
+    meta: [
+      { title: "AI Tool Optimization Guides — TokenOps Atlas" },
+      {
+        name: "description",
+        content:
+          "Provider-specific guidance for reducing token, credit, character, request, and media-generation costs across major AI tools.",
+      },
+      { property: "og:title", content: "AI Tool Optimization Guides — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content:
+          "Practical optimization playbooks for leading AI platforms, including caching and batch guidance.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
 function ToolGuidesPage() {
   const [active, setActive] = useState(toolGuides[0].id);
-  const guide = toolGuides.find((g) => g.id === active)!;
+  const guide = toolGuides.find((g) => g.id === active) ?? toolGuides[0];
+
+  if (!guide) return null;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="text-4xl font-bold tracking-tight">Tool-Specific Guides</h1>
       <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-        How to spend the least on each major tool. Costs are billed in different
-        units — tokens, credits, characters, requests — but the moves rhyme.
+        How to spend the least on each major tool. Costs are billed in different units — tokens,
+        credits, characters, requests — but the moves rhyme.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         {toolGuides.map((g) => (
-          <button
+          <Button
             key={g.id}
+            type="button"
+            size="sm"
+            variant={active === g.id ? "default" : "outline"}
             onClick={() => setActive(g.id)}
-            className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-              active === g.id
-                ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                : "border-border text-muted-foreground hover:border-emerald-500/40"
-            }`}
+            aria-pressed={active === g.id}
+            className="rounded-full"
           >
             {g.name}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -119,7 +140,8 @@ function ToolGuidesPage() {
         </table>
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        Discounts and TTLs change often — confirm against each provider's current docs before budgeting.
+        Discounts and TTLs change often — confirm against each provider's current docs before
+        budgeting.
       </p>
     </div>
   );

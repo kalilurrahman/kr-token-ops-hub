@@ -111,20 +111,42 @@ function Index() {
             </div>
             <h2 className="mt-1 text-2xl font-semibold">Token Optimization Playbook</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Techniques, tool-specific guides, the Caveman method, and copy-paste templates — spend the fewest tokens for the best result.
+              Techniques, tool-specific guides, the Caveman method, and copy-paste templates — spend
+              the fewest tokens for the best result.
             </p>
           </div>
           <span className="inline-flex items-center gap-1 self-start rounded-full bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-700 dark:text-emerald-300 sm:self-auto">
-            Open Optimize <ArrowRight className="h-4 w-4 transition-all group-hover:translate-x-0.5" />
+            Open Optimize{" "}
+            <ArrowRight className="h-4 w-4 transition-all group-hover:translate-x-0.5" />
           </span>
         </Link>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { to: "/techniques", icon: Layers, title: "Techniques", desc: "Caching, routing, compression, RAG." },
-            { to: "/tool-guides", icon: Wrench, title: "Tool Guides", desc: "Claude, Lovable, GPT, Gemini, Cursor." },
-            { to: "/caveman", icon: Sparkles, title: "Caveman", desc: "Telegram-style prompts: 14–45% savings." },
-            { to: "/prompt-templates", icon: ClipboardList, title: "Templates", desc: "Copy-paste prompts & checklists." },
+            {
+              to: "/techniques",
+              icon: Layers,
+              title: "Techniques",
+              desc: "Caching, routing, compression, RAG.",
+            },
+            {
+              to: "/tool-guides",
+              icon: Wrench,
+              title: "Tool Guides",
+              desc: "Claude, Lovable, GPT, Gemini, Cursor.",
+            },
+            {
+              to: "/caveman",
+              icon: Sparkles,
+              title: "Caveman",
+              desc: "Telegram-style prompts: 14–45% savings.",
+            },
+            {
+              to: "/prompt-templates",
+              icon: ClipboardList,
+              title: "Templates",
+              desc: "Copy-paste prompts & checklists.",
+            },
           ].map((t) => (
             <Link
               key={t.to}
@@ -304,30 +326,102 @@ function Index() {
       <section className="mx-auto w-full max-w-[1200px] px-4">
         <div className="flex items-center justify-between gap-4 mb-4">
           <div>
-            <p className="eyebrow" style={{ marginBottom: 4 }}>What's new</p>
+            <p className="eyebrow" style={{ marginBottom: 4 }}>
+              What's new
+            </p>
             <h2 style={{ margin: 0 }}>2026 TokenOps trends</h2>
           </div>
-          <Link to="/library" className="secondary-action">Browse all →</Link>
+          <Link to="/library" className="secondary-action">
+            Browse all →
+          </Link>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { file: "trends/2026-pricing-landscape.md", title: "2026 Pricing Landscape", desc: "GPT-5, Claude Opus 4.5, Gemini 3, DeepSeek V3.2 — and the tokenizer inflation trap." },
-            { file: "trends/prompt-caching-2026.md", title: "Prompt Caching: The 90% Discount", desc: "Discount rates, TTLs, write premiums, and the break-even model across providers." },
-            { file: "trends/reasoning-token-governance.md", title: "Reasoning Token Governance", desc: "Right-size thinking budgets across o3/o4, GPT-5, Claude Adaptive Thinking, Deep Think." },
-            { file: "trends/agentic-cost-loop-tax.md", title: "The Loop Tax", desc: "The $47K runaway agent, the 5–30× estimation error, and the six required agent controls." },
-            { file: "trends/greenops-focus-2026.md", title: "GreenOps & FOCUS", desc: "FOCUS 1.4/1.5 for AI and the dual-reporting playbook for dollars and carbon." },
-            { file: "trends/enterprise-case-studies-2026.md", title: "Enterprise Case Studies", desc: "AT&T 90% cut, fintech 73% saved, SaaS $48K→$19K — and the stack behind each." },
-            { file: "trends/semantic-caching-2026.md", title: "Semantic Caching Beyond Exact-Match", desc: "The two-cache stack, similarity thresholds, invalidation strategy, and when it adds cost." },
-            { file: "trends/slm-production-2026.md", title: "Small Language Models in Production", desc: "The 2026 SLM shortlist, hosting break-evens, and the routing pattern behind 60–90% traffic shifts." },
-            { file: "trends/multi-agent-orchestration-cost.md", title: "Multi-Agent Cost Reality", desc: "Why multi-agent costs 5–15× single-agent, the context-inheritance tax, and four cost controls." },
-            { file: "trends/batch-api-arbitrage-2026.md", title: "Batch API Arbitrage", desc: "The 50% discount every provider ships — migration pattern, hidden traps, and the sharding trick." },
-            { file: "trends/embedding-and-vector-db-costs-2026.md", title: "Embedding & Vector DB Tuning", desc: "Matryoshka truncation, chunking recall vs cost, and the object-storage vector-DB shift." },
-            { file: "trends/structured-output-json-mode-2026.md", title: "Structured Output Economics", desc: "Why strict schemas add tokens, when JSON mode wins, and the retry-loop trap." },
-            { file: "trends/observability-stack-2026.md", title: "The Observability Stack", desc: "Five categories, must-have span fields, and the five alerts that catch 80% of incidents." },
-            { file: "trends/context-engineering-2026.md", title: "Context Engineering: The Discipline", desc: "Seven layers, per-layer token budgets, five compression techniques, and a new engineering role." },
-            { file: "trends/fine-tuning-economics-2026.md", title: "Fine-Tuning vs Prompting Economics", desc: "When to distil, when to prompt-cache, when to stay stateless — with break-even math." },
-            { file: "trends/tokenops-kpis-benchmarks-2026.md", title: "KPI Benchmarks 2026", desc: "Four tiers of KPIs with benchmark numbers and the six questions Level 4 programs answer on demand." },
-            { file: "trends/model-arbitrage-playbook-2026.md", title: "Cross-Provider Arbitrage Playbook", desc: "The arbitrage matrix, four patterns, negotiation floor discounts, cost-aware gateway routing." },
+            {
+              file: "trends/2026-pricing-landscape.md",
+              title: "2026 Pricing Landscape",
+              desc: "GPT-5, Claude Opus 4.5, Gemini 3, DeepSeek V3.2 — and the tokenizer inflation trap.",
+            },
+            {
+              file: "trends/prompt-caching-2026.md",
+              title: "Prompt Caching: The 90% Discount",
+              desc: "Discount rates, TTLs, write premiums, and the break-even model across providers.",
+            },
+            {
+              file: "trends/reasoning-token-governance.md",
+              title: "Reasoning Token Governance",
+              desc: "Right-size thinking budgets across o3/o4, GPT-5, Claude Adaptive Thinking, Deep Think.",
+            },
+            {
+              file: "trends/agentic-cost-loop-tax.md",
+              title: "The Loop Tax",
+              desc: "The $47K runaway agent, the 5–30× estimation error, and the six required agent controls.",
+            },
+            {
+              file: "trends/greenops-focus-2026.md",
+              title: "GreenOps & FOCUS",
+              desc: "FOCUS 1.4/1.5 for AI and the dual-reporting playbook for dollars and carbon.",
+            },
+            {
+              file: "trends/enterprise-case-studies-2026.md",
+              title: "Enterprise Case Studies",
+              desc: "AT&T 90% cut, fintech 73% saved, SaaS $48K→$19K — and the stack behind each.",
+            },
+            {
+              file: "trends/semantic-caching-2026.md",
+              title: "Semantic Caching Beyond Exact-Match",
+              desc: "The two-cache stack, similarity thresholds, invalidation strategy, and when it adds cost.",
+            },
+            {
+              file: "trends/slm-production-2026.md",
+              title: "Small Language Models in Production",
+              desc: "The 2026 SLM shortlist, hosting break-evens, and the routing pattern behind 60–90% traffic shifts.",
+            },
+            {
+              file: "trends/multi-agent-orchestration-cost.md",
+              title: "Multi-Agent Cost Reality",
+              desc: "Why multi-agent costs 5–15× single-agent, the context-inheritance tax, and four cost controls.",
+            },
+            {
+              file: "trends/batch-api-arbitrage-2026.md",
+              title: "Batch API Arbitrage",
+              desc: "The 50% discount every provider ships — migration pattern, hidden traps, and the sharding trick.",
+            },
+            {
+              file: "trends/embedding-and-vector-db-costs-2026.md",
+              title: "Embedding & Vector DB Tuning",
+              desc: "Matryoshka truncation, chunking recall vs cost, and the object-storage vector-DB shift.",
+            },
+            {
+              file: "trends/structured-output-json-mode-2026.md",
+              title: "Structured Output Economics",
+              desc: "Why strict schemas add tokens, when JSON mode wins, and the retry-loop trap.",
+            },
+            {
+              file: "trends/observability-stack-2026.md",
+              title: "The Observability Stack",
+              desc: "Five categories, must-have span fields, and the five alerts that catch 80% of incidents.",
+            },
+            {
+              file: "trends/context-engineering-2026.md",
+              title: "Context Engineering: The Discipline",
+              desc: "Seven layers, per-layer token budgets, five compression techniques, and a new engineering role.",
+            },
+            {
+              file: "trends/fine-tuning-economics-2026.md",
+              title: "Fine-Tuning vs Prompting Economics",
+              desc: "When to distil, when to prompt-cache, when to stay stateless — with break-even math.",
+            },
+            {
+              file: "trends/tokenops-kpis-benchmarks-2026.md",
+              title: "KPI Benchmarks 2026",
+              desc: "Four tiers of KPIs with benchmark numbers and the six questions Level 4 programs answer on demand.",
+            },
+            {
+              file: "trends/model-arbitrage-playbook-2026.md",
+              title: "Cross-Provider Arbitrage Playbook",
+              desc: "The arbitrage matrix, four patterns, negotiation floor discounts, cost-aware gateway routing.",
+            },
           ].map((t) => (
             <Link
               key={t.file}

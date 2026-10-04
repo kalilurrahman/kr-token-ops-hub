@@ -51,9 +51,36 @@ export function TokenOpsLogo({
         />
         {/* ascending bars */}
         <g>
-          <rect x="20" y="36" width="5" height="8" rx="1" fill="url(#to-bars)" stroke="#E8B964" strokeWidth="1" />
-          <rect x="28" y="30" width="5" height="14" rx="1" fill="url(#to-bars)" stroke="#E8B964" strokeWidth="1" />
-          <rect x="36" y="24" width="5" height="20" rx="1" fill="url(#to-bars)" stroke="#F0C674" strokeWidth="1" />
+          <rect
+            x="20"
+            y="36"
+            width="5"
+            height="8"
+            rx="1"
+            fill="url(#to-bars)"
+            stroke="#E8B964"
+            strokeWidth="1"
+          />
+          <rect
+            x="28"
+            y="30"
+            width="5"
+            height="14"
+            rx="1"
+            fill="url(#to-bars)"
+            stroke="#E8B964"
+            strokeWidth="1"
+          />
+          <rect
+            x="36"
+            y="24"
+            width="5"
+            height="20"
+            rx="1"
+            fill="url(#to-bars)"
+            stroke="#F0C674"
+            strokeWidth="1"
+          />
           <rect x="44" y="18" width="5" height="26" rx="1" fill="#E8B964" />
         </g>
         {/* sparkle */}
@@ -65,9 +92,7 @@ export function TokenOpsLogo({
             TokenOps <span className="to-gold-text">Atlas</span>
           </span>
           {showTagline && (
-            <span className="to-eyebrow block text-[10px]">
-              FINOPS FOR LLM TOKENS
-            </span>
+            <span className="to-eyebrow block text-[10px]">FINOPS FOR LLM TOKENS</span>
           )}
         </div>
       )}
