@@ -36,8 +36,8 @@ function ToolGuidesPage() {
     <div className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="text-4xl font-bold tracking-tight">Tool-Specific Guides</h1>
       <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-        How to spend the least on each major tool. Costs are billed in different
-        units — tokens, credits, characters, requests — but the moves rhyme.
+        How to spend the least on each major tool. Costs are billed in different units — tokens,
+        credits, characters, requests — but the moves rhyme.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
@@ -140,7 +140,8 @@ function ToolGuidesPage() {
         </table>
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        Discounts and TTLs change often — confirm against each provider's current docs before budgeting.
+        Discounts and TTLs change often — confirm against each provider's current docs before
+        budgeting.
       </p>
     </div>
   );

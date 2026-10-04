@@ -1,13 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Gauge,
-  Layers,
-  Wrench,
-  Sparkles,
-  ClipboardList,
-  BookOpen,
-  ArrowRight,
-} from "lucide-react";
+import { Gauge, Layers, Wrench, Sparkles, ClipboardList, BookOpen, ArrowRight } from "lucide-react";
 import { techniques, toolGuides, meta } from "../data/tokenopsContent";
 
 export const Route = createFileRoute("/optimize")({
@@ -74,9 +66,9 @@ function OptimizeHub() {
         Spend the fewest tokens for the best result
       </h1>
       <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-        A complete, tool-by-tool playbook for token and credit optimization —
-        from prompt caching and model routing to the viral Caveman method.
-        Plan first, pick the smallest sufficient model, reuse outputs, and batch.
+        A complete, tool-by-tool playbook for token and credit optimization — from prompt caching
+        and model routing to the viral Caveman method. Plan first, pick the smallest sufficient
+        model, reuse outputs, and batch.
       </p>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2">

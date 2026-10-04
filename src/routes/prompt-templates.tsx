@@ -17,8 +17,7 @@ export const Route = createFileRoute("/prompt-templates")({
       { property: "og:title", content: "Prompt Templates and Checklists — TokenOps Atlas" },
       {
         property: "og:description",
-        content:
-          "Reusable scaffolds for efficient prompts and production-ready TokenOps controls.",
+        content: "Reusable scaffolds for efficient prompts and production-ready TokenOps controls.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -38,8 +37,8 @@ function TemplatesPage() {
     <div className="mx-auto max-w-4xl px-4 py-12">
       <h1 className="text-4xl font-bold tracking-tight">Prompt Templates & Checklists</h1>
       <p className="mt-3 max-w-3xl text-lg text-muted-foreground">
-        Copy-paste scaffolds for the highest-leverage moves, plus checklists you
-        can run before, during, and in production.
+        Copy-paste scaffolds for the highest-leverage moves, plus checklists you can run before,
+        during, and in production.
       </p>
 
       <div className="mt-8 space-y-5">

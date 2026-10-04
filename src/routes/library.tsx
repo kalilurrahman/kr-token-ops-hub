@@ -68,9 +68,7 @@ function LibraryPage() {
       </div>
 
       {filter !== "All" && libraryCategoryMeta[filter] && (
-        <p className="hero-copy -mt-2 text-[var(--muted)]">
-          {libraryCategoryMeta[filter].tagline}
-        </p>
+        <p className="hero-copy -mt-2 text-[var(--muted)]">{libraryCategoryMeta[filter].tagline}</p>
       )}
 
       <div className="section-grid two">

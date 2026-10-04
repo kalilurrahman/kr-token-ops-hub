@@ -16,7 +16,8 @@ function openDatabase(): Promise<IDBDatabase> {
       }
     };
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error ?? new Error("Reading lists could not be opened."));
+    request.onerror = () =>
+      reject(request.error ?? new Error("Reading lists could not be opened."));
   });
 }
 
@@ -30,9 +31,18 @@ function requestResult<T>(request: IDBRequest<T>): Promise<T> {
 async function ensureDefaultCollection(database: IDBDatabase): Promise<void> {
   const transaction = database.transaction(STORE_NAME, "readwrite");
   const store = transaction.objectStore(STORE_NAME);
-  const existing = await requestResult(store.get(DEFAULT_COLLECTION_ID) as IDBRequest<ReadingCollection | undefined>);
+  const existing = await requestResult(
+    store.get(DEFAULT_COLLECTION_ID) as IDBRequest<ReadingCollection | undefined>,
+  );
   if (!existing) {
-    await requestResult(store.put({ id: DEFAULT_COLLECTION_ID, name: "Saved", createdAt: new Date().toISOString(), items: [] }));
+    await requestResult(
+      store.put({
+        id: DEFAULT_COLLECTION_ID,
+        name: "Saved",
+        createdAt: new Date().toISOString(),
+        items: [],
+      }),
+    );
   }
 }
 
@@ -40,7 +50,9 @@ export async function getReadingCollections(): Promise<ReadingCollection[]> {
   const database = await openDatabase();
   await ensureDefaultCollection(database);
   const transaction = database.transaction(STORE_NAME, "readonly");
-  const collections = await requestResult(transaction.objectStore(STORE_NAME).getAll() as IDBRequest<ReadingCollection[]>);
+  const collections = await requestResult(
+    transaction.objectStore(STORE_NAME).getAll() as IDBRequest<ReadingCollection[]>,
+  );
   database.close();
   return collections.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 }
@@ -73,7 +85,10 @@ export async function deleteReadingCollection(id: string): Promise<void> {
   window.dispatchEvent(new Event(READING_LISTS_CHANGED));
 }
 
-export async function toggleBriefingInCollection(collectionId: string, briefing: SavedBriefing): Promise<boolean> {
+export async function toggleBriefingInCollection(
+  collectionId: string,
+  briefing: SavedBriefing,
+): Promise<boolean> {
   const collections = await getReadingCollections();
   const collection = collections.find((entry) => entry.id === collectionId);
   if (!collection) return false;
