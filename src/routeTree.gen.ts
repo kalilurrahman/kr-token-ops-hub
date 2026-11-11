@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolkitRouteImport } from './routes/toolkit'
 import { Route as ToolGuidesRouteImport } from './routes/tool-guides'
 import { Route as TemplatesRouteImport } from './routes/templates'
@@ -34,6 +35,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReadSplatRouteImport } from './routes/read.$'
 
+const TrainingRoute = TrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolkitRoute = ToolkitRouteImport.update({
   id: '/toolkit',
   path: '/toolkit',
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/templates': typeof TemplatesRoute
   '/tool-guides': typeof ToolGuidesRoute
   '/toolkit': typeof ToolkitRoute
+  '/training': typeof TrainingRoute
   '/read/$': typeof ReadSplatRoute
 }
 export interface FileRoutesByTo {
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/templates': typeof TemplatesRoute
   '/tool-guides': typeof ToolGuidesRoute
   '/toolkit': typeof ToolkitRoute
+  '/training': typeof TrainingRoute
   '/read/$': typeof ReadSplatRoute
 }
 export interface FileRoutesById {
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/templates': typeof TemplatesRoute
   '/tool-guides': typeof ToolGuidesRoute
   '/toolkit': typeof ToolkitRoute
+  '/training': typeof TrainingRoute
   '/read/$': typeof ReadSplatRoute
 }
 export interface FileRouteTypes {
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/tool-guides'
     | '/toolkit'
+    | '/training'
     | '/read/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/tool-guides'
     | '/toolkit'
+    | '/training'
     | '/read/$'
   id:
     | '__root__'
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/tool-guides'
     | '/toolkit'
+    | '/training'
     | '/read/$'
   fileRoutesById: FileRoutesById
 }
@@ -339,11 +351,19 @@ export interface RootRouteChildren {
   TemplatesRoute: typeof TemplatesRoute
   ToolGuidesRoute: typeof ToolGuidesRoute
   ToolkitRoute: typeof ToolkitRoute
+  TrainingRoute: typeof TrainingRoute
   ReadSplatRoute: typeof ReadSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/training': {
+      id: '/training'
+      path: '/training'
+      fullPath: '/training'
+      preLoaderRoute: typeof TrainingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/toolkit': {
       id: '/toolkit'
       path: '/toolkit'
@@ -539,6 +559,7 @@ const rootRouteChildren: RootRouteChildren = {
   TemplatesRoute: TemplatesRoute,
   ToolGuidesRoute: ToolGuidesRoute,
   ToolkitRoute: ToolkitRoute,
+  TrainingRoute: TrainingRoute,
   ReadSplatRoute: ReadSplatRoute,
 }
 export const routeTree = rootRouteImport

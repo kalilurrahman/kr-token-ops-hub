@@ -35,6 +35,9 @@ export function SiteFooter() {
           <Link to="/library" className="hover:underline">
             Library
           </Link>
+          <Link to="/training" className="hover:underline">
+            Training
+          </Link>
           <Link to="/sample-chapter" className="hover:underline">
             Free Chapter
           </Link>
