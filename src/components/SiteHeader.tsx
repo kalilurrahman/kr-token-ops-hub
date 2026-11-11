@@ -19,6 +19,7 @@ import {
   Wrench,
   ClipboardList,
   Scale,
+  GraduationCap,
 } from "lucide-react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -32,6 +33,7 @@ const PRIMARY_NAV = [
   { to: "/calculator", label: "Calculator", icon: Calculator },
   { to: "/roadmap", label: "Roadmap", icon: MapIcon },
   { to: "/library", label: "Library", icon: Library },
+  { to: "/training", label: "Training", icon: GraduationCap },
 ] as const;
 
 const FULL_NAV = [
@@ -55,6 +57,7 @@ const FULL_NAV = [
   { to: "/resources", label: "Resources", icon: FolderDown },
   { to: "/templates", label: "Templates", icon: FileText },
   { to: "/library", label: "Library", icon: Library },
+  { to: "/training", label: "Training", icon: GraduationCap },
   { to: "/sources", label: "Sources", icon: Github },
   { to: "/about", label: "About", icon: Info },
 ] as const;
