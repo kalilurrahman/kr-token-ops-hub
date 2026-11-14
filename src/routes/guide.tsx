@@ -23,6 +23,7 @@ export const Route = createFileRoute("/guide")({
           "The complete TokenOps operating manual — a FinOps-style playbook for LLM token visibility, allocation, optimization, and governance.",
       },
       { property: "og:url", content: "https://tokenops.kalilurrahman.com/guide" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://tokenops.kalilurrahman.com/guide" }],
     scripts: [

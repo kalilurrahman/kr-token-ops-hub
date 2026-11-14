@@ -1,13 +1,13 @@
 {
   "$schema": "./pricing.schema.json",
   "meta": {
-    "version": "2026.09",
-    "reviewed_date": "2026-09-27",
+    "version": "2026.11",
+    "reviewed_date": "2026-11-14",
     "sla": "Reviewed monthly. Provider pricing changes reflected within 7 days. Every figure carries a verification date and a source link.",
     "unit": "USD per 1,000,000 tokens",
     "upstream_feed": "https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json",
     "changelog": "./pricing-changelog.md",
-    "coverage": "Public list pricing for current hosted APIs plus deployment and licence metadata for open-weight/open-source models. Self-hosted costs are workload-specific and calculated separately."
+    "coverage": "November additions verified against official sources; older rows retain their original verification dates. Standard USD API rates exclude tools, regional premiums, subscriptions, and self-hosted infrastructure."
   },
   "providers": {
     "openai": {
@@ -224,6 +224,34 @@
           "verified_date": "2026-09-27",
           "notes": "Cost-efficient high-volume tier; verify modality-specific pricing.",
           "cached_input_per_mtok": 0.03
+        },
+        "gemini-4-hydrogen": {
+          "display_name": "Gemini 4 Hydrogen",
+          "input_per_mtok": 1.5,
+          "output_per_mtok": 7.5,
+          "context_tokens": 1048576,
+          "tier": "mid",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-4-hydrogen",
+          "verified_date": "2026-11-14",
+          "notes": "Unified input/output context. Thinking is billed as output. Implicit caching only; Batch/Flex $0.75/$3.75. Search grounding is billed separately.",
+          "cached_input_per_mtok": 0.075
+        },
+        "gemini-4-argon": {
+          "display_name": "Gemini 4 Argon",
+          "input_per_mtok": 4,
+          "output_per_mtok": 20,
+          "context_tokens": 1048576,
+          "tier": "frontier",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-4-argon",
+          "verified_date": "2026-11-14",
+          "notes": "Conservative standard rates effective 01/12/2026. Through 30/11/2026 introductory input/output is $2/$10 and cached input $0.10. Calculator uses post-promotion rates to avoid understated recurring budgets. Unified context; thinking and grounding costs apply.",
+          "cached_input_per_mtok": 0.2
         }
       }
     },
@@ -345,6 +373,26 @@
           "notes": "Compact open-weight family for edge and self-hosted inference."
         }
       }
+    },
+    "typesafe": {
+      "label": "TypeSafe AI",
+      "pricing_url": "https://docs.typesafe.ai/models",
+      "prompt_caching_notes": "Typed decision API, not a text generator. Input-only pricing; no assumed batch or cache discount.",
+      "models": {
+        "jev-1.14.0": {
+          "display_name": "Jev 1.14",
+          "input_per_mtok": 0.042,
+          "output_per_mtok": 0,
+          "context_tokens": 64000,
+          "tier": "decision",
+          "access_model": "proprietary",
+          "deployment": "Hosted API",
+          "license": "Proprietary",
+          "verified_url": "https://docs.typesafe.ai/models",
+          "verified_date": "2026-11-14",
+          "notes": "Typed Choice, Score, Noul and Box decisions. Default 64K per request and 32K state plus any one question; experimental 262K long context. Does not generate prose."
+        }
+      }
     }
   },
   "presets": {
@@ -359,9 +407,9 @@
       "cheap_model": "anthropic/claude-haiku-4-5"
     },
     "google": {
-      "label": "Google (3.1 Pro + 3.1 Flash-Lite)",
-      "premium_model": "google/gemini-3-1-pro",
-      "cheap_model": "google/gemini-3-1-flash-lite"
+      "label": "Google (Argon recurring + Hydrogen)",
+      "premium_model": "google/gemini-4-argon",
+      "cheap_model": "google/gemini-4-hydrogen"
     },
     "mixed": {
       "label": "Cross-provider (Astra + Gemini Flash-Lite)",

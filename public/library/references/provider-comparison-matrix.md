@@ -4,7 +4,7 @@
 
 # LLM Provider Comparison Matrix
 
-> **Snapshot of `data/pricing.json` (v2026.09) — reviewed 2026-09-27.**
+> **Snapshot of `data/pricing.json` (v2026.11) — reviewed 2026-11-14.**
 > Regenerated from the dataset; edit `data/pricing.json` to correct.
 > **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md).
 
@@ -27,6 +27,8 @@
 | **Google** | Gemini 3.1 Pro | Proprietary | $2 | $0.2 | $12 | 1M | Frontier |
 | **Google** | Gemini 3.8 Flash | Proprietary | $0.75 | $0.075 | $3.75 | 1.048576M | Mid |
 | **Google** | Gemini 3.1 Flash-Lite | Proprietary | $0.3 | $0.03 | $2.5 | 1.048576M | Cheap |
+| **Google** | Gemini 4 Hydrogen | Proprietary | $1.5 | $0.075 | $7.5 | 1.048576M | Mid |
+| **Google** | Gemini 4 Argon | Proprietary | $4 | $0.2 | $20 | 1.048576M | Frontier |
 | **DeepSeek** | DeepSeek V4 Pro | Open weight | — | — | — | 1M | Open model |
 | **DeepSeek** | DeepSeek V4 Flash | Open weight | — | — | — | 1M | Open model |
 | **Meta** | Llama 4 Scout | Open weight | — | — | — | 10M | Open model |
@@ -34,6 +36,7 @@
 | **Qwen** | Qwen3.8-Flash-Next | Open weight | — | — | — | 262.144K | Open model |
 | **Mistral AI** | Mistral Large | Proprietary | $2 | — | $6 | 128K | Frontier |
 | **Mistral AI** | Ministral 8B | Open weight | — | — | — | 128K | Open model |
+| **TypeSafe AI** | Jev 1.14 | Proprietary | $0.042 | — | $0 | 64K | decision |
 
 ### Batch API discounts
 
@@ -52,6 +55,7 @@
 - **Meta:** No universal token price; rates depend on cloud host or owned infrastructure.
 - **Qwen:** No universal token price for downloaded weights; hosted rates vary.
 - **Mistral AI:** API and self-deployment options differ by model and licence.
+- **TypeSafe AI:** Typed decision API, not a text generator. Input-only pricing; no assumed batch or cache discount.
 
 ## Reading open-model costs
 
@@ -72,4 +76,5 @@ Open weight means model parameters are downloadable under model-specific terms. 
 | Meta | https://llama.com/llama4/license |
 | Qwen | https://huggingface.co/Qwen |
 | Mistral AI | https://mistral.ai/pricing |
+| TypeSafe AI | https://docs.typesafe.ai/models |
 

@@ -4,7 +4,7 @@
 
 # Token Pricing Reference — Major LLM Providers
 
-> **Snapshot of `data/pricing.json` (v2026.09) — reviewed 2026-09-27.**
+> **Snapshot of `data/pricing.json` (v2026.11) — reviewed 2026-11-14.**
 > This file is regenerated from the dataset. To propose a correction, edit `data/pricing.json` and re-run the generator.
 > **Live changelog:** [data/pricing-changelog.md](https://github.com/kalilurrahman/kr-token-ops-hub/blob/main/data/pricing-changelog.md). **SLA:** Reviewed monthly. Provider pricing changes reflected within 7 days. Every figure carries a verification date and a source link.
 
@@ -47,6 +47,8 @@ _Batch API:_ 50% off standard rates, ~24h SLA.
 | Gemini 3.1 Pro | Proprietary | Hosted API; Proprietary | $2 / $4 (>200K ctx) | $0.2 | $12 / $18 (>200K ctx) | 1M | Frontier | [verified 2026-09-27](https://ai.google.dev/gemini-api/docs/pricing) |
 | Gemini 3.8 Flash | Proprietary | Hosted API; Proprietary | $0.75 | $0.075 | $3.75 | 1.048576M | Mid | [verified 2026-09-27](https://ai.google.dev/gemini-api/docs/pricing) |
 | Gemini 3.1 Flash-Lite | Proprietary | Hosted API; Proprietary | $0.3 | $0.03 | $2.5 | 1.048576M | Cheap | [verified 2026-09-27](https://ai.google.dev/gemini-api/docs/pricing) |
+| Gemini 4 Hydrogen | Proprietary | Hosted API; Proprietary | $1.5 | $0.075 | $7.5 | 1.048576M | Mid | [verified 2026-11-14](https://ai.google.dev/gemini-api/docs/pricing#gemini-4-hydrogen) |
+| Gemini 4 Argon | Proprietary | Hosted API; Proprietary | $4 | $0.2 | $20 | 1.048576M | Frontier | [verified 2026-11-14](https://ai.google.dev/gemini-api/docs/pricing#gemini-4-argon) |
 
 _Caching:_ Model-specific context caching and batch rates apply; verify region and long-context tiers.
 
@@ -86,6 +88,14 @@ _Caching:_ No universal token price for downloaded weights; hosted rates vary.
 | Ministral 8B | Open weight | Self-hosted or third-party inference; Mistral model licence | — | — | — | 128K | Open model | [verified 2026-09-27](https://mistral.ai/news/ministraux) |
 
 _Caching:_ API and self-deployment options differ by model and licence.
+
+### TypeSafe AI
+
+| Model | Access | Deployment / licence | Input ($/1M) | Cached Input ($/1M) | Output ($/1M) | Context | Tier | Source |
+|---|---|---|---|---|---|---|---|---|
+| Jev 1.14 | Proprietary | Hosted API; Proprietary | $0.042 | — | $0 | 64K | decision | [verified 2026-11-14](https://docs.typesafe.ai/models) |
+
+_Caching:_ Typed decision API, not a text generator. Input-only pricing; no assumed batch or cache discount.
 
 ---
 

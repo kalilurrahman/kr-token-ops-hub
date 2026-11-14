@@ -13,6 +13,13 @@ export const Route = createFileRoute("/sources")({
         name: "description",
         content: "Reference material used by the TokenOps guide and implementation spec.",
       },
+      { property: "og:title", content: "Sources — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content: "Reference material used by the TokenOps guide and implementation spec.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

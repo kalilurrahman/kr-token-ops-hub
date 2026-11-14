@@ -20,6 +20,7 @@ export const Route = createFileRoute("/sample-chapter")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: PAGE_URL },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: PAGE_URL }],
     scripts: [

@@ -138,6 +138,34 @@
   ],
   "library": [
     {
+      "title": "Model Tetris: specialist intelligence and advanced controls",
+      "desc": "Typed decisions, specialist models, maintained knowledge and outcome-based controls.",
+      "category": "Advanced",
+      "format": "Markdown",
+      "file": "advanced/model-tetris-specialist-intelligence.md"
+    },
+    {
+      "title": "LLM Wiki: maintained knowledge, not repeated context",
+      "desc": "Reusable knowledge with provenance, maintenance costs and break-even guidance.",
+      "category": "Techniques",
+      "format": "Markdown",
+      "file": "techniques/llm-wiki-maintained-knowledge.md"
+    },
+    {
+      "title": "Gemini 4: Hydrogen and Argon routing",
+      "desc": "November 2026 capabilities, verified billing, context boundaries and safe migration.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/gemini-4-november-routing.md"
+    },
+    {
+      "title": "Jev: System One decision economics",
+      "desc": "November 2026 capabilities, verified billing, context boundaries and safe migration.",
+      "category": "Models",
+      "format": "Markdown",
+      "file": "models/jev-system-one-decision-economics.md"
+    },
+    {
       "title": "Cost Anomaly Detection",
       "desc": "Detect, investigate, and respond to unexpected token spend spikes before they break budgets.",
       "category": "Advanced",

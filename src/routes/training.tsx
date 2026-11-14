@@ -39,6 +39,8 @@ export const Route = createFileRoute("/training")({
         content:
           "Interactive courses on cutting AI token costs without degrading quality. Plays in the browser; downloadable for offline use.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
@@ -162,7 +164,9 @@ function CourseList({ courses, onOpen }: { courses: Course[]; onOpen: (slug: str
             <div className="resource-card-footer">
               <span className="badge badge-guide">{badge(availability)}</span>
               {first?.durationMinutes ? (
-                <span className="text-xs text-[var(--muted)]">about {first.durationMinutes} min</span>
+                <span className="text-xs text-[var(--muted)]">
+                  about {first.durationMinutes} min
+                </span>
               ) : null}
               <button
                 type="button"

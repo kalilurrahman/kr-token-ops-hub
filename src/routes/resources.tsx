@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { CheckSquare, FileCode2, FileText, FolderDown, Package } from "lucide-react";
 import content from "@/tokenops/content.json";
@@ -18,6 +18,13 @@ export const Route = createFileRoute("/resources")({
         content:
           "Documents, templates, and starter artifacts to implement TokenOps across your organization.",
       },
+      { property: "og:title", content: "TokenOps resources and November intelligence" },
+      {
+        property: "og:description",
+        content: "Verified model briefings, LLM Wiki guidance and practical economics references.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
@@ -38,6 +45,34 @@ function ResourcesPage() {
           organization.
         </p>
       </div>
+
+      <section className="stack">
+        <h2>November intelligence update</h2>
+        <div className="section-grid two">
+          {data.library
+            .filter((item) =>
+              [
+                "models/jev-system-one-decision-economics.md",
+                "models/gemini-4-november-routing.md",
+                "techniques/llm-wiki-maintained-knowledge.md",
+                "advanced/model-tetris-specialist-intelligence.md",
+              ].includes(item.file),
+            )
+            .map((item) => (
+              <article className="resource-card" key={item.file}>
+                <span className="category-tag">{item.category}</span>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+                <Link className="download-btn" to="/read/$" params={{ _splat: item.file }}>
+                  <FileText size={16} /> Read briefing
+                </Link>
+              </article>
+            ))}
+        </div>
+        <Link to="/calculator" className="download-btn">
+          Decision routing and LLM Wiki calculators
+        </Link>
+      </section>
 
       <div className="starter-kit-banner">
         <div>

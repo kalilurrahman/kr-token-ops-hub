@@ -14,6 +14,13 @@ export const Route = createFileRoute("/patterns")({
         name: "description",
         content: "Reusable recipes for reducing LLM token waste without degrading outcomes.",
       },
+      { property: "og:title", content: "Optimization Patterns — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content: "Reusable recipes for reducing LLM token waste without degrading outcomes.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

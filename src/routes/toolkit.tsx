@@ -18,6 +18,14 @@ export const Route = createFileRoute("/toolkit")({
         content:
           "Live prompt compressor, model cost comparator, and reference implementation downloads.",
       },
+      { property: "og:title", content: "Toolkit — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content:
+          "Live prompt compressor, model cost comparator, and reference implementation downloads.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

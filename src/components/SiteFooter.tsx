@@ -35,7 +35,11 @@ export function SiteFooter() {
           <Link to="/library" className="hover:underline">
             Library
           </Link>
-          <Link to="/training" className="hover:underline">
+          <Link
+            to="/training"
+            search={{ course: undefined, module: undefined }}
+            className="hover:underline"
+          >
             Training
           </Link>
           <Link to="/sample-chapter" className="hover:underline">

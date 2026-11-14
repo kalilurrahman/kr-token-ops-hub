@@ -47,6 +47,17 @@ export const Route = createFileRoute("/hub")({
         content:
           "Interactive TokenOps calculators (savings, unit economics, model comparison), glossary, maturity self-check, and key concepts.",
       },
+      {
+        property: "og:title",
+        content: "TokenOps Professional Hub — Calculators, Glossary, Maturity",
+      },
+      {
+        property: "og:description",
+        content:
+          "Interactive TokenOps calculators (savings, unit economics, model comparison), glossary, maturity self-check, and key concepts.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: HubPage,

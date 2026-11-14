@@ -22,6 +22,8 @@ export const Route = createFileRoute("/library")({
         content:
           "Guides, playbooks, checklists, references, and operating templates for running TokenOps.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

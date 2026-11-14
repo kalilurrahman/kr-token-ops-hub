@@ -1,8 +1,77 @@
 import type { ModelComparisonEntry } from "@/types/model-comparison.types";
 
-export const MODEL_REVIEW_DATE = "27/09/2026";
+export const MODEL_REVIEW_DATE =
+  "14/11/2026 (November additions; earlier briefings retain their own dates)";
 
 export const modelComparisonEntries: ModelComparisonEntry[] = [
+  {
+    id: "jev-114",
+    name: "Jev 1.14",
+    role: "Typed decision model — not a text generator",
+    capabilities:
+      "Choice, Score, Noul and Box questions over shared state; bounded decisions rather than prose.",
+    contextLimit: "64K per request; 32K state plus one question. Experimental 262K opt-in.",
+    pricing:
+      "$0.042/M input; output tokens uncharged. Include all decision calls, fallbacks and evaluation overhead.",
+    latency:
+      "Benchmark end-to-end p95, abstention and calibration; no universal latency guarantee.",
+    recommendedUses: [
+      "Preflight classification",
+      "Tool selection",
+      "Bounded scoring",
+      "Confidence-aware routing",
+    ],
+    briefingFile: "models/jev-system-one-decision-economics.md",
+    accessModel: "Proprietary",
+    deployment: "TypeSafe hosted decision API",
+    license: "Proprietary",
+  },
+  {
+    id: "gemini-4",
+    name: "Gemini 4 Hydrogen / Argon",
+    role: "Everyday agents and frontier reasoning",
+    capabilities:
+      "Hydrogen for efficient everyday coding and agentic workflows; Argon for demanding reasoning. Thinking tokens are billed.",
+    contextLimit:
+      "Unified 1,048,576 input/output window; 65,536 default synchronous output; long decode shares the window.",
+    pricing:
+      "Hydrogen $1.50/$7.50 per M input/output. Argon $2/$10 through 30/11, $4/$20 from 01/12; calculators use recurring rates.",
+    latency:
+      "Evaluate p50/p95 including thinking and grounding. Batch/Flex discounts are not interactive latency guarantees.",
+    recommendedUses: [
+      "Coding agents",
+      "Multimodal tasks",
+      "Reasoning escalation",
+      "Delay-tolerant batch",
+    ],
+    briefingFile: "models/gemini-4-november-routing.md",
+    accessModel: "Proprietary",
+    deployment: "Gemini API",
+    license: "Proprietary",
+  },
+  {
+    id: "llm-wiki",
+    name: "LLM Wiki",
+    role: "Maintained knowledge pattern — not a model",
+    capabilities:
+      "Agent-maintained linked pages with ingest, query and lint operations; combines with source retrieval.",
+    contextLimit:
+      "Chosen model and retrieved page budget determine limits; no independent context window.",
+    pricing:
+      "Amortize ingestion, updates, linting and human review against avoided repeated input. Savings are workload-dependent.",
+    latency: "Measure query latency separately from asynchronous ingestion and maintenance.",
+    recommendedUses: [
+      "Stable knowledge",
+      "Repeated research",
+      "Source-linked synthesis",
+      "Knowledge operations",
+    ],
+    briefingFile: "techniques/llm-wiki-maintained-knowledge.md",
+    accessModel: "Framework",
+    deployment: "Provider-neutral; preserve original access scope",
+    license: "Source and tooling licences apply",
+    isFramework: true,
+  },
   {
     id: "astra",
     name: "GPT-6 Astra",

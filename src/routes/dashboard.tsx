@@ -56,6 +56,17 @@ export const Route = createFileRoute("/dashboard")({
         content:
           "A sample-data demo of a TokenOps dashboard: visibility, allocation, optimization progress, and anomalies for LLM token spend.",
       },
+      {
+        property: "og:title",
+        content: "Operational Dashboard (Sample Data Demo) — TokenOps Atlas",
+      },
+      {
+        property: "og:description",
+        content:
+          "A sample-data demo of a TokenOps dashboard: visibility, allocation, optimization progress, and anomalies for LLM token spend.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Download } from "lucide-react";
+import { AdvancedCalculators } from "@/components/advanced-calculators";
 import {
   providerPresets,
   exportScenarioCSV,
@@ -23,8 +24,16 @@ export const Route = createFileRoute("/calculator")({
       {
         name: "description",
         content:
-          "Estimate the impact of caching, model routing, batching, and implementation cost.",
+          "Estimate November model pricing, typed decision routing, LLM Wiki maintenance, caching, and self-hosted economics.",
       },
+      { property: "og:title", content: "TokenOps model and knowledge cost calculators" },
+      {
+        property: "og:description",
+        content:
+          "Compare decision routing, LLM Wiki amortization, hosted models and infrastructure costs.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
@@ -96,9 +105,9 @@ function CalculatorPage() {
         <p className="eyebrow">Calculators</p>
         <h1>TokenOps Savings Calculator</h1>
         <p>
-          Seven calculators backed by the model catalogue reviewed {pricingReviewedDate}: blended
-          savings, RAG, routing, budget, caching, self-hosted economics, and total cost of
-          ownership.
+          Nine calculators backed by the model catalogue updated {pricingReviewedDate}: decision
+          routing, maintained knowledge, blended savings, RAG, routing, budget, caching, self-hosted
+          economics, and total cost of ownership.
         </p>
       </div>
       <div className="calculator-layout">
@@ -208,6 +217,7 @@ function CalculatorPage() {
       </div>
 
       <div className="calc-stack">
+        <AdvancedCalculators />
         <RAGCalculator />
         <RoutingCalculator />
         <BudgetCalculator />

@@ -12,6 +12,14 @@ export const Route = createFileRoute("/glossary")({
         content:
           "Searchable glossary of every TokenOps term: tokens, caching, routing, RAG, gateways, governance, and unit economics.",
       },
+      { property: "og:title", content: "TokenOps Glossary — the canonical reference" },
+      {
+        property: "og:description",
+        content:
+          "Searchable glossary of every TokenOps term: tokens, caching, routing, RAG, gateways, governance, and unit economics.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

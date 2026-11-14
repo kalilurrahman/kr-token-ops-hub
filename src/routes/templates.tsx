@@ -15,6 +15,13 @@ export const Route = createFileRoute("/templates")({
         name: "description",
         content: "Starter operating artifacts for making TokenOps repeatable.",
       },
+      { property: "og:title", content: "Templates — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content: "Starter operating artifacts for making TokenOps repeatable.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

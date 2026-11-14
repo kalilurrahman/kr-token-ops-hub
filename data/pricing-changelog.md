@@ -6,6 +6,14 @@ The site's calculators, guide tables, and every published pricing figure render 
 
 ---
 
+## 2026-11-14 · v2026.11 — Specialist decisions and Gemini 4
+
+- Added Jev 1.14 from TypeSafe's official model reference: $0.042/M input, no output charge, 64K request and 32K per-question default limits.
+- Added Gemini 4 Hydrogen: standard $1.50/$7.50 input/output, $0.075 cached input; unified 1,048,576-token context.
+- Added Gemini 4 Argon using conservative recurring $4/$20 and $0.20 cached input effective 01/12/2026. Introductory $2/$10 and $0.10 cached input through 30/11/2026 remain explicitly documented in notes.
+- Updated the Google calculator preset to Argon/Hydrogen. Existing rows retain September verification dates; this is an incremental source review, not a claim that every historical price was reverified.
+- Added decision-routing and LLM Wiki maintenance estimates, with fallbacks and overhead included. LFM3/d1-ultra are research candidates without unverified calculator rates.
+
 ## 2026-09-27 · v2026.09 — Current and open-model overhaul
 
 Replaced the July hosted-only snapshot with current proprietary tiers and explicit open-model metadata. Every row now records access type, deployment mode, licence, source, and verification date.

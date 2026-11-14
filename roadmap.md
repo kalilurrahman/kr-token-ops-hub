@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Deliver the November refresh: verified model entries, Jev and LLM Wiki guidance, decision-routing and knowledge-maintenance calculators, linked resources, and focused validation within the requested five-credit scope.
+
 - [ ] Add a responsive comparison matrix and richer decision guidance for the five new model briefings.
 - [ ] Add private device-local reading-list collections and bookmarks across briefings and reader.
 - [ ] Add the AI-powered workload adviser using Lovable AI Gateway.

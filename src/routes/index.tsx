@@ -66,6 +66,13 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "TokenOps Atlas — FinOps for LLM Tokens" },
       { name: "description", content: "Run LLM spend like a professional operating discipline." },
+      { property: "og:title", content: "TokenOps Atlas — FinOps for LLM Tokens" },
+      {
+        property: "og:description",
+        content: "Run LLM spend like a professional operating discipline.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

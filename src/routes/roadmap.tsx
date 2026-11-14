@@ -12,6 +12,17 @@ export const Route = createFileRoute("/roadmap")({
         content:
           "A phased 90-day TokenOps roadmap: establish visibility, standardize measurement, set governance, optimize usage, and operationalize continuous improvement.",
       },
+      {
+        property: "og:title",
+        content: "TokenOps Implementation Roadmap — Discover, Measure, Govern, Optimize, Scale",
+      },
+      {
+        property: "og:description",
+        content:
+          "A phased 90-day TokenOps roadmap: establish visibility, standardize measurement, set governance, optimize usage, and operationalize continuous improvement.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

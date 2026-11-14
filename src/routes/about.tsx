@@ -56,6 +56,14 @@ export const Route = createFileRoute("/about")({
         content:
           "The open reference for teams applying FinOps discipline to LLM token consumption.",
       },
+      { property: "og:title", content: "About — TokenOps Atlas" },
+      {
+        property: "og:description",
+        content:
+          "The open reference for teams applying FinOps discipline to LLM token consumption.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
