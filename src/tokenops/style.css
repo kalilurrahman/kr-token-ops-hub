@@ -724,6 +724,14 @@ html, body { max-width: 100%; overflow-x: clip; }
   .guide table, .reader-article table { display: block; max-width: 100%; overflow-x: auto; table-layout: auto; }
   .guide th, .guide td, .reader-article th, .reader-article td { min-width: 7.5rem; overflow-wrap: break-word; }
 }
+/* Motion: hover lift is 2px at most and disappears for reduced-motion users. */
+@media (prefers-reduced-motion: reduce) {
+  .tile:hover, .to-card:hover, .about-feature-card:hover, .hub-card:hover, .hub-compare-card:hover,
+  .primary-action:hover, .button-action:hover, .to-btn-gold:hover, .download-btn.primary:hover,
+  a:hover .card-arrow, .about-feature-card .card-arrow { transform: none; }
+  .to-pulse, .animate-spin { animation: none; }
+}
+a:hover .card-arrow { transform: translateX(2px); }
 /* Grid children may shrink below their min-content width (long tables, code, URLs);
    wide content then scrolls inside its own box instead of widening the page. */
 .stack, .reader-shell { grid-template-columns: minmax(0, 1fr); }
