@@ -671,3 +671,19 @@ html, body { max-width: 100%; overflow-x: clip; }
 .dashboard-kpis .dash-card:nth-child(3) strong { color: var(--to-saving-text); }
 .dashboard-kpis .dash-card:nth-child(4) strong { color: var(--to-money-text); }
 .dash-panel .recharts-legend-item-text { font-size: var(--to-fs-xs); color: var(--to-ink-2); }
+
+/* Home executive summary: intro + pillars left, savings profile right (laptop). */
+@media (min-width: 1024px) {
+  .exec-summary { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--to-space-10); align-items: start; }
+  .exec-summary > div:last-child { grid-column: 2; grid-row: 1 / span 2; }
+}
+.exec-summary > table td:nth-child(3) { font: 500 var(--to-fs-xs) var(--font-mono); color: var(--to-money-text); }
+.exec-summary > div:last-child td:nth-child(2) { font: 600 var(--to-fs-xs) var(--font-mono); font-variant-numeric: tabular-nums; color: var(--to-saving-text); white-space: nowrap; }
+.exec-summary > div:last-child td:nth-child(3) { color: var(--to-ink-3); font-size: var(--to-fs-xs); }
+
+/* Numeric outputs: mono, tabular figures (complements .to-metric selectors above). */
+.hub-table td:nth-child(2), .hub-table td:nth-child(3),
+.comparator-row > span:not(.comparator-model),
+.compression-stat strong, .hub-val, .calc-results .row strong, .metric-row strong {
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+}
