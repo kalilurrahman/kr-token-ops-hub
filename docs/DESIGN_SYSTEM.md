@@ -177,10 +177,12 @@ BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
 
 ## Accessibility status (v2.0.0)
 
-- axe colour-contrast: 0 violations on 24 routes × 3 palettes at 1440 and 390px.
-- Lighthouse mobile (local `wrangler dev`, simulated throttling): `/` and `/calculator`
-  Performance 99, Accessibility 100; `/library` Performance 99, Accessibility 98; CLS 0.
-- Known markup issues, present before v2 and out of scope for a visual uplift: unlabelled range
-  inputs and select on `/hub`, unlabelled task-list checkboxes rendered from markdown on
-  `/guide` and `/sample-chapter`, a scrollable `<pre>` without keyboard focus on `/caveman`,
-  and a skipped heading level on `/library`.
+- axe-core WCAG 2 A/AA (smoke step): no violations on 24 routes; colour contrast checked in all
+  three palettes at 1440 and 390px.
+- Lighthouse mobile (local `wrangler dev`, simulated throttling): `/` Performance 100,
+  `/calculator` and `/library` 99; Accessibility 100 on all three; CLS 0.
+- In-page buttons and range sliders are at least 44px tall on phones. Remaining smoke tap-target
+  warnings are links inside paragraphs (exempt from WCAG target size) and disabled checklist
+  checkboxes rendered from markdown.
+- Markdown task-list items are rendered by `src/lib/markdown.ts`, which wraps each item in a
+  `<label>` so its text names the checkbox. Use `renderMarkdown()` for any new long-form page.
