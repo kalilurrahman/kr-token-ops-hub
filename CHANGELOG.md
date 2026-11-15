@@ -7,6 +7,11 @@
 - AI workload adviser (`src/lib/workload-adviser.functions.ts`): `createServerFn().inputValidator()`
   → `.validator()`. Clears the deprecation warning that the newer `@tanstack/start-plugin-core`
   prints in `npm run dev`. Same schema, same typed input, no behaviour change.
+- Plain `npm ci` works again: a new `.npmrc` sets `legacy-peer-deps=true`, matching how
+  `package-lock.json` is generated. Without it npm stopped with `ERESOLVE`, because
+  `@lovable.dev/vite-tanstack-config` declares `nitro >=3.0.260603-beta` and semver prerelease
+  rules don't treat the pinned `3.0.260903-beta` as satisfying it. Lovable installs from
+  `bun.lock` and is unaffected.
 
 ## 2.1.0 — Release watermark (2026-11-15)
 
