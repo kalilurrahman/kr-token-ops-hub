@@ -179,8 +179,11 @@ BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
 
 - axe-core WCAG 2 A/AA (smoke step): no violations on 24 routes; colour contrast checked in all
   three palettes at 1440 and 390px.
-- Lighthouse mobile (local `wrangler dev`, simulated throttling): `/` Performance 100,
-  `/calculator` and `/library` 99; Accessibility 100 on all three; CLS 0.
+- Lighthouse mobile (local `wrangler dev`, simulated throttling): Performance 99,
+  Accessibility 100, CLS 0 on `/`, `/calculator` and `/library`. Production (#21, measured via
+  the sandbox proxy): Performance 95–98, Accessibility 98–100, CLS 0.
+- Hero art is a `<picture>`: phones (< 640px, where it is hidden) download nothing, larger screens
+  get a 40 KB WebP with the original PNG as fallback. Home page weight on mobile: 809 KB → 407 KB.
 - In-page buttons and range sliders are at least 44px tall on phones. Remaining smoke tap-target
   warnings are links inside paragraphs (exempt from WCAG target size) and disabled checklist
   checkboxes rendered from markdown.
