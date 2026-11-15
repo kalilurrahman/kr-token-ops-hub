@@ -228,7 +228,7 @@ function Player({
             minHeight: "28rem",
             border: "1px solid var(--line)",
             borderRadius: "0.75rem",
-            background: "#000",
+            background: "var(--to-bg)",
           }}
         />
       ) : (

@@ -249,7 +249,7 @@ function SavingsCalc() {
       { name: "Model tiering", save: tierSave, color: "var(--gold)" },
       { name: "Batch API routing", save: batchSave, color: "var(--blue)" },
       { name: "Prompt compression", save: compressSave, color: "var(--gold-dim)" },
-      { name: "Output constraints", save: outSave, color: "#d85a30" },
+      { name: "Output constraints", save: outSave, color: "var(--to-chart-5)" },
     ].sort((a, b) => b.save - a.save);
     return { baseline, optimized, totalSave, savePct, payback, levers, preset: p };
   }, [preset, reqs, inp, out, cache, batch, compress, tier, outopt]);
