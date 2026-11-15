@@ -390,7 +390,7 @@ html, body { max-width: 100%; overflow-x: clip; }
   --surface: var(--to-surface);
   --surface-2: var(--to-surface-2);
   --shadow: var(--to-shadow-2);
-  --gold: var(--to-money);
+  --gold: var(--to-money-text);
   --gold-dim: color-mix(in srgb, var(--to-money) 70%, var(--to-bg));
   --gold-glow: var(--to-money-fill);
   --green: var(--to-saving);
@@ -732,6 +732,9 @@ html, body { max-width: 100%; overflow-x: clip; }
   .to-pulse, .animate-spin { animation: none; }
 }
 a:hover .card-arrow { transform: translateX(2px); }
+/* Contrast (WCAG AA): small text never uses the saffron/gold fill colour directly. */
+.timeline-item > span, .compression-stat strong { color: var(--to-money-text); }
+html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, html[data-palette="bright"] .reader-kicker { color: var(--to-info-text); }
 /* Grid children may shrink below their min-content width (long tables, code, URLs);
    wide content then scrolls inside its own box instead of widening the page. */
 .stack, .reader-shell { grid-template-columns: minmax(0, 1fr); }

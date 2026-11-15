@@ -68,6 +68,7 @@
   /* Brand semantic utilities: bg-money, text-saving, border-risk … */
   --color-money: var(--to-money);
   --color-money-fill: var(--to-money-fill);
+  --color-money-text: var(--to-money-text);
   --color-saving: var(--to-saving);
   --color-saving-fill: var(--to-saving-fill);
   --color-risk: var(--to-risk);
@@ -213,7 +214,7 @@ html[data-theme="light"] {
   --to-field: #fbfaf7;
   --to-ink: #14161c;
   --to-ink-2: #4a4d57;
-  --to-ink-3: #6b6e78;
+  --to-ink-3: #676a74; /* v2.0.0 #6b6e78 → AA on surface-2 */
   --to-line: #e4ded1;
   --to-line-2: #d8d0bf;
   --to-line-strong: #c9b98f;
@@ -225,9 +226,9 @@ html[data-theme="light"] {
   --to-money: #8a6418;
   --to-money-fill: #fbf1dc;
   --to-money-text: #8a6418;
-  --to-saving: #0f7f72;
+  --to-saving: #0e786c; /* v2.0.0 #0f7f72 → AA on fills */
   --to-saving-fill: #e3f5f1;
-  --to-saving-text: #0f7f72;
+  --to-saving-text: #0e786c;
   --to-risk: #b8452a;
   --to-risk-fill: #fbe8e2;
   --to-risk-text: #b8452a;
@@ -277,19 +278,19 @@ html[data-theme="light"][data-palette="bright"] {
   --to-line-2: #c9d4ea;
   --to-line-strong: #9fb3dc;
 
-  --to-primary: #2f6bff;
+  --to-primary: #2b62eb; /* v2.0.0 #2f6bff → AA white text and text-primary */
   --to-primary-hover: #1f55d6;
   --to-primary-ink: #ffffff;
-  --to-primary-grad: linear-gradient(180deg, #4a7eff, #2f6bff);
+  --to-primary-grad: linear-gradient(180deg, #416edf, #2b62eb);
   --to-money: #b87700;
   --to-money-fill: #fff6e5;
   --to-money-text: #8a5a00;
-  --to-saving: #00866b;
+  --to-saving: #007c63; /* v2.0.0 #00866b → AA on fills */
   --to-saving-fill: #ecfbf6;
-  --to-saving-text: #00866b;
-  --to-risk: #d43d24;
+  --to-saving-text: #007c63;
+  --to-risk: #ca3a22; /* v2.0.0 #d43d24 → AA on fills */
   --to-risk-fill: #fff1ee;
-  --to-risk-text: #d43d24;
+  --to-risk-text: #ca3a22;
   --to-info: #1f55d6;
   --to-info-fill: #eaf0ff;
   --to-info-text: #1f55d6;
