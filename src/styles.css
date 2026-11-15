@@ -73,6 +73,7 @@
   --color-risk: var(--to-risk);
   --color-risk-fill: var(--to-risk-fill);
   --color-info: var(--to-info);
+  --color-info-fill: var(--to-info-fill);
   --color-surface-1: var(--to-surface);
   --color-surface-2: var(--to-surface-2);
   --color-surface-3: var(--to-surface-3);
@@ -116,6 +117,9 @@
   --to-fs-metric: clamp(1.75rem, 3vw, 2.5rem);
 
   --sds-radius: 10px;
+
+  /* Opaque stop for alpha masks (mask-image); not a palette colour. */
+  --to-mask: #000;
 }
 
 /* ---------- A · Ledger Dark (default) ---------- */

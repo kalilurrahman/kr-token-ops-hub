@@ -18,7 +18,7 @@
     linear-gradient(var(--to-chart-grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--to-chart-grid) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: linear-gradient(180deg, #000, transparent 60%);
+  mask-image: linear-gradient(180deg, var(--to-mask), transparent 60%);
 }
 .tokenops-root { position: relative; z-index: 1; }
 
@@ -192,7 +192,7 @@ html[data-theme="dark"] .to-tabbar [aria-current="page"] { color: var(--to-money
 .exec-summary td, .hub-table td, .comparator-table td, .guide td, .reader-article td {
   padding: 12px 14px; border-top: 1px solid var(--to-line); vertical-align: top; overflow-wrap: anywhere;
 }
-.to-table-scroll { overflow-x: auto; border: 1px solid var(--to-line); border-radius: var(--to-radius-btn); mask-image: linear-gradient(90deg, #000 92%, transparent); }
+.to-table-scroll { overflow-x: auto; border: 1px solid var(--to-line); border-radius: var(--to-radius-btn); mask-image: linear-gradient(90deg, var(--to-mask) 92%, transparent); }
 @media (max-width: 639px) { .exec-summary table, .hub-table, .comparator-table { display: block; overflow-x: auto; } }
 
 /* ---------- Split / timeline ---------- */
@@ -372,3 +372,179 @@ a:hover .card-arrow { transform: translateX(3px); }
 
 /* ---------- Overflow guard ---------- */
 html, body { max-width: 100%; overflow-x: clip; }
+
+/* =====================================================================
+   Legacy variable aliases
+   Route JSX still references pre-v2 variable names in inline styles and
+   Tailwind arbitrary values (e.g. text-[var(--muted)]). They resolve to
+   tokens here so they follow the active palette. Don't use them in new code.
+   ===================================================================== */
+:root {
+  --ink: var(--to-ink);
+  --muted: var(--to-ink-2);
+  --subtle: var(--to-ink-3);
+  --line: var(--to-line);
+  --line-bright: var(--to-line-strong);
+  --bg: var(--to-bg);
+  --bg-1: var(--to-bg-1);
+  --surface: var(--to-surface);
+  --surface-2: var(--to-surface-2);
+  --shadow: var(--to-shadow-2);
+  --gold: var(--to-money);
+  --gold-dim: color-mix(in srgb, var(--to-money) 70%, var(--to-bg));
+  --gold-glow: var(--to-money-fill);
+  --green: var(--to-saving);
+  --blue: var(--to-info);
+  --red: var(--to-risk-text);
+}
+
+/* =====================================================================
+   Ported layout (Phase 2.3)
+   Layout rules carried over from the pre-v2 stylesheet for selectors the
+   component layer above doesn't fully cover. Colours, fonts and shadows
+   are re-expressed as --to-* tokens.
+   ===================================================================== */
+
+/* ---------- Shared gaps ---------- */
+.dash-panel { min-width: 0; }
+.loading-panel { padding: var(--to-space-12); text-align: center; color: var(--to-ink-2); }
+.glossary-search { margin-bottom: var(--to-space-4); }
+.source-list { display: grid; gap: var(--to-space-3); }
+.source-list > div { padding: var(--to-space-4); border-radius: var(--to-radius-input); background: var(--to-surface-2); border: 1px solid var(--to-line); color: var(--to-ink); overflow-wrap: anywhere; }
+.resource-card-header > div { flex: 1; min-width: 0; }
+.resource-card-icon { min-width: 44px; }
+.resource-card-icon.doc { background: var(--to-saving-fill); color: var(--to-saving); }
+.resource-card-icon.finance { background: var(--to-money-fill); color: var(--to-money); }
+.resource-card-footer { margin-top: auto; }
+.starter-kit-banner .download-btn { white-space: nowrap; }
+
+/* ---------- Reader ---------- */
+.reader-title-block { min-width: 0; flex: 1 1 420px; }
+.reader-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-2); }
+.reader-toolbar .reader-actions { margin-top: 0; gap: var(--to-space-2); align-items: center; }
+.reader-icon-btn-wide { min-width: 112px; }
+.reader-meta-row { margin-bottom: var(--to-space-3); }
+.reader-article table { table-layout: fixed; }
+.reader-article th, .reader-article td { overflow-wrap: anywhere; }
+
+/* ---------- Article shell ---------- */
+.article-shell { display: grid; grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr); gap: var(--to-space-8); align-items: start; padding-block: var(--to-space-8); }
+@media (max-width: 860px) { .article-shell { grid-template-columns: 1fr; } }
+
+/* ---------- About ---------- */
+.about-hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: var(--to-space-10); align-items: center; }
+.about-hero h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; }
+.about-hero-desc { max-width: 560px; margin: 0; }
+.about-stat { text-align: center; }
+.about-feature-card { display: flex; flex-direction: column; gap: var(--to-space-3); text-decoration: none; }
+.about-feature-card > svg { color: var(--to-money); }
+.about-feature-card h2 { font-size: var(--to-fs-h3); letter-spacing: -0.01em; margin: 0; }
+.about-feature-card .card-arrow { margin-top: auto; opacity: 0; transform: translateX(-4px); transition: opacity var(--to-dur) var(--to-ease), transform var(--to-dur) var(--to-ease); }
+.about-feature-card:hover .card-arrow, .about-feature-card:focus-visible .card-arrow { opacity: 1; transform: translateX(0); }
+.about-cta { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+.about-cta h2 { font-size: var(--to-fs-h3); margin: 0; }
+.about-cta p { max-width: 480px; margin: 0; }
+.about-cta-actions { justify-content: center; margin-top: 0; }
+@media (max-width: 860px) { .about-hero { grid-template-columns: 1fr; } }
+
+/* ---------- Toolkit, compression, comparator ---------- */
+.toolkit-panel-header { display: flex; align-items: flex-start; gap: var(--to-space-4); margin-bottom: var(--to-space-5); padding-bottom: var(--to-space-4); border-bottom: 1px solid var(--to-line); }
+.toolkit-panel-header > svg { flex: none; margin-top: 2px; color: var(--to-money); }
+.toolkit-panel-header h3 { margin: 0 0 4px; }
+.toolkit-panel-header p { margin: 0; }
+.toolkit-textarea { resize: vertical; }
+.toolkit-textarea.compressed { background: var(--to-saving-fill); border-color: color-mix(in srgb, var(--to-saving) 35%, transparent); color: var(--to-ink); }
+.toolkit-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; padding: var(--to-space-8); text-align: center; color: var(--to-ink-3); }
+.toolkit-placeholder svg { margin-bottom: var(--to-space-3); opacity: 0.5; }
+.toolkit-placeholder p { margin: 0; }
+.compression-stats { margin-top: var(--to-space-4); }
+.compression-stat { text-align: center; }
+.compression-stat strong { display: block; margin-bottom: 2px; font: 600 1.3rem var(--font-mono); font-variant-numeric: tabular-nums; color: var(--to-money); }
+.compression-stat span { font: 500 var(--to-fs-eyebrow) var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--to-ink-3); }
+.compression-changes { display: grid; gap: 4px; margin-top: var(--to-space-3); padding: var(--to-space-3); border-radius: var(--to-radius-input); background: var(--to-saving-fill); color: var(--to-saving-text); font-size: var(--to-fs-xs); }
+.comparator-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--to-space-4); margin-bottom: var(--to-space-5); }
+.comparator-table { border: 1px solid var(--to-line); border-radius: var(--to-radius-card); overflow: hidden; background: var(--to-surface); }
+.comparator-header, .comparator-row { display: grid; grid-template-columns: 1.4fr 0.7fr 0.7fr 0.8fr 1.3fr 0.6fr; gap: var(--to-space-2); align-items: center; padding: var(--to-space-3) var(--to-space-4); }
+.comparator-header { border: 0; border-radius: 0; font: 500 11px var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--to-ink-3); }
+.comparator-row { border-top: 1px solid var(--to-line); font-size: var(--to-fs-small); color: var(--to-ink); transition: background var(--to-dur-fast); }
+.comparator-row:hover { background: var(--to-surface-2); }
+.comparator-model { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.comparator-cost { position: relative; }
+.comparator-bar { display: block; margin-top: 4px; }
+@media (max-width: 860px) {
+  .comparator-controls { grid-template-columns: 1fr; }
+  .comparator-header, .comparator-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .comparator-header > :nth-child(n + 4), .comparator-row > :nth-child(n + 4) { display: none; }
+}
+
+/* ---------- Hub ---------- */
+.hub-page { padding-block: var(--to-space-6) var(--to-space-12); }
+.hub-hero { max-width: 920px; margin-bottom: var(--to-space-6); }
+.hub-hero p { max-width: 760px; }
+.hub-link { color: var(--to-money-text); text-decoration: none; border-bottom: 1px dashed var(--to-line-strong); }
+.hub-link:hover { color: var(--to-ink); }
+.hub-tabs { margin-bottom: var(--to-space-5); }
+.hub-pane { display: block; }
+.hub-card { margin-bottom: var(--to-space-4); }
+.hub-sec-title { margin-bottom: var(--to-space-4); }
+.hub-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-3); margin-bottom: var(--to-space-3); }
+.hub-row > label { flex: none; min-width: 200px; font-size: var(--to-fs-xs); color: var(--to-ink-2); }
+.hub-row input[type="range"] { flex: 1; min-width: 160px; }
+.hub-row select { flex: 1 1 0; width: auto; min-width: 0; max-width: 100%; }
+.hub-val { min-width: 78px; text-align: right; font: 600 var(--to-fs-xs) var(--font-mono); font-variant-numeric: tabular-nums; color: var(--to-money-text); }
+.hub-metrics { margin-bottom: var(--to-space-4); }
+.hub-metric-label { margin-bottom: 6px; }
+.hub-metric-val.blue { color: var(--to-info-text); }
+.hub-bar-row { margin-bottom: var(--to-space-2); }
+.hub-table { margin-top: var(--to-space-4); }
+.hub-pill.green { background: var(--to-saving-fill); color: var(--to-saving-text); }
+.hub-pill.amber { background: var(--to-money-fill); color: var(--to-money-text); }
+.hub-pill.red { background: var(--to-risk-fill); color: var(--to-risk-text); }
+.hub-pill.blue { background: var(--to-info-fill); color: var(--to-info-text); }
+.hub-insight { margin-top: var(--to-space-4); }
+.hub-insight b, .hub-kc-section b { color: var(--to-ink); }
+.hub-compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--to-space-3); margin-bottom: var(--to-space-4); }
+.hub-compare-card { padding: var(--to-space-4); transition: transform var(--to-dur) var(--to-ease), border-color var(--to-dur); }
+.hub-compare-card:hover { transform: translateY(-2px); border-color: var(--to-line-strong); }
+.hub-compare-card.best { border-color: var(--to-saving); background: var(--to-saving-fill); }
+.hub-compare-card.worst { border-color: color-mix(in srgb, var(--to-risk) 45%, transparent); background: var(--to-risk-fill); }
+.hub-compare-card .provider { margin-bottom: 4px; font-weight: 600; font-size: var(--to-fs-small); color: var(--to-ink); }
+.hub-compare-card .model { margin-bottom: var(--to-space-2); font-size: var(--to-fs-xs); color: var(--to-ink-2); }
+.hub-compare-card .price { margin-bottom: 4px; font-size: 1.4rem; font-weight: 600; color: var(--to-ink); }
+.hub-compare-card .price .suffix { margin-left: 4px; font-size: 0.7rem; color: var(--to-ink-3); }
+.hub-compare-card .price2 { font-size: var(--to-fs-xs); color: var(--to-ink-2); }
+.hub-compare-card .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--to-space-3); }
+.hub-compare-card .note { margin-top: var(--to-space-2); font-size: var(--to-fs-xs); font-style: italic; color: var(--to-ink-3); }
+.hub-tag-row { margin-top: var(--to-space-3); }
+.hub-maturity-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr)); gap: var(--to-space-3); margin-bottom: var(--to-space-4); }
+.hub-maturity-card { min-height: 44px; padding: var(--to-space-4) var(--to-space-3); border: 1px solid var(--to-line); border-radius: var(--to-radius-btn); background: var(--to-surface-2); color: var(--to-ink-2); text-align: center; font-family: inherit; cursor: pointer; transition: border-color var(--to-dur-fast), color var(--to-dur-fast), background var(--to-dur-fast); }
+.hub-maturity-card:hover { border-color: var(--to-line-strong); color: var(--to-ink); }
+.hub-maturity-card.active { border-color: var(--to-money); background: var(--to-money-fill); color: var(--to-money-text); }
+.hub-maturity-card .lvl { margin-bottom: 2px; font: 600 1.5rem var(--font-mono); }
+.hub-maturity-card .name { font-size: var(--to-fs-xs); }
+.hub-maturity-desc { margin: var(--to-space-3) 0; color: var(--to-ink-2); line-height: 1.65; font-size: var(--to-fs-small); }
+.hub-progress-outer { margin-bottom: 6px; }
+.hub-progress-label { margin-bottom: var(--to-space-3); font-size: var(--to-fs-xs); color: var(--to-ink-2); }
+.tokenops-root label.hub-check-item { display: flex; align-items: flex-start; gap: var(--to-space-3); padding: var(--to-space-3) 0; border-bottom: 1px solid var(--to-line); font-size: var(--to-fs-small); font-weight: 400; color: var(--to-ink); cursor: pointer; }
+.hub-check-item:last-child { border-bottom: 0; }
+.hub-check-item input[type="checkbox"] { flex: none; width: 16px; height: 16px; margin-top: 3px; accent-color: var(--to-money); }
+.hub-check-item .done { color: var(--to-ink-3); text-decoration: line-through; }
+.hub-check-item .sub { margin-top: 2px; font-size: var(--to-fs-xs); color: var(--to-ink-3); }
+.hub-search { margin-bottom: var(--to-space-4); }
+.hub-empty { grid-column: 1 / -1; }
+.hub-kc-section { margin-bottom: var(--to-space-5); }
+.hub-kc-section h3 { margin: 0 0 var(--to-space-2); }
+.hub-kc-section ul { margin: 4px 0; padding-left: 1.3rem; }
+@media (max-width: 640px) {
+  .hub-row { gap: var(--to-space-2); }
+  .hub-row > label { min-width: 100%; }
+  .hub-val { min-width: 60px; }
+}
+
+/* ---------- Alignment fixes ---------- */
+/* Eyebrows inside headings keep eyebrow type (".page-heading p" would otherwise win). */
+.page-heading .eyebrow, .page-heading .to-eyebrow { font-size: var(--to-fs-eyebrow); }
+.page-heading .eyebrow { color: var(--to-money); }
+/* Route sections wrapped in a 1200px Tailwind container duplicate .app-shell's width;
+   let them align with sibling sections instead of insetting by another gutter. */
+.app-shell .stack > .max-w-\[1200px\] { max-width: none; padding-inline: 0; }
