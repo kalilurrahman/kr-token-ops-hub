@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.2 — Server function validator API (2026-11-15)
+
+- AI workload adviser (`src/lib/workload-adviser.functions.ts`): `createServerFn().inputValidator()`
+  → `.validator()`. Clears the deprecation warning that the newer `@tanstack/start-plugin-core`
+  prints in `npm run dev`. Same schema, same typed input, no behaviour change.
+
 ## 2.0.1 — Dependency updates (2026-11-15)
 
 Applies the pending Dependabot updates in one tested change.
