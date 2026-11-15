@@ -390,7 +390,7 @@ html, body { max-width: 100%; overflow-x: clip; }
   --surface: var(--to-surface);
   --surface-2: var(--to-surface-2);
   --shadow: var(--to-shadow-2);
-  --gold: var(--to-money);
+  --gold: var(--to-money-text);
   --gold-dim: color-mix(in srgb, var(--to-money) 70%, var(--to-bg));
   --gold-glow: var(--to-money-fill);
   --green: var(--to-saving);
@@ -711,3 +711,43 @@ html, body { max-width: 100%; overflow-x: clip; }
 .calc-results > p { margin: var(--to-space-2) 0 0; color: var(--to-ink-2); font-size: var(--to-fs-xs); line-height: 1.55; }
 .calc-results > p[role="status"] { padding: 8px 12px; border-radius: var(--to-radius-input); border: 1px solid color-mix(in srgb, var(--to-money) 30%, transparent); background: var(--to-money-fill); color: var(--to-money-text); }
 .calc-results > .download-btn { justify-self: start; margin-top: var(--to-space-2); }
+
+/* =====================================================================
+   Long-form & polish (Phase 5)
+   ===================================================================== */
+/* Reader: comfortable measure is set above (72ch); keep the sticky title clear of the header. */
+.reader-toolbar-title { margin-inline: calc(-1 * var(--to-space-2)); padding-inline: var(--to-space-2); border-bottom: 1px solid var(--to-line); }
+.guide a:hover, .reader-article a:hover { text-decoration-thickness: 2px; }
+.guide h2 a, .reader-article h2 a { color: inherit; text-decoration: none; }
+/* Wide tables scroll inside the article on small screens instead of crushing columns. */
+@media (max-width: 639px) {
+  .guide table, .reader-article table { display: block; max-width: 100%; overflow-x: auto; table-layout: auto; }
+  .guide th, .guide td, .reader-article th, .reader-article td { min-width: 7.5rem; overflow-wrap: break-word; }
+}
+/* Motion: hover lift is 2px at most and disappears for reduced-motion users. */
+@media (prefers-reduced-motion: reduce) {
+  .tile:hover, .to-card:hover, .about-feature-card:hover, .hub-card:hover, .hub-compare-card:hover,
+  .primary-action:hover, .button-action:hover, .to-btn-gold:hover, .download-btn.primary:hover,
+  a:hover .card-arrow, .about-feature-card .card-arrow { transform: none; }
+  .to-pulse, .animate-spin { animation: none; }
+}
+a:hover .card-arrow { transform: translateX(2px); }
+/* Contrast (WCAG AA): small text never uses the saffron/gold fill colour directly. */
+.timeline-item > span, .compression-stat strong { color: var(--to-money-text); }
+html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, html[data-palette="bright"] .reader-kicker { color: var(--to-info-text); }
+/* Grid children may shrink below their min-content width (long tables, code, URLs);
+   wide content then scrolls inside its own box instead of widening the page. */
+.stack, .reader-shell { grid-template-columns: minmax(0, 1fr); }
+.stack > *, .reader-shell > * { min-width: 0; }
+.page-heading, .calc-stack, .calc-results, .timeline, .source-list { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 1023px) { .exec-summary { grid-template-columns: minmax(0, 1fr); } }
+.exec-summary > *, .page-heading > *, .calc-stack > *, .calc-results > * { min-width: 0; }
+/* On phones the title block (title, summary, controls) is too tall to pin while reading. */
+@media (max-width: 767px) { .reader-toolbar-title { position: static; } }
+/* Touch: sliders get a 44px hit area (the track stays thin). */
+.tokenops-root input[type="range"] { min-height: 44px; }
+/* Touch: in-page buttons (shadcn Button, data-slot="button") reach 44px on phones;
+   laptop density is unchanged. */
+@media (max-width: 767px) { .tokenops-root main [data-slot="button"] { min-height: 44px; } }
+/* Home "Open Optimize" pill stays on one line beside its copy. */
+.app-shell .stack > .max-w-\[1200px\] > a > span:last-child { flex: none; white-space: nowrap; }

@@ -111,14 +111,14 @@ function CavemanPage() {
 
       <h2 className="mt-10 text-2xl font-semibold">Drop-in skill</h2>
       <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-background text-foreground">
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
+        <div className="flex items-center justify-between border-b border-border px-4 py-2">
           <span className="text-xs text-ink-3">caveman-skill.txt</span>
           <Button
             type="button"
             variant="ghost"
             size="sm"
             onClick={copy}
-            className="h-7 bg-primary-foreground/10 px-2.5 text-xs text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
+            className="h-7 bg-surface-2 px-2.5 text-xs text-foreground hover:bg-surface-3 hover:text-foreground"
           >
             {copied ? <CheckCheck className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? "Copied" : "Copy"}

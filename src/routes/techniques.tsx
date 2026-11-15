@@ -47,7 +47,7 @@ const categories = [
 const impactColor: Record<Technique["impact"], string> = {
   "Very High": "bg-saving-fill text-saving",
   High: "bg-info-fill text-info",
-  Medium: "bg-money-fill text-money",
+  Medium: "bg-money-fill text-money-text",
   Low: "bg-surface-3 text-foreground",
 };
 
@@ -228,7 +228,7 @@ function TechniquesPage() {
               </div>
 
               {t.pitfalls && (
-                <p className="mt-3 rounded-lg border border-money/30 bg-money-fill px-3 py-2 text-sm text-money">
+                <p className="mt-3 rounded-lg border border-money/30 bg-money-fill px-3 py-2 text-sm text-money-text">
                   <span className="font-semibold">Watch out:</span> {t.pitfalls}
                 </p>
               )}

@@ -10,17 +10,20 @@
  * SMOKE_IGNORE_CONSOLE (optional regex) downgrades matching console errors to warnings.
  * Checks, for every route × viewport (390, 834, 1440):
  *   1. HTTP 200 and no uncaught page errors / console errors
- *   2. No horizontal overflow (scrollWidth <= innerWidth + 1)
+ *   2. No horizontal overflow (scrollWidth <= innerWidth + 1, and no element escaping the
+ *      viewport outside a scroll/clip container — html/body clip would otherwise hide it)
  *   3. Content parity: normalized visible text of <main> equals the baseline
  *      (read with CSS text-transform neutralised and chart axis ticks hidden, so casing
  *      styles and font-dependent tick collisions are not counted as content)
  *      (the uplift must not add, drop or reword content)
  *   4. Every interactive element in <main> is >= 40px tall on mobile (warn) / 44px tab bar
+ *   5. axe-core WCAG 2 A/AA audit per palette (warn only; report in .smoke/axe.json)
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
  */
 import { chromium } from "playwright";
 import fs from "node:fs/promises";
 import path from "node:path";
+import AxeBuilder from "@axe-core/playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4173";
 const BASELINE = process.argv.includes("--baseline");
@@ -92,13 +95,39 @@ for (const vp of VIEWPORTS) {
           : failures.push(`${tag} ${e}`),
       );
 
-    const { overflow, text, smallTargets } = await page.evaluate(() => {
+    const { overflow, escaped, text, smallTargets } = await page.evaluate(() => {
       const main = document.querySelector("main") ?? document.body;
       const small = [...main.querySelectorAll("a,button,input,select,textarea")].filter((el) => {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && r.height < 40;
       }).length;
       const overflow = document.documentElement.scrollWidth - window.innerWidth;
+      // html/body use overflow-x: clip, which hides overflow from scrollWidth. Also report
+      // elements whose box escapes the viewport without a scroll/clip container to hold them.
+      const clips = (el) => /auto|scroll|hidden|clip/.test(getComputedStyle(el).overflowX);
+      const escaped = [];
+      for (const el of document.body.querySelectorAll("*")) {
+        const r = el.getBoundingClientRect();
+        if (
+          r.width === 0 ||
+          r.right <= window.innerWidth + 1 ||
+          getComputedStyle(el).position === "fixed"
+        )
+          continue;
+        let parent = el.parentElement;
+        let contained = false;
+        while (parent && parent !== document.body) {
+          if (clips(parent) && parent.getBoundingClientRect().right <= window.innerWidth + 1) {
+            contained = true;
+            break;
+          }
+          parent = parent.parentElement;
+        }
+        if (!contained)
+          escaped.push(
+            `${el.tagName.toLowerCase()}${el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\s+/).slice(0, 2).join(".") : ""} +${Math.round(r.right - window.innerWidth)}px`,
+          );
+      }
       // Parity compares authored text, so presentation is neutralised while reading it:
       //  - innerText applies CSS text-transform (a restyled eyebrow would read as reworded);
       //    inline !important beats stylesheet !important, so set it per element.
@@ -123,9 +152,10 @@ for (const vp of VIEWPORTS) {
         if (value) el.style.setProperty(prop, value, priority);
         else el.style.removeProperty(prop);
       }
-      return { overflow, text, smallTargets: small };
+      return { overflow, escaped: escaped.slice(0, 3), text, smallTargets: small };
     });
     if (overflow > 1) failures.push(`${tag} horizontal overflow ${overflow}px`);
+    if (escaped.length) failures.push(`${tag} content escapes the viewport: ${escaped.join(", ")}`);
     if (vp.name === "mobile" && smallTargets > 0)
       warnings.push(`${tag} ${smallTargets} tap targets < 40px`);
 
@@ -160,6 +190,62 @@ for (const vp of VIEWPORTS) {
   }
   await ctx.close();
 }
+// ---------- Accessibility (warning only) ----------
+// axe-core at laptop width: full WCAG 2 A/AA in Ledger Dark, colour contrast in the two light
+// palettes. Findings never fail the run; the full report is written to .smoke/axe.json.
+// Set SMOKE_AXE=0 to skip.
+if (process.env.SMOKE_AXE !== "0" && !BASELINE) {
+  const PALETTES = [
+    { name: "dark", rules: null },
+    { name: "light", rules: ["color-contrast"] },
+    { name: "bright", rules: ["color-contrast"] },
+  ];
+  const report = [];
+  for (const palette of PALETTES) {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await ctx.addInitScript((theme) => {
+      try {
+        localStorage.setItem("tokenops-theme-v2", theme);
+      } catch {
+        /* storage blocked */
+      }
+    }, palette.name);
+    for (const route of ROUTES) {
+      const page = await ctx.newPage();
+      await page.goto(BASE + route, { waitUntil: "networkidle" });
+      let builder = new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]);
+      if (palette.rules) builder = builder.withRules(palette.rules);
+      const { violations } = await builder.analyze();
+      for (const v of violations) {
+        report.push({
+          palette: palette.name,
+          route,
+          rule: v.id,
+          impact: v.impact,
+          nodes: v.nodes.length,
+          targets: v.nodes.slice(0, 5).map((n) => n.target.join(" ")),
+        });
+      }
+      await page.close();
+    }
+    await ctx.close();
+  }
+  await fs.mkdir(OUT, { recursive: true });
+  await fs.writeFile(path.join(OUT, "axe.json"), JSON.stringify(report, null, 2));
+  const byRule = new Map();
+  for (const r of report) {
+    const key = `${r.palette} ${r.rule} (${r.impact})`;
+    const agg = byRule.get(key) ?? { nodes: 0, routes: new Set() };
+    agg.nodes += r.nodes;
+    agg.routes.add(r.route);
+    byRule.set(key, agg);
+  }
+  if (byRule.size === 0) console.log("axe: no WCAG 2 A/AA violations found");
+  for (const [key, agg] of byRule) {
+    warnings.push(`axe ${key}: ${agg.nodes} node(s) on ${agg.routes.size} route(s)`);
+  }
+}
+
 await browser.close();
 
 warnings.forEach((w) => console.warn("WARN", w));
