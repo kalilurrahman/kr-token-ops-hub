@@ -1,17 +1,6 @@
 # Changelog
 
-## 2.1.1 — Server function validator API (2026-11-15)
-
-### Fixed
-
-- AI workload adviser (`src/lib/workload-adviser.functions.ts`): `createServerFn().inputValidator()`
-  → `.validator()`. Clears the deprecation warning that the newer `@tanstack/start-plugin-core`
-  prints in `npm run dev`. Same schema, same typed input, no behaviour change.
-- Plain `npm ci` works again: a new `.npmrc` sets `legacy-peer-deps=true`, matching how
-  `package-lock.json` is generated. Without it npm stopped with `ERESOLVE`, because
-  `@lovable.dev/vite-tanstack-config` declares `nitro >=3.0.260603-beta` and semver prerelease
-  rules don't treat the pinned `3.0.260903-beta` as satisfying it. Lovable installs from
-  `bun.lock` and is unaffected.
+## 2.1.2 — zod 4 and npm install fix (2026-11-15)
 
 ### Changed
 
@@ -19,6 +8,23 @@
   schema, whose APIs (`object`, `string().trim().min().max()`, `enum`, `nullable`) are unchanged
   in v4. Valid input still parses and invalid input is still rejected; only the issue codes in
   validation errors are renamed. Both `package-lock.json` and `bun.lock` carry the update.
+- README demo GIF shows the Design System v2 UI in all three palettes.
+
+### Fixed
+
+- Plain `npm ci` works again: a new `.npmrc` sets `legacy-peer-deps=true`, matching how
+  `package-lock.json` is generated. Without it npm stopped with `ERESOLVE`, because
+  `@lovable.dev/vite-tanstack-config` declares `nitro >=3.0.260603-beta` and semver prerelease
+  rules don't treat the pinned `3.0.260903-beta` as satisfying it. Lovable installs from
+  `bun.lock` and is unaffected.
+
+## 2.1.1 — Server function validator API (2026-11-15)
+
+### Fixed
+
+- AI workload adviser (`src/lib/workload-adviser.functions.ts`): `createServerFn().inputValidator()`
+  → `.validator()`. Clears the deprecation warning that the newer `@tanstack/start-plugin-core`
+  prints in `npm run dev`. Same schema, same typed input, no behaviour change.
 
 ## 2.1.0 — Release watermark (2026-11-15)
 
