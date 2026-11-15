@@ -81,7 +81,7 @@ function LibraryPage() {
                 <LibraryIcon size={22} />
               </div>
               <div>
-                <h3>{item.title}</h3>
+                <h2>{item.title}</h2>
                 <p>{item.desc}</p>
               </div>
             </div>

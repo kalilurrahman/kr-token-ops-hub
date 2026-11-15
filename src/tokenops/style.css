@@ -751,3 +751,5 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 @media (max-width: 767px) { .tokenops-root main [data-slot="button"] { min-height: 44px; } }
 /* Home "Open Optimize" pill stays on one line beside its copy. */
 .app-shell .stack > .max-w-\[1200px\] > a > span:last-child { flex: none; white-space: nowrap; }
+/* Library card titles are h2 (directly under the page h1); same look as the h3 cards elsewhere. */
+.resource-card-header h2 { font-size: 1rem; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 4px; }
