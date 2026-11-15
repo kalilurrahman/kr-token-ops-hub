@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import tokenopsCss from "../tokenops/style.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { MobileTabBar } from "@/components/MobileTabBar";
 import { DEFAULT_THEME, THEME_COLOR, THEME_HEAD_SCRIPT } from "@/lib/theme";
 
 function NotFoundComponent() {
@@ -180,6 +181,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
+        <MobileTabBar />
       </div>
     </QueryClientProvider>
   );
