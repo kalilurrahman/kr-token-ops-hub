@@ -746,3 +746,6 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 @media (max-width: 767px) { .reader-toolbar-title { position: static; } }
 /* Touch: sliders get a 44px hit area (the track stays thin). */
 .tokenops-root input[type="range"] { min-height: 44px; }
+/* Touch: in-page buttons (shadcn Button, data-slot="button") reach 44px on phones;
+   laptop density is unchanged. */
+@media (max-width: 767px) { .tokenops-root main [data-slot="button"] { min-height: 44px; } }
