@@ -124,7 +124,7 @@ function CavemanPage() {
             {copied ? "Copied" : "Copy"}
           </Button>
         </div>
-        <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
+        <pre className="overflow-x-auto p-4 text-sm leading-relaxed" tabIndex={0}>
           <code>{caveman.skillSnippet}</code>
         </pre>
       </div>
