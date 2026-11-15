@@ -749,3 +749,5 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 /* Touch: in-page buttons (shadcn Button, data-slot="button") reach 44px on phones;
    laptop density is unchanged. */
 @media (max-width: 767px) { .tokenops-root main [data-slot="button"] { min-height: 44px; } }
+/* Home "Open Optimize" pill stays on one line beside its copy. */
+.app-shell .stack > .max-w-\[1200px\] > a > span:last-child { flex: none; white-space: nowrap; }
