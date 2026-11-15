@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.1 — Dependency updates (2026-11-15)
+
+Applies the pending Dependabot updates in one tested change.
+
+- Vite 7 → 8 (8.3.8), Nitro `3.0.260903-beta`, `@cloudflare/vite-plugin` ^1.54.7 (1.69.1).
+- Transitive security and compatibility bumps now reach `bun.lock` (what Lovable installs) as
+  well as `package-lock.json`: brace-expansion 1.1.22, postcss 8.5.33, nanoid 3.3.20, js-yaml
+  4.3.2, browserslist 4.29.5, baseline-browser-mapping 2.11.37, undici 7.30.1, ws 8.22.0, sharp
+  0.35.5.
+- `package-lock.json` is regenerated and back in sync with `package.json` (`npm ci` works again).
+- `wrangler.jsonc`: trailing comma removed; the newer Nitro parses it as strict JSON.
+
 ## 2.0.0 — Design System v2 (2026-11-15)
 
 Visual uplift to TokenOps Atlas Design System v2. Content, data, routes, calculator maths, SEO
