@@ -6,6 +6,16 @@
 
 TokenOps applies visibility, allocation, optimization, and governance to LLM token consumption so AI products can scale without invoice surprises. It acts as operational intelligence for LLM token spend, applying FinOps-style discipline to four key domains.
 
+## Design system
+
+TokenOps Atlas uses **Design System v2**: three palettes on one token contract, all switchable
+from the header and remembered on the device. Details in
+[`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md); release notes in [`CHANGELOG.md`](CHANGELOG.md).
+
+| Ledger Dark (default) | Paper Light | Bright Pro |
+|---|---|---|
+| ![Ledger Dark](docs/design-system/screens/home-laptop-dark.jpg) | ![Paper Light](docs/design-system/screens/home-laptop-light.jpg) | ![Bright Pro](docs/design-system/screens/home-laptop-bright.jpg) |
+
 ## Features
 
 - **Visibility:** Know which services, features, teams, and use cases consume tokens and at what cost. Target: Tagging coverage %.
@@ -86,6 +96,18 @@ To run the application locally:
    npm run dev
    ```
 4. Access the application in your browser.
+
+Checks (each must pass before merging):
+
+```bash
+npm run lint        # ESLint + design-token guard (scripts/check-tokens.mjs)
+npm run typecheck   # tsc --noEmit
+npm test            # arithmetic tests (tsx --test)
+npm run build       # production build
+npm run smoke       # build, preview with wrangler, route × viewport smoke + content parity
+```
+
+Section screenshots below are from a local build at 1440×900 in Ledger Dark.
 
 ## Built With
 
