@@ -1,50 +1,70 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Moon, Sparkles, Sun, type LucideIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  DEFAULT_THEME,
+  applyTheme,
+  isThemeChoice,
+  persistTheme,
+  readStoredTheme,
+  type ThemeChoice,
+} from "@/lib/theme";
 
-type Theme = "dark" | "light";
-const KEY = "tokenops-theme-v2";
-
-function getInitial(): Theme {
-  if (typeof window === "undefined") return "dark";
-  const stored = window.localStorage.getItem(KEY) as Theme | null;
-  if (stored === "light" || stored === "dark") return stored;
-  return "dark";
-}
+const OPTIONS: { value: ThemeChoice; label: string; palette: string; icon: LucideIcon }[] = [
+  { value: "dark", label: "Dark", palette: "Ledger", icon: Moon },
+  { value: "light", label: "Light", palette: "Paper", icon: Sun },
+  { value: "bright", label: "Bright", palette: "Bright Pro", icon: Sparkles },
+];
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  // SSR always renders the default; the head script has already painted the stored palette.
+  const [theme, setTheme] = useState<ThemeChoice>(DEFAULT_THEME);
 
   useEffect(() => {
-    const t = getInitial();
-    setTheme(t);
-    document.documentElement.setAttribute("data-theme", t);
-    document.documentElement.classList.toggle("dark", t === "dark");
+    const stored = readStoredTheme();
+    setTheme(stored);
+    applyTheme(stored);
   }, []);
 
-  const toggle = () => {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    document.documentElement.classList.toggle("dark", next === "dark");
-    try {
-      window.localStorage.setItem(KEY, next);
-    } catch {
-      return;
-    }
+  const choose = (value: string) => {
+    if (!isThemeChoice(value)) return;
+    setTheme(value);
+    applyTheme(value);
+    persistTheme(value);
   };
 
+  const current = OPTIONS.find((o) => o.value === theme) ?? OPTIONS[0];
+  const CurrentIcon = current.icon;
+
   return (
-    <Button
-      type="button"
-      variant="outline"
-      size="icon"
-      className="theme-toggle h-10 w-10"
-      onClick={toggle}
-      aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-      title={theme === "dark" ? "Light mode" : "Dark mode"}
-    >
-      {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className="theme-toggle inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border"
+        aria-label={`Theme: ${current.label} (${current.palette}). Change theme`}
+        title="Theme"
+      >
+        <CurrentIcon size={18} strokeWidth={1.75} aria-hidden="true" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" sideOffset={8} className="to-theme-menu min-w-[220px]">
+        <DropdownMenuLabel className="to-eyebrow">Theme</DropdownMenuLabel>
+        <DropdownMenuRadioGroup value={theme} onValueChange={choose}>
+          {OPTIONS.map(({ value, label, palette, icon: Icon }) => (
+            <DropdownMenuRadioItem key={value} value={value} className="min-h-[44px] gap-3">
+              <Icon size={16} strokeWidth={1.75} aria-hidden="true" />
+              <span>
+                {label} <span className="text-muted-foreground">({palette})</span>
+              </span>
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
