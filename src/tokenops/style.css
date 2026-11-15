@@ -753,3 +753,7 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 .app-shell .stack > .max-w-\[1200px\] > a > span:last-child { flex: none; white-space: nowrap; }
 /* Library card titles are h2 (directly under the page h1); same look as the h3 cards elsewhere. */
 .resource-card-header h2 { font-size: 1rem; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 4px; }
+/* Markdown task lists: the item text labels its checkbox; keep it looking like list text. */
+.guide li.task-list-item, .reader-article li.task-list-item { list-style: none; }
+.tokenops-root .guide li.task-list-item > label, .tokenops-root .reader-article li.task-list-item > label { display: inline; font: inherit; color: inherit; }
+.task-list-item input[type="checkbox"] { margin-right: 0.5em; accent-color: var(--to-saving); }

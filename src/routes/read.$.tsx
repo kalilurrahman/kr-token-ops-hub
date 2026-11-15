@@ -14,7 +14,7 @@ import {
   FolderHeart,
   LoaderCircle,
 } from "lucide-react";
-import { marked } from "marked";
+import { renderMarkdown } from "@/lib/markdown";
 import { Button } from "@/components/ui/button";
 import { recommendWorkload } from "@/lib/workload-adviser.functions";
 import {
@@ -124,7 +124,7 @@ function ReaderPage() {
       : null;
 
   const isMarkdown = resolved.key.toLowerCase().endsWith(".md");
-  const html = isMarkdown ? (marked.parse(raw) as string) : null;
+  const html = isMarkdown ? renderMarkdown(raw) : null;
   const handleDownload = () => {
     if (resolved.source === "template") downloadTemplate(resolved.key);
     else downloadLibraryFile(resolved.key);

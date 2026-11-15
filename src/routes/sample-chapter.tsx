@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowLeft, ArrowUp, Download } from "lucide-react";
-import { marked } from "marked";
+import { renderMarkdown } from "@/lib/markdown";
 import chapterRaw from "../../content/sample-chapter-prompt-caching.md?raw";
 
-const html = marked.parse(chapterRaw) as string;
+const html = renderMarkdown(chapterRaw);
 
 const TITLE = "Prompt Caching Economics — free chapter from The TokenOps Handbook";
 const DESCRIPTION =

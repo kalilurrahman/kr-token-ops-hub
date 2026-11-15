@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowLeft, ArrowUp, Download } from "lucide-react";
-import { marked } from "marked";
+import { renderMarkdown } from "@/lib/markdown";
 import guideRaw from "@/tokenops/guide.md?raw";
 
-const html = marked.parse(guideRaw) as string;
+const html = renderMarkdown(guideRaw);
 
 export const Route = createFileRoute("/guide")({
   component: GuidePage,
