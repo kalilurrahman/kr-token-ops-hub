@@ -27,6 +27,8 @@ on all 24 routes. See [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
 - Tailwind palette utilities in routes replaced with semantic tokens.
 - Five token values tuned for WCAG AA (Paper Light ink-3 and saving; Bright Pro primary, saving
   and risk); Bright Pro eyebrows use cobalt.
+- Hero illustration served as WebP (40 KB, PNG fallback) and not downloaded on phones, where it
+  is hidden; home page weight on mobile drops from 809 KB to 407 KB.
 
 ### Fixed
 
