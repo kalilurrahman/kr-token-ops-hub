@@ -16,6 +16,10 @@ import { operatingPillars, playbook } from "@/tokenops/data";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
 import heroIllustration from "@/assets/hero-tokenops.png";
+import heroIllustrationWebp from "@/assets/hero-tokenops.webp";
+
+// 1×1 transparent GIF: phones (<640px) hide the illustration, so they skip the image download.
+const NO_IMAGE = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
 const data = content as TokenOpsContent;
 const libCount = data.library.length;
@@ -98,12 +102,18 @@ function Index() {
           </div>
         </div>
         <div className="hero-illustration">
-          <img
-            src={heroIllustration}
-            alt="TokenOps illustration: glowing gold token coin with a rising cost chart"
-            width={1024}
-            height={1024}
-          />
+          <picture>
+            <source media="(max-width: 639px)" srcSet={NO_IMAGE} />
+            <source type="image/webp" srcSet={heroIllustrationWebp} />
+            <img
+              src={heroIllustration}
+              alt="TokenOps illustration: glowing gold token coin with a rising cost chart"
+              width={1024}
+              height={1024}
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
         </div>
       </section>
 
