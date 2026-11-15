@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import pricingData from "../../data/pricing.json";
 
 // PRESETS and MODELS are DERIVED from data/pricing.json — the single pricing
@@ -216,6 +216,7 @@ function HubPage() {
 }
 
 function SavingsCalc() {
+  const presetId = useId();
   const [preset, setPreset] = useState<PresetKey>("openai");
   const [reqs, setReqs] = useState(3_000_000);
   const [inp, setInp] = useState(2000);
@@ -259,8 +260,12 @@ function SavingsCalc() {
       <div className="hub-card">
         <div className="hub-sec-title">Optimization savings calculator</div>
         <div className="hub-row">
-          <label>Provider preset</label>
-          <select value={preset} onChange={(e) => setPreset(e.target.value as PresetKey)}>
+          <label htmlFor={presetId}>Provider preset</label>
+          <select
+            id={presetId}
+            value={preset}
+            onChange={(e) => setPreset(e.target.value as PresetKey)}
+          >
             {Object.entries(PRESETS).map(([key, p]) => (
               <option key={key} value={key}>
                 {p.name}
@@ -880,10 +885,12 @@ function Slider({
   step: number;
   fmt: (n: number) => string;
 }) {
+  const id = useId();
   return (
     <div className="hub-row">
-      <label>{label}</label>
+      <label htmlFor={id}>{label}</label>
       <input
+        id={id}
         type="range"
         min={min}
         max={max}

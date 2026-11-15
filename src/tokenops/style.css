@@ -411,7 +411,7 @@ html, body { max-width: 100%; overflow-x: clip; }
 .glossary-search { margin-bottom: var(--to-space-4); }
 .source-list { display: grid; gap: var(--to-space-3); }
 .source-list > div { padding: var(--to-space-4); border-radius: var(--to-radius-input); background: var(--to-surface-2); border: 1px solid var(--to-line); color: var(--to-ink); overflow-wrap: anywhere; }
-.resource-card-header > div { flex: 1; min-width: 0; }
+.resource-card-header > div:not(.resource-card-icon) { flex: 1; min-width: 0; }
 .resource-card-icon { min-width: 44px; }
 .resource-card-icon.doc { background: var(--to-saving-fill); color: var(--to-saving); }
 .resource-card-icon.finance { background: var(--to-money-fill); color: var(--to-money); }
@@ -751,3 +751,9 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 @media (max-width: 767px) { .tokenops-root main [data-slot="button"] { min-height: 44px; } }
 /* Home "Open Optimize" pill stays on one line beside its copy. */
 .app-shell .stack > .max-w-\[1200px\] > a > span:last-child { flex: none; white-space: nowrap; }
+/* Library card titles are h2 (directly under the page h1); same look as the h3 cards elsewhere. */
+.resource-card-header h2 { font-size: 1rem; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 4px; }
+/* Markdown task lists: the item text labels its checkbox; keep it looking like list text. */
+.guide li.task-list-item, .reader-article li.task-list-item { list-style: none; }
+.tokenops-root .guide li.task-list-item > label, .tokenops-root .reader-article li.task-list-item > label { display: inline; font: inherit; color: inherit; }
+.task-list-item input[type="checkbox"] { margin-right: 0.5em; accent-color: var(--to-saving); }

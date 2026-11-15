@@ -33,6 +33,11 @@ on all 24 routes. See [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
 - Content that escaped the viewport on mobile (reader, home hero and executive summary) and was
   hidden by the overflow guard.
 - Reduced motion now also stops infinite animations and hover lifts.
+- In-page buttons and range sliders reach 44px on phones.
+- Accessibility markup (no visible text changes): `/hub` slider and preset labels are tied to their
+  controls, markdown task-list checkboxes are labelled by their item text, the `/caveman` snippet
+  is keyboard-scrollable, and `/library` card titles no longer skip a heading level.
+- Resource card icon tiles are 44px again on `/library`, `/resources` and `/templates`.
 
 ### Removed
 
