@@ -14,6 +14,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useChartTheme } from "@/lib/chart-theme";
 
 const teamData = [
   { team: "Product", spend: 42000, yield: 86 },
@@ -43,8 +44,6 @@ const anomalies: [string, string, string][] = [
   ["Content pipeline", "9.4k retries", "Schema validation failed after provider model change."],
   ["Research agent", "$8.6k context waste", "Top-10 retrieval included low-similarity chunks."],
 ];
-
-const colors = ["#d4af37", "#c9a227", "#a07a17", "#f0d278"];
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -85,11 +84,8 @@ function DashboardPage() {
     ];
   }, []);
 
-  const tooltipStyle = {
-    background: "#15161a",
-    border: "1px solid #2a2c33",
-    color: "#f5f1e6",
-  } as const;
+  const t = useChartTheme();
+  const axisTick = { fill: t.axis, fontFamily: t.mono, fontSize: 12 };
 
   return (
     <section className="dashboard stack">
@@ -117,35 +113,42 @@ function DashboardPage() {
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={300}>
               <ComposedChart data={monthlyTrend}>
-                <CartesianGrid stroke="#2a2c33" strokeDasharray="3 3" />
-                <XAxis dataKey="month" stroke="#9aa0aa" />
-                <YAxis yAxisId="cost" stroke="#9aa0aa" />
-                <YAxis yAxisId="yield" orientation="right" domain={[50, 100]} stroke="#9aa0aa" />
-                <Tooltip contentStyle={tooltipStyle} />
+                <CartesianGrid stroke={t.grid} vertical={false} />
+                <XAxis dataKey="month" stroke={t.axis} tick={axisTick} />
+                <YAxis yAxisId="cost" stroke={t.axis} tick={axisTick} />
+                <YAxis
+                  yAxisId="yield"
+                  orientation="right"
+                  domain={[50, 100]}
+                  stroke={t.axis}
+                  tick={axisTick}
+                />
+                <Tooltip contentStyle={t.tooltip} />
                 <Legend />
                 <Area
                   yAxisId="cost"
                   type="monotone"
                   dataKey="baseline"
                   name="Baseline spend"
-                  stroke="#a07a17"
-                  fill="rgba(212,175,55,0.15)"
+                  stroke={t.baseline}
+                  fill={t.baselineFill}
                 />
                 <Area
                   yAxisId="cost"
                   type="monotone"
                   dataKey="optimized"
                   name="Optimized spend"
-                  stroke="#d4af37"
-                  fill="rgba(240,210,120,0.18)"
+                  stroke={t.saving}
+                  fill={t.savingFill}
                 />
                 <Line
                   yAxisId="yield"
                   type="monotone"
                   dataKey="yieldRate"
                   name="Yield rate"
-                  stroke="#f0d278"
-                  strokeWidth={3}
+                  stroke={t.money}
+                  strokeWidth={2.5}
+                  dot={false}
                 />
               </ComposedChart>
             </ResponsiveContainer>
@@ -157,13 +160,13 @@ function DashboardPage() {
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={270}>
               <BarChart data={teamData}>
-                <CartesianGrid stroke="#2a2c33" strokeDasharray="3 3" />
-                <XAxis dataKey="team" stroke="#9aa0aa" />
-                <YAxis stroke="#9aa0aa" />
-                <Tooltip contentStyle={tooltipStyle} />
+                <CartesianGrid stroke={t.grid} vertical={false} />
+                <XAxis dataKey="team" stroke={t.axis} tick={axisTick} />
+                <YAxis stroke={t.axis} tick={axisTick} />
+                <Tooltip contentStyle={t.tooltip} />
                 <Bar dataKey="spend" name="Spend">
                   {teamData.map((entry, index) => (
-                    <Cell key={entry.team} fill={colors[index % colors.length]} />
+                    <Cell key={entry.team} fill={t.series[index % t.series.length]} />
                   ))}
                 </Bar>
               </BarChart>
@@ -176,11 +179,15 @@ function DashboardPage() {
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={270}>
               <BarChart data={modelData}>
-                <CartesianGrid stroke="#2a2c33" strokeDasharray="3 3" />
-                <XAxis dataKey="model" stroke="#9aa0aa" />
-                <YAxis stroke="#9aa0aa" />
-                <Tooltip contentStyle={tooltipStyle} />
-                <Bar dataKey="spend" name="Spend" fill="#d4af37" />
+                <CartesianGrid stroke={t.grid} vertical={false} />
+                <XAxis dataKey="model" stroke={t.axis} tick={axisTick} />
+                <YAxis stroke={t.axis} tick={axisTick} />
+                <Tooltip contentStyle={t.tooltip} />
+                <Bar dataKey="spend" name="Spend">
+                  {modelData.map((entry, index) => (
+                    <Cell key={entry.model} fill={t.series[index % t.series.length]} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
