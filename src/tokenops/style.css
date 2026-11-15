@@ -744,3 +744,5 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 .exec-summary > *, .page-heading > *, .calc-stack > *, .calc-results > * { min-width: 0; }
 /* On phones the title block (title, summary, controls) is too tall to pin while reading. */
 @media (max-width: 767px) { .reader-toolbar-title { position: static; } }
+/* Touch: sliders get a 44px hit area (the track stays thin). */
+.tokenops-root input[type="range"] { min-height: 44px; }
