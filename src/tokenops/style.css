@@ -411,7 +411,7 @@ html, body { max-width: 100%; overflow-x: clip; }
 .glossary-search { margin-bottom: var(--to-space-4); }
 .source-list { display: grid; gap: var(--to-space-3); }
 .source-list > div { padding: var(--to-space-4); border-radius: var(--to-radius-input); background: var(--to-surface-2); border: 1px solid var(--to-line); color: var(--to-ink); overflow-wrap: anywhere; }
-.resource-card-header > div { flex: 1; min-width: 0; }
+.resource-card-header > div:not(.resource-card-icon) { flex: 1; min-width: 0; }
 .resource-card-icon { min-width: 44px; }
 .resource-card-icon.doc { background: var(--to-saving-fill); color: var(--to-saving); }
 .resource-card-icon.finance { background: var(--to-money-fill); color: var(--to-money); }
