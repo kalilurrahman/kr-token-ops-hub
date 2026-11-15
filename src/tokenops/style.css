@@ -687,3 +687,22 @@ html, body { max-width: 100%; overflow-x: clip; }
 .compression-stat strong, .hub-val, .calc-results .row strong, .metric-row strong {
   font-family: var(--font-mono); font-variant-numeric: tabular-nums;
 }
+
+/* Calculator: results sticky beside inputs on laptop (above); on mobile the same figures
+   become a compact summary pinned above the tab bar while the inputs scroll. */
+@media (max-width: 767px) {
+  html:has(.calculator-layout) { scroll-padding-bottom: 380px; }
+  .calculator-layout > .result-surface {
+    position: sticky; top: auto; bottom: calc(var(--to-tabbar-h) + var(--to-space-4) + env(safe-area-inset-bottom)); z-index: 20;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--to-space-2);
+    padding: var(--to-space-4); border-color: var(--to-line-strong); border-radius: var(--to-radius-panel);
+    background: color-mix(in srgb, var(--to-surface) 94%, transparent); backdrop-filter: blur(16px); box-shadow: var(--to-shadow-2);
+  }
+  .calculator-layout > .result-surface .metric-row { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2px; padding: 6px 10px; border: 0; border-radius: var(--to-radius-input); background: var(--to-surface-2); }
+  .calculator-layout > .result-surface .metric-row span { font-size: var(--to-fs-xs); }
+  .calculator-layout > .result-surface .metric-row strong { font-size: 1rem; }
+  .calculator-layout > .result-surface .metric-row.accent { grid-column: 1 / -1; order: -1; padding: 0 2px 4px; background: transparent; }
+  .calculator-layout > .result-surface .metric-row.accent strong { font-size: 1.75rem; line-height: 1.1; }
+  .calculator-layout > .result-surface .executive-note { grid-column: 1 / -1; margin: 0; padding: 8px 10px; font-size: var(--to-fs-xs); line-height: 1.5; }
+  .calculator-layout > .result-surface > .primary-action { grid-column: 1 / -1; }
+}
