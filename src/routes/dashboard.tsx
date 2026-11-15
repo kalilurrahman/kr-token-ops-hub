@@ -15,6 +15,7 @@ import {
   YAxis,
 } from "recharts";
 import { useChartTheme } from "@/lib/chart-theme";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const teamData = [
   { team: "Product", spend: 42000, yield: 86 },
@@ -86,6 +87,9 @@ function DashboardPage() {
 
   const t = useChartTheme();
   const axisTick = { fill: t.axis, fontFamily: t.mono, fontSize: 12 };
+  // Below 768px the bar charts run horizontally so category names never rotate or collide.
+  const isMobile = useIsMobile();
+  const barLayout = isMobile ? "vertical" : "horizontal";
 
   return (
     <section className="dashboard stack">
@@ -159,10 +163,24 @@ function DashboardPage() {
           <h2>Spend by team</h2>
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={270}>
-              <BarChart data={teamData}>
-                <CartesianGrid stroke={t.grid} vertical={false} />
-                <XAxis dataKey="team" stroke={t.axis} tick={axisTick} />
-                <YAxis stroke={t.axis} tick={axisTick} />
+              <BarChart data={teamData} layout={barLayout}>
+                <CartesianGrid stroke={t.grid} vertical={isMobile} horizontal={!isMobile} />
+                {isMobile ? (
+                  <XAxis type="number" stroke={t.axis} tick={axisTick} />
+                ) : (
+                  <XAxis dataKey="team" stroke={t.axis} tick={axisTick} />
+                )}
+                {isMobile ? (
+                  <YAxis
+                    type="category"
+                    dataKey="team"
+                    width={132}
+                    stroke={t.axis}
+                    tick={axisTick}
+                  />
+                ) : (
+                  <YAxis stroke={t.axis} tick={axisTick} />
+                )}
                 <Tooltip contentStyle={t.tooltip} />
                 <Bar dataKey="spend" name="Spend">
                   {teamData.map((entry, index) => (
@@ -178,10 +196,24 @@ function DashboardPage() {
           <h2>Spend by model</h2>
           <div className="chart-box">
             <ResponsiveContainer width="100%" height={270}>
-              <BarChart data={modelData}>
-                <CartesianGrid stroke={t.grid} vertical={false} />
-                <XAxis dataKey="model" stroke={t.axis} tick={axisTick} />
-                <YAxis stroke={t.axis} tick={axisTick} />
+              <BarChart data={modelData} layout={barLayout}>
+                <CartesianGrid stroke={t.grid} vertical={isMobile} horizontal={!isMobile} />
+                {isMobile ? (
+                  <XAxis type="number" stroke={t.axis} tick={axisTick} />
+                ) : (
+                  <XAxis dataKey="model" stroke={t.axis} tick={axisTick} />
+                )}
+                {isMobile ? (
+                  <YAxis
+                    type="category"
+                    dataKey="model"
+                    width={132}
+                    stroke={t.axis}
+                    tick={axisTick}
+                  />
+                ) : (
+                  <YAxis stroke={t.axis} tick={axisTick} />
+                )}
                 <Tooltip contentStyle={t.tooltip} />
                 <Bar dataKey="spend" name="Spend">
                   {modelData.map((entry, index) => (
