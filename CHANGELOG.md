@@ -1,10 +1,21 @@
 # Changelog
 
-## 2.0.2 — Server function validator API (2026-11-15)
+## 2.1.1 — Server function validator API (2026-11-15)
+
+### Fixed
 
 - AI workload adviser (`src/lib/workload-adviser.functions.ts`): `createServerFn().inputValidator()`
   → `.validator()`. Clears the deprecation warning that the newer `@tanstack/start-plugin-core`
   prints in `npm run dev`. Same schema, same typed input, no behaviour change.
+
+## 2.1.0 — Release watermark (2026-11-15)
+
+### Added
+
+- Release version watermark in the footer (`v2.1.0`), read from `package.json` through
+  `src/lib/release.ts` so it always matches the deployed build.
+- `package.json` now carries the release `version`; `src/lib/release.test.ts` fails if it differs
+  from the newest entry in this changelog.
 
 ## 2.0.1 — Dependency updates (2026-11-15)
 
