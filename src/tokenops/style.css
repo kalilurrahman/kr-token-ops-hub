@@ -706,3 +706,8 @@ html, body { max-width: 100%; overflow-x: clip; }
   .calculator-layout > .result-surface .executive-note { grid-column: 1 / -1; margin: 0; padding: 8px 10px; font-size: var(--to-fs-xs); line-height: 1.5; }
   .calculator-layout > .result-surface > .primary-action { grid-column: 1 / -1; }
 }
+
+/* Status states → tokens. .calc-status ok/warn/bad above; inline warnings in calc results. */
+.calc-results > p { margin: var(--to-space-2) 0 0; color: var(--to-ink-2); font-size: var(--to-fs-xs); line-height: 1.55; }
+.calc-results > p[role="status"] { padding: 8px 12px; border-radius: var(--to-radius-input); border: 1px solid color-mix(in srgb, var(--to-money) 30%, transparent); background: var(--to-money-fill); color: var(--to-money-text); }
+.calc-results > .download-btn { justify-self: start; margin-top: var(--to-space-2); }
