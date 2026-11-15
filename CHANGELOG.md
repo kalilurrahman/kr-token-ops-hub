@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.1.4 — AI workload adviser requires sign-in (2026-11-16)
+
+### Security
+
+- The AI workload adviser's server function (`recommendWorkload` in
+  `src/lib/workload-adviser.functions.ts`) now runs `requireSupabaseAuth`, so only requests with a
+  valid Supabase session reach the Lovable AI Gateway, as `AGENTS.md` requires. Previously any
+  visitor could call it and spend gateway credits. The middleware runs before input validation,
+  so rejected requests never reach the gateway. Signed-in browsers already send their session
+  token through the global `attachSupabaseAuth` middleware in `src/start.ts`.
+- The site has no sign-in flow yet, so the adviser is unavailable until one is added: `/read`
+  pages show a "Sign-in required" notice in place of the form for visitors without a session
+  (server render included), and a rejected session shows a plain message instead of the raw
+  `Unauthorized: …` error.
+
 ## 2.1.3 — Table of contents tap targets (2026-11-16)
 
 ### Fixed

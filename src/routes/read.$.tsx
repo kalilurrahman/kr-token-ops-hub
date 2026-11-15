@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import {
   ArrowDown,
   ArrowLeft,
@@ -13,9 +14,11 @@ import {
   Download,
   FolderHeart,
   LoaderCircle,
+  LockKeyhole,
 } from "lucide-react";
 import { renderMarkdown } from "@/lib/markdown";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { recommendWorkload } from "@/lib/workload-adviser.functions";
 import {
   getReadingCollections,
@@ -356,7 +359,64 @@ const adviserOptions = {
   ],
 } as const;
 
+const ADVISER_SIGN_IN_ERROR =
+  "Your sign-in could not be verified. Sign in again to use the adviser.";
+
+// The adviser's server function requires a signed-in Supabase user (requireSupabaseAuth).
+// Server-rendered and signed-out visitors see a notice; the form appears once a session exists.
+function useSupabaseSignedIn(): boolean {
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    let active = true;
+    let unsubscribe: (() => void) | undefined;
+    try {
+      void supabase.auth
+        .getSession()
+        .then(({ data }) => {
+          if (active) setSignedIn(Boolean(data.session));
+        })
+        .catch(() => {
+          if (active) setSignedIn(false);
+        });
+      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (active) setSignedIn(Boolean(session));
+      });
+      unsubscribe = () => data.subscription.unsubscribe();
+    } catch {
+      setSignedIn(false);
+    }
+    return () => {
+      active = false;
+      unsubscribe?.();
+    };
+  }, []);
+  return signedIn;
+}
+
+function AdviserSection({ children }: { children: ReactNode }) {
+  return (
+    <section
+      className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]"
+      aria-labelledby="adviser-title"
+    >
+      <div className="mb-5 flex items-start gap-3">
+        <BrainCircuit className="mt-1 shrink-0 text-[var(--blue)]" />
+        <div>
+          <p className="eyebrow">AI workload adviser</p>
+          <h2 id="adviser-title">Ask TokenOps</h2>
+          <p className="m-0 text-[var(--muted)]">
+            Describe a real workload to receive a model portfolio, routing policy, and cost controls
+            grounded in the current briefings.
+          </p>
+        </div>
+      </div>
+      {children}
+    </section>
+  );
+}
+
 function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
+  const signedIn = useSupabaseSignedIn();
   const recommend = useServerFn(recommendWorkload);
   const [workload, setWorkload] = useState("");
   const [volume, setVolume] = useState<(typeof adviserOptions.volume)[number][0]>("moderate");
@@ -383,30 +443,30 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
       });
       setAdvice(result.advice);
     } catch (caught) {
-      setError(
-        caught instanceof Error ? caught.message : "The recommendation could not be generated.",
-      );
+      const message =
+        caught instanceof Error ? caught.message : "The recommendation could not be generated.";
+      setError(message.startsWith("Unauthorized") ? ADVISER_SIGN_IN_ERROR : message);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!signedIn) {
+    return (
+      <AdviserSection>
+        <p className="m-0 flex items-start gap-2 rounded-md border border-[var(--line)] bg-info-fill p-3 text-[var(--ink)]">
+          <LockKeyhole className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
+          <span>
+            <strong>Sign-in required.</strong> The AI workload adviser is available to signed-in
+            users only.
+          </span>
+        </p>
+      </AdviserSection>
+    );
+  }
+
   return (
-    <section
-      className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]"
-      aria-labelledby="adviser-title"
-    >
-      <div className="mb-5 flex items-start gap-3">
-        <BrainCircuit className="mt-1 shrink-0 text-[var(--blue)]" />
-        <div>
-          <p className="eyebrow">AI workload adviser</p>
-          <h2 id="adviser-title">Ask TokenOps</h2>
-          <p className="m-0 text-[var(--muted)]">
-            Describe a real workload to receive a model portfolio, routing policy, and cost controls
-            grounded in the current briefings.
-          </p>
-        </div>
-      </div>
+    <AdviserSection>
       <label className="grid gap-2 font-semibold text-[var(--ink)]">
         Workload description
         <textarea
@@ -474,7 +534,7 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
           {advice}
         </div>
       )}
-    </section>
+    </AdviserSection>
   );
 }
 

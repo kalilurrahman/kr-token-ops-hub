@@ -2,6 +2,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { APICallError, streamText } from "ai";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { createLovableAiGatewayRunIdFetch } from "@/lib/ai-gateway.server";
 
 const workloadInputSchema = z.object({
@@ -118,6 +119,7 @@ Name a primary model and alternatives. Do not invent prices, latency figures, or
 }
 
 export const recommendWorkload = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .validator((input: unknown) => workloadInputSchema.parse(input))
   .handler(async ({ data }) => {
     const lovableApiKey = process.env["LOVABLE_API_KEY"];
