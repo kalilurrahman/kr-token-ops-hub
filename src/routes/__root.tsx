@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import tokenopsCss from "../tokenops/style.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { MobileTabBar } from "@/components/MobileTabBar";
+import { DEFAULT_THEME, THEME_COLOR, THEME_HEAD_SCRIPT } from "@/lib/theme";
 
 function NotFoundComponent() {
   return (
@@ -99,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
       },
-      { name: "theme-color", content: "#0A0F17" },
+      { name: "theme-color", content: THEME_COLOR[DEFAULT_THEME] },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "TokenOps" },
@@ -119,7 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       {
-        children: `(function(){try{var t=localStorage.getItem('tokenops-theme-v2');if(t!=='light'&&t!=='dark'){t='dark';}document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.toggle('dark',t==='dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('dark');}})();`,
+        children: THEME_HEAD_SCRIPT,
       },
       {
         type: "application/ld+json",
@@ -179,6 +181,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
+        <MobileTabBar />
       </div>
     </QueryClientProvider>
   );

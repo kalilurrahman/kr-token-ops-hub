@@ -54,7 +54,7 @@ function TemplatesPage() {
                 className="h-7 px-2.5 text-xs"
               >
                 {copiedId === t.id ? (
-                  <CheckCheck className="h-3.5 w-3.5 text-emerald-500" />
+                  <CheckCheck className="h-3.5 w-3.5 text-saving" />
                 ) : (
                   <Copy className="h-3.5 w-3.5" />
                 )}
@@ -64,7 +64,7 @@ function TemplatesPage() {
             <p className="mt-1 text-sm text-muted-foreground">
               <span className="font-medium">Use when:</span> {t.useWhen}
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-xl bg-zinc-950 p-4 text-sm leading-relaxed text-zinc-100">
+            <pre className="mt-3 overflow-x-auto rounded-xl bg-background p-4 text-sm leading-relaxed text-foreground border border-border">
               <code>{t.body}</code>
             </pre>
           </div>
@@ -79,7 +79,7 @@ function TemplatesPage() {
             <ul className="mt-3 space-y-2 text-sm">
               {c.items.map((it, i) => (
                 <li key={i} className="flex gap-2">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-saving" />
                   <span>{it}</span>
                 </li>
               ))}

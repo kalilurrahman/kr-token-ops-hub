@@ -110,10 +110,10 @@ function Index() {
       <section className="mx-auto w-full max-w-[1200px] px-4">
         <Link
           to="/optimize"
-          className="group flex flex-col gap-3 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent p-6 transition hover:border-emerald-500/70 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
+          className="group flex flex-col gap-3 rounded-2xl border border-saving/40 bg-gradient-to-br from-saving-fill via-transparent to-transparent p-6 transition hover:border-saving/70 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-saving">
               <Sparkles className="h-4 w-4" /> New
             </div>
             <h2 className="mt-1 text-2xl font-semibold">Token Optimization Playbook</h2>
@@ -122,7 +122,7 @@ function Index() {
               the fewest tokens for the best result.
             </p>
           </div>
-          <span className="inline-flex items-center gap-1 self-start rounded-full bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-700 dark:text-emerald-300 sm:self-auto">
+          <span className="inline-flex items-center gap-1 self-start rounded-full bg-saving-fill px-4 py-2 text-sm font-medium text-saving sm:self-auto">
             Open Optimize{" "}
             <ArrowRight className="h-4 w-4 transition-all group-hover:translate-x-0.5" />
           </span>
@@ -158,9 +158,9 @@ function Index() {
             <Link
               key={t.to}
               to={t.to}
-              className="rounded-xl border border-border bg-card p-4 transition hover:border-emerald-500/50"
+              className="rounded-xl border border-border bg-card p-4 transition hover:border-saving/60"
             >
-              <t.icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <t.icon className="h-5 w-5 text-saving" />
               <div className="mt-2 font-semibold">{t.title}</div>
               <div className="mt-1 text-xs text-muted-foreground">{t.desc}</div>
             </Link>
@@ -434,9 +434,9 @@ function Index() {
               key={t.file}
               to="/read/$"
               params={{ _splat: `library/${t.file}` }}
-              className="rounded-xl border border-border bg-card p-4 transition hover:border-emerald-500/50"
+              className="rounded-xl border border-border bg-card p-4 transition hover:border-saving/60"
             >
-              <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <Sparkles className="h-5 w-5 text-saving" />
               <div className="mt-2 font-semibold">{t.title}</div>
               <div className="mt-1 text-xs text-muted-foreground">{t.desc}</div>
             </Link>

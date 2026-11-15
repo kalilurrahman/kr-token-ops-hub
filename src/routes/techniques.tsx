@@ -45,10 +45,10 @@ const categories = [
 ] as const;
 
 const impactColor: Record<Technique["impact"], string> = {
-  "Very High": "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300",
-  High: "bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300",
-  Medium: "bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-300",
-  Low: "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200",
+  "Very High": "bg-saving-fill text-saving",
+  High: "bg-info-fill text-info",
+  Medium: "bg-money-fill text-money",
+  Low: "bg-surface-3 text-foreground",
 };
 
 const essentialControls = [
@@ -219,7 +219,7 @@ function TechniquesPage() {
               </ul>
 
               <div className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-                <div className="rounded-lg bg-emerald-500/10 px-3 py-2 text-emerald-700 dark:text-emerald-300">
+                <div className="rounded-lg bg-saving-fill px-3 py-2 text-saving">
                   <span className="font-semibold">Typical savings:</span> {t.typicalSavings}
                 </div>
                 <div className="rounded-lg bg-muted px-3 py-2 text-muted-foreground">
@@ -228,7 +228,7 @@ function TechniquesPage() {
               </div>
 
               {t.pitfalls && (
-                <p className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-sm text-amber-700 dark:text-amber-300">
+                <p className="mt-3 rounded-lg border border-money/30 bg-money-fill px-3 py-2 text-sm text-money">
                   <span className="font-semibold">Watch out:</span> {t.pitfalls}
                 </p>
               )}

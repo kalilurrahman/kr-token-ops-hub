@@ -63,7 +63,7 @@ function ToolGuidesPage() {
             Billed in {guide.unit}
           </span>
         </div>
-        <p className="mt-1 text-emerald-600 dark:text-emerald-400">{guide.tagline}</p>
+        <p className="mt-1 text-saving">{guide.tagline}</p>
         <p className="mt-2 text-sm text-muted-foreground">
           <span className="font-semibold">Best for:</span> {guide.bestFor}
         </p>
@@ -80,22 +80,22 @@ function ToolGuidesPage() {
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
-            <h3 className="font-semibold text-emerald-600 dark:text-emerald-400">Do this</h3>
+            <h3 className="font-semibold text-saving">Do this</h3>
             <ul className="mt-2 space-y-2 text-sm">
               {guide.doThis.map((d, i) => (
                 <li key={i} className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-saving" />
                   <span>{d}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-rose-600 dark:text-rose-400">Avoid this</h3>
+            <h3 className="font-semibold text-risk">Avoid this</h3>
             <ul className="mt-2 space-y-2 text-sm">
               {guide.avoidThis.map((d, i) => (
                 <li key={i} className="flex gap-2">
-                  <X className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
+                  <X className="mt-0.5 h-4 w-4 shrink-0 text-risk" />
                   <span>{d}</span>
                 </li>
               ))}
@@ -103,8 +103,8 @@ function ToolGuidesPage() {
           </div>
         </div>
 
-        <p className="mt-6 flex gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 text-sm">
-          <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+        <p className="mt-6 flex gap-2 rounded-xl border border-saving/40 bg-saving-fill p-4 text-sm">
+          <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-saving" />
           <span>
             <span className="font-semibold">Pro tip: </span>
             {guide.proTip}

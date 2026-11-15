@@ -58,7 +58,7 @@ const cards = [
 function OptimizeHub() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <div className="flex items-center gap-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+      <div className="flex items-center gap-2 text-sm font-medium text-saving">
         <Gauge className="h-4 w-4" />
         Optimize
       </div>
@@ -76,17 +76,17 @@ function OptimizeHub() {
           <Link
             key={c.to}
             to={c.to}
-            className="group rounded-2xl border border-border bg-card p-6 transition hover:border-emerald-500/50 hover:shadow-lg"
+            className="group rounded-2xl border border-border bg-card p-6 transition hover:border-saving/60 hover:shadow-lg"
           >
             <div className="flex items-center justify-between">
-              <c.icon className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
+              <c.icon className="h-7 w-7 text-saving" />
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 {c.stat}
               </span>
             </div>
             <h2 className="mt-4 text-xl font-semibold">{c.title}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-            <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-emerald-600 group-hover:gap-2 dark:text-emerald-400">
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-saving group-hover:gap-2">
               Open <ArrowRight className="h-4 w-4 transition-all" />
             </span>
           </Link>
