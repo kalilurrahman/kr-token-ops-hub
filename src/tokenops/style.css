@@ -654,3 +654,20 @@ html, body { max-width: 100%; overflow-x: clip; }
 @media (max-width: 767px) {
   .site-footer { padding-bottom: calc(var(--to-tabbar-h) + var(--to-space-6) + env(safe-area-inset-bottom)); }
 }
+
+/* =====================================================================
+   Data views (Phase 4)
+   ===================================================================== */
+/* Dashboard heading: sample-data notice sits beside the title on laptop (text unchanged). */
+@media (min-width: 1024px) {
+  .dashboard > .page-heading { max-width: none; grid-template-columns: minmax(0, 1fr) minmax(280px, 400px); column-gap: var(--to-space-8); align-items: end; }
+  .dashboard > .page-heading > :not(.badge) { grid-column: 1; }
+  .dashboard > .page-heading > .badge { grid-column: 2; grid-row: 1 / span 2; align-self: center; justify-self: end; }
+}
+.page-heading .badge { font: 600 11px/1.6 var(--font-mono); letter-spacing: 0.04em; color: var(--to-money-text); }
+@media (max-width: 767px) { .page-heading .badge { padding: 6px 10px; font-size: 10.5px; } }
+/* KPI order is fixed in dashboard.tsx: spend, run-rate, savings, yield. */
+.dashboard-kpis .dash-card:nth-child(3) { background: linear-gradient(160deg, var(--to-saving-fill), transparent 70%), var(--to-surface); border-color: color-mix(in srgb, var(--to-saving) 35%, transparent); }
+.dashboard-kpis .dash-card:nth-child(3) strong { color: var(--to-saving-text); }
+.dashboard-kpis .dash-card:nth-child(4) strong { color: var(--to-money-text); }
+.dash-panel .recharts-legend-item-text { font-size: var(--to-fs-xs); color: var(--to-ink-2); }
