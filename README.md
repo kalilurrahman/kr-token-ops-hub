@@ -107,6 +107,10 @@ npm run build       # production build
 npm run smoke       # build, preview with wrangler, route × viewport smoke + content parity
 ```
 
+The current release is shown in the site footer (for example `v2.1.0`) and comes from the
+`version` field in `package.json`. Bump it together with a new entry in
+[`CHANGELOG.md`](CHANGELOG.md); `npm test` fails if the two disagree.
+
 Section screenshots below are from a local build at 1440×900 in Ledger Dark.
 
 ## Built With

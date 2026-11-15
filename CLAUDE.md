@@ -35,4 +35,5 @@ Claude Code reads this on every session. Also follow `AGENTS.md`; the design sys
 - Charts: `src/routes/dashboard.tsx` + `src/lib/chart-theme.ts`
 - Mobile tab bar: `src/components/MobileTabBar.tsx`; palette logic: `src/lib/theme.ts`
 - Guardrail: `scripts/check-tokens.mjs` (runs in `npm run lint`)
+- Release version: `package.json` `version` → footer watermark via `src/lib/release.ts`. Bump it together with a new top entry in `CHANGELOG.md` (`npm test` enforces the match).
 - Reference visuals: the design handoff's `reference/*.html` (not committed); palette screenshots in `docs/design-system/screens/`
