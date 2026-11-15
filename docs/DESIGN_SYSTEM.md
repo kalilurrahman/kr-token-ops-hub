@@ -158,6 +158,15 @@ the current build. Environment: `CHROMIUM_PATH` points Playwright at an existing
 `SMOKE_IGNORE_CONSOLE` (regex) downgrades matching console errors to warnings for sandboxes that
 block third-party APIs, `SMOKE_AXE=0` skips the axe pass, `SMOKE_PORT` changes the port.
 
+### Releases and the version watermark
+
+The footer shows the release version (`.to-release`, e.g. `v2.1.0`). It comes from the
+`version` field in `package.json` via `src/lib/release.ts`; Vite inlines only that field. To cut
+a release, bump `package.json` `version` and add a matching `## x.y.z — Title (date)` entry at
+the top of `CHANGELOG.md` in the same change. `npm test` (`src/lib/release.test.ts`) fails if
+they disagree. The live site's version can be checked from the footer or with
+`curl -s https://tokenops.kalilurrahman.com/ | grep -o 'v[0-9]*\.[0-9]*\.[0-9]*'`.
+
 ### Regenerating the baseline
 
 `.smoke/` is not committed. To rebuild the baseline in a fresh clone, take it from the last

@@ -760,3 +760,7 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 /* Hero art is a <picture> (WebP + PNG fallback); let the img stay the grid item. */
 .hero-illustration picture { display: contents; }
 .hero-illustration picture > source { display: none; }
+
+/* Release watermark (footer): version from package.json via src/lib/release.ts. */
+.site-footer-legal-end { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-2) var(--to-space-3); }
+.to-release { display: inline-flex; align-items: center; padding: 1px 8px; border: 1px solid var(--to-line-2); border-radius: 999px; font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: var(--to-ink-3); }
