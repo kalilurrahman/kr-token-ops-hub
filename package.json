@@ -9,7 +9,10 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts",
+    "smoke": "node scripts/run-smoke.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.71",
@@ -90,6 +93,7 @@
     "playwright": "^1.60.0",
     "postgres": "^3.4.9",
     "prettier": "^3.7.3",
+    "tsx": "^4.23.15",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1"
