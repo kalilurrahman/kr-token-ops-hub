@@ -2,6 +2,7 @@ import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
+import { RELEASE_LABEL } from "@/lib/release";
 
 export function SiteFooter() {
   return (
@@ -56,7 +57,13 @@ export function SiteFooter() {
             Made with <Heart className="footer-heart inline h-3 w-3" aria-hidden="true" /> by
             Kalilur Rahman
           </p>
-          <p>© {new Date().getFullYear()} TokenOps Atlas — All rights reserved</p>
+          <div className="site-footer-legal-end">
+            <p>© {new Date().getFullYear()} TokenOps Atlas — All rights reserved</p>
+            <p className="to-release" title={`TokenOps Atlas release ${RELEASE_LABEL}`}>
+              <span className="sr-only">Release </span>
+              {RELEASE_LABEL}
+            </p>
+          </div>
         </div>
       </div>
     </footer>

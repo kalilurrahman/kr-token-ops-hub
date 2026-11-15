@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.0 — Release watermark (2026-11-15)
+
+### Added
+
+- Release version watermark in the footer (`v2.1.0`), read from `package.json` through
+  `src/lib/release.ts` so it always matches the deployed build.
+- `package.json` now carries the release `version`; `src/lib/release.test.ts` fails if it differs
+  from the newest entry in this changelog.
+
 ## 2.0.1 — Dependency updates (2026-11-15)
 
 Applies the pending Dependabot updates in one tested change.
