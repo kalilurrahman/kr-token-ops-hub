@@ -12,6 +12,8 @@
  *   1. HTTP 200 and no uncaught page errors / console errors
  *   2. No horizontal overflow (scrollWidth <= innerWidth + 1)
  *   3. Content parity: normalized visible text of <main> equals the baseline
+ *      (read with CSS text-transform neutralised and chart axis ticks hidden, so casing
+ *      styles and font-dependent tick collisions are not counted as content)
  *      (the uplift must not add, drop or reword content)
  *   4. Every interactive element in <main> is >= 40px tall on mobile (warn) / 44px tab bar
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
@@ -96,11 +98,32 @@ for (const vp of VIEWPORTS) {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && r.height < 40;
       }).length;
-      return {
-        overflow: document.documentElement.scrollWidth - window.innerWidth,
-        text: main.innerText,
-        smallTargets: small,
+      const overflow = document.documentElement.scrollWidth - window.innerWidth;
+      // Parity compares authored text, so presentation is neutralised while reading it:
+      //  - innerText applies CSS text-transform (a restyled eyebrow would read as reworded);
+      //    inline !important beats stylesheet !important, so set it per element.
+      //  - Recharts drops colliding axis tick labels depending on font metrics; ticks are
+      //    rendered graphics, not copy. Legends and tooltips still count.
+      const restore = [];
+      const force = (el, prop, value) => {
+        restore.push([
+          el,
+          prop,
+          el.style.getPropertyValue(prop),
+          el.style.getPropertyPriority(prop),
+        ]);
+        el.style.setProperty(prop, value, "important");
       };
+      for (const el of [main, ...main.querySelectorAll("*")]) force(el, "text-transform", "none");
+      for (const el of main.querySelectorAll(".recharts-cartesian-axis-ticks")) {
+        force(el, "visibility", "hidden");
+      }
+      const text = main.innerText;
+      for (const [el, prop, value, priority] of restore.reverse()) {
+        if (value) el.style.setProperty(prop, value, priority);
+        else el.style.removeProperty(prop);
+      }
+      return { overflow, text, smallTargets: small };
     });
     if (overflow > 1) failures.push(`${tag} horizontal overflow ${overflow}px`);
     if (vp.name === "mobile" && smallTargets > 0)
