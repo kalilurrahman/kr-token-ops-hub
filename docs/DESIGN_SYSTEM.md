@@ -158,6 +158,23 @@ the current build. Environment: `CHROMIUM_PATH` points Playwright at an existing
 `SMOKE_IGNORE_CONSOLE` (regex) downgrades matching console errors to warnings for sandboxes that
 block third-party APIs, `SMOKE_AXE=0` skips the axe pass, `SMOKE_PORT` changes the port.
 
+### Regenerating the baseline
+
+`.smoke/` is not committed. To rebuild the baseline in a fresh clone, take it from the last
+commit before the uplift (`51c8ffb`, scripts only), then return to your branch:
+
+```bash
+git worktree add ../tokenops-baseline 51c8ffb
+cd ../tokenops-baseline && npm install && npm run build
+npx wrangler dev --cwd .output --config server/wrangler.json --ip 127.0.0.1 --port 4174
+```
+
+In a second shell from the repo root (using this branch's `scripts/smoke.mjs`):
+
+```bash
+BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
+```
+
 ## Accessibility status (v2.0.0)
 
 - axe colour-contrast: 0 violations on 24 routes × 3 palettes at 1440 and 390px.
