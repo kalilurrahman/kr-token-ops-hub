@@ -46,9 +46,7 @@ export const Route = createFileRoute("/training")({
 });
 
 type LoadState =
-  | { kind: "loading" }
-  | { kind: "error"; message: string }
-  | { kind: "ready"; courses: Course[] };
+  { kind: "loading" } | { kind: "error"; message: string } | { kind: "ready"; courses: Course[] };
 
 function TrainingPage() {
   const search = useSearch({ from: "/training" });
