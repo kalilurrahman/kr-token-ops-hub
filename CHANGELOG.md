@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.2.1 — Email sign-in links finish on any page (2026-11-16)
+
+### Fixed
+
+- An emailed sign-in link now completes wherever it opens. Supabase sends the reader to its
+  Site URL (the homepage) when the briefing isn't on its redirect allow-list, and only the
+  adviser started the Supabase client, so on any other page the session was never stored, the
+  adviser stayed locked and the access token stayed in the address bar and history.
+  `src/components/EmailLinkCompletion.tsx` (in the root layout) starts the client only when the
+  URL carries a link result, which stores the session and strips the token, then returns the
+  reader to the briefing they asked from: signed in, or with the expired-link message.
+- The return briefing is remembered when the link is requested: a page path in `localStorage`,
+  used once and ignored after an hour or if it isn't a same-site path
+  (`src/lib/adviser-auth.ts`, 3 new tests).
+
+### Changed
+
+- `npm run smoke` also covers a Techniques briefing, so the adviser's sign-in form is checked for
+  overflow, 16px fields and contrast at every width (25 routes).
+
 ## 2.2.0 — Email sign-in for the AI workload adviser (2026-11-16)
 
 ### Added

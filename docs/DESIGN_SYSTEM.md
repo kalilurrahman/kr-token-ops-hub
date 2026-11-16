@@ -145,7 +145,9 @@ npm run smoke       # build, wrangler dev on 127.0.0.1:4173, scripts/smoke.mjs
 ```
 
 `npm run smoke` serves `.output/` with `wrangler dev` (the Cloudflare build can't be served by
-`vite preview`), then for 24 routes × 390/834/1440 checks HTTP 200, console errors, horizontal
+`vite preview`), then for 25 routes (the 23 in `FULL_NAV` plus a Trends briefing and a
+Techniques briefing, which shows the AI adviser's sign-in form) × 390/834/1440 checks HTTP 200,
+console errors, horizontal
 overflow (including elements escaping the viewport, which the `html, body { overflow-x: clip }`
 guard would otherwise hide), mobile tap targets under 40px (warning; disabled controls and
 links inside a sentence are exempt), and content parity against
