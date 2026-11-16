@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.2.0 — Email sign-in for the AI workload adviser (2026-11-16)
+
+### Added
+
+- Passwordless sign-in for the AI workload adviser. On Models and Techniques reader pages,
+  signed-out readers enter their email and Supabase sends a one-time magic link back to the
+  same page; once signed in they see the adviser form, their email and a "Sign out" button.
+  Browsing, reading lists (still device-local) and calculators never need an account.
+- Clear messages for an invalid address, a rate-limited send, and an expired or already used
+  link. Helpers live in `src/lib/adviser-auth.ts` with tests in `src/lib/adviser-auth.test.ts`.
+
+### Fixed
+
+- Text inputs are 16px on phones again, so iOS no longer zooms in on focus (57 fields on
+  `/calculator`, `/toolkit`, `/glossary` and `/reading-lists` were 15px). The phone rule in
+  `src/tokenops/style.css` now uses the same selectors as the base input rule, which had
+  outranked it.
+- Bright Pro: filled primary buttons darken on hover instead of fading, keeping the white label
+  above AA contrast (it dropped to 4.33:1).
+
+### Changed
+
+- `AGENTS.md`: the privacy note now records that the adviser's email sign-in is the only
+  account and stays scoped to the adviser.
+- `npm run smoke` fails if any visible text field is under 16px on mobile.
+
 ## 2.1.4 — AI workload adviser requires sign-in (2026-11-16)
 
 ### Security

@@ -17,7 +17,8 @@
  *      styles and font-dependent tick collisions are not counted as content)
  *      (the uplift must not add, drop or reword content)
  *   4. Every interactive element in <main> is >= 40px tall on mobile (warn; disabled controls
- *      and links inside a sentence are exempt)
+ *      and links inside a sentence are exempt), and every visible text field is >= 16px on
+ *      mobile (fail; smaller fields make iOS zoom on focus)
  *   5. axe-core WCAG 2 A/AA audit per palette (warn only; report in .smoke/axe.json)
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
  */
@@ -96,7 +97,7 @@ for (const vp of VIEWPORTS) {
           : failures.push(`${tag} ${e}`),
       );
 
-    const { overflow, escaped, text, smallTargets } = await page.evaluate(() => {
+    const { overflow, escaped, text, smallTargets, smallInputs } = await page.evaluate(() => {
       const main = document.querySelector("main") ?? document.body;
       // Disabled controls are not targets, and links inside a sentence are sized by its
       // line-height (WCAG 2.5.8 inline exception), so neither is counted.
@@ -114,6 +115,14 @@ for (const vp of VIEWPORTS) {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && r.height < 40 && !inSentence(el);
       }).length;
+      // Text fields under 16px make iOS zoom in on focus.
+      const smallInputs = [
+        ...document.querySelectorAll(
+          'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),select,textarea',
+        ),
+      ]
+        .filter((el) => el.getBoundingClientRect().width > 0)
+        .filter((el) => parseFloat(getComputedStyle(el).fontSize) < 16).length;
       const overflow = document.documentElement.scrollWidth - window.innerWidth;
       // html/body use overflow-x: clip, which hides overflow from scrollWidth. Also report
       // elements whose box escapes the viewport without a scroll/clip container to hold them.
@@ -165,12 +174,14 @@ for (const vp of VIEWPORTS) {
         if (value) el.style.setProperty(prop, value, priority);
         else el.style.removeProperty(prop);
       }
-      return { overflow, escaped: escaped.slice(0, 3), text, smallTargets: small };
+      return { overflow, escaped: escaped.slice(0, 3), text, smallTargets: small, smallInputs };
     });
     if (overflow > 1) failures.push(`${tag} horizontal overflow ${overflow}px`);
     if (escaped.length) failures.push(`${tag} content escapes the viewport: ${escaped.join(", ")}`);
     if (vp.name === "mobile" && smallTargets > 0)
       warnings.push(`${tag} ${smallTargets} tap targets < 40px`);
+    if (vp.name === "mobile" && smallInputs > 0)
+      failures.push(`${tag} ${smallInputs} text field(s) under 16px (iOS zooms on focus)`);
 
     // Content parity is measured at laptop width only (mobile may collapse/abbreviate nav, not content).
     if (vp.name === "laptop") {

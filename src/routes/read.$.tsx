@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import type { ReactNode } from "react";
+import type { FormEvent, ReactNode } from "react";
 import {
   ArrowDown,
   ArrowLeft,
@@ -15,7 +15,15 @@ import {
   FolderHeart,
   LoaderCircle,
   LockKeyhole,
+  LogOut,
+  Mail,
 } from "lucide-react";
+import {
+  isLikelyEmail,
+  linkErrorFromUrl,
+  sendLinkErrorMessage,
+  signInRedirectUrl,
+} from "@/lib/adviser-auth";
 import { renderMarkdown } from "@/lib/markdown";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -362,35 +370,132 @@ const adviserOptions = {
 const ADVISER_SIGN_IN_ERROR =
   "Your sign-in could not be verified. Sign in again to use the adviser.";
 
+type AdviserUser = { signedIn: boolean; email: string | null };
+
 // The adviser's server function requires a signed-in Supabase user (requireSupabaseAuth).
-// Server-rendered and signed-out visitors see a notice; the form appears once a session exists.
-function useSupabaseSignedIn(): boolean {
-  const [signedIn, setSignedIn] = useState(false);
+// Server-rendered and signed-out visitors see the email sign-in; the form appears once a session
+// exists. Returning from a magic link, supabase-js reads the session from the URL itself.
+function useSupabaseUser(): AdviserUser {
+  const [user, setUser] = useState<AdviserUser>({ signedIn: false, email: null });
   useEffect(() => {
     let active = true;
     let unsubscribe: (() => void) | undefined;
+    const apply = (session: { user?: { email?: string | null } } | null) => {
+      if (active) setUser({ signedIn: Boolean(session), email: session?.user?.email ?? null });
+    };
     try {
       void supabase.auth
         .getSession()
-        .then(({ data }) => {
-          if (active) setSignedIn(Boolean(data.session));
-        })
-        .catch(() => {
-          if (active) setSignedIn(false);
-        });
-      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        if (active) setSignedIn(Boolean(session));
-      });
+        .then(({ data }) => apply(data.session))
+        .catch(() => apply(null));
+      const { data } = supabase.auth.onAuthStateChange((_event, session) => apply(session));
       unsubscribe = () => data.subscription.unsubscribe();
     } catch {
-      setSignedIn(false);
+      apply(null);
     }
     return () => {
       active = false;
       unsubscribe?.();
     };
   }, []);
-  return signedIn;
+  return user;
+}
+
+/** Passwordless sign-in: Supabase emails a one-time link back to this page. */
+function AdviserSignIn() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setError(linkErrorFromUrl(window.location.href) ?? "");
+  }, []);
+
+  const send = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const address = email.trim();
+    if (!isLikelyEmail(address)) {
+      setError("Enter a valid email address.");
+      return;
+    }
+    setStatus("sending");
+    setError("");
+    try {
+      const { error: sendError } = await supabase.auth.signInWithOtp({
+        email: address,
+        options: { emailRedirectTo: signInRedirectUrl(window.location.href) },
+      });
+      if (sendError) throw sendError;
+      setStatus("sent");
+    } catch (caught) {
+      const httpStatus =
+        typeof caught === "object" && caught !== null && "status" in caught
+          ? Number((caught as { status?: unknown }).status)
+          : undefined;
+      setError(sendLinkErrorMessage(httpStatus));
+      setStatus("idle");
+    }
+  };
+
+  return (
+    <div className="grid gap-4">
+      <p className="m-0 flex items-start gap-2 rounded-md border border-[var(--line)] bg-info-fill p-3 text-[var(--ink)]">
+        <LockKeyhole className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
+        <span>
+          <strong>Sign-in required.</strong> The AI workload adviser is available to signed-in users
+          only. Enter your email and we&apos;ll send a one-time sign-in link, no password needed.
+          Your reading lists stay on this device.
+        </span>
+      </p>
+      {status === "sent" ? (
+        <p
+          className="m-0 rounded-md border border-[var(--line)] p-3 text-[var(--ink)]"
+          role="status"
+        >
+          Check <strong>{email.trim()}</strong> for a sign-in link. Open it on this device to come
+          back here signed in.
+        </p>
+      ) : (
+        <form
+          className="flex flex-wrap items-end gap-3"
+          onSubmit={(event) => void send(event)}
+          noValidate
+        >
+          <label className="grid min-w-0 flex-[1_1_16rem] gap-2 font-semibold text-[var(--ink)]">
+            Email address
+            <input
+              type="email"
+              className="min-h-11 rounded-md px-3 font-normal"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="email"
+              inputMode="email"
+              required
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "adviser-sign-in-error" : undefined}
+            />
+          </label>
+          <Button type="submit" className="min-h-11" disabled={status === "sending"}>
+            {status === "sending" ? (
+              <LoaderCircle className="animate-spin" aria-hidden="true" />
+            ) : (
+              <Mail aria-hidden="true" />
+            )}{" "}
+            {status === "sending" ? "Sending link" : "Email me a sign-in link"}
+          </Button>
+        </form>
+      )}
+      {error && (
+        <p
+          id="adviser-sign-in-error"
+          className="m-0 rounded-md border border-[var(--line)] p-3 text-[var(--red)]"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
+    </div>
+  );
 }
 
 function AdviserSection({ children }: { children: ReactNode }) {
@@ -416,7 +521,7 @@ function AdviserSection({ children }: { children: ReactNode }) {
 }
 
 function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
-  const signedIn = useSupabaseSignedIn();
+  const { signedIn, email } = useSupabaseUser();
   const recommend = useServerFn(recommendWorkload);
   const [workload, setWorkload] = useState("");
   const [volume, setVolume] = useState<(typeof adviserOptions.volume)[number][0]>("moderate");
@@ -454,19 +559,27 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
   if (!signedIn) {
     return (
       <AdviserSection>
-        <p className="m-0 flex items-start gap-2 rounded-md border border-[var(--line)] bg-info-fill p-3 text-[var(--ink)]">
-          <LockKeyhole className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
-          <span>
-            <strong>Sign-in required.</strong> The AI workload adviser is available to signed-in
-            users only.
-          </span>
-        </p>
+        <AdviserSignIn />
       </AdviserSection>
     );
   }
 
   return (
     <AdviserSection>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-[var(--muted)]">
+        <span className="min-w-0 break-all">
+          Signed in{email ? " as " : ""}
+          {email && <strong className="text-[var(--ink)]">{email}</strong>}
+        </span>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => void supabase.auth.signOut()}
+        >
+          <LogOut aria-hidden="true" /> Sign out
+        </Button>
+      </div>
       <label className="grid gap-2 font-semibold text-[var(--ink)]">
         Workload description
         <textarea

@@ -264,7 +264,12 @@ html[data-theme="dark"] .to-tabbar [aria-current="page"] { color: var(--to-money
 }
 .tokenops-root input[type="range"] { accent-color: var(--to-money); width: 100%; min-height: 32px; }
 html[data-palette="bright"] .tokenops-root input[type="range"] { accent-color: var(--to-primary); }
-@media (max-width: 767px) { .tokenops-root input, .tokenops-root select, .tokenops-root textarea { font-size: 16px; } }
+/* 16px on phones so iOS doesn't zoom on focus. Same selectors as the base rule above: the
+   :not() chain there outranks a plain `.tokenops-root input`, which left text inputs at 15px. */
+@media (max-width: 767px) {
+  .tokenops-root input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  .tokenops-root select, .tokenops-root textarea, .glossary-search, .hub-search input, .toolkit-textarea { font-size: 16px; }
+}
 
 /* ---------- Filters, badges, tags ---------- */
 .filter-tabs, .hub-tabs { display: flex; gap: 4px; padding: 4px; overflow-x: auto; scrollbar-width: none; border-radius: 12px; background: var(--to-bg-1); border: 1px solid var(--to-line); }
@@ -757,6 +762,10 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 .guide li.task-list-item, .reader-article li.task-list-item { list-style: none; }
 .tokenops-root .guide li.task-list-item > label, .tokenops-root .reader-article li.task-list-item > label { display: inline; font: inherit; color: inherit; }
 .task-list-item input[type="checkbox"] { margin-right: 0.5em; accent-color: var(--to-saving); }
+/* Bright Pro: filled primary buttons darken on hover. shadcn's hover:bg-primary/90 fades the
+   cobalt towards white and drops the white label to 4.33:1 (below AA). */
+html[data-palette="bright"] [data-slot="button"].bg-primary:hover,
+html[data-palette="bright"] a.bg-primary:hover { background-color: color-mix(in srgb, var(--to-primary) 88%, var(--to-ink)); }
 /* Link-only list items (a table of contents): 44px rows on touch-size screens. */
 @media (max-width: 1023px) {
   .guide li.link-item > a, .reader-article li.link-item > a { display: inline-flex; align-items: center; min-height: 44px; }
