@@ -96,7 +96,10 @@ Garamond are gone and the token check rejects them.
 - Data: `.dashboard-kpis`, `.dashboard-grid`, `.anomaly-board`, `.calculator-layout` (results
   sticky beside inputs on laptop, pinned summary above the tab bar on mobile).
 - Long-form: `.guide`, `.reader-article` (72ch measure, info-coloured links, tables that scroll
-  on mobile), `.reader-toolbar-title` (sticky from 768px).
+  on mobile), `.reader-toolbar-title` (sticky from 768px). Lists show markers (disc, `circle`
+  when nested, decimal) indented 1.5em, since Tailwind's preflight removes them. A table of
+  contents (`li.link-item` rows linking to a `#` anchor) and a top-level checklist stay
+  unmarked and flush with the text.
 
 ### Navigation
 

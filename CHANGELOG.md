@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.3.3 — Bullets and numbers in long-form lists (2026-11-16)
+
+### Fixed
+
+- Lists in the guide, the sample chapter and every Markdown library and template page had no
+  bullets or numbers. Tailwind 4's reset removes list markers and the long-form styles never set
+  them back, so numbered steps lost their numbers and nested bullets read as plain lines (on
+  `/guide` alone, 41 numbered and 275 bulleted items). `.guide` and `.reader-article` lists now
+  show discs and numbers indented 1.5em, as adviser answers have since 2.3.1, with circles for
+  nested bullets.
+- Tables of contents (link-only items that jump to a heading on the same page, on `/guide` and
+  the FAQ) and checklists look as before: no markers, flush with the text. The Sources lists of
+  external links in model and technique briefings now have bullets.
+
+Found and fixed in #38 (originally numbered 2.3.2); brought onto `main` after 2.3.2 shipped.
+
 ## 2.3.2 — Keyboard-scrollable tables and code on phones (2026-11-16)
 
 ### Fixed
