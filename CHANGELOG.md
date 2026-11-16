@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.1.3 — Table of contents tap targets (2026-11-16)
+
+### Fixed
+
+- `/guide` table of contents: each link is a 44px row on phones and tablets instead of a
+  22px strip. The markdown renderer (`src/lib/markdown.ts`) marks list items that are only a
+  link with `class="link-item"`; text and laptop layout are unchanged.
+
+### Changed
+
+- `npm run smoke` no longer counts disabled controls (markdown task-list checkboxes) or links
+  inside a sentence (the WCAG 2.5.8 inline exception) as small tap targets, so its warning
+  lists only real targets.
+- `src/lib/markdown.test.ts` covers the renderer's task-list and link-item markup and checks
+  that its visible text matches plain `marked`.
+
 ## 2.1.2 — zod 4 and npm install fix (2026-11-15)
 
 ### Changed
