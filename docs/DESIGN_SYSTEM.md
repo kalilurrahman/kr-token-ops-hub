@@ -147,7 +147,8 @@ npm run smoke       # build, wrangler dev on 127.0.0.1:4173, scripts/smoke.mjs
 `npm run smoke` serves `.output/` with `wrangler dev` (the Cloudflare build can't be served by
 `vite preview`), then for 24 routes × 390/834/1440 checks HTTP 200, console errors, horizontal
 overflow (including elements escaping the viewport, which the `html, body { overflow-x: clip }`
-guard would otherwise hide), mobile tap targets (warning), and content parity against
+guard would otherwise hide), mobile tap targets under 40px (warning; disabled controls and
+links inside a sentence are exempt), and content parity against
 `.smoke/baseline` at 1440px. Parity reads authored text: CSS `text-transform` is neutralised and
 Recharts axis ticks (whose visibility depends on font metrics) are ignored. An axe-core pass
 (WCAG 2 A/AA in Ledger Dark, colour contrast in the light palettes) adds warnings and writes
@@ -164,7 +165,8 @@ The footer shows the release version (`.to-release`, e.g. `v2.1.0`). It comes fr
 `version` field in `package.json` via `src/lib/release.ts`; Vite inlines only that field. To cut
 a release, bump `package.json` `version` and add a matching `## x.y.z — Title (date)` entry at
 the top of `CHANGELOG.md` in the same change. `npm test` (`src/lib/release.test.ts`) fails if
-they disagree. The live site's version can be checked from the footer or with
+they disagree. Bump the version for every change that reaches production, so no two deployed
+builds share a label. The live site's version can be checked from the footer or with
 `curl -s https://tokenops.kalilurrahman.com/ | grep -o 'v[0-9]*\.[0-9]*\.[0-9]*'`.
 
 ### Regenerating the baseline
@@ -193,8 +195,10 @@ BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
   the sandbox proxy): Performance 95–98, Accessibility 98–100, CLS 0.
 - Hero art is a `<picture>`: phones (< 640px, where it is hidden) download nothing, larger screens
   get a 40 KB WebP with the original PNG as fallback. Home page weight on mobile: 809 KB → 407 KB.
-- In-page buttons and range sliders are at least 44px tall on phones. Remaining smoke tap-target
-  warnings are links inside paragraphs (exempt from WCAG target size) and disabled checklist
-  checkboxes rendered from markdown.
-- Markdown task-list items are rendered by `src/lib/markdown.ts`, which wraps each item in a
-  `<label>` so its text names the checkbox. Use `renderMarkdown()` for any new long-form page.
+- In-page buttons and range sliders are at least 44px tall on phones, and table-of-contents
+  links (`li.link-item`) are 44px rows below 1024px. The smoke tap-target check reports none
+  (since v2.1.3); it skips links inside a sentence (exempt from WCAG target size) and disabled
+  checklist checkboxes rendered from markdown.
+- Markdown is rendered by `src/lib/markdown.ts`: task-list items are wrapped in a `<label>` so
+  their text names the checkbox, and link-only list items get `class="link-item"`. Use
+  `renderMarkdown()` for any new long-form page; `src/lib/markdown.test.ts` covers it.
