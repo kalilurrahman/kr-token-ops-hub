@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.3.2 — Keyboard-scrollable tables and code on phones (2026-11-16)
+
+### Fixed
+
+- Keyboard users can scroll wide content that scrolls sideways: Markdown tables (guide, sample
+  chapter, library reader) and adviser answer tables get `tabindex="0"` from
+  `src/lib/markdown.ts` (`focusableTables`, also used by `renderAdviceMarkdown`); the home page
+  executive-summary tables and the `/prompt-templates` code blocks are focusable; the
+  `/tool-guides` caching table is a focusable region labelled by its heading. axe flagged 26 of
+  these on 7 routes at 390px. No visible text changes.
+
+### Changed
+
+- `npm run smoke` also runs the full axe WCAG 2 A/AA audit in Ledger Dark at 390px, so
+  phone-only layouts are checked (reported as `dark@390`).
+
 ## 2.3.1 — Adviser answers render as formatted text (2026-11-16)
 
 ### Fixed
@@ -17,6 +33,7 @@
 ## 2.3.0 — Compare optimization strategies for a workload (2026-11-16)
 
 ### Added
+
 - The workload adviser can compare the cost and trade-offs of relevant token-optimization strategies for a described workload.
 
 ## 2.2.1 — Email sign-in links finish on any page (2026-11-16)

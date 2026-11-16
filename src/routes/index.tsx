@@ -190,7 +190,7 @@ function Index() {
             allocation, optimisation, and governance.
           </p>
         </div>
-        <table>
+        <table tabIndex={0}>
           <thead>
             <tr>
               <th>Pillar</th>
@@ -224,7 +224,7 @@ function Index() {
         </table>
         <div>
           <h3 style={{ marginBottom: 8 }}>Typical savings profile</h3>
-          <table>
+          <table tabIndex={0}>
             <thead>
               <tr>
                 <th>Technique</th>

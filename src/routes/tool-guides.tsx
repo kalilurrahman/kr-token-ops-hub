@@ -112,8 +112,15 @@ function ToolGuidesPage() {
         </p>
       </section>
 
-      <h2 className="mt-12 text-2xl font-semibold">Caching & batch at a glance</h2>
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
+      <h2 id="caching-batch-heading" className="mt-12 text-2xl font-semibold">
+        Caching & batch at a glance
+      </h2>
+      <div
+        className="mt-4 overflow-x-auto rounded-2xl border border-border"
+        role="region"
+        aria-labelledby="caching-batch-heading"
+        tabIndex={0}
+      >
         <table className="w-full min-w-[760px] text-left text-sm">
           <thead className="bg-muted/60 text-muted-foreground">
             <tr>

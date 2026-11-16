@@ -19,7 +19,8 @@
  *   4. Every interactive element in <main> is >= 40px tall on mobile (warn; disabled controls
  *      and links inside a sentence are exempt), and every visible text field is >= 16px on
  *      mobile (fail; smaller fields make iOS zoom on focus)
- *   5. axe-core WCAG 2 A/AA audit per palette (warn only; report in .smoke/axe.json)
+ *   5. axe-core WCAG 2 A/AA audit per palette, plus Ledger Dark at 390px (warn only; report in
+ *      .smoke/axe.json)
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
  */
 import { chromium } from "playwright";
@@ -217,18 +218,22 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 // ---------- Accessibility (warning only) ----------
-// axe-core at laptop width: full WCAG 2 A/AA in Ledger Dark, colour contrast in the two light
-// palettes. Findings never fail the run; the full report is written to .smoke/axe.json.
+// axe-core: full WCAG 2 A/AA in Ledger Dark at laptop and phone width (phone-only layouts such
+// as scrolling tables), colour contrast in the two light palettes at laptop width. Findings never
+// fail the run; the full report is written to .smoke/axe.json.
 // Set SMOKE_AXE=0 to skip.
 if (process.env.SMOKE_AXE !== "0" && !BASELINE) {
   const PALETTES = [
-    { name: "dark", rules: null },
-    { name: "light", rules: ["color-contrast"] },
-    { name: "bright", rules: ["color-contrast"] },
+    { name: "dark", width: 1440, rules: null },
+    { name: "dark", width: 390, rules: null },
+    { name: "light", width: 1440, rules: ["color-contrast"] },
+    { name: "bright", width: 1440, rules: ["color-contrast"] },
   ];
   const report = [];
   for (const palette of PALETTES) {
-    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const ctx = await browser.newContext({
+      viewport: { width: palette.width, height: palette.width < 768 ? 844 : 900 },
+    });
     await ctx.addInitScript((theme) => {
       try {
         localStorage.setItem("tokenops-theme-v2", theme);
@@ -244,7 +249,7 @@ if (process.env.SMOKE_AXE !== "0" && !BASELINE) {
       const { violations } = await builder.analyze();
       for (const v of violations) {
         report.push({
-          palette: palette.name,
+          palette: palette.width < 768 ? `${palette.name}@${palette.width}` : palette.name,
           route,
           rule: v.id,
           impact: v.impact,

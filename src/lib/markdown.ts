@@ -1,5 +1,8 @@
 import { Marked, type Tokens } from "marked";
 
+/** Wide tables scroll sideways on phones; tabindex lets keyboard users focus and scroll them. */
+export const focusableTables = (html: string) => html.replaceAll("<table>", '<table tabindex="0">');
+
 /**
  * Markdown renderer for long-form pages (guide, sample chapter, library reader).
  *
@@ -8,8 +11,10 @@ import { Marked, type Tokens } from "marked";
  *   checkbox for assistive technology.
  * - Items that are nothing but one link (optionally with a nested list), as in a table of
  *   contents, get `class="link-item"` so the component layer can give them full tap targets.
+ * - Tables get `tabindex="0"` (see `focusableTables`).
  */
 const longForm = new Marked({
+  hooks: { postprocess: focusableTables },
   renderer: {
     listitem(item) {
       if (item.task && !item.loose) {

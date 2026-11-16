@@ -44,3 +44,9 @@ test("visible text matches marked's own output", () => {
     strip(marked.parse(source, { async: false }) as string),
   );
 });
+
+test("long-form tables are keyboard-focusable (they scroll sideways on phones)", () => {
+  const html = renderMarkdown("| Model | Price |\n| --- | --- |\n| A | 1 |\n");
+  assert.match(html, /<table tabindex="0">/);
+  assert.doesNotMatch(html, /<table>/);
+});

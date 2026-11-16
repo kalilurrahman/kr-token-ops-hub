@@ -19,7 +19,10 @@ test("adviser answers render headings, lists, emphasis and the strategy table", 
     ].join("\n"),
   );
   assert.match(html, /<h2>1\. Strategy comparison<\/h2>/);
-  assert.match(html, /<table>[\s\S]*<th>Strategy<\/th>[\s\S]*<td>Prompt caching<\/td>/);
+  assert.match(
+    html,
+    /<table tabindex="0">[\s\S]*<th>Strategy<\/th>[\s\S]*<td>Prompt caching<\/td>/,
+  );
   assert.match(html, /<ol>\s*<li><strong>Prompt caching<\/strong> first<\/li>/);
   assert.match(html, /<em>output limits<\/em>/);
 });
@@ -82,4 +85,12 @@ test("code keeps markup as text", () => {
   assert.match(html, /<code>&lt;b&gt;<\/code>/);
   assert.match(html, /&lt;script&gt;x&lt;\/script&gt;/);
   assert.doesNotMatch(html, /<script\b/);
+});
+
+test("advice tables are keyboard-focusable (they scroll inside the card)", () => {
+  const html = renderAdviceMarkdown(
+    "| Strategy | Saving |\n| --- | --- |\n| Prompt caching | high |\n",
+  );
+  assert.match(html, /<table tabindex="0">/);
+  assert.match(renderAdviceMarkdown("<table><tr><td>x</td></tr></table>"), /&lt;table&gt;/);
 });

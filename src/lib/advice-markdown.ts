@@ -1,4 +1,5 @@
 import { Marked } from "marked";
+import { focusableTables } from "./markdown";
 
 /**
  * Markdown for AI workload adviser answers. These are model output that a reader can steer
@@ -39,6 +40,8 @@ export function safeAdviceHref(href: string): { href: string; external: boolean 
 
 const advice = new Marked({
   gfm: true,
+  // The strategy table scrolls inside the card when it can't fit; keyboard users need to focus it.
+  hooks: { postprocess: focusableTables },
   renderer: {
     html({ text, block }) {
       return block ? `<p>${escapeHtml(text.trim())}</p>\n` : escapeHtml(text);
