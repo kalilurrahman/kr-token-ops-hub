@@ -145,7 +145,8 @@ npm run smoke       # build, wrangler dev on 127.0.0.1:4173, scripts/smoke.mjs
 ```
 
 `npm run smoke` serves `.output/` with `wrangler dev` (the Cloudflare build can't be served by
-`vite preview`), then for 24 routes × 390/834/1440 checks HTTP 200, console errors, horizontal
+`vite preview`), then for 25 routes (the 23 in `FULL_NAV`, one `/read` page and `/auth`) ×
+390/834/1440 checks HTTP 200, console errors, horizontal
 overflow (including elements escaping the viewport, which the `html, body { overflow-x: clip }`
 guard would otherwise hide), mobile tap targets under 40px (warning; disabled controls and
 links inside a sentence are exempt), and content parity against
@@ -185,6 +186,9 @@ In a second shell from the repo root (using this branch's `scripts/smoke.mjs`):
 ```bash
 BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
 ```
+
+Routes added after that commit (`/auth`) return 404 there, so `--baseline` skips them with a
+warning and later runs report "no baseline" for them instead of a parity failure.
 
 ## Accessibility status (v2.0.0)
 

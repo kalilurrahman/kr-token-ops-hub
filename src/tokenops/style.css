@@ -78,6 +78,8 @@ p { margin: 0 0 var(--to-space-3); line-height: 1.65; }
   transition: background var(--to-dur-fast), border-color var(--to-dur-fast);
 }
 .header-menu-button:hover, .header-link:hover, .theme-toggle:hover, .social-link:hover { background: var(--to-surface-2); border-color: var(--to-line-strong); }
+.account-link[data-signed-in="true"] { color: var(--to-saving); }
+.account-link[aria-current="page"] { background: var(--to-money-fill); border-color: transparent; color: var(--to-money-text); }
 .site-mobile-menu { background: var(--to-bg-1); border-top: 1px solid var(--to-line); }
 
 /* Mega-menu (new NavGroup component) */

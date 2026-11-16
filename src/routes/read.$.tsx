@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useLocation } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
@@ -15,10 +15,11 @@ import {
   FolderHeart,
   LoaderCircle,
   LockKeyhole,
+  LogIn,
 } from "lucide-react";
 import { renderMarkdown } from "@/lib/markdown";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { useSupabaseSession } from "@/hooks/use-supabase-session";
 import { recommendWorkload } from "@/lib/workload-adviser.functions";
 import {
   getReadingCollections,
@@ -362,37 +363,6 @@ const adviserOptions = {
 const ADVISER_SIGN_IN_ERROR =
   "Your sign-in could not be verified. Sign in again to use the adviser.";
 
-// The adviser's server function requires a signed-in Supabase user (requireSupabaseAuth).
-// Server-rendered and signed-out visitors see a notice; the form appears once a session exists.
-function useSupabaseSignedIn(): boolean {
-  const [signedIn, setSignedIn] = useState(false);
-  useEffect(() => {
-    let active = true;
-    let unsubscribe: (() => void) | undefined;
-    try {
-      void supabase.auth
-        .getSession()
-        .then(({ data }) => {
-          if (active) setSignedIn(Boolean(data.session));
-        })
-        .catch(() => {
-          if (active) setSignedIn(false);
-        });
-      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        if (active) setSignedIn(Boolean(session));
-      });
-      unsubscribe = () => data.subscription.unsubscribe();
-    } catch {
-      setSignedIn(false);
-    }
-    return () => {
-      active = false;
-      unsubscribe?.();
-    };
-  }, []);
-  return signedIn;
-}
-
 function AdviserSection({ children }: { children: ReactNode }) {
   return (
     <section
@@ -415,8 +385,12 @@ function AdviserSection({ children }: { children: ReactNode }) {
   );
 }
 
+// The adviser's server function requires a signed-in Supabase user (requireSupabaseAuth).
+// Server-rendered and signed-out visitors see a sign-in notice; the form appears once a
+// session exists.
 function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
-  const signedIn = useSupabaseSignedIn();
+  const signedIn = Boolean(useSupabaseSession().session);
+  const href = useLocation({ select: (location) => location.href });
   const recommend = useServerFn(recommendWorkload);
   const [workload, setWorkload] = useState("");
   const [volume, setVolume] = useState<(typeof adviserOptions.volume)[number][0]>("moderate");
@@ -454,13 +428,20 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
   if (!signedIn) {
     return (
       <AdviserSection>
-        <p className="m-0 flex items-start gap-2 rounded-md border border-[var(--line)] bg-info-fill p-3 text-[var(--ink)]">
-          <LockKeyhole className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
-          <span>
-            <strong>Sign-in required.</strong> The AI workload adviser is available to signed-in
-            users only.
-          </span>
-        </p>
+        <div className="flex flex-col gap-3 rounded-md border border-[var(--line)] bg-info-fill p-3 text-[var(--ink)] sm:flex-row sm:items-center sm:justify-between">
+          <p className="m-0 flex items-start gap-2">
+            <LockKeyhole className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
+            <span>
+              <strong>Sign-in required.</strong> The AI workload adviser is available to signed-in
+              users only.
+            </span>
+          </p>
+          <Button asChild className="shrink-0 self-start sm:self-auto">
+            <Link to="/auth" search={{ redirect: href }}>
+              <LogIn /> Sign in
+            </Link>
+          </Button>
+        </div>
       </AdviserSection>
     );
   }

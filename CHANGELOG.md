@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.2.0 — Email sign-in for the AI workload adviser (2026-11-16)
+
+### Added
+
+- `/auth` sign-in page: enter an email address and Supabase sends a one-time sign-in link
+  (`signInWithOtp`); no password. The page shows "Check your email" after sending (with resend
+  and "use a different email"), "You're signed in" with **Sign out** afterwards, and a plain
+  message when an emailed link has expired or failed. It is `noindex` and not in the sitemap.
+- Header account button (all widths, 44px) next to the theme menu: a sign-in icon when signed
+  out, a teal account icon when signed in; it links to `/auth` and returns to the current page.
+- The adviser's "Sign-in required" notice on `/read` pages has a **Sign in** button that returns
+  to the same briefing after signing in.
+- `src/lib/auth-redirect.ts` (+ tests): post-sign-in redirects are limited to same-site paths,
+  and link errors show fixed text rather than text from the URL.
+- `src/hooks/use-supabase-session.ts`: one session hook for the header, `/auth` and the adviser.
+
+### Changed
+
+- `npm run smoke` covers `/auth` (25 routes). A `--baseline` run skips routes its build does not
+  have, so a baseline taken from before 2.2.0 reports "no baseline" for `/auth`.
+- Sign-in is only for the AI workload adviser: reading lists stay in the browser and are not
+  linked to an account (recorded in `AGENTS.md`).
+
 ## 2.1.4 — AI workload adviser requires sign-in (2026-11-16)
 
 ### Security

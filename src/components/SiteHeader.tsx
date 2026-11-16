@@ -22,9 +22,12 @@ import {
   ClipboardList,
   Scale,
   GraduationCap,
+  LogIn,
+  CircleUserRound,
 } from "lucide-react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useSupabaseSession } from "@/hooks/use-supabase-session";
 import {
   Dialog,
   DialogContent,
@@ -51,7 +54,10 @@ import {
 export const NAV_GROUPS = ["Start", "Optimize", "Models & tools", "Library", "Learn"] as const;
 export type NavGroup = (typeof NAV_GROUPS)[number];
 
-/** Every route in the app (23). Header, search, mobile "All" sheet and tab bar derive from it. */
+/**
+ * Every content route in the app (23). Header, search, mobile "All" sheet and tab bar derive
+ * from it. The /auth sign-in page is reached from the header account button instead.
+ */
 export const FULL_NAV = [
   { to: "/", label: "Home", icon: Gauge, group: "Start" },
   { to: "/hub", label: "Hub", icon: Sparkles, group: "Start" },
@@ -172,6 +178,7 @@ export function SiteHeader() {
         <div className="site-header-actions">
           <NavSearch />
           <ThemeToggle />
+          <AccountLink />
           <Link to="/calculator" className="to-btn-gold site-header-cta">
             <Calculator size={16} strokeWidth={1.75} aria-hidden="true" />
             Calculator
@@ -188,6 +195,31 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
+  );
+}
+
+/** Sign-in (signed out) or account (signed in) link to /auth, returning to the current page. */
+function AccountLink() {
+  const href = useLocation({ select: (location) => location.href });
+  const { session } = useSupabaseSession();
+  const signedIn = Boolean(session);
+  const label = signedIn
+    ? `Account: signed in as ${session?.user.email ?? "you"}`
+    : "Sign in for the AI workload adviser";
+  const Icon = signedIn ? CircleUserRound : LogIn;
+  const onAuthPage = href === "/auth" || href.startsWith("/auth?") || href.startsWith("/auth#");
+  return (
+    <Link
+      to="/auth"
+      search={{ redirect: onAuthPage ? undefined : href }}
+      className="header-link account-link"
+      activeOptions={NAV_ACTIVE_OPTIONS}
+      aria-label={label}
+      title={label}
+      data-signed-in={signedIn ? "true" : undefined}
+    >
+      <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
+    </Link>
   );
 }
 
