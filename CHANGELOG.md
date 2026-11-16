@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0 — Compare optimization strategies for a workload (2026-11-16)
+
+### Added
+- The workload adviser can compare the cost and trade-offs of relevant token-optimization strategies for a described workload.
+
 ## 2.2.1 — Email sign-in links finish on any page (2026-11-16)
 
 ### Fixed

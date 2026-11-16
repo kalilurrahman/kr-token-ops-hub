@@ -544,7 +544,7 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const submit = async () => {
+  const submit = async (mode: "portfolio" | "strategies") => {
     if (workload.trim().length < 20) {
       setError("Describe the workload in at least 20 characters.");
       return;
@@ -554,7 +554,7 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
     setError("");
     try {
       const result = await recommend({
-        data: { workload, volume, contextSize, latency, risk, priority, currentBriefing },
+        data: { workload, volume, contextSize, latency, risk, priority, currentBriefing, mode },
       });
       setAdvice(result.advice);
     } catch (caught) {
@@ -633,9 +633,17 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
         />
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <Button type="button" onClick={() => void submit()} disabled={loading}>
+        <Button type="button" onClick={() => void submit("portfolio")} disabled={loading}>
           {loading ? <LoaderCircle className="animate-spin" /> : <BrainCircuit />}{" "}
           {loading ? "Analysing workload" : "Recommend a strategy"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => void submit("strategies")}
+          disabled={loading}
+        >
+          Compare optimization strategies
         </Button>
         <span className="text-xs text-[var(--muted)]">
           AI-assisted guidance; validate with provider terms and controlled evaluation.

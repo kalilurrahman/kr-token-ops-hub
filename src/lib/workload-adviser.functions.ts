@@ -13,7 +13,28 @@ const workloadInputSchema = z.object({
   risk: z.enum(["low", "medium", "high", "regulated"]),
   priority: z.enum(["lowest-cost", "balanced", "highest-quality"]),
   currentBriefing: z.string().max(200).nullable(),
+  mode: z.enum(["portfolio", "strategies"]).default("portfolio"),
 });
+
+const PORTFOLIO_TASK = `Return a concise professional recommendation with exactly these headings:
+1. Recommended portfolio
+2. Routing strategy
+3. Cost controls
+4. Risks and validation
+5. First 30-day experiment
+
+Name a primary model and alternatives.`;
+
+const STRATEGY_TASK = `Candidate strategies: small-model-first, multi-model routing, context trimming, conversation summarisation, output limits, focused RAG, exact response caching, prompt caching, semantic caching, structured outputs, batch processing, agent guardrails, tool-first execution, preflight query classification, cost dashboards.
+
+Select the 5 to 7 strategies most relevant to this workload and return exactly these headings:
+1. Strategy comparison — a Markdown table with columns: Strategy | Tokens affected (input/output/retries) | Relative saving (low/medium/high, qualitative) | Implementation effort | Quality or latency risk | Fit for this workload
+2. Recommended combination and order — note overlaps so savings are not double-counted
+3. Trade-offs to watch
+4. How to measure — baseline metric, cost per accepted outcome, and a guardrail metric
+5. Strategies to skip and why
+
+Use qualitative bands, never invented percentages or prices.`;
 
 export interface WorkloadAdviceResult {
   advice: string;
@@ -65,7 +86,7 @@ async function generateAdvice(
     fetch: runIdFetch.fetch,
   });
 
-  const prompt = `Recommend a production model portfolio for this workload.
+  const prompt = `${data.mode === "strategies" ? "Compare the cost and trade-offs of token-optimization strategies for this workload." : "Recommend a production model portfolio for this workload."}
 
 WORKLOAD
 Description: ${data.workload}
@@ -84,14 +105,7 @@ TOKENOPS EVIDENCE SNAPSHOT (reviewed 27/09/2026)
 - Open models: gpt-oss is Apache-2.0 open source; DeepSeek V4, Llama 4, Qwen, and Ministral families are open weight under model-specific terms. They have no universal token price: compare measured infrastructure cost, utilisation, throughput, operations, and accepted-output quality.
 - Routing policy: measure cost per accepted outcome, use deterministic validation, cap retries/tool loops, and allow at most one premium escalation by default.
 
-Return a concise professional recommendation with exactly these headings:
-1. Recommended portfolio
-2. Routing strategy
-3. Cost controls
-4. Risks and validation
-5. First 30-day experiment
-
-Name a primary model and alternatives. Do not invent prices, latency figures, or capabilities. Treat prices as dated snapshots and tell the reader to verify current provider terms. State assumptions clearly. Keep the answer below 650 words.`;
+${data.mode === "strategies" ? STRATEGY_TASK : PORTFOLIO_TASK} Do not invent prices, latency figures, or capabilities. Treat prices as dated snapshots and tell the reader to verify current provider terms. State assumptions clearly. Keep the answer below 650 words.`;
 
   const result = streamText({
     model: lovable.responses("openai/gpt-6-astra"),
