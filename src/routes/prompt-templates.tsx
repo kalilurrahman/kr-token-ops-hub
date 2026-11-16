@@ -64,7 +64,10 @@ function TemplatesPage() {
             <p className="mt-1 text-sm text-muted-foreground">
               <span className="font-medium">Use when:</span> {t.useWhen}
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-xl bg-background p-4 text-sm leading-relaxed text-foreground border border-border">
+            <pre
+              className="mt-3 overflow-x-auto rounded-xl bg-background p-4 text-sm leading-relaxed text-foreground border border-border"
+              tabIndex={0}
+            >
               <code>{t.body}</code>
             </pre>
           </div>

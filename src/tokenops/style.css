@@ -766,6 +766,10 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
    cobalt towards white and drops the white label to 4.33:1 (below AA). */
 html[data-palette="bright"] [data-slot="button"].bg-primary:hover,
 html[data-palette="bright"] a.bg-primary:hover { background-color: color-mix(in srgb, var(--to-primary) 88%, var(--to-ink)); }
+/* AI adviser answers: comparison tables use the panel's full width and headers break between
+   words, not mid-word (the article's 72ch cap squeezed a 6-column table). */
+.adviser-answer > table { max-width: none; }
+.adviser-answer th { overflow-wrap: normal; }
 /* Link-only list items (a table of contents): 44px rows on touch-size screens. */
 @media (max-width: 1023px) {
   .guide li.link-item > a, .reader-article li.link-item > a { display: inline-flex; align-items: center; min-height: 44px; }

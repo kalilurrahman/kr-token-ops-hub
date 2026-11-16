@@ -1,8 +1,30 @@
 # Changelog
 
+## 2.3.1 — Adviser answers render as formatted text (2026-11-16)
+
+### Fixed
+
+- The AI workload adviser's answer is rendered as Markdown, so the strategy comparison added in
+  2.3.0 shows as a real table (scrollable on phones) and headings and lists are formatted,
+  instead of raw `|` pipes and `##` marks. It goes through `renderUntrustedMarkdown()` in
+  `src/lib/markdown.ts`, which escapes any raw HTML in the model output, drops images, and keeps
+  only http(s), mailto and same-site links (opened in a new tab); 3 new tests cover it. On
+  laptops the table uses the panel's full width and its headers no longer split mid-word.
+- Keyboard users can scroll wide content on phones: Markdown tables (guide, sample chapter,
+  library reader, adviser answers), the home page executive-summary tables, the `/tool-guides`
+  caching table and the `/prompt-templates` code blocks are focusable (`tabindex="0"`; the
+  `/tool-guides` table is a region labelled by its heading). axe flagged 26 of these on 7 routes
+  at 390px.
+
+### Changed
+
+- `npm run smoke` also runs the full axe WCAG 2 A/AA audit in Ledger Dark at 390px, so
+  phone-only layouts are checked (reported as `dark@390`).
+
 ## 2.3.0 — Compare optimization strategies for a workload (2026-11-16)
 
 ### Added
+
 - The workload adviser can compare the cost and trade-offs of relevant token-optimization strategies for a described workload.
 
 ## 2.2.1 — Email sign-in links finish on any page (2026-11-16)

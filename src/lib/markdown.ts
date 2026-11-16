@@ -1,5 +1,8 @@
 import { Marked, type Tokens } from "marked";
 
+/** Wide tables scroll sideways on phones; tabindex lets keyboard users focus and scroll them. */
+const focusableTables = (html: string) => html.replaceAll("<table>", '<table tabindex="0">');
+
 /**
  * Markdown renderer for long-form pages (guide, sample chapter, library reader).
  *
@@ -8,8 +11,10 @@ import { Marked, type Tokens } from "marked";
  *   checkbox for assistive technology.
  * - Items that are nothing but one link (optionally with a nested list), as in a table of
  *   contents, get `class="link-item"` so the component layer can give them full tap targets.
+ * - Tables get `tabindex="0"` (see `focusableTables`).
  */
 const longForm = new Marked({
+  hooks: { postprocess: focusableTables },
   renderer: {
     listitem(item) {
       if (item.task && !item.loose) {
@@ -35,4 +40,43 @@ function isLinkOnly(item: Tokens.ListItem): boolean {
 
 export function renderMarkdown(source: string): string {
   return longForm.parse(source, { async: false }) as string;
+}
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+/** http(s), mailto, same-page anchors and same-site paths; anything else (javascript:, data:) is dropped. */
+const SAFE_HREF = /^(?:https?:\/\/|mailto:|#|\/(?![/\\]))/i;
+
+/**
+ * Markdown from an untrusted source (AI adviser output). Marked already escapes text, code and
+ * attributes; this renderer also escapes raw HTML, drops images, and keeps only safe links, which
+ * open in a new tab so the advice stays on screen.
+ */
+const untrusted = new Marked({
+  hooks: { postprocess: focusableTables },
+  renderer: {
+    html({ text }) {
+      return escapeHtml(text);
+    },
+    image({ text }) {
+      return escapeHtml(text);
+    },
+    link({ href, title, tokens }) {
+      const label = this.parser.parseInline(tokens);
+      const target = href.trim();
+      if (!SAFE_HREF.test(target)) return label;
+      const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
+      return `<a href="${escapeHtml(target)}"${titleAttr} target="_blank" rel="noopener noreferrer nofollow">${label}</a>`;
+    },
+  },
+});
+
+export function renderUntrustedMarkdown(source: string): string {
+  return untrusted.parse(source, { async: false }) as string;
 }
