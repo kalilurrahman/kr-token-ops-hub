@@ -26,7 +26,8 @@ import {
   sendLinkErrorMessage,
   signInRedirectUrl,
 } from "@/lib/adviser-auth";
-import { renderMarkdown, renderUntrustedMarkdown } from "@/lib/markdown";
+import { renderMarkdown } from "@/lib/markdown";
+import { renderAdviceMarkdown } from "@/lib/advice-markdown";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { recommendWorkload } from "@/lib/workload-adviser.functions";
@@ -658,12 +659,12 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
         </p>
       )}
       {advice && (
-        // Model output: rendered as Markdown (headings, the strategy table) through the
-        // untrusted renderer, which escapes raw HTML and keeps only safe links.
+        // Model output: renderAdviceMarkdown escapes raw HTML, keeps only safe links and never
+        // loads images, so the answer's headings and strategy table render as formatted text.
         <div
-          className="guide adviser-answer mt-5 rounded-md border border-[var(--line)] p-5"
+          className="guide advice-output mt-5 rounded-md border border-[var(--line)] p-5"
           aria-live="polite"
-          dangerouslySetInnerHTML={{ __html: renderUntrustedMarkdown(advice) }}
+          dangerouslySetInnerHTML={{ __html: renderAdviceMarkdown(advice) }}
         />
       )}
     </AdviserSection>

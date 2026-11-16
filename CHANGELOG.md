@@ -1,25 +1,34 @@
 # Changelog
 
-## 2.3.1 — Adviser answers render as formatted text (2026-11-16)
+## 2.3.2 — Keyboard-scrollable tables and code on phones (2026-11-16)
 
 ### Fixed
 
-- The AI workload adviser's answer is rendered as Markdown, so the strategy comparison added in
-  2.3.0 shows as a real table (scrollable on phones) and headings and lists are formatted,
-  instead of raw `|` pipes and `##` marks. It goes through `renderUntrustedMarkdown()` in
-  `src/lib/markdown.ts`, which escapes any raw HTML in the model output, drops images, and keeps
-  only http(s), mailto and same-site links (opened in a new tab); 3 new tests cover it. On
-  laptops the table uses the panel's full width and its headers no longer split mid-word.
-- Keyboard users can scroll wide content on phones: Markdown tables (guide, sample chapter,
-  library reader, adviser answers), the home page executive-summary tables, the `/tool-guides`
-  caching table and the `/prompt-templates` code blocks are focusable (`tabindex="0"`; the
-  `/tool-guides` table is a region labelled by its heading). axe flagged 26 of these on 7 routes
-  at 390px.
+- Keyboard users can scroll wide content that scrolls sideways: Markdown tables (guide, sample
+  chapter, library reader) and adviser answer tables get `tabindex="0"` from
+  `src/lib/markdown.ts` (`focusableTables`, also used by `renderAdviceMarkdown`); the home page
+  executive-summary tables and the `/prompt-templates` code blocks are focusable; the
+  `/tool-guides` caching table is a focusable region labelled by its heading. axe flagged 26 of
+  these on 7 routes at 390px. No visible text changes.
 
 ### Changed
 
 - `npm run smoke` also runs the full axe WCAG 2 A/AA audit in Ledger Dark at 390px, so
   phone-only layouts are checked (reported as `dark@390`).
+
+## 2.3.1 — Adviser answers render as formatted text (2026-11-16)
+
+### Fixed
+
+- AI workload adviser answers were shown as raw Markdown, so the strategy comparison's table
+  (2.3.0) appeared as rows of `|` and `---`, and headings and lists as plain lines. Answers now
+  render as headings, numbered and bulleted lists, emphasis, links and a table. The table uses
+  the full card width and scrolls inside it on narrow screens, with cells wrapping between
+  words.
+- Model output is untrusted, so `src/lib/advice-markdown.ts` (`renderAdviceMarkdown`, 5 tests)
+  shows any raw HTML in an answer as text, keeps only https, http, mailto and same-site links
+  (external links open in a new tab), and never loads images (their alt text is shown), so an
+  answer cannot run script, fetch anything or track readers. `AGENTS.md` records the rule.
 
 ## 2.3.0 — Compare optimization strategies for a workload (2026-11-16)
 
