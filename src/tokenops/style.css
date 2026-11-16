@@ -757,6 +757,10 @@ html[data-palette="bright"] .eyebrow, html[data-palette="bright"] .hub-kicker, h
 .guide li.task-list-item, .reader-article li.task-list-item { list-style: none; }
 .tokenops-root .guide li.task-list-item > label, .tokenops-root .reader-article li.task-list-item > label { display: inline; font: inherit; color: inherit; }
 .task-list-item input[type="checkbox"] { margin-right: 0.5em; accent-color: var(--to-saving); }
+/* Link-only list items (a table of contents): 44px rows on touch-size screens. */
+@media (max-width: 1023px) {
+  .guide li.link-item > a, .reader-article li.link-item > a { display: inline-flex; align-items: center; min-height: 44px; }
+}
 /* Hero art is a <picture> (WebP + PNG fallback); let the img stay the grid item. */
 .hero-illustration picture { display: contents; }
 .hero-illustration picture > source { display: none; }

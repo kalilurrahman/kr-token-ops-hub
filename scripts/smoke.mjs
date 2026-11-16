@@ -16,7 +16,8 @@
  *      (read with CSS text-transform neutralised and chart axis ticks hidden, so casing
  *      styles and font-dependent tick collisions are not counted as content)
  *      (the uplift must not add, drop or reword content)
- *   4. Every interactive element in <main> is >= 40px tall on mobile (warn) / 44px tab bar
+ *   4. Every interactive element in <main> is >= 40px tall on mobile (warn; disabled controls
+ *      and links inside a sentence are exempt)
  *   5. axe-core WCAG 2 A/AA audit per palette (warn only; report in .smoke/axe.json)
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
  */
@@ -97,9 +98,21 @@ for (const vp of VIEWPORTS) {
 
     const { overflow, escaped, text, smallTargets } = await page.evaluate(() => {
       const main = document.querySelector("main") ?? document.body;
+      // Disabled controls are not targets, and links inside a sentence are sized by its
+      // line-height (WCAG 2.5.8 inline exception), so neither is counted.
+      const inSentence = (el) =>
+        getComputedStyle(el).display === "inline" &&
+        [...el.parentElement.childNodes].some(
+          (node) =>
+            node !== el &&
+            node.textContent.trim() &&
+            (node.nodeType === Node.TEXT_NODE ||
+              getComputedStyle(node).display.startsWith("inline")),
+        );
       const small = [...main.querySelectorAll("a,button,input,select,textarea")].filter((el) => {
+        if (el.disabled) return false;
         const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0 && r.height < 40;
+        return r.width > 0 && r.height > 0 && r.height < 40 && !inSentence(el);
       }).length;
       const overflow = document.documentElement.scrollWidth - window.innerWidth;
       // html/body use overflow-x: clip, which hides overflow from scrollWidth. Also report
