@@ -60,6 +60,8 @@ const ROUTES = [
   "/sources",
   "/about",
   "/read/library/trends/prompt-caching-2026.md",
+  // A Techniques briefing renders the AI workload adviser (signed-out: its email sign-in form).
+  "/read/library/techniques/llm-wiki-maintained-knowledge.md",
 ];
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },

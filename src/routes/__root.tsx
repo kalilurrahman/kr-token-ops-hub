@@ -14,6 +14,7 @@ import tokenopsCss from "../tokenops/style.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { EmailLinkCompletion } from "@/components/EmailLinkCompletion";
 import { DEFAULT_THEME, THEME_COLOR, THEME_HEAD_SCRIPT } from "@/lib/theme";
 
 function NotFoundComponent() {
@@ -173,6 +174,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <EmailLinkCompletion />
       <div className="to-bg-glow" aria-hidden="true" />
       <div className="to-bg-grid" aria-hidden="true" />
       <div className="tokenops-root flex min-h-screen flex-col">

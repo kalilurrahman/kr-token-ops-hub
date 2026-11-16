@@ -19,8 +19,10 @@ import {
   Mail,
 } from "lucide-react";
 import {
+  encodeReturnPath,
   isLikelyEmail,
   linkErrorFromUrl,
+  RETURN_PATH_KEY,
   sendLinkErrorMessage,
   signInRedirectUrl,
 } from "@/lib/adviser-auth";
@@ -420,6 +422,14 @@ function AdviserSignIn() {
     }
     setStatus("sending");
     setError("");
+    try {
+      // If Supabase sends the link to another page (its Site URL), EmailLinkCompletion uses this
+      // to bring the reader back here. Page path only, kept on this device for up to an hour.
+      const returnPath = encodeReturnPath(window.location.href, Date.now());
+      if (returnPath) window.localStorage.setItem(RETURN_PATH_KEY, returnPath);
+    } catch {
+      // Storage blocked: the link still signs the reader in on whichever page it opens.
+    }
     try {
       const { error: sendError } = await supabase.auth.signInWithOtp({
         email: address,
