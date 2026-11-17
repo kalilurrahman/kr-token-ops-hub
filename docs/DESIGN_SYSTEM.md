@@ -11,7 +11,7 @@ independent of this layer: a smoke test checks every route's text against a base
 | `src/lib/theme.ts`         | Palette choice, storage key, `theme-color` values and the inline `<head>` script.                                                               |
 | `src/lib/chart-theme.ts`   | `useChartTheme()` — Recharts colours read from tokens at render time and refreshed on palette change.                                           |
 | `scripts/check-tokens.mjs` | Runs with `npm run lint`; fails on hex, `!important`, Tailwind palette utilities or removed fonts outside the token files.                      |
-| `scripts/smoke.mjs`        | Route × viewport smoke, content parity, viewport-escape check, axe warnings.                                                                    |
+| `scripts/smoke.mjs`        | Route × viewport smoke, content parity, release watermark, viewport-escape check, axe warnings.                                                 |
 
 ## Palettes
 
@@ -155,7 +155,9 @@ overflow (including elements escaping the viewport, which the `html, body { over
 guard would otherwise hide), mobile tap targets under 40px (warning; disabled controls and
 links inside a sentence are exempt), and content parity against
 `.smoke/baseline` at 1440px. Parity reads authored text: CSS `text-transform` is neutralised and
-Recharts axis ticks (whose visibility depends on font metrics) are ignored. An axe-core pass
+Recharts axis ticks (whose visibility depends on font metrics) are ignored (`/changelog` has its
+own check, below). On every route and width the footer watermark must read
+`v<package.json version>`. An axe-core pass
 (WCAG 2 A/AA in Ledger Dark, colour contrast in the light palettes) adds warnings and writes
 `.smoke/axe.json`.
 
@@ -201,8 +203,9 @@ Routes added after that commit (`/changelog` and others) return 404 there, so `-
 them with a warning and later runs report "no baseline" for them instead of a parity failure.
 
 `/changelog` is exempt from content parity (`PARITY_EXEMPT` in `scripts/smoke.mjs`): its text is
-`CHANGELOG.md`, which every release extends, so a parity check would fail every release PR. It
-keeps the HTTP, console, overflow, tap-target, field-size and axe checks.
+`CHANGELOG.md`, which every release extends, so a parity check would fail every release PR.
+Instead it must list every `CHANGELOG.md` version, newest first, with the `package.json` version
+marked current, and it keeps the HTTP, console, overflow, tap-target, field-size and axe checks.
 
 ## Accessibility status (v2.0.0)
 

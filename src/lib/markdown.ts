@@ -12,10 +12,25 @@ export const focusableTables = (html: string) => html.replaceAll("<table>", '<ta
  * - Items that are nothing but one link (optionally with a nested list), as in a table of
  *   contents, get `class="link-item"` so the component layer can give them full tap targets.
  * - Tables get `tabindex="0"` (see `focusableTables`).
+ * - With a `resolveLink` callback (the library reader passes `resolveReaderLink`), each link's
+ *   href can be rewritten, or the link dropped to its text when it points at nothing.
  */
+/** Returns a new href, `null` to render the link's text without a link, or `undefined` to keep it. */
+export type LinkResolver = (href: string) => string | null | undefined;
+
+// Set only for the duration of one synchronous `renderMarkdown` call.
+let activeLinkResolver: LinkResolver | undefined;
+
 const longForm = new Marked({
   hooks: { postprocess: focusableTables },
   renderer: {
+    link(token) {
+      const next = activeLinkResolver?.(token.href);
+      if (next === undefined) return false; // default rendering
+      if (next === null) return this.parser.parseInline(token.tokens);
+      token.href = next;
+      return false; // default rendering, with the rewritten href
+    },
     listitem(item) {
       if (item.task && !item.loose) {
         return `<li class="task-list-item"><label>${this.parser.parse(item.tokens)}</label></li>\n`;
@@ -38,6 +53,11 @@ function isLinkOnly(item: Tokens.ListItem): boolean {
   );
 }
 
-export function renderMarkdown(source: string): string {
-  return longForm.parse(source, { async: false }) as string;
+export function renderMarkdown(source: string, resolveLink?: LinkResolver): string {
+  activeLinkResolver = resolveLink;
+  try {
+    return longForm.parse(source, { async: false }) as string;
+  } finally {
+    activeLinkResolver = undefined;
+  }
 }
