@@ -419,6 +419,16 @@ html, body { max-width: 100%; overflow-x: clip; }
 .dash-panel { min-width: 0; }
 .loading-panel { padding: var(--to-space-12); text-align: center; color: var(--to-ink-2); }
 .glossary-search { margin-bottom: var(--to-space-4); }
+/* Library search (/library): a search box above the category tabs; matches are highlighted and
+   text-only matches show a snippet. The input uses the base rule's :not() chain to outrank it. */
+.library-search { display: flex; flex-direction: column; max-width: 720px; }
+.library-search-field { position: relative; }
+.library-search-field > svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--to-ink-3); pointer-events: none; }
+.tokenops-root .library-search-field input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) { padding-left: 42px; }
+.library-search-status { margin: 0; color: var(--to-ink-2); font-size: var(--to-fs-small); }
+.library-search-status:not(:empty) { margin-top: var(--to-space-2); }
+.resource-card-header .library-snippet { margin-top: 6px; font-size: var(--to-fs-xs); line-height: 1.55; overflow-wrap: anywhere; }
+.library-results mark { padding: 0 2px; border-radius: 3px; background: var(--to-info-fill); color: inherit; }
 .source-list { display: grid; gap: var(--to-space-3); }
 .source-list > div { padding: var(--to-space-4); border-radius: var(--to-radius-input); background: var(--to-surface-2); border: 1px solid var(--to-line); color: var(--to-ink); overflow-wrap: anywhere; }
 .resource-card-header > div:not(.resource-card-icon) { flex: 1; min-width: 0; }

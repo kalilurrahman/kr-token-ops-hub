@@ -46,7 +46,6 @@ type PricingDataset = {
 const dataset = pricingData as PricingDataset;
 
 export const pricingReviewedDate = dataset.meta.reviewed_date;
-export const pricingVersion = dataset.meta.version;
 
 function resolveModel(qualifiedId: string): PricingModel {
   const [providerKey, modelKey] = qualifiedId.split("/");
