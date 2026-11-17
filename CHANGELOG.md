@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.3.4 — Remove unused UI components and packages (2026-11-17)
+
+### Removed
+
+- 41 shadcn/ui components that nothing imports (`accordion`, `alert-dialog`, `calendar`,
+  `card`, `carousel`, `chart`, `form`, `select`, `sidebar`, `sonner`, `tabs`, `tooltip` and
+  others) from `src/components/ui`. The five in use stay: `button`, `command`, `dialog`,
+  `dropdown-menu` and `sheet`. They can be re-added with the shadcn CLI (`components.json`) if a
+  future page needs one.
+- 32 packages used only by those components or by nothing: 22 `@radix-ui/react-*` primitives,
+  `react-day-picker`, `date-fns`, `embla-carousel-react`, `vaul`, `input-otp`,
+  `react-resizable-panels`, `sonner`, `react-hook-form`, `@hookform/resolvers` and
+  `@ai-sdk/react`. 44 entries leave `package-lock.json` and `bun.lock`; no remaining package
+  changes version.
+- Kept on purpose: the Lovable-managed `drizzle/` scaffold and its packages, and the generated
+  Supabase integration files.
+
 ## 2.3.3 — Bullets and numbers in long-form lists (2026-11-16)
 
 ### Fixed
