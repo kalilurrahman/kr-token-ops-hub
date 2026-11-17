@@ -321,6 +321,58 @@ html[data-theme="light"][data-palette="bright"] {
   --to-wordmark-accent: linear-gradient(180deg, #1f55d6, #1f55d6);
 }
 
+/* ---------- Print: every palette prints as ink on paper (Paper Light values, no shadows or
+   gradients). Browsers drop page backgrounds when printing but keep text colours, so Ledger
+   Dark's light ink would otherwise print pale on white. Listing the palette selectors keeps this
+   block at least as specific as each palette's own block, and later in the file. ---------- */
+@media print {
+  html,
+  html[data-theme="dark"],
+  html[data-theme="light"],
+  html[data-theme="light"][data-palette="bright"] {
+    color-scheme: light;
+    --to-bg: #ffffff;
+    --to-bg-1: #ffffff;
+    --to-surface: #ffffff;
+    --to-surface-2: #f4f2ec;
+    --to-surface-3: #e9e4d8;
+    --to-field: #ffffff;
+    --to-ink: #14161c;
+    --to-ink-2: #3a3d46;
+    --to-ink-3: #55585f;
+    --to-line: #d8d0bf;
+    --to-line-2: #c9c1ae;
+    --to-line-strong: #b9a77a;
+    --to-primary: #14161c;
+    --to-primary-hover: #14161c;
+    --to-primary-ink: #ffffff;
+    --to-primary-grad: linear-gradient(#14161c, #14161c);
+    --to-money: #8a6418;
+    --to-money-fill: #fbf1dc;
+    --to-money-text: #6e500f;
+    --to-saving: #0e786c;
+    --to-saving-fill: #e3f5f1;
+    --to-saving-text: #0b5f55;
+    --to-risk: #b8452a;
+    --to-risk-fill: #fbe8e2;
+    --to-risk-text: #9a3a22;
+    --to-info: #2b5db8;
+    --to-info-fill: #e8effb;
+    --to-info-text: #234c97;
+    --to-violet-fill: #efeafd;
+    --to-violet-text: #5b3fc4;
+    --to-focus: #0e786c;
+    --to-chart-grid: #e4ded1;
+    --to-chart-axis: #55585f;
+    --to-shadow-1: none;
+    --to-shadow-2: none;
+    --to-shadow-glow: none;
+    --to-hero-bg: #ffffff;
+    --to-page-bg: #ffffff;
+    --to-header-bg: #ffffff;
+  }
+}
+
 @layer base {
   * { border-color: var(--color-border); }
   html { -webkit-text-size-adjust: 100%; }

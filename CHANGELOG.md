@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.6.0 — Print-ready pages (2026-11-17)
+
+### Added
+
+- Print and "Save as PDF" give ink on paper in every palette. Ledger Dark printed pale text on
+  white, because browsers drop page backgrounds but keep text colours, and pages printed the
+  header, tab bar, buttons and the fixed background grid. Now every palette prints with Paper
+  Light colours (print tokens in `src/styles.css`), site chrome and controls are hidden, wide
+  tables and code print whole, headings stay with their text, and tables, code blocks and
+  release cards don't split across pages. External links in long-form pages print their
+  address after the link text. The guide prints as a 36-page A4 document.
+- Printouts keep the footer's bottom row, so every printed or saved page set ends with the
+  copyright and the release watermark (`v2.6.0`).
+- `npm run smoke` checks print in all three palettes on `/guide`, `/calculator` and a library
+  briefing: no chrome or buttons, dark text on a white page, and the watermark printed. On the
+  build before this change it reported 21 failures.
+
 ## 2.5.0 — Shareable calculator scenarios (2026-11-17)
 
 ### Added
@@ -18,6 +35,7 @@
 - `npm run smoke -- --accept=/route[,/route]` rewrites the content-parity baseline for routes a
   feature changes on purpose; every other route is still compared.
 - Secondary buttons show a pointer cursor.
+
 ## 2.4.2 — Working links between library documents (2026-11-17)
 
 ### Added
