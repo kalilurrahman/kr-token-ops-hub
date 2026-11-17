@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.4.0 — Release notes behind the version watermark (2026-11-17)
+
+### Added
+
+- `/changelog` release notes page: every release from `CHANGELOG.md`, newest first, each with
+  its version, date and an anchor (`#v2-4-0`); the current release is marked. It is in the
+  sitemap. `src/lib/changelog.ts` parses the file (4 tests).
+- The footer version watermark links to its own release on `/changelog`, with a 44px target on
+  phones and the accessible name "Release notes for v…".
+
+### Changed
+
+- Release checks in `npm test` (`src/lib/release.test.ts`): besides `package.json` matching the
+  newest `CHANGELOG.md` entry, both `package-lock.json` versions must match, every release
+  heading must read `## x.y.z — Title (YYYY-MM-DD)`, and versions must be unique and strictly
+  descending with dates that never go forward. Two branches that both ship the same number now
+  fail the tests instead of deploying a duplicate label (it happened with 2.3.4).
+- `npm run smoke` covers `/changelog` (26 routes); a `--baseline` run skips routes its build does
+  not have instead of recording a 404 page as the baseline.
+- Release steps are documented in `docs/DESIGN_SYSTEM.md` (Releases), `README.md`, `CLAUDE.md`
+  and `AGENTS.md`.
+
+### Removed
+
+- `screenshot.js` and `screenshot.cjs`: identical one-off scripts from May that nothing ran or
+  referenced, pointing at the old `lovable.app` URL (the `.js` copy could not run in this ES
+  module package). `npm run smoke` takes the section screenshots (`.smoke/shots`).
+
 ## 2.3.4 — Remove unused UI components and packages (2026-11-17)
 
 ### Removed

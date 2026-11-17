@@ -148,8 +148,8 @@ npm run smoke       # build, wrangler dev on 127.0.0.1:4173, scripts/smoke.mjs
 ```
 
 `npm run smoke` serves `.output/` with `wrangler dev` (the Cloudflare build can't be served by
-`vite preview`), then for 25 routes (the 23 in `FULL_NAV` plus a Trends briefing and a
-Techniques briefing, which shows the AI adviser's sign-in form) × 390/834/1440 checks HTTP 200,
+`vite preview`), then for 26 routes (the 23 in `FULL_NAV`, a Trends briefing, a Techniques
+briefing, which shows the AI adviser's sign-in form, and `/changelog`) × 390/834/1440 checks HTTP 200,
 console errors, horizontal
 overflow (including elements escaping the viewport, which the `html, body { overflow-x: clip }`
 guard would otherwise hide), mobile tap targets under 40px (warning; disabled controls and
@@ -166,12 +166,25 @@ block third-party APIs, `SMOKE_AXE=0` skips the axe pass, `SMOKE_PORT` changes t
 
 ### Releases and the version watermark
 
-The footer shows the release version (`.to-release`, e.g. `v2.1.0`). It comes from the
-`version` field in `package.json` via `src/lib/release.ts`; Vite inlines only that field. To cut
-a release, bump `package.json` `version` and add a matching `## x.y.z — Title (date)` entry at
-the top of `CHANGELOG.md` in the same change. `npm test` (`src/lib/release.test.ts`) fails if
-they disagree. Bump the version for every change that reaches production, so no two deployed
-builds share a label. The live site's version can be checked from the footer or with
+The footer shows the release version (`.to-release`, e.g. `v2.4.0`). It comes from the
+`version` field in `package.json` via `src/lib/release.ts`; Vite inlines only that field. The
+watermark links to that release's entry on `/changelog` (`#v2-4-0`), the release notes page
+rendered from `CHANGELOG.md` by `src/routes/changelog.tsx` and `src/lib/changelog.ts`.
+
+To cut a release, in the same change:
+
+1. Take the next version after the newest one on **current** `main` (other branches and Lovable
+   release too; re-check just before merging and renumber if yours was taken).
+2. Set `package.json` `version` and the two `package-lock.json` copies (`version` and
+   `packages[""].version`) to it.
+3. Add `## x.y.z — Title (YYYY-MM-DD)` at the top of `CHANGELOG.md` (an em dash, ISO date).
+
+`npm test` (`src/lib/release.test.ts`) fails if `package.json`, `package-lock.json` and the top
+`CHANGELOG.md` entry disagree, if a release heading is not in that format, or if versions are
+not unique and strictly descending with dates that never go forward, so a merge that keeps
+two branches' entries for the same number fails instead of shipping a duplicate label. Bump the
+version for every change that reaches production, so no two deployed builds share a label. The
+live site's version can be checked from the footer or with
 `curl -s https://tokenops.kalilurrahman.com/ | grep -o 'v[0-9]*\.[0-9]*\.[0-9]*'`.
 
 ### Regenerating the baseline
@@ -190,6 +203,9 @@ In a second shell from the repo root (using this branch's `scripts/smoke.mjs`):
 ```bash
 BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
 ```
+
+Routes added after that commit (`/changelog` and others) return 404 there, so `--baseline` skips
+them with a warning and later runs report "no baseline" for them instead of a parity failure.
 
 ## Accessibility status (v2.0.0)
 

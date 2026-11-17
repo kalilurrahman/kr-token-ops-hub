@@ -801,3 +801,14 @@ html[data-palette="bright"] a.bg-primary:hover { background-color: color-mix(in 
 /* Release watermark (footer): version from package.json via src/lib/release.ts. */
 .site-footer-legal-end { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-2) var(--to-space-3); }
 .to-release { display: inline-flex; align-items: center; padding: 1px 8px; border: 1px solid var(--to-line-2); border-radius: 999px; font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: var(--to-ink-3); }
+/* The watermark links to its release on /changelog: 44px target on touch widths. */
+.to-release-link { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+.to-release-link:hover .to-release { border-color: var(--to-line-strong); color: var(--to-ink-2); }
+@media (min-width: 768px) { .to-release-link { min-height: 32px; } }
+/* /changelog release notes (src/routes/changelog.tsx) */
+.changelog-release { scroll-margin-top: calc(var(--to-header-h) + 16px); }
+.changelog-release > h2 { margin-bottom: var(--to-space-1); font-size: var(--to-fs-h3); }
+.changelog-release:first-child > h2 { margin-top: 0; padding-top: 0; border-top: 0; }
+.changelog-release h3 { font-size: var(--to-fs-h4); }
+.changelog-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-2); margin: 0 0 var(--to-space-4); color: var(--to-ink-3); font-size: var(--to-fs-small); }
+.changelog-current { display: inline-flex; padding: 1px 8px; border-radius: 999px; background: var(--to-saving-fill); color: var(--to-saving-text); font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }

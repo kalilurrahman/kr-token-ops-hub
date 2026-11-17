@@ -35,5 +35,5 @@ Claude Code reads this on every session. Also follow `AGENTS.md`; the design sys
 - Charts: `src/routes/dashboard.tsx` + `src/lib/chart-theme.ts`
 - Mobile tab bar: `src/components/MobileTabBar.tsx`; palette logic: `src/lib/theme.ts`
 - Guardrail: `scripts/check-tokens.mjs` (runs in `npm run lint`)
-- Release version: `package.json` `version` → footer watermark via `src/lib/release.ts`. Bump it together with a new top entry in `CHANGELOG.md` (`npm test` enforces the match).
+- Release version: `package.json` `version` → footer watermark via `src/lib/release.ts`, linking to its entry on `/changelog` (rendered from `CHANGELOG.md`). Bump it with `package-lock.json` and a new top `## x.y.z — Title (YYYY-MM-DD)` entry, taking the next free version on current `main` (`npm test` enforces the match, the format and unique, descending versions).
 - Reference visuals: the design handoff's `reference/*.html` (not committed); palette screenshots in `docs/design-system/screens/`

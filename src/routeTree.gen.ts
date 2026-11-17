@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as CavemanRouteImport } from './routes/caveman'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as GuideRouteImport } from './routes/guide'
@@ -53,6 +54,11 @@ const CalculatorRoute = CalculatorRouteImport.update({
 const CavemanRoute = CavemanRouteImport.update({
   id: '/caveman',
   path: '/caveman',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
   '/caveman': typeof CavemanRoute
+  '/changelog': typeof ChangelogRoute
   '/dashboard': typeof DashboardRoute
   '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
@@ -193,6 +200,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
   '/caveman': typeof CavemanRoute
+  '/changelog': typeof ChangelogRoute
   '/dashboard': typeof DashboardRoute
   '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
@@ -221,6 +229,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/calculator': typeof CalculatorRoute
   '/caveman': typeof CavemanRoute
+  '/changelog': typeof ChangelogRoute
   '/dashboard': typeof DashboardRoute
   '/glossary': typeof GlossaryRoute
   '/guide': typeof GuideRoute
@@ -250,6 +259,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/calculator'
     | '/caveman'
+    | '/changelog'
     | '/dashboard'
     | '/glossary'
     | '/guide'
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/calculator'
     | '/caveman'
+    | '/changelog'
     | '/dashboard'
     | '/glossary'
     | '/guide'
@@ -304,6 +315,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/calculator'
     | '/caveman'
+    | '/changelog'
     | '/dashboard'
     | '/glossary'
     | '/guide'
@@ -332,6 +344,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CalculatorRoute: typeof CalculatorRoute
   CavemanRoute: typeof CavemanRoute
+  ChangelogRoute: typeof ChangelogRoute
   DashboardRoute: typeof DashboardRoute
   GlossaryRoute: typeof GlossaryRoute
   GuideRoute: typeof GuideRoute
@@ -383,6 +396,13 @@ declare module '@tanstack/react-router' {
       path: '/caveman'
       fullPath: '/caveman'
       preLoaderRoute: typeof CavemanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -540,6 +560,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CalculatorRoute: CalculatorRoute,
   CavemanRoute: CavemanRoute,
+  ChangelogRoute: ChangelogRoute,
   DashboardRoute: DashboardRoute,
   GlossaryRoute: GlossaryRoute,
   GuideRoute: GuideRoute,

@@ -63,6 +63,7 @@ const ROUTES = [
   "/read/library/trends/prompt-caching-2026.md",
   // A Techniques briefing renders the AI workload adviser (signed-out: its email sign-in form).
   "/read/library/techniques/llm-wiki-maintained-knowledge.md",
+  "/changelog",
 ];
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
@@ -91,7 +92,16 @@ for (const vp of VIEWPORTS) {
     });
     const res = await page.goto(BASE + route, { waitUntil: "networkidle" });
     const tag = `[${vp.name}] ${route}`;
-    if (!res || res.status() !== 200) failures.push(`${tag} HTTP ${res?.status()}`);
+    if (!res || res.status() !== 200) {
+      // A baseline build may predate a route (e.g. /changelog, added in 2.4.0): skip it there so
+      // later runs report "no baseline" instead of comparing against a 404 page.
+      if (BASELINE) {
+        warnings.push(`${tag} HTTP ${res?.status()} in the baseline build; no baseline written`);
+        await page.close();
+        continue;
+      }
+      failures.push(`${tag} HTTP ${res?.status()}`);
+    }
     errors
       .filter((e) => !/favicon|manifest/.test(e))
       .forEach((e) =>
