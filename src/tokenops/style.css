@@ -822,3 +822,30 @@ a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
 .release-entry-current { padding: 1px 8px; border-radius: 999px; background: var(--to-saving-fill); color: var(--to-saving-text); font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .release-entry-body { padding-top: var(--to-space-4); }
 .release-entry-body h3 { margin-top: var(--to-space-5); font-size: var(--to-fs-h4); }
+
+/* =====================================================================
+   Print and "Save as PDF" (colours come from the print tokens in src/styles.css)
+   ===================================================================== */
+@media print {
+  @page { margin: 16mm 14mm; }
+  body { background: var(--to-page-bg); font-size: 11pt; }
+  /* Site chrome and controls don't print. The footer keeps only its bottom row, so every
+     printout ends with the copyright and the release watermark (v<version>). */
+  .to-bg-glow, .to-bg-grid, .site-header, .to-tabbar, .reader-toolbar, .site-footer-grid,
+  button, .primary-action, .secondary-action, .download-btn, .to-btn-gold, [data-slot="button"],
+  .result-actions, .result-share-status, .reader-actions, .reader-icon-btn { display: none; }
+  .site-footer { padding: 0; border: 0; background: none; }
+  .site-footer-legal { margin-top: var(--to-space-6); }
+  .app-shell { width: auto; padding: 0; }
+  /* Long-form: full width, wide tables and code printed whole, no breaks inside blocks. */
+  .guide, .reader-article { padding: 0; border: 0; background: none; }
+  .guide > *, .reader-article > * { max-width: none; }
+  .guide table, .reader-article table, .advice-output > table { display: table; overflow: visible; }
+  .guide pre, .reader-article pre { white-space: pre-wrap; overflow: visible; }
+  h1, h2, h3, h4 { break-after: avoid; }
+  pre, table, blockquote, img, figure, .release-entry, .metric-row { break-inside: avoid; }
+  /* On paper a link can't be clicked: print where external links go. */
+  .guide a[href^="http"]::after, .reader-article a[href^="http"]::after {
+    content: " (" attr(href) ")"; color: var(--to-ink-3); font-size: 0.85em; overflow-wrap: anywhere;
+  }
+}

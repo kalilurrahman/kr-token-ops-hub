@@ -167,6 +167,15 @@ build. Environment: `CHROMIUM_PATH` points Playwright at an existing Chromium,
 `SMOKE_IGNORE_CONSOLE` (regex) downgrades matching console errors to warnings for sandboxes that
 block third-party APIs, `SMOKE_AXE=0` skips the axe pass, `SMOKE_PORT` changes the port.
 
+### Print
+
+`@media print` in `src/styles.css` resets every palette to Paper Light's ink-on-paper tokens (no
+shadows, gradients or page tint), and the print block at the end of `src/tokenops/style.css`
+hides site chrome and controls, prints wide tables and code whole, avoids page breaks inside
+tables, code and cards, and prints external link addresses in long-form pages. The footer's
+bottom row (copyright and release watermark) prints. `npm run smoke` checks print on three routes
+in all three palettes.
+
 ### Releases and the version watermark
 
 The footer shows the release version (`.to-release`, e.g. `v2.4.0`). It comes from the
