@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.4.0 — Release notes page and release tooling (2026-11-17)
+
+### Added
+
+- Release notes page at `/changelog`, rendered from `CHANGELOG.md` with one card per version and
+  the current release marked. The footer watermark (`v2.4.0`) now links to it; the page is in
+  `sitemap.xml` and the smoke routes, and stays out of the main navigation.
+- `npm run release -- <patch|minor|major|x.y.z> "Title"` cuts a release: it bumps
+  `package.json` and both `package-lock.json` version fields, and adds a dated
+  `## x.y.z — Title (YYYY-MM-DD)` entry with a placeholder at the top of `CHANGELOG.md`
+  (`--dry-run` prints the plan). This release was cut with it.
+
+### Changed
+
+- `npm test` guards the watermark more strictly: `package-lock.json` must carry the same version
+  as `package.json`, `CHANGELOG.md` versions must be unique and newest first with well-formed
+  dated headings, and the newest entry must have real notes rather than the release script's
+  placeholder. Shared parsing lives in `src/lib/release-notes.ts` (5 tests).
+
 ## 2.3.4 — Remove unused UI components and packages (2026-11-17)
 
 ### Removed

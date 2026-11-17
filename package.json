@@ -1,7 +1,7 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
-  "version": "2.3.4",
+  "version": "2.4.0",
   "sideEffects": false,
   "type": "module",
   "scripts": {
@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/**/*.test.ts",
-    "smoke": "node scripts/run-smoke.mjs"
+    "smoke": "node scripts/run-smoke.mjs",
+    "release": "tsx scripts/release.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.71",

@@ -107,9 +107,11 @@ npm run build       # production build
 npm run smoke       # build, preview with wrangler, route × viewport smoke + content parity
 ```
 
-The current release is shown in the site footer (for example `v2.1.0`) and comes from the
-`version` field in `package.json`. Bump it together with a new entry in
-[`CHANGELOG.md`](CHANGELOG.md); `npm test` fails if the two disagree.
+The current release is shown in the site footer (for example `v2.4.0`) and comes from the
+`version` field in `package.json`; it links to the release notes page (`/changelog`), rendered
+from [`CHANGELOG.md`](CHANGELOG.md). Cut a release with
+`npm run release -- <patch|minor|major> "Title"`, then write the notes in the new changelog
+entry; `npm test` fails if the versions disagree or the notes are missing.
 
 Section screenshots below are from a local build at 1440×900 in Ledger Dark.
 
