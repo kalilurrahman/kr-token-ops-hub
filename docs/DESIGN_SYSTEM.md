@@ -161,8 +161,9 @@ own check, below). On every route and width the footer watermark must read
 (WCAG 2 A/AA in Ledger Dark, colour contrast in the light palettes) adds warnings and writes
 `.smoke/axe.json`.
 
-Options: `-- --baseline` rewrites the baseline (only on an untouched UI), `-- --no-build` reuses
-the current build. Environment: `CHROMIUM_PATH` points Playwright at an existing Chromium,
+Options: `-- --baseline` rewrites the baseline (only on an untouched UI), `-- --accept=/route`
+rewrites it only for routes a feature changes on purpose, `-- --no-build` reuses the current
+build. Environment: `CHROMIUM_PATH` points Playwright at an existing Chromium,
 `SMOKE_IGNORE_CONSOLE` (regex) downgrades matching console errors to warnings for sandboxes that
 block third-party APIs, `SMOKE_AXE=0` skips the axe pass, `SMOKE_PORT` changes the port.
 

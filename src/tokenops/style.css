@@ -119,7 +119,7 @@ html[data-theme="dark"] .to-tabbar [aria-current="page"] { color: var(--to-money
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   min-height: 44px; padding: 0 18px; border-radius: var(--to-radius-btn);
   border: 1px solid var(--to-line-strong); background: transparent; color: var(--to-ink);
-  font: 500 var(--to-fs-small)/1 var(--font-sans); text-decoration: none;
+  font: 500 var(--to-fs-small)/1 var(--font-sans); text-decoration: none; cursor: pointer;
   transition: background var(--to-dur-fast);
 }
 .secondary-action:hover { background: var(--to-surface-2); }
@@ -806,6 +806,13 @@ html[data-palette="bright"] a.bg-primary:hover { background-color: color-mix(in 
 a.to-release { position: relative; text-decoration: none; transition: color var(--to-dur-fast), border-color var(--to-dur-fast); }
 a.to-release:hover { color: var(--to-ink); border-color: var(--to-ink-3); }
 a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
+/* Calculator result actions: CSV download and the shareable scenario link. */
+.result-actions { display: flex; flex-wrap: wrap; gap: var(--to-space-3); }
+.result-actions > * { white-space: nowrap; }
+/* On phones .result-surface is a two-column grid; the actions and the copy message span it. */
+.result-surface > .result-actions, .result-surface > .result-share-status { grid-column: 1 / -1; }
+.result-share-status:empty { display: none; }
+.result-share-status p { margin: 0; color: var(--to-saving-text); font-size: var(--to-fs-small); }
 /* Release notes page (/changelog), one card per CHANGELOG.md entry. */
 .release-list { display: grid; gap: var(--to-space-6); margin: 0; padding: 0; list-style: none; }
 .release-entry { border: 1px solid var(--to-line); border-radius: var(--to-radius-card); background: var(--to-surface); scroll-margin-top: calc(var(--to-header-h) + 16px); }

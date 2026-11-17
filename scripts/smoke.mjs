@@ -4,6 +4,7 @@
  *
  *   node scripts/smoke.mjs --baseline   # run ONCE on main before any UI change
  *   node scripts/smoke.mjs              # run after every phase
+ *   node scripts/smoke.mjs --accept=/calculator   # a feature changes that route's content
  *
  * BASE_URL defaults to http://localhost:4173 (`npm run smoke` builds, previews and sets it).
  * CHROMIUM_PATH (optional) points Playwright at an existing Chromium binary.
@@ -33,6 +34,14 @@ import AxeBuilder from "@axe-core/playwright";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4173";
 const BASELINE = process.argv.includes("--baseline");
+// Routes whose content a feature changes on purpose: their parity baseline is rewritten in this
+// run (e.g. --accept=/calculator,/changelog). Every other route is still compared.
+const ACCEPT = new Set(
+  process.argv
+    .filter((arg) => arg.startsWith("--accept="))
+    .flatMap((arg) => arg.slice("--accept=".length).split(","))
+    .filter(Boolean),
+);
 // Opt-in only: a regex of console errors to downgrade to warnings, for sandboxes
 // whose network policy blocks third-party APIs (e.g. ERR_TUNNEL_CONNECTION_FAILED).
 const IGNORE_CONSOLE = process.env.SMOKE_IGNORE_CONSOLE
@@ -251,9 +260,10 @@ for (const vp of VIEWPORTS) {
     }
     if (vp.name === "laptop" && !PARITY_EXEMPT.has(route)) {
       const file = path.join(OUT, "baseline", `${slug(route)}.txt`);
-      if (BASELINE) {
+      if (BASELINE || ACCEPT.has(route)) {
         await fs.mkdir(path.dirname(file), { recursive: true });
         await fs.writeFile(file, norm(text));
+        if (!BASELINE) warnings.push(`${tag} baseline updated (--accept)`);
       } else {
         try {
           const before = await fs.readFile(file, "utf8");

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.5.0 — Shareable calculator scenarios (2026-11-17)
+
+### Added
+
+- Shareable calculator scenarios. "Copy scenario link" beside "Download CSV" on `/calculator`
+  copies a link such as `/calculator?p=anthropic&r=5000000&cache=50` and puts it in the address
+  bar; opening it fills the blended-savings calculator with the same inputs, server render
+  included. Only values that differ from the defaults are written, so the default scenario is
+  plain `/calculator`. Where the clipboard is blocked, the link is shown in a field to copy.
+- Links are validated before use (`src/lib/calculator-scenario.ts`, 6 tests): only known
+  presets and in-range numbers are read, anything else falls back to the default, and unknown
+  parameters such as `utm_source` are ignored. The calculator maths is unchanged.
+
+### Changed
+
+- `npm run smoke -- --accept=/route[,/route]` rewrites the content-parity baseline for routes a
+  feature changes on purpose; every other route is still compared.
+- Secondary buttons show a pointer cursor.
 ## 2.4.2 — Working links between library documents (2026-11-17)
 
 ### Added
