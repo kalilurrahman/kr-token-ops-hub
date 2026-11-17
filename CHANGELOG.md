@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.7.0 — Search the library (2026-11-17)
+
+### Added
+
+- Full-text search on `/library`. A search box above the category tabs finds documents by title,
+  description, category and their full text; every word must match, and title matches rank first
+  (so "prompt caching" leads with _Prompt Caching in 2026_). Matching words are highlighted, and
+  documents that match only in their text show the passage around the match. The search works
+  with the category tabs, says how many documents match (also to screen readers), and lives in the
+  address bar (`/library?q=prompt+caching`) so it can be shared, bookmarked or reloaded.
+- The document text (about 230 KB gzipped) loads only when someone focuses or uses the search
+  box, so the library page itself grows by under 4 KB. The reader shares the same file, so a
+  reader page opened later doesn't download it again. Ranking, snippets and highlighting live in
+  `src/lib/library-search.ts` (8 tests, including the real 65-document library).
+
+### Removed
+
+- `pricingVersion` in `src/tokenops/data.ts`, which nothing used.
+
 ## 2.6.0 — Print-ready pages (2026-11-17)
 
 ### Added
