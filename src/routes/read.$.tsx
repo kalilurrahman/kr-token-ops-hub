@@ -27,6 +27,7 @@ import {
   signInRedirectUrl,
 } from "@/lib/adviser-auth";
 import { renderMarkdown } from "@/lib/markdown";
+import { resolveReaderLink } from "@/lib/reader-links";
 import { renderAdviceMarkdown } from "@/lib/advice-markdown";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -138,7 +139,10 @@ function ReaderPage() {
       : null;
 
   const isMarkdown = resolved.key.toLowerCase().endsWith(".md");
-  const html = isMarkdown ? renderMarkdown(raw) : null;
+  // Links between documents point at their content-pack paths; open their reader pages instead.
+  const html = isMarkdown
+    ? renderMarkdown(raw, (href) => resolveReaderLink(href, resolved, documentStore))
+    : null;
   const handleDownload = () => {
     if (resolved.source === "template") downloadTemplate(resolved.key);
     else downloadLibraryFile(resolved.key);

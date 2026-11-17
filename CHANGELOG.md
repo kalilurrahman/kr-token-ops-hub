@@ -18,6 +18,33 @@
 - `npm run smoke -- --accept=/route[,/route]` rewrites the content-parity baseline for routes a
   feature changes on purpose; every other route is still compared.
 - Secondary buttons show a pointer cursor.
+## 2.4.2 — Working links between library documents (2026-11-17)
+
+### Added
+
+- `npm run smoke` checks the release watermark on every page at every width: the footer must
+  show `v<package.json version>`, so a stale build or cached shell fails instead of passing.
+- `/changelog`, exempt from text parity since 2.4.1, is now checked against `CHANGELOG.md`: it
+  must list every version, newest first, with the `package.json` version marked current.
+
+### Fixed
+
+- 29 links between library documents led to "not found" pages. The FAQ, maturity model, RACI
+  matrix and case studies point at templates with content-pack paths such as
+  `../../public/templates/implementation-playbook.md`, which the browser resolved to
+  `/read/public/templates/…`. The library reader now resolves relative links against the
+  document's place in the pack (`src/lib/reader-links.ts`) and opens the target in the reader:
+  27 template links and the templates folder link now work, and the 18 links that already worked
+  point straight at their reader page. A link to a file that exists nowhere (the library
+  README's `INTEGRATION.md`) shows as plain text instead of a dead link. Absolute, `#anchor` and
+  root-relative links are unchanged, as are the guide and sample chapter.
+- A test renders all 72 library and template documents and fails if any link points at a
+  missing reader page, so new content can't add dead links (6 tests).
+
+### Removed
+
+- `THEME_CHOICES` in `src/lib/theme.ts`, which nothing used.
+
 ## 2.4.1 — Watermark opens its own release notes (2026-11-17)
 
 ### Changed
