@@ -25,6 +25,8 @@
  *   5. axe-core WCAG 2 A/AA audit per palette, plus Ledger Dark at 390px (warn only; report in
  *      .smoke/axe.json)
  *   6. The footer release watermark reads v<package.json version> (fail)
+ *   7. Print (Ledger Dark, Paper Light, Bright Pro): no chrome or buttons, dark text on a white
+ *      page, watermark printed (fail)
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
  */
 import { chromium } from "playwright";
@@ -289,6 +291,60 @@ for (const vp of VIEWPORTS) {
   }
   await ctx.close();
 }
+// ---------- Print ----------
+// Printing or "Save as PDF" must give ink on paper in every palette: no site chrome or buttons,
+// dark text on a white page, and the footer's release watermark (v<version>) still printed.
+if (!BASELINE) {
+  const PRINT_ROUTES = ["/guide", "/calculator", "/read/library/trends/prompt-caching-2026.md"];
+  for (const theme of ["dark", "light", "bright"]) {
+    const ctx = await browser.newContext({ viewport: { width: 794, height: 1123 } });
+    await ctx.addInitScript((value) => {
+      try {
+        localStorage.setItem("tokenops-theme-v2", value);
+      } catch {
+        /* storage blocked */
+      }
+    }, theme);
+    for (const route of PRINT_ROUTES) {
+      const page = await ctx.newPage();
+      await page.goto(BASE + route, { waitUntil: "networkidle" });
+      await page.emulateMedia({ media: "print" });
+      const result = await page.evaluate(() => {
+        const shown = (el) =>
+          el && getComputedStyle(el).display !== "none" && el.offsetParent !== null;
+        const luminance = (color) => {
+          const [r, g, b] = color.match(/[\d.]+/g).map(Number);
+          const f = (v) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+          return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+        };
+        const text = document.querySelector("main p, main li") ?? document.body;
+        const watermark = document.querySelector(".site-footer .to-release");
+        return {
+          chrome: [".site-header", ".to-tabbar", ".to-bg-grid"].filter((s) =>
+            shown(document.querySelector(s)),
+          ),
+          buttons: [...document.querySelectorAll("main button")].filter(shown).length,
+          ink: luminance(getComputedStyle(text).color),
+          paper: luminance(getComputedStyle(document.body).backgroundColor),
+          watermark: shown(watermark) ? watermark.textContent : null,
+        };
+      });
+      const tag = `[print ${theme}] ${route}`;
+      if (result.chrome.length)
+        failures.push(`${tag} prints site chrome: ${result.chrome.join(", ")}`);
+      if (result.buttons) failures.push(`${tag} prints ${result.buttons} button(s)`);
+      if (result.ink > 0.2 || result.paper < 0.9)
+        failures.push(
+          `${tag} not ink on paper (text luminance ${result.ink.toFixed(2)}, page ${result.paper.toFixed(2)})`,
+        );
+      if (!result.watermark?.includes(`v${RELEASE}`))
+        failures.push(`${tag} printed watermark is "${result.watermark}", expected v${RELEASE}`);
+      await page.close();
+    }
+    await ctx.close();
+  }
+}
+
 // ---------- Accessibility (warning only) ----------
 // axe-core: full WCAG 2 A/AA in Ledger Dark at laptop and phone width (phone-only layouts such
 // as scrolling tables), colour contrast in the two light palettes at laptop width. Findings never
