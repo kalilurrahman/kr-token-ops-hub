@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Download } from "lucide-react";
+import { Download, Link2 } from "lucide-react";
 import { AdvancedCalculators } from "@/components/advanced-calculators";
 import {
   providerPresets,
@@ -15,8 +15,17 @@ import {
   openModelOptions,
   pricingReviewedDate,
 } from "@/tokenops/data";
+import {
+  scenarioFromSearch,
+  scenarioShareUrl,
+  scenarioToSearch,
+  validateCalculatorSearch,
+} from "@/lib/calculator-scenario";
 
 export const Route = createFileRoute("/calculator")({
+  // Shared scenario links (?r=…&cache=…): known, in-range values only; see calculator-scenario.ts.
+  validateSearch: (search: Record<string, unknown>) =>
+    validateCalculatorSearch(search, Object.keys(providerPresets)),
   component: CalculatorPage,
   head: () => ({
     meta: [
@@ -39,14 +48,22 @@ export const Route = createFileRoute("/calculator")({
 });
 
 function CalculatorPage() {
-  const [provider, setProvider] = useState("openai");
-  const [requestsPerMonth, setRequestsPerMonth] = useState(3_000_000);
-  const [inputTokens, setInputTokens] = useState(1800);
-  const [outputTokens, setOutputTokens] = useState(450);
-  const [cacheHitRate, setCacheHitRate] = useState(35);
-  const [batchShare, setBatchShare] = useState(30);
-  const [cheapModelShare, setCheapModelShare] = useState(60);
-  const [implementationCost, setImplementationCost] = useState(25_000);
+  // A shared link seeds the inputs (server render included); defaults otherwise.
+  const search = Route.useSearch();
+  const [initial] = useState(() => scenarioFromSearch(search, Object.keys(providerPresets)));
+  const navigate = useNavigate({ from: Route.fullPath });
+  const [provider, setProvider] = useState(initial.provider);
+  const [requestsPerMonth, setRequestsPerMonth] = useState(initial.requestsPerMonth);
+  const [inputTokens, setInputTokens] = useState(initial.inputTokens);
+  const [outputTokens, setOutputTokens] = useState(initial.outputTokens);
+  const [cacheHitRate, setCacheHitRate] = useState(initial.cacheHitRate);
+  const [batchShare, setBatchShare] = useState(initial.batchShare);
+  const [cheapModelShare, setCheapModelShare] = useState(initial.cheapModelShare);
+  const [implementationCost, setImplementationCost] = useState(initial.implementationCost);
+  const [shareState, setShareState] = useState<{
+    status: "idle" | "copied" | "manual";
+    url: string;
+  }>({ status: "idle", url: "" });
   const pricing = providerPresets[provider];
 
   const summary = useMemo(() => {
@@ -97,6 +114,28 @@ function CalculatorPage() {
       ["Savings Percent", `${summary.savingsPct.toFixed(1)}%`],
       ["Payback Months", summary.paybackMonths.toFixed(1)],
     ]);
+  };
+
+  const copyScenarioLink = async () => {
+    const scenario = {
+      provider,
+      requestsPerMonth,
+      inputTokens,
+      outputTokens,
+      cacheHitRate,
+      batchShare,
+      cheapModelShare,
+      implementationCost,
+    };
+    const url = scenarioShareUrl(window.location.origin, scenario);
+    // Keep the address bar in step with the copied link.
+    void navigate({ search: scenarioToSearch(scenario), replace: true, resetScroll: false });
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareState({ status: "copied", url });
+    } catch {
+      setShareState({ status: "manual", url });
+    }
   };
 
   return (
@@ -210,9 +249,34 @@ function CalculatorPage() {
             At {requestsPerMonth.toLocaleString()} monthly requests, this scenario lowers run-rate
             by {summary.savingsPct.toFixed(1)}% while preserving a clear optimization audit trail.
           </div>
-          <button className="primary-action button-action" type="button" onClick={exportCSV}>
-            <Download size={17} /> Download CSV
-          </button>
+          <div className="result-actions">
+            <button className="primary-action button-action" type="button" onClick={exportCSV}>
+              <Download size={17} /> Download CSV
+            </button>
+            <button
+              className="secondary-action"
+              type="button"
+              onClick={() => void copyScenarioLink()}
+            >
+              <Link2 size={17} aria-hidden="true" /> Copy scenario link
+            </button>
+          </div>
+          <div role="status" className="result-share-status">
+            {shareState.status === "copied" && (
+              <p>Link copied. Anyone who opens it sees this scenario.</p>
+            )}
+            {shareState.status === "manual" && (
+              <label>
+                Copy this link to share the scenario
+                <input
+                  type="url"
+                  readOnly
+                  value={shareState.url}
+                  onFocus={(event) => event.currentTarget.select()}
+                />
+              </label>
+            )}
+          </div>
         </div>
       </div>
 
