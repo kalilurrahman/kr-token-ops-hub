@@ -166,11 +166,17 @@ block third-party APIs, `SMOKE_AXE=0` skips the axe pass, `SMOKE_PORT` changes t
 
 ### Releases and the version watermark
 
-The footer shows the release version (`.to-release`, e.g. `v2.1.0`). It comes from the
-`version` field in `package.json` via `src/lib/release.ts`; Vite inlines only that field. To cut
-a release, bump `package.json` `version` and add a matching `## x.y.z — Title (date)` entry at
-the top of `CHANGELOG.md` in the same change. `npm test` (`src/lib/release.test.ts`) fails if
-they disagree. Bump the version for every change that reaches production, so no two deployed
+The footer shows the release version (`.to-release`, e.g. `v2.4.0`). It comes from the
+`version` field in `package.json` via `src/lib/release.ts`; Vite inlines only that field. The
+badge links to `/changelog`, which renders `CHANGELOG.md` (one card per release, parsed by
+`src/lib/release-notes.ts`).
+
+To cut a release, run `npm run release -- <patch|minor|major|x.y.z> "Title"` (`--dry-run` to
+preview). It bumps `package.json` and both `package-lock.json` version fields and adds a
+`## x.y.z — Title (YYYY-MM-DD)` entry with a placeholder at the top of `CHANGELOG.md`; replace
+the placeholder with the notes. `npm test` (`src/lib/release.test.ts`) fails if the versions
+disagree, if changelog versions repeat or aren't newest first, or if the newest entry still has
+the placeholder. Bump the version for every change that reaches production, so no two deployed
 builds share a label. The live site's version can be checked from the footer or with
 `curl -s https://tokenops.kalilurrahman.com/ | grep -o 'v[0-9]*\.[0-9]*\.[0-9]*'`.
 

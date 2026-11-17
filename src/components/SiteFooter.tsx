@@ -59,10 +59,15 @@ export function SiteFooter() {
           </p>
           <div className="site-footer-legal-end">
             <p>© {new Date().getFullYear()} TokenOps Atlas — All rights reserved</p>
-            <p className="to-release" title={`TokenOps Atlas release ${RELEASE_LABEL}`}>
+            <Link
+              to="/changelog"
+              className="to-release"
+              title={`TokenOps Atlas release ${RELEASE_LABEL}: see what changed`}
+            >
               <span className="sr-only">Release </span>
               {RELEASE_LABEL}
-            </p>
+              <span className="sr-only">, release notes</span>
+            </Link>
           </div>
         </div>
       </div>

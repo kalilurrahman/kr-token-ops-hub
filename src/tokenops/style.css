@@ -801,3 +801,17 @@ html[data-palette="bright"] a.bg-primary:hover { background-color: color-mix(in 
 /* Release watermark (footer): version from package.json via src/lib/release.ts. */
 .site-footer-legal-end { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-2) var(--to-space-3); }
 .to-release { display: inline-flex; align-items: center; padding: 1px 8px; border: 1px solid var(--to-line-2); border-radius: 999px; font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: var(--to-ink-3); }
+/* The footer watermark links to the release notes: hover and focus feedback, and a touch target
+   of about 44px without changing the badge's size. */
+a.to-release { position: relative; text-decoration: none; transition: color var(--to-dur-fast), border-color var(--to-dur-fast); }
+a.to-release:hover { color: var(--to-ink); border-color: var(--to-ink-3); }
+a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
+/* Release notes page (/changelog), one card per CHANGELOG.md entry. */
+.release-list { display: grid; gap: var(--to-space-6); margin: 0; padding: 0; list-style: none; }
+.release-entry { border: 1px solid var(--to-line); border-radius: var(--to-radius-card); background: var(--to-surface); scroll-margin-top: calc(var(--to-header-h) + 16px); }
+.release-entry-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--to-space-2) var(--to-space-4); padding: var(--to-space-5) clamp(18px, 3vw, 40px) 0; }
+.release-entry-header h2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--to-space-3); margin: 0; font-size: var(--to-fs-h3); }
+.release-entry-meta { display: flex; align-items: center; gap: var(--to-space-3); margin: 0; color: var(--to-ink-3); font-size: var(--to-fs-small); }
+.release-entry-current { padding: 1px 8px; border-radius: 999px; background: var(--to-saving-fill); color: var(--to-saving-text); font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.release-entry-body { padding-top: var(--to-space-4); }
+.release-entry-body h3 { margin-top: var(--to-space-5); font-size: var(--to-fs-h4); }
