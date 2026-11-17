@@ -12,7 +12,6 @@ export type ThemeChoice = "dark" | "light" | "bright";
 
 export const THEME_STORAGE_KEY = "tokenops-theme-v2";
 export const DEFAULT_THEME: ThemeChoice = "dark";
-export const THEME_CHOICES: readonly ThemeChoice[] = ["dark", "light", "bright"];
 
 /** Browser chrome colour (meta theme-color) per palette — mirrors --to-bg in styles.css. */
 export const THEME_COLOR: Record<ThemeChoice, string> = {

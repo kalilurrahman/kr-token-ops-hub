@@ -15,12 +15,15 @@
  *   3. Content parity: normalized visible text of <main> equals the baseline
  *      (read with CSS text-transform neutralised and chart axis ticks hidden, so casing
  *      styles and font-dependent tick collisions are not counted as content)
- *      (the uplift must not add, drop or reword content)
+ *      (the uplift must not add, drop or reword content). /changelog is rendered from
+ *      CHANGELOG.md and grows with every release, so instead it must list every CHANGELOG.md
+ *      version, newest first, with the package.json version marked current
  *   4. Every interactive element in <main> is >= 40px tall on mobile (warn; disabled controls
  *      and links inside a sentence are exempt), and every visible text field is >= 16px on
  *      mobile (fail; smaller fields make iOS zoom on focus)
  *   5. axe-core WCAG 2 A/AA audit per palette, plus Ledger Dark at 390px (warn only; report in
  *      .smoke/axe.json)
+ *   6. The footer release watermark reads v<package.json version> (fail)
  * Screenshots go to .smoke/shots/<viewport>/<route>.png for visual review.
  */
 import { chromium } from "playwright";
@@ -73,6 +76,15 @@ const VIEWPORTS = [
 const slug = (r) => (r === "/" ? "home" : r.replace(/^\//, "").replace(/[^\w.-]+/g, "_"));
 const norm = (t) => t.replace(/\s+/g, " ").trim();
 
+// Release watermark: every page's footer shows the package.json version. /changelog is rendered
+// from CHANGELOG.md and gains an entry with every release, so instead of text parity it must list
+// every CHANGELOG.md version, newest first, with the package.json version marked current.
+const RELEASE = JSON.parse(await fs.readFile("package.json", "utf8")).version;
+const CHANGELOG_VERSIONS = [
+  ...(await fs.readFile("CHANGELOG.md", "utf8")).matchAll(/^## (\d+\.\d+\.\d+\S*)/gm),
+].map((m) => `v${m[1]}`);
+const RELEASE_NOTES_ROUTE = "/changelog";
+
 const failures = [];
 const warnings = [];
 // CHROMIUM_PATH lets CI/sandboxes reuse a pre-installed Chromium when the
@@ -101,8 +113,23 @@ for (const vp of VIEWPORTS) {
           : failures.push(`${tag} ${e}`),
       );
 
-    const { overflow, escaped, text, smallTargets, smallInputs } = await page.evaluate(() => {
+    const {
+      overflow,
+      escaped,
+      text,
+      smallTargets,
+      smallInputs,
+      watermark,
+      releaseIds,
+      currentRelease,
+    } = await page.evaluate(() => {
       const main = document.querySelector("main") ?? document.body;
+      const watermark =
+        document.querySelector("footer .to-release")?.textContent.replace(/\s+/g, " ").trim() ??
+        null;
+      const releaseIds = [...main.querySelectorAll(".release-entry")].map((el) => el.id);
+      const currentRelease =
+        main.querySelector(".release-entry-current")?.closest(".release-entry")?.id ?? null;
       // Disabled controls are not targets, and links inside a sentence are sized by its
       // line-height (WCAG 2.5.8 inline exception), so neither is counted.
       const inSentence = (el) =>
@@ -178,7 +205,16 @@ for (const vp of VIEWPORTS) {
         if (value) el.style.setProperty(prop, value, priority);
         else el.style.removeProperty(prop);
       }
-      return { overflow, escaped: escaped.slice(0, 3), text, smallTargets: small, smallInputs };
+      return {
+        overflow,
+        escaped: escaped.slice(0, 3),
+        text,
+        smallTargets: small,
+        smallInputs,
+        watermark,
+        releaseIds,
+        currentRelease,
+      };
     });
     if (overflow > 1) failures.push(`${tag} horizontal overflow ${overflow}px`);
     if (escaped.length) failures.push(`${tag} content escapes the viewport: ${escaped.join(", ")}`);
@@ -186,9 +222,21 @@ for (const vp of VIEWPORTS) {
       warnings.push(`${tag} ${smallTargets} tap targets < 40px`);
     if (vp.name === "mobile" && smallInputs > 0)
       failures.push(`${tag} ${smallInputs} text field(s) under 16px (iOS zooms on focus)`);
+    // The link reads "Release vX.Y.Z, release notes" to screen readers; compare the version.
+    if (watermark?.match(/\bv(\d+\.\d+\.\d+[\w.-]*)/)?.[1] !== RELEASE)
+      failures.push(`${tag} footer watermark reads "${watermark}", expected v${RELEASE}`);
 
     // Content parity is measured at laptop width only (mobile may collapse/abbreviate nav, not content).
-    if (vp.name === "laptop") {
+    if (vp.name === "laptop" && route === RELEASE_NOTES_ROUTE) {
+      if (releaseIds.join() !== CHANGELOG_VERSIONS.join())
+        failures.push(
+          `${tag} lists ${releaseIds.length} releases (${releaseIds.slice(0, 2).join(", ")}…), CHANGELOG.md has ${CHANGELOG_VERSIONS.length} (${CHANGELOG_VERSIONS.slice(0, 2).join(", ")}…)`,
+        );
+      if (currentRelease !== `v${RELEASE}`)
+        failures.push(
+          `${tag} marks ${currentRelease} as the current release, expected v${RELEASE}`,
+        );
+    } else if (vp.name === "laptop") {
       const file = path.join(OUT, "baseline", `${slug(route)}.txt`);
       if (BASELINE) {
         await fs.mkdir(path.dirname(file), { recursive: true });
