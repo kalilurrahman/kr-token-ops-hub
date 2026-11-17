@@ -1,11 +1,13 @@
 # Changelog
 
-## 2.4.1 — Working links between library documents (2026-11-17)
+## 2.4.2 — Working links between library documents (2026-11-17)
 
 ### Added
 
 - `npm run smoke` checks the release watermark on every page at every width: the footer must
-  read `v<package.json version>`, so a stale build or cached shell shows up as a failure.
+  show `v<package.json version>`, so a stale build or cached shell fails instead of passing.
+- `/changelog`, exempt from text parity since 2.4.1, is now checked against `CHANGELOG.md`: it
+  must list every version, newest first, with the `package.json` version marked current.
 
 ### Fixed
 
@@ -20,14 +22,29 @@
   root-relative links are unchanged, as are the guide and sample chapter.
 - A test renders all 72 library and template documents and fails if any link points at a
   missing reader page, so new content can't add dead links (6 tests).
-- `npm run smoke` failed on every release since 2.4.0: it compared `/changelog`, which gains an
-  entry with each release, against the previous release's text. That page is now checked
-  against `CHANGELOG.md` instead: it must list every version, newest first, with the
-  `package.json` version marked current.
 
 ### Removed
 
 - `THEME_CHOICES` in `src/lib/theme.ts`, which nothing used.
+
+## 2.4.1 — Watermark opens its own release notes (2026-11-17)
+
+### Changed
+
+- The footer version watermark links straight to its own entry on `/changelog`
+  (`/changelog#v2.4.1`) instead of the top of the page.
+- `npm run smoke -- --baseline` skips routes that the baseline build does not have (HTTP 404)
+  with a warning, so a baseline rebuilt from the pre-uplift commit reports "no baseline" for
+  `/changelog` instead of recording a 404 page that later fails content parity.
+- `/changelog` is exempt from smoke's content-parity check (`PARITY_EXEMPT`): its text is the
+  release log, which every release extends, so parity failed every release PR against a `main`
+  baseline. It keeps the HTTP, console, overflow, tap-target, field-size and axe checks.
+
+### Removed
+
+- `screenshot.js` and `screenshot.cjs`: identical one-off scripts from May that nothing ran or
+  referenced, pointing at the old `lovable.app` URL (the `.js` copy could not run in this ES
+  module package). `npm run smoke` takes the section screenshots (`.smoke/shots`).
 
 ## 2.4.0 — Release notes page and release tooling (2026-11-17)
 

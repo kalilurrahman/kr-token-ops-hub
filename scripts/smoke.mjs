@@ -39,6 +39,9 @@ const IGNORE_CONSOLE = process.env.SMOKE_IGNORE_CONSOLE
   ? new RegExp(process.env.SMOKE_IGNORE_CONSOLE)
   : null;
 const OUT = ".smoke";
+// Pages whose text is generated from the release log change with every release by design, so
+// content parity would fail on every release PR. They keep every other check.
+const PARITY_EXEMPT = new Set(["/changelog"]);
 const ROUTES = [
   "/",
   "/hub",
@@ -77,8 +80,8 @@ const slug = (r) => (r === "/" ? "home" : r.replace(/^\//, "").replace(/[^\w.-]+
 const norm = (t) => t.replace(/\s+/g, " ").trim();
 
 // Release watermark: every page's footer shows the package.json version. /changelog is rendered
-// from CHANGELOG.md and gains an entry with every release, so instead of text parity it must list
-// every CHANGELOG.md version, newest first, with the package.json version marked current.
+// from CHANGELOG.md and exempt from text parity (PARITY_EXEMPT); instead it must list every
+// CHANGELOG.md version, newest first, with the package.json version marked current.
 const RELEASE = JSON.parse(await fs.readFile("package.json", "utf8")).version;
 const CHANGELOG_VERSIONS = [
   ...(await fs.readFile("CHANGELOG.md", "utf8")).matchAll(/^## (\d+\.\d+\.\d+\S*)/gm),
@@ -104,7 +107,16 @@ for (const vp of VIEWPORTS) {
     });
     const res = await page.goto(BASE + route, { waitUntil: "networkidle" });
     const tag = `[${vp.name}] ${route}`;
-    if (!res || res.status() !== 200) failures.push(`${tag} HTTP ${res?.status()}`);
+    if (!res || res.status() !== 200) {
+      // A baseline build may predate a route (e.g. /changelog, added in 2.4.0): skip it there so
+      // later runs report "no baseline" instead of comparing against a 404 page.
+      if (BASELINE) {
+        warnings.push(`${tag} HTTP ${res?.status()} in the baseline build; no baseline written`);
+        await page.close();
+        continue;
+      }
+      failures.push(`${tag} HTTP ${res?.status()}`);
+    }
     errors
       .filter((e) => !/favicon|manifest/.test(e))
       .forEach((e) =>
@@ -236,7 +248,8 @@ for (const vp of VIEWPORTS) {
         failures.push(
           `${tag} marks ${currentRelease} as the current release, expected v${RELEASE}`,
         );
-    } else if (vp.name === "laptop") {
+    }
+    if (vp.name === "laptop" && !PARITY_EXEMPT.has(route)) {
       const file = path.join(OUT, "baseline", `${slug(route)}.txt`);
       if (BASELINE) {
         await fs.mkdir(path.dirname(file), { recursive: true });

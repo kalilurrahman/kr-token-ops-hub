@@ -155,10 +155,9 @@ overflow (including elements escaping the viewport, which the `html, body { over
 guard would otherwise hide), mobile tap targets under 40px (warning; disabled controls and
 links inside a sentence are exempt), and content parity against
 `.smoke/baseline` at 1440px. Parity reads authored text: CSS `text-transform` is neutralised and
-Recharts axis ticks (whose visibility depends on font metrics) are ignored. `/changelog` grows
-with every release, so instead of parity it must list every `CHANGELOG.md` version, newest
-first, with the `package.json` version marked current; and on every route the footer watermark
-must read `v<package.json version>`. An axe-core pass
+Recharts axis ticks (whose visibility depends on font metrics) are ignored (`/changelog` has its
+own check, below). On every route and width the footer watermark must read
+`v<package.json version>`. An axe-core pass
 (WCAG 2 A/AA in Ledger Dark, colour contrast in the light palettes) adds warnings and writes
 `.smoke/axe.json`.
 
@@ -199,6 +198,14 @@ In a second shell from the repo root (using this branch's `scripts/smoke.mjs`):
 ```bash
 BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
 ```
+
+Routes added after that commit (`/changelog` and others) return 404 there, so `--baseline` skips
+them with a warning and later runs report "no baseline" for them instead of a parity failure.
+
+`/changelog` is exempt from content parity (`PARITY_EXEMPT` in `scripts/smoke.mjs`): its text is
+`CHANGELOG.md`, which every release extends, so a parity check would fail every release PR.
+Instead it must list every `CHANGELOG.md` version, newest first, with the `package.json` version
+marked current, and it keeps the HTTP, console, overflow, tap-target, field-size and axe checks.
 
 ## Accessibility status (v2.0.0)
 
