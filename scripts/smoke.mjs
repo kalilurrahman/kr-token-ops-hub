@@ -36,6 +36,9 @@ const IGNORE_CONSOLE = process.env.SMOKE_IGNORE_CONSOLE
   ? new RegExp(process.env.SMOKE_IGNORE_CONSOLE)
   : null;
 const OUT = ".smoke";
+// Pages whose text is generated from the release log change with every release by design, so
+// content parity would fail on every release PR. They keep every other check.
+const PARITY_EXEMPT = new Set(["/changelog"]);
 const ROUTES = [
   "/",
   "/hub",
@@ -92,7 +95,16 @@ for (const vp of VIEWPORTS) {
     });
     const res = await page.goto(BASE + route, { waitUntil: "networkidle" });
     const tag = `[${vp.name}] ${route}`;
-    if (!res || res.status() !== 200) failures.push(`${tag} HTTP ${res?.status()}`);
+    if (!res || res.status() !== 200) {
+      // A baseline build may predate a route (e.g. /changelog, added in 2.4.0): skip it there so
+      // later runs report "no baseline" instead of comparing against a 404 page.
+      if (BASELINE) {
+        warnings.push(`${tag} HTTP ${res?.status()} in the baseline build; no baseline written`);
+        await page.close();
+        continue;
+      }
+      failures.push(`${tag} HTTP ${res?.status()}`);
+    }
     errors
       .filter((e) => !/favicon|manifest/.test(e))
       .forEach((e) =>
@@ -188,7 +200,7 @@ for (const vp of VIEWPORTS) {
       failures.push(`${tag} ${smallInputs} text field(s) under 16px (iOS zooms on focus)`);
 
     // Content parity is measured at laptop width only (mobile may collapse/abbreviate nav, not content).
-    if (vp.name === "laptop") {
+    if (vp.name === "laptop" && !PARITY_EXEMPT.has(route)) {
       const file = path.join(OUT, "baseline", `${slug(route)}.txt`);
       if (BASELINE) {
         await fs.mkdir(path.dirname(file), { recursive: true });

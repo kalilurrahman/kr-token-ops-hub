@@ -197,6 +197,13 @@ In a second shell from the repo root (using this branch's `scripts/smoke.mjs`):
 BASE_URL=http://127.0.0.1:4174 node scripts/smoke.mjs --baseline
 ```
 
+Routes added after that commit (`/changelog` and others) return 404 there, so `--baseline` skips
+them with a warning and later runs report "no baseline" for them instead of a parity failure.
+
+`/changelog` is exempt from content parity (`PARITY_EXEMPT` in `scripts/smoke.mjs`): its text is
+`CHANGELOG.md`, which every release extends, so a parity check would fail every release PR. It
+keeps the HTTP, console, overflow, tap-target, field-size and axe checks.
+
 ## Accessibility status (v2.0.0)
 
 - axe-core WCAG 2 A/AA (smoke step): no violations on 24 routes; colour contrast checked in all
