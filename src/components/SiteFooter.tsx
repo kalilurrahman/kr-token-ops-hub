@@ -2,7 +2,7 @@ import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
-import { RELEASE_LABEL } from "@/lib/release";
+import { RELEASE_LABEL, RELEASE_VERSION } from "@/lib/release";
 
 export function SiteFooter() {
   return (
@@ -61,6 +61,7 @@ export function SiteFooter() {
             <p>© {new Date().getFullYear()} TokenOps Atlas — All rights reserved</p>
             <Link
               to="/changelog"
+              hash={`v${RELEASE_VERSION}`}
               className="to-release"
               title={`TokenOps Atlas release ${RELEASE_LABEL}: see what changed`}
             >

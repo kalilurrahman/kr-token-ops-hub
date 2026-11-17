@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.4.1 — Watermark opens its own release notes (2026-11-17)
+
+### Changed
+
+- The footer version watermark links straight to its own entry on `/changelog`
+  (`/changelog#v2.4.1`) instead of the top of the page.
+- `npm run smoke -- --baseline` skips routes that the baseline build does not have (HTTP 404)
+  with a warning, so a baseline rebuilt from the pre-uplift commit reports "no baseline" for
+  `/changelog` instead of recording a 404 page that later fails content parity.
+- `/changelog` is exempt from smoke's content-parity check (`PARITY_EXEMPT`): its text is the
+  release log, which every release extends, so parity failed every release PR against a `main`
+  baseline. It keeps the HTTP, console, overflow, tap-target, field-size and axe checks.
+
+### Removed
+
+- `screenshot.js` and `screenshot.cjs`: identical one-off scripts from May that nothing ran or
+  referenced, pointing at the old `lovable.app` URL (the `.js` copy could not run in this ES
+  module package). `npm run smoke` takes the section screenshots (`.smoke/shots`).
+
 ## 2.4.0 — Release notes page and release tooling (2026-11-17)
 
 ### Added
