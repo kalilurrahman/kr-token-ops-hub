@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.10.0 — Agent trace token-waste analyser (2026-11-19)
+
+### Changed
+
+- The AI adviser on Models and Techniques briefings can now analyse an uploaded or pasted agent-run trace (up to 60 KB), point out token-waste patterns with evidence from the trace, and give prioritised recommendations. The trace is not stored.
+
 ## 2.9.0 — Agent loop cost calculator and briefing (2026-11-19)
 
 ### Changed
