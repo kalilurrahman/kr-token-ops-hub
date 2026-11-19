@@ -1,6 +1,8 @@
 import { test } from "node:test";
 import { strict as assert } from "node:assert";
+import { readFileSync } from "node:fs";
 import { marked } from "marked";
+import documents from "../tokenops/documents.json";
 import { renderMarkdown } from "./markdown";
 
 const strip = (html: string) =>
@@ -49,4 +51,46 @@ test("long-form tables are keyboard-focusable (they scroll sideways on phones)",
   const html = renderMarkdown("| Model | Price |\n| --- | --- |\n| A | 1 |\n");
   assert.match(html, /<table tabindex="0">/);
   assert.doesNotMatch(html, /<table>/);
+});
+
+test("headings get unique GitHub-style ids, and h2/h3 text links to its own section", () => {
+  const html = renderMarkdown(
+    "# Title\n\n## Part 1: Foundations\n\n## Part 1: Foundations\n\n### Unit Economics & Metrics\n\n## [Linked](https://x.test)\n\n#### Deep `code`\n",
+  );
+  assert.match(html, /<h1 id="title">Title<\/h1>/);
+  assert.match(
+    html,
+    /<h2 id="part-1-foundations"><a class="heading-link" href="#part-1-foundations">Part 1: Foundations<\/a><\/h2>/,
+  );
+  assert.match(html, /<h2 id="part-1-foundations-1">/);
+  assert.match(html, /<h3 id="unit-economics--metrics"><a class="heading-link"/);
+  assert.match(html, /<h2 id="linked"><a href="https:\/\/x\.test">Linked<\/a><\/h2>/);
+  assert.match(html, /<h4 id="deep-code">Deep <code>code<\/code><\/h4>/);
+});
+
+test("ids restart for each document and can be turned off", () => {
+  const source = "## Added\n\n## Added\n";
+  assert.equal(renderMarkdown(source), renderMarkdown(source));
+  assert.match(renderMarkdown(source), /id="added-1"/);
+  assert.doesNotMatch(renderMarkdown(source, undefined, { headingIds: false }), /id=|heading-link/);
+});
+
+test("every in-page # link in the guide, sample chapter and library documents resolves", () => {
+  const read = (path: string) => readFileSync(new URL(path, import.meta.url), "utf8");
+  const sources: [string, string][] = [
+    ["guide.md", read("../tokenops/guide.md")],
+    ["sample chapter", read("../../content/sample-chapter-prompt-caching.md")],
+    ...Object.entries(documents.library).filter(([key]) => key.endsWith(".md")),
+    ...Object.entries(documents.templates).filter(([key]) => key.endsWith(".md")),
+  ];
+  const broken: string[] = [];
+  for (const [name, markdown] of sources) {
+    const html = renderMarkdown(markdown);
+    const ids = new Set([...html.matchAll(/ id="([^"]+)"/g)].map((match) => match[1]));
+    for (const [, target] of html.matchAll(/href="#([^"]+)"/g)) {
+      if (!ids.has(decodeURIComponent(target))) broken.push(`${name} → #${target}`);
+    }
+  }
+  assert.ok(sources.length > 50, `expected the full content pack, got ${sources.length}`);
+  assert.deepEqual(broken, []);
 });

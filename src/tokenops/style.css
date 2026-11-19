@@ -816,6 +816,15 @@ html[data-palette="bright"] a.bg-primary:hover { background-color: color-mix(in 
 a.to-release { position: relative; text-decoration: none; transition: color var(--to-dur-fast), border-color var(--to-dur-fast); }
 a.to-release:hover { color: var(--to-ink); border-color: var(--to-ink-3); }
 a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
+/* Section links (src/lib/markdown.ts): an h2/h3's text links to its own section. It reads as a
+   plain heading; a "#" (generated, so page text is unchanged) shows on hover and keyboard focus,
+   and faintly on touch screens, which have no hover. */
+:is(.guide, .reader-article) a.heading-link { color: inherit; text-decoration: none; }
+.heading-link::after { content: "#"; margin-left: 0.35em; color: var(--to-ink-3); opacity: 0; transition: opacity var(--to-dur-fast); }
+.heading-link:hover::after, .heading-link:focus-visible::after { opacity: 1; }
+@media (hover: none) { .heading-link::after { opacity: 0.5; } }
+/* Phones: taller touch area via vertical padding, which an inline link adds without moving text. */
+@media (max-width: 767px) { :is(.guide, .reader-article) a.heading-link { padding-block: 0.45em; } }
 /* Calculator result actions: CSV download and the shareable scenario link. */
 .result-actions { display: flex; flex-wrap: wrap; gap: var(--to-space-3); }
 .result-actions > * { white-space: nowrap; }
@@ -853,6 +862,7 @@ a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
   .guide table, .reader-article table, .advice-output > table { display: table; overflow: visible; }
   .guide pre, .reader-article pre { white-space: pre-wrap; overflow: visible; }
   h1, h2, h3, h4 { break-after: avoid; }
+  .heading-link::after { content: none; }
   pre, table, blockquote, img, figure, .release-entry, .metric-row { break-inside: avoid; }
   /* On paper a link can't be clicked: print where external links go. */
   .guide a[href^="http"]::after, .reader-article a[href^="http"]::after {
