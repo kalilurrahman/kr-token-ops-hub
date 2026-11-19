@@ -57,7 +57,9 @@ function ChangelogPage() {
             </header>
             <div
               className="reader-article release-entry-body"
-              dangerouslySetInnerHTML={{ __html: renderMarkdown(release.body) }}
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(release.body, undefined, { headingIds: false }),
+              }}
             />
           </li>
         ))}

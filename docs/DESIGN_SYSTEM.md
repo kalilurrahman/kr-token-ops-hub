@@ -99,7 +99,8 @@ Garamond are gone and the token check rejects them.
   on mobile), `.reader-toolbar-title` (sticky from 768px). Lists show markers (disc, `circle`
   when nested, decimal) indented 1.5em, since Tailwind's preflight removes them. A table of
   contents (`li.link-item` rows linking to a `#` anchor) and a top-level checklist stay
-  unmarked and flush with the text.
+  unmarked and flush with the text. Headings get GitHub-style ids from `renderMarkdown`; an h2/h3's text
+  links to its own section (`a.heading-link`, a CSS "#" on hover and focus).
 
 ### Navigation
 
