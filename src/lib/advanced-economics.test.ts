@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import { strict as assert } from "node:assert";
-import { calculateDecisionEconomics, calculateWikiEconomics } from "./advanced-economics";
+import {
+  calculateAgentLoopCost,
+  calculateDecisionEconomics,
+  calculateWikiEconomics,
+} from "./advanced-economics";
 import pricing from "../../data/pricing.json";
 
 test("Jev input-only billing uses $0.042/M and no output charge", () => {
@@ -59,4 +63,38 @@ test("routing retains every fallback when no decisions are resolved", () => {
       }).optimized - 100.0042,
     ) < 1e-8,
   );
+});
+
+test("agent loop input grows with resent transcript", () => {
+  const r = calculateAgentLoopCost({
+    turns: 4,
+    initialContextTokens: 1000,
+    addedTokensPerTurn: 400,
+    outputTokensPerTurn: 100,
+    inputPrice: 2,
+    outputPrice: 10,
+    cachedInputPrice: 0.2,
+    cacheHitPercent: 0,
+    compactEveryTurns: 0,
+  });
+  assert.equal(r.inputTokens, 1000 + 1500 + 2000 + 2500);
+  assert.equal(r.outputTokens, 400);
+  assert.ok(Math.abs(r.naive - (7000 * 2 + 400 * 10) / 1e6) < 1e-12);
+  assert.equal(r.cachedCompacted, r.naive);
+});
+
+test("agent loop compaction resets transcript and cache discounts input", () => {
+  const r = calculateAgentLoopCost({
+    turns: 4,
+    initialContextTokens: 1000,
+    addedTokensPerTurn: 400,
+    outputTokensPerTurn: 100,
+    inputPrice: 2,
+    outputPrice: 10,
+    cachedInputPrice: 0.2,
+    cacheHitPercent: 50,
+    compactEveryTurns: 2,
+  });
+  assert.equal(r.compactedInputTokens, 1000 + 1500 + 1000 + 1500);
+  assert.ok(Math.abs(r.cached - (7000 * 0.5 * 2 + 7000 * 0.5 * 0.2 + 4000) / 1e6) < 1e-12);
 });

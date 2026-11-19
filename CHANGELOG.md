@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.8.1 — Correct payback on the Hub (2026-11-19)
+## 2.10.1 — Correct payback on the Hub (2026-11-19)
 
 ### Fixed
 
@@ -10,6 +10,19 @@
   by the monthly savings, the same formula as the `/calculator` page. Only this figure changes;
   the savings figures were already right. The formula and the $15,000 assumption now live in
   `src/lib/hub-payback.ts` (3 tests, including the old formula as a regression check).
+
+## 2.10.0 — Agent trace token-waste analyser (2026-11-19)
+
+### Changed
+
+- The AI adviser on Models and Techniques briefings can now analyse an uploaded or pasted agent-run trace (up to 60 KB), point out token-waste patterns with evidence from the trace, and give prioritised recommendations. The trace is not stored.
+
+## 2.9.0 — Agent loop cost calculator and briefing (2026-11-19)
+
+### Changed
+
+- New Agent loop cost calculator on the Calculators page: compares no controls, prompt caching, and caching plus compaction for multi-turn agents.
+- New briefing "Agent loop economics" explaining why agent costs grow with the square of turns and the four controls that bound them.
 
 ## 2.8.0 — Section links in long-form pages (2026-11-19)
 

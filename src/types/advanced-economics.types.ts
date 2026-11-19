@@ -14,3 +14,15 @@ export interface WikiEconomicsInput {
   inputPrice: number;
   maintenanceCost: number;
 }
+
+export interface AgentLoopInput {
+  turns: number;
+  initialContextTokens: number;
+  addedTokensPerTurn: number;
+  outputTokensPerTurn: number;
+  inputPrice: number;
+  outputPrice: number;
+  cachedInputPrice: number;
+  cacheHitPercent: number;
+  compactEveryTurns: number;
+}

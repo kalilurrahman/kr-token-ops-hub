@@ -548,8 +548,22 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
   const [advice, setAdvice] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [trace, setTrace] = useState("");
 
-  const submit = async (mode: "portfolio" | "strategies") => {
+  const loadTrace = async (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 60000) {
+      setError("Trace files must be under 60 KB. Trim the run or keep the most expensive turns.");
+      return;
+    }
+    setTrace(await file.text());
+  };
+
+  const submit = async (mode: "portfolio" | "strategies" | "trace") => {
+    if (mode === "trace" && trace.trim().length < 50) {
+      setError("Upload or paste an agent-run trace (at least 50 characters).");
+      return;
+    }
     if (workload.trim().length < 20) {
       setError("Describe the workload in at least 20 characters.");
       return;
@@ -559,7 +573,17 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
     setError("");
     try {
       const result = await recommend({
-        data: { workload, volume, contextSize, latency, risk, priority, currentBriefing, mode },
+        data: {
+          workload,
+          volume,
+          contextSize,
+          latency,
+          risk,
+          priority,
+          currentBriefing,
+          mode,
+          ...(mode === "trace" ? { trace } : {}),
+        },
       });
       setAdvice(result.advice);
     } catch (caught) {
@@ -649,6 +673,37 @@ function WorkloadAdviser({ currentBriefing }: { currentBriefing: string }) {
           disabled={loading}
         >
           Compare optimization strategies
+        </Button>
+      </div>
+      <div className="mt-6 grid gap-2">
+        <label className="grid gap-2 font-semibold text-[var(--ink)]">
+          Agent-run trace (JSON, JSONL or text log, up to 60 KB)
+          <input
+            type="file"
+            accept=".json,.jsonl,.txt,.log,.md"
+            onChange={(event) => void loadTrace(event.target.files?.[0])}
+          />
+        </label>
+        <textarea
+          aria-label="Agent-run trace"
+          className="min-h-28 rounded-md p-3 font-mono text-sm"
+          value={trace}
+          onChange={(event) => setTrace(event.target.value)}
+          maxLength={60000}
+          placeholder="Or paste turns, tool calls and token usage here. Remove secrets and personal data first."
+        />
+        <p className="text-xs text-[var(--muted)]">
+          The trace is sent to the AI model for this analysis only and is not stored.
+        </p>
+      </div>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => void submit("trace")}
+          disabled={loading}
+        >
+          Find token waste in trace
         </Button>
         <span className="text-xs text-[var(--muted)]">
           AI-assisted guidance; validate with provider terms and controlled evaluation.

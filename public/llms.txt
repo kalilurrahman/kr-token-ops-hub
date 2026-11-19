@@ -26,7 +26,7 @@ optimizing prompts and models, and operationalizing governance.
 - [Dashboard](/dashboard): Sample operational dashboard.
 - [Hub](/hub): Calculators, glossary, and operating manual entry.
 - [Glossary](/glossary): TokenOps terminology.
-- [Content library](/library): 65 guides, playbooks, checklists, references, and templates, searchable by full text; each opens in the reader at /read/library/<path>.
+- [Content library](/library): 66 guides, playbooks, checklists, references, and templates, searchable by full text; each opens in the reader at /read/library/<path>.
 - [Reading lists](/reading-lists): Private collections of model and technique briefings, stored on the reader's device.
 - [Training](/training): Short interactive TokenOps courses: a cost-cutting decision simulation, a knowledge check and a template to keep.
 - [Resources](/resources): Documents and starter artifacts.

@@ -13,7 +13,7 @@ test("savings under $1 a month count as $1 instead of dividing by zero", () => {
   assert.equal(paybackMonths(15_000, 0.25), 15_000);
 });
 
-test("regression: payback is not 12× too long (the pre-2.8.1 Hub formula)", () => {
+test("regression: payback is not 12× too long (the pre-2.10.1 Hub formula)", () => {
   const monthlySavings = 5_000;
   const old = HUB_IMPLEMENTATION_COST / Math.max(monthlySavings / 12, 1);
   assert.equal(old, 36);

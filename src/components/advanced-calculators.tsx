@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { calculateDecisionEconomics, calculateWikiEconomics } from "@/lib/advanced-economics";
 import { hostedModelOptions } from "@/tokenops/data";
+import { AgentLoopCalculator } from "@/components/agent-loop-calculator";
 
-const dollars = (value: number) =>
+export const dollars = (value: number) =>
   value.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
-function NumberField({
+export function NumberField({
   label,
   value,
   onChange,
@@ -34,7 +35,7 @@ function NumberField({
   );
 }
 
-function Result({ label, value }: { label: string; value: string }) {
+export function Result({ label, value }: { label: string; value: string }) {
   return (
     <div className="row">
       <span>{label}</span>
@@ -48,6 +49,7 @@ export function AdvancedCalculators() {
     <>
       <DecisionCalculator />
       <WikiCalculator />
+      <AgentLoopCalculator />
     </>
   );
 }
