@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useId, useMemo, useState } from "react";
 import pricingData from "../../data/pricing.json";
+import { HUB_IMPLEMENTATION_COST, paybackMonths } from "@/lib/hub-payback";
 
 // PRESETS and MODELS are DERIVED from data/pricing.json — the single pricing
 // source of truth for the site. See data/README.md.
@@ -244,7 +245,7 @@ function SavingsCalc() {
     );
     const optimized = baseline - totalSave;
     const savePct = baseline ? totalSave / baseline : 0;
-    const payback = 15000 / Math.max(totalSave / 12, 1);
+    const payback = paybackMonths(HUB_IMPLEMENTATION_COST, totalSave); // totalSave is monthly
     const levers = [
       { name: "Semantic caching", save: cacheSave, color: "var(--green)" },
       { name: "Model tiering", save: tierSave, color: "var(--gold)" },
