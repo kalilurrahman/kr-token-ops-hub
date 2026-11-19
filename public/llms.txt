@@ -20,16 +20,20 @@ optimizing prompts and models, and operationalizing governance.
 - [Caveman compression](/caveman): The telegram-style prompt method.
 - [Prompt templates](/prompt-templates): Copy-paste scaffolds and checklists.
 - [Optimization patterns](/patterns): Reusable recipes for reducing waste.
+- [Model comparison matrix](/models): Current proprietary, open-weight, and open-source models by capability, context, pricing, deployment, licence, and recommended workload.
 - [Toolkit](/toolkit): Interactive tools and calculators overview.
 - [Cost calculator](/calculator): Model spend calculator.
 - [Dashboard](/dashboard): Sample operational dashboard.
 - [Hub](/hub): Calculators, glossary, and operating manual entry.
 - [Glossary](/glossary): TokenOps terminology.
-- [Content library](/library): 44 guides, playbooks, checklists, references, and templates.
+- [Content library](/library): 65 guides, playbooks, checklists, references, and templates, searchable by full text; each opens in the reader at /read/library/<path>.
+- [Reading lists](/reading-lists): Private collections of model and technique briefings, stored on the reader's device.
+- [Training](/training): Short interactive TokenOps courses: a cost-cutting decision simulation, a knowledge check and a template to keep.
 - [Resources](/resources): Documents and starter artifacts.
 - [Templates](/templates): Starter operating artifacts.
 - [Sources](/sources): Reference material.
+- [Release notes](/changelog): What changed in each version of TokenOps Atlas.
 
 ## Optional
 
-- [Sitemap](/sitemap.xml): Machine-readable list of all public routes.
+- [Sitemap](/sitemap.xml): Machine-readable list of all public pages and every library and template document.
