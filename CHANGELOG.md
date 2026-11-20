@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.12.0 — Saved calculator scenario comparisons (2026-11-20)
+
+### Changed
+
+- Save named snapshots of inputs and results from any calculator in private device-local storage, select snapshots for side-by-side comparison, and delete saved scenarios. Mobile comparisons stack vertically; saved prices remain historical snapshots.
+
 ## 2.11.0 — Quality-adjusted optimization calculators (2026-11-20)
 
 ### Changed

@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Download, Link2 } from "lucide-react";
 import { AdvancedCalculators } from "@/components/advanced-calculators";
 import { OptimizationCalculators } from "@/components/optimization-calculators";
+import { ScenarioComparison } from "@/components/scenario-comparison";
 import {
   providerPresets,
   exportScenarioCSV,
@@ -283,6 +284,7 @@ function CalculatorPage() {
       </div>
 
       <div className="calc-stack">
+        <ScenarioComparison />
         <OptimizationCalculators />
         <AdvancedCalculators />
         <RAGCalculator />

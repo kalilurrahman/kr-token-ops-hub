@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Save calculator snapshots privately on this device and compare scenarios side by side.
+
 - [x] Add and validate quality-adjusted retry, tool-payload reduction, and batch-processing calculators within the requested 4.5-credit scope.
 
 - [x] Deliver the November refresh: verified model entries, Jev and LLM Wiki guidance, decision-routing and knowledge-maintenance calculators, linked resources, and focused validation within the requested five-credit scope.
