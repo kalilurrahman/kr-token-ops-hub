@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.11.0 — Quality-adjusted optimization calculators (2026-11-20)
+
+### Changed
+
+- Added quality-adjusted task costs with bounded retries, tool-result trimming economics, and batch-processing break-even calculators using the existing hosted-model catalogue.
+- Included recurring overhead, explicit assumptions and trade-offs, zero-success handling, and five arithmetic regression tests. The Calculators page now contains thirteen calculators.
+
 ## 2.10.1 — Correct payback on the Hub (2026-11-19)
 
 ### Fixed

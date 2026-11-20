@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Download, Link2 } from "lucide-react";
 import { AdvancedCalculators } from "@/components/advanced-calculators";
+import { OptimizationCalculators } from "@/components/optimization-calculators";
 import {
   providerPresets,
   exportScenarioCSV,
@@ -33,13 +34,13 @@ export const Route = createFileRoute("/calculator")({
       {
         name: "description",
         content:
-          "Estimate November model pricing, typed decision routing, LLM Wiki maintenance, caching, and self-hosted economics.",
+          "Estimate quality-adjusted retry costs, tool-result trimming, batch break-even, model routing, caching, and self-hosted economics.",
       },
       { property: "og:title", content: "TokenOps model and knowledge cost calculators" },
       {
         property: "og:description",
         content:
-          "Compare decision routing, LLM Wiki amortization, hosted models and infrastructure costs.",
+          "Compare retries, tool-payload reduction, batch processing, decision routing, maintained knowledge and infrastructure costs.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -144,8 +145,9 @@ function CalculatorPage() {
         <p className="eyebrow">Calculators</p>
         <h1>TokenOps Savings Calculator</h1>
         <p>
-          Nine calculators backed by the model catalogue updated {pricingReviewedDate}: decision
-          routing, maintained knowledge, blended savings, RAG, routing, budget, caching, self-hosted
+          Thirteen calculators using the model catalogue updated {pricingReviewedDate}: blended
+          savings, decision routing, maintained knowledge, agent loops, quality-adjusted retries,
+          tool-result trimming, batch processing, RAG, routing, budget, caching, self-hosted
           economics, and total cost of ownership.
         </p>
       </div>
@@ -281,6 +283,7 @@ function CalculatorPage() {
       </div>
 
       <div className="calc-stack">
+        <OptimizationCalculators />
         <AdvancedCalculators />
         <RAGCalculator />
         <RoutingCalculator />
