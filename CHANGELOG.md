@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.13.1 — Link to VERITRAIL's AI cost governance practice (2026-11-26)
+
+### Changed
+
+- The Home hero and the footer add a secondary link, "AI cost governance at VERITRAIL", beside the "Book an AI cost governance review" button. It opens VERITRAIL's AI cost governance practice page (https://veritrail.kalilurrahman.com/practice/ai-cost), which is now live. It is styled as an underlined text link in the link colour, 44 px tall so it is a full tap target, and is left out of printouts like the other calls to action. No other copy, figure or route changed.
+
 ## 2.13.0 — AI cost governance reviews with VERITRAIL; dated pricing pages (2026-11-26)
 
 ### Changed

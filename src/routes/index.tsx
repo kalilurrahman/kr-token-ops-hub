@@ -12,7 +12,7 @@ import {
   Layers,
   ClipboardList,
 } from "lucide-react";
-import { ReviewCta } from "@/components/ReviewCta";
+import { PracticeLink, ReviewCta } from "@/components/ReviewCta";
 import { operatingPillars, playbook } from "@/tokenops/data";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
@@ -98,6 +98,7 @@ function Index() {
               className="primary-action"
               after={<ArrowRight size={17} aria-hidden="true" />}
             />
+            <PracticeLink />
             <Link className="secondary-action" to="/dashboard">
               View dashboard
             </Link>

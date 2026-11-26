@@ -1,7 +1,7 @@
 import { CalendarCheck, Github, Linkedin, Twitter, Mail, Heart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { ReviewCta } from "@/components/ReviewCta";
+import { PracticeLink, ReviewCta } from "@/components/ReviewCta";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 import { RELEASE_LABEL, RELEASE_VERSION } from "@/lib/release";
 
@@ -30,6 +30,7 @@ export function SiteFooter() {
               className="to-btn-gold site-footer-cta"
               before={<CalendarCheck size={16} strokeWidth={1.75} aria-hidden="true" />}
             />
+            <PracticeLink />
           </div>
 
           <nav className="site-footer-nav" aria-label="Footer">
