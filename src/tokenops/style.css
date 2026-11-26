@@ -855,6 +855,16 @@ a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
 /* Footer call to action (VERITRAIL review) */
 .site-footer-cta { max-width: 100%; white-space: normal; text-align: left; line-height: 1.3; }
 
+/* Secondary text link beside a primary call to action (VERITRAIL practice page, ReviewCta.tsx):
+   sky = links, underlined like links in prose; 44px tall so it is a full tap target. */
+.to-secondary-link {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; max-width: 100%;
+  color: var(--to-info-text); font: 500 var(--to-fs-small)/1.3 var(--font-sans);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+  transition: color var(--to-dur-fast) var(--to-ease);
+}
+.to-secondary-link:hover { color: var(--to-ink); }
+
 /* =====================================================================
    Print and "Save as PDF" (colours come from the print tokens in src/styles.css)
    ===================================================================== */
@@ -864,7 +874,7 @@ a.to-release::after { content: ""; position: absolute; inset: -12px -8px; }
   /* Site chrome and controls don't print. The footer keeps only its bottom row, so every
      printout ends with the copyright and the release watermark (v<version>). */
   .to-bg-glow, .to-bg-grid, .site-header, .to-tabbar, .reader-toolbar, .site-footer-grid,
-  button, .primary-action, .secondary-action, .download-btn, .to-btn-gold, [data-slot="button"],
+  button, .primary-action, .secondary-action, .to-secondary-link, .download-btn, .to-btn-gold, [data-slot="button"],
   .result-actions, .result-share-status, .reader-actions, .reader-icon-btn { display: none; }
   .site-footer { padding: 0; border: 0; background: none; }
   .site-footer-legal { margin-top: var(--to-space-6); }
