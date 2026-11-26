@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- Redirect page for a merged site. Use it when the old site's paths do not exist on the new one
+     (Lovable aliases keep the path, which would land on 404s). Replace HOME and MAP, keep everything else.
+     In a Lovable/Vite project: put this as index.html, delete src/, or ask Lovable to "replace the whole app with this page". -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>This page has moved</title>
+  <!-- HOME is also the no-JavaScript fallback -->
+  <meta http-equiv="refresh" content="0; url=https://industrybizcapability.kalilurrahman.com/library/finance">
+  <link rel="canonical" href="https://industrybizcapability.kalilurrahman.com/library/finance">
+  <script>
+    (function () {
+      var HOME = "https://industrybizcapability.kalilurrahman.com/library/finance";
+      // exact paths first, then prefixes ending in "/*"
+      var MAP = {
+        "/": HOME,
+        "/library": HOME,
+        "/engine": HOME
+        // "/domains/*": "https://.../capability-models"
+      };
+      var p = window.location.pathname.replace(/\/+$/, "") || "/";
+      var to = MAP[p];
+      if (!to) {
+        for (var k in MAP) {
+          if (k.slice(-2) === "/*" && p.indexOf(k.slice(0, -2)) === 0) { to = MAP[k]; break; }
+        }
+      }
+      to = to || HOME;
+      try {
+        var q = new URLSearchParams(window.location.search);
+        ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(function (k) {
+          if (q.get(k)) to += (to.indexOf("?") < 0 ? "?" : "&") + k + "=" + encodeURIComponent(q.get(k));
+        });
+      } catch (e) {}
+      window.location.replace(to);
+      document.addEventListener("DOMContentLoaded", function () {
+        var a = document.getElementById("to"); a.href = to; a.textContent = to;
+      });
+    })();
+  </script>
+  <style>
+    body { font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; color: #14213D; background: #F7F5EF;
+           display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 24px; text-align: center; }
+    a { color: #1F7A6B; }
+  </style>
+</head>
+<body>
+  <p>This page has moved to <a id="to" href="https://industrybizcapability.kalilurrahman.com/library/finance">https://industrybizcapability.kalilurrahman.com/library/finance</a>.</p>
+</body>
+</html>
