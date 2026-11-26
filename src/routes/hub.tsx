@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useId, useMemo, useState } from "react";
 import pricingData from "../../data/pricing.json";
+import { LastReviewed } from "@/components/LastReviewed";
 import { HUB_IMPLEMENTATION_COST, paybackMonths } from "@/lib/hub-payback";
 
 // PRESETS and MODELS are DERIVED from data/pricing.json — the single pricing
@@ -190,6 +191,7 @@ function HubPage() {
           </Link>
           .
         </p>
+        <LastReviewed page="/hub" />
       </header>
 
       <nav className="hub-tabs" role="tablist" aria-label="Hub sections">

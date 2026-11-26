@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { useChartTheme } from "@/lib/chart-theme";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { LastReviewed } from "@/components/LastReviewed";
 
 const teamData = [
   { team: "Product", spend: 42000, yield: 86 },
@@ -100,6 +101,7 @@ function DashboardPage() {
           Sample data demo — every figure on this page is illustrative, showing what a TokenOps
           dashboard looks like. Wire it to your own metering to make it real.
         </p>
+        <LastReviewed page="/dashboard" />
       </div>
 
       <div className="dashboard-kpis">
