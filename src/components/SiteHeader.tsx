@@ -22,7 +22,9 @@ import {
   ClipboardList,
   Scale,
   GraduationCap,
+  CalendarCheck,
 } from "lucide-react";
+import { ReviewCta } from "@/components/ReviewCta";
 import { TokenOpsLogo } from "@/components/TokenOpsLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
@@ -172,10 +174,10 @@ export function SiteHeader() {
         <div className="site-header-actions">
           <NavSearch />
           <ThemeToggle />
-          <Link to="/calculator" className="to-btn-gold site-header-cta">
-            <Calculator size={16} strokeWidth={1.75} aria-hidden="true" />
-            Calculator
-          </Link>
+          <ReviewCta
+            className="to-btn-gold site-header-cta"
+            before={<CalendarCheck size={16} strokeWidth={1.75} aria-hidden="true" />}
+          />
           <AllSectionsSheet
             side="right"
             trigger={
@@ -215,6 +217,7 @@ function NavSearch() {
           className="to-search-trigger"
           aria-haspopup="dialog"
           aria-label="Search sections"
+          title="Search sections (⌘K)"
           aria-keyshortcuts="Meta+K Control+K"
         >
           <Search size={16} strokeWidth={1.75} aria-hidden="true" />

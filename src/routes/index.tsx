@@ -12,6 +12,7 @@ import {
   Layers,
   ClipboardList,
 } from "lucide-react";
+import { ReviewCta } from "@/components/ReviewCta";
 import { operatingPillars, playbook } from "@/tokenops/data";
 import content from "@/tokenops/content.json";
 import type { TokenOpsContent } from "@/tokenops/data";
@@ -93,9 +94,10 @@ function Index() {
             consumption so AI products can scale without invoice surprises.
           </p>
           <div className="hero-actions">
-            <Link className="primary-action" to="/calculator">
-              Open calculator <ArrowRight size={17} />
-            </Link>
+            <ReviewCta
+              className="primary-action"
+              after={<ArrowRight size={17} aria-hidden="true" />}
+            />
             <Link className="secondary-action" to="/dashboard">
               View dashboard
             </Link>

@@ -1,7 +1,7 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
-  "version": "2.12.0",
+  "version": "2.13.0",
   "sideEffects": false,
   "type": "module",
   "scripts": {
@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/**/*.test.ts",
     "smoke": "node scripts/run-smoke.mjs",
-    "release": "tsx scripts/release.ts"
+    "release": "tsx scripts/release.ts",
+    "review-dates": "node scripts/gen-review-dates.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.71",

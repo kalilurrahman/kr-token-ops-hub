@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Code2, Database, Download, LineChart, Zap } from "lucide-react";
+import { LastReviewed } from "@/components/LastReviewed";
 import {
   modelPricingData,
   compressPrompt,
@@ -67,6 +68,7 @@ function ToolkitPage() {
           Interactive tools to test TokenOps optimization strategies. Try prompt compression and
           model cost comparison live.
         </p>
+        <LastReviewed page="/toolkit" />
       </div>
 
       <div className="toolkit-panel">

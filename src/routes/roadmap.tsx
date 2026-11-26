@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Compass, Ruler, ShieldCheck, Sparkles, Repeat, Flag } from "lucide-react";
+import { ReviewCta } from "@/components/ReviewCta";
 
 export const Route = createFileRoute("/roadmap")({
   component: RoadmapPage,
@@ -116,9 +117,10 @@ function RoadmapPage() {
             FinOps-style operating model — not a one-off reporting project.
           </p>
           <div className="hero-actions">
-            <Link className="primary-action" to="/calculator">
-              Model your savings <ArrowRight size={17} />
-            </Link>
+            <ReviewCta
+              className="primary-action"
+              after={<ArrowRight size={17} aria-hidden="true" />}
+            />
             <Link className="secondary-action" to="/dashboard">
               View dashboard
             </Link>

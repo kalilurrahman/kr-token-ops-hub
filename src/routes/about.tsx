@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, FolderDown, Gauge, LineChart, Target, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  CalendarCheck,
+  FolderDown,
+  Gauge,
+  LineChart,
+  Target,
+  Zap,
+} from "lucide-react";
+import { ReviewCta } from "@/components/ReviewCta";
 
 const features = [
   {
@@ -117,10 +127,11 @@ function AboutPage() {
         <h2>Ready to get started?</h2>
         <p>Begin with a baseline audit, deploy instrumentation, and start optimizing in weeks.</p>
         <div className="about-cta-actions">
-          <Link className="primary-action button-action" to="/resources">
-            <FolderDown size={17} /> Download Starter Kit
-          </Link>
-          <Link className="primary-action" to="/guide" style={{ border: "1px solid var(--line)" }}>
+          <ReviewCta
+            className="primary-action button-action"
+            before={<CalendarCheck size={17} aria-hidden="true" />}
+          />
+          <Link className="secondary-action" to="/guide">
             <BookOpen size={17} /> Read the Guide
           </Link>
         </div>

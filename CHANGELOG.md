@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.13.0 — AI cost governance reviews with VERITRAIL; dated pricing pages (2026-11-26)
+
+### Changed
+
+- Every primary call to action now reads "Book an AI cost governance review" and opens VERITRAIL's contact page (https://veritrail.kalilurrahman.com/contact): the header button (laptop widths), the Home and Roadmap hero buttons and the About page's closing button. The footer gains the same button, so phone and tablet visitors see it on every page. Secondary links (View dashboard, Read the Guide, the navigation and the phone tab bar) still go where they did; Read the Guide is now styled as a secondary button.
+- The header search is an icon button at every width (⌘K still opens it), which makes room for the longer call to action.
+- Pricing and model pages show "Last reviewed: <date>": Models, Calculator, Hub, Toolkit, the Dashboard sample, every Models briefing, the 2026 pricing landscape, the provider comparison matrix, and the token pricing reference and model selection matrix templates. The date is the last git change to the source of the page's figures (`data/pricing.json`, the briefing's markdown, or the dashboard's sample data), generated into `src/tokenops/review-dates.json` by `npm run review-dates` (`npm run review-dates -- --check` verifies it). No price or model figure changed.
+- The 2026 pricing landscape and the Dashboard sample add: "Prices and model line-ups change often; check the provider's current pricing page before relying on these figures."
+
 ## 2.12.0 — Saved calculator scenario comparisons (2026-11-20)
 
 ### Changed

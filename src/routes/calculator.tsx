@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Download, Link2 } from "lucide-react";
 import { AdvancedCalculators } from "@/components/advanced-calculators";
+import { LastReviewed } from "@/components/LastReviewed";
 import { OptimizationCalculators } from "@/components/optimization-calculators";
 import { ScenarioComparison } from "@/components/scenario-comparison";
 import {
@@ -151,6 +152,7 @@ function CalculatorPage() {
           tool-result trimming, batch processing, RAG, routing, budget, caching, self-hosted
           economics, and total cost of ownership.
         </p>
+        <LastReviewed page="/calculator" />
       </div>
       <div className="calculator-layout">
         <form className="control-surface" onSubmit={(e) => e.preventDefault()}>

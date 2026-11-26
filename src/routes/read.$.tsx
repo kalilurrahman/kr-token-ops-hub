@@ -30,6 +30,7 @@ import { renderMarkdown } from "@/lib/markdown";
 import { resolveReaderLink } from "@/lib/reader-links";
 import { renderAdviceMarkdown } from "@/lib/advice-markdown";
 import { Button } from "@/components/ui/button";
+import { LastReviewed } from "@/components/LastReviewed";
 import { supabase } from "@/integrations/supabase/client";
 import { recommendWorkload } from "@/lib/workload-adviser.functions";
 import {
@@ -239,6 +240,7 @@ function ReaderPage() {
             <span className="category-tag">{item.category}</span>
           </div>
         )}
+        <LastReviewed page={`${resolved.source}/${resolved.key}`} />
         {isMarkdown && html && <div dangerouslySetInnerHTML={{ __html: html }} />}
         {!isMarkdown && (
           <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{raw}</pre>

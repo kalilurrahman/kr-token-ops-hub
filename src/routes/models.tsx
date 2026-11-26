@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, Clock3, Coins, Layers3, Ruler, Scale } from "lucide-react";
+import { LastReviewed } from "@/components/LastReviewed";
 import { modelComparisonEntries, MODEL_REVIEW_DATE } from "@/lib/model-comparison";
 
 export const Route = createFileRoute("/models")({
@@ -48,6 +49,7 @@ function ModelsPage() {
           Guidance was reviewed on {MODEL_REVIEW_DATE}; verify current terms, licences, and hardware
           benchmarks before production use.
         </p>
+        <LastReviewed page="/models" />
       </div>
 
       <div className="filter-tabs" aria-label="Filter model access">
