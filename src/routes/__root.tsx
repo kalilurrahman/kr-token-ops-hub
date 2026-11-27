@@ -98,11 +98,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "TokenOps Atlas" },
       { property: "og:url", content: "https://tokenops.kalilurrahman.com/" },
-      // The share image, self-hosted (public/og.png, 1344×768 PNG); it was on Lovable's upload storage.
+      // The share image, self-hosted (public/og.png, 1200×630 PNG, drawn by scripts/make-share-card.mjs).
       { property: "og:image", content: `${SITE_ORIGIN}/og.png` },
       { property: "og:image:type", content: "image/png" },
-      { property: "og:image:width", content: "1344" },
-      { property: "og:image:height", content: "768" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:image", content: `${SITE_ORIGIN}/og.png` },
