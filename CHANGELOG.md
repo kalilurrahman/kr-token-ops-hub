@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.13.4 — A clean share card (2026-11-27)
+
+### Changed
+
+- The share image (`/og.png`) is redrawn as a clean 1200×630 card: "FinOps for tokens", "TokenOps Atlas", the home page's own line "Run LLM spend like a professional operating discipline." and the site address, in the site's fonts and Ledger Dark colours. The picture it replaces was machine-generated and its small print was misspelt ("TINOPS FOR TOKENS", "prmmpt", "Governonce"). `scripts/make-share-card.mjs` draws the card, so it can be regenerated; `og:image:width` and `og:image:height` now say 1200 and 630. No title, description or other share text changed.
+
 ## 2.13.3 — Canonical links and a self-hosted share image (2026-11-27)
 
 ### Changed
