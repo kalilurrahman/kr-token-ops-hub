@@ -1,12 +1,12 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
-  "version": "2.13.1",
+  "version": "2.13.2",
   "sideEffects": false,
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "node scripts/write-version.mjs && vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint . && node scripts/check-tokens.mjs",

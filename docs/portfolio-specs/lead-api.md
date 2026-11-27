@@ -34,7 +34,7 @@ Responses: `201 {id}` on success; `400` with the field errors; `429` when rate l
 
 ## Rules
 
-- **CORS allow-list.** Answer `OPTIONS` and send `Access-Control-Allow-Origin` only for: `https://kalilurrahman.com`, `https://veritrail.kalilurrahman.com`, `https://gcc-compass.kalilurrahman.com`, `https://gcc-playbook.kalilurrahman.com`, `https://pharma.kalilurrahman.com`, `https://healthcare.kalilurrahman.com`, `https://industrybizcapability.kalilurrahman.com`, `https://tokenops.kalilurrahman.com`, and the Lovable preview domains of those projects while testing.
+- **CORS allow-list.** Answer `OPTIONS` and send `Access-Control-Allow-Origin` only for: `https://kalilurrahman.com`, `https://veritrail.kalilurrahman.com`, `https://gcc-compass.kalilurrahman.com`, `https://gcc-playbook.kalilurrahman.com`, `https://pharma.kalilurrahman.com`, `https://healthcare.kalilurrahman.com`, `https://kr-library.kalilurrahman.com` and `https://kr-products.kalilurrahman.com` (the KR Library's new names), `https://industrybizcapability.kalilurrahman.com` (its old name, kept while it moves), `https://tokenops.kalilurrahman.com`, and the Lovable preview domains of those projects while testing.
 - **Rate limit.** 5 requests per IP per 10 minutes. Store a hash of the IP, not the IP.
 - **Consent.** Store `consentText` and `consentAt` (server time). Suggested sentence: "I agree that Kalilur Rahman may contact me about this request. I can ask for my details to be deleted at any time." Make the contact person and entity match the contracting entity you decide on.
 - **Data kept.** Only the fields above plus `createdAt`, `ipHash`, `userAgent` (first 200 characters). No cookies or tracking pixels added by this feature.

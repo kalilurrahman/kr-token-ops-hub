@@ -33,3 +33,6 @@ dist-ssr
 
 # Smoke test output (baseline text + screenshots)
 .smoke/
+
+# Generated at build by scripts/write-version.mjs
+/public/version.json

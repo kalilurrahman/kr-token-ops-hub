@@ -16,6 +16,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { EmailLinkCompletion } from "@/components/EmailLinkCompletion";
 import { DEFAULT_THEME, THEME_COLOR, THEME_HEAD_SCRIPT } from "@/lib/theme";
+import { RELEASE_VERSION } from "@/lib/release";
 
 function NotFoundComponent() {
   return (
@@ -85,6 +86,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "The open reference for visibility, allocation, optimization, and governance of LLM token spend.",
       },
       { name: "author", content: "Kalilur Rahman" },
+      // The release this build carries (package.json "version"); /version.json says the same.
+      { name: "version", content: RELEASE_VERSION },
       { property: "og:title", content: "TokenOps Atlas — FinOps for LLM Tokens" },
       {
         property: "og:description",
