@@ -1,6 +1,6 @@
 # Spec: KR Library collections
 
-The KR Library (today `industrybizcapability.kalilurrahman.com`, project "IndustryPrompt Hub") becomes the one home for prompts, skills, capability models and test packs. Each merged site becomes a collection: a JSON file the existing UI reads. Content moves as data, so nothing is rebuilt by hand.
+The KR Library (`kr-library.kalilurrahman.com`; the old `industrybizcapability.kalilurrahman.com` and `kr-products.kalilurrahman.com` redirect to it with the path kept; project "IndustryPrompt Hub") becomes the one home for prompts, skills, capability models and test packs. Each merged site becomes a collection: a JSON file the existing UI reads. Content moves as data, so nothing is rebuilt by hand.
 
 ## File layout in the KR Library repo
 

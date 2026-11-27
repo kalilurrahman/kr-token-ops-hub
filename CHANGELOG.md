@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.13.2 — The KR Library's new address; /version.json (2026-11-27)
+
+### Changed
+
+- Every build now answers `/version.json` with the release it carries: the version, the short commit and the commit's date (for example `{"version": "2.13.2", "commit": "abc1234", "date": "2026-11-27"}`). `scripts/write-version.mjs` writes it into `public/` as the first step of `npm run build`; the file is generated and not committed, and the step never fails a build.
+- Every page's head now carries `<meta name="version" content="2.13.2">`, the same version as the footer watermark.
+- The portfolio specs in `docs/portfolio-specs/` now name the KR Library at https://kr-library.kalilurrahman.com, its primary address since 27 November 2026; the old industrybizcapability address 301s there with the path kept. No page on this site linked the old address, so no visible copy, figure or route changed.
+
 ## 2.13.1 — Link to VERITRAIL's AI cost governance practice (2026-11-26)
 
 ### Changed

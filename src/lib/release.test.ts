@@ -49,3 +49,23 @@ test("the newest CHANGELOG entry has release notes", () => {
   assert.match(body, /^- \S/m, "the newest entry needs at least one bullet");
   assert.ok(!body.includes(RELEASE_PLACEHOLDER), "replace the placeholder left by npm run release");
 });
+
+test("the build writes /version.json with the same version, before vite build", async () => {
+  // @ts-expect-error plain ESM build script without type declarations
+  const { releaseInfo, versionJson } = await import("../../scripts/write-version.mjs");
+  const info = releaseInfo({ RELEASE_COMMIT: "ABCDEF1234567", RELEASE_DATE: "2026-11-27" });
+  assert.deepEqual(info, { version: RELEASE_VERSION, commit: "abcdef1", date: "2026-11-27" });
+  assert.deepEqual(JSON.parse(versionJson(info)), info);
+  const pkg = JSON.parse(read("../../package.json")) as { scripts: Record<string, string> };
+  assert.match(pkg.scripts.build, /^node scripts\/write-version\.mjs && vite build$/);
+  assert.match(
+    read("../../.gitignore"),
+    /^\/public\/version\.json$/m,
+    "version.json is generated, never committed",
+  );
+});
+
+test('every page names its release in <meta name="version">', () => {
+  const root = read("../routes/__root.tsx");
+  assert.match(root, /\{ name: "version", content: RELEASE_VERSION \}/);
+});
