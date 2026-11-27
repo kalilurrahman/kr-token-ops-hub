@@ -17,6 +17,7 @@ import { MobileTabBar } from "@/components/MobileTabBar";
 import { EmailLinkCompletion } from "@/components/EmailLinkCompletion";
 import { DEFAULT_THEME, THEME_COLOR, THEME_HEAD_SCRIPT } from "@/lib/theme";
 import { RELEASE_VERSION } from "@/lib/release";
+import { canonicalLink, SITE_ORIGIN } from "@/lib/canonical";
 
 function NotFoundComponent() {
   return (
@@ -75,7 +76,7 @@ function ErrorComponent({ reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  head: ({ matches }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -97,8 +98,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "TokenOps Atlas" },
       { property: "og:url", content: "https://tokenops.kalilurrahman.com/" },
+      // The share image, self-hosted (public/og.png, 1344×768 PNG); it was on Lovable's upload storage.
+      { property: "og:image", content: `${SITE_ORIGIN}/og.png` },
+      { property: "og:image:type", content: "image/png" },
+      { property: "og:image:width", content: "1344" },
+      { property: "og:image:height", content: "768" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:image", content: `${SITE_ORIGIN}/og.png` },
       { name: "twitter:title", content: "TokenOps Atlas — FinOps for LLM Tokens" },
       {
         name: "twitter:description",
@@ -122,6 +129,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
+      // One canonical per page, for the route that is showing (src/lib/canonical.ts).
+      canonicalLink(matches[matches.length - 1]?.pathname ?? "/"),
     ],
     scripts: [
       {

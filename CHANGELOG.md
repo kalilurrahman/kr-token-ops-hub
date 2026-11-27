@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.13.3 — Canonical links and a self-hosted share image (2026-11-27)
+
+### Changed
+
+- Every page now carries one `<link rel="canonical">` naming itself at https://tokenops.kalilurrahman.com plus its path, without a query string (the home page is https://tokenops.kalilurrahman.com/). The root route adds it for whichever route is showing (`src/lib/canonical.ts`); the Guide, Changelog and Free Chapter pages already named the same address. A test checks that each of the 23 routes in the header's navigation gets its own.
+- The share image is now served from this site, at https://tokenops.kalilurrahman.com/og.png, instead of Lovable's upload storage. It is the same picture, unchanged (a 1344×768 PNG); `og:image` and `twitter:image` point at it, and `og:image:type`, `og:image:width` and `og:image:height` describe it. No title, description or other share text changed.
+
 ## 2.13.2 — The KR Library's new address; /version.json (2026-11-27)
 
 ### Changed
